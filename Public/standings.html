@@ -8,6 +8,8 @@
 
     <title>Sofive Soccer Center</title>
 
+    <link href="css/plugins/select2/select2.min.css" rel="stylesheet">
+
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
     <link href="css/animate.css" rel="stylesheet">
@@ -48,8 +50,8 @@
                         </ul>
                     </li>
 
-                    </div>
-                </nav>
+                </div>
+            </nav>
 
             <div id="page-wrapper" class="gray-bg">
 
@@ -129,30 +131,47 @@
                         <div class="row">
                             <div class="col-sm-4">
                                 <div class="form-group">
-                                    <label class="col-form-label" for="status">Select Location</label>
-                                    <select name="status" id="status" class="form-control">
-                                        <option value="1" selected>Search</option>
-                                        <option value="0">Disabled</option>
+                                    <label class="col-form-label" for="status">Select Center</label>
+                                    <select class="select_center form-control">
+                                        <option></option>
+                                        <option value="Bahamas">Bahamas</option>
+                                        <option value="Bahrain">Bahrain</option>
+                                        <option value="Bangladesh">Bangladesh</option>
+                                        <option value="Barbados">Barbados</option>
+                                        <option value="Belarus">Belarus</option>
+                                        <option value="Belgium">Belgium</option>
+                                        <option value="Belize">Belize</option>
+                                        <option value="Benin">Benin</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label class="col-form-label" for="status">Select Season</label>
-                                    <select name="status" id="status" class="form-control">
-                                        <option value="1" selected>Search</option>
-                                        <option value="0">Disabled</option>
+                                <label class="col-form-label" for="status">Select Season</label>
+                                    <select class="select_season form-control">
+                                        <option></option>
+                                        <option value="Bahamas">Bahamas</option>
+                                        <option value="Bahrain">Bahrain</option>
+                                        <option value="Bangladesh">Bangladesh</option>
+                                        <option value="Barbados">Barbados</option>
+                                        <option value="Belarus">Belarus</option>
+                                        <option value="Belgium">Belgium</option>
+                                        <option value="Belize">Belize</option>
+                                        <option value="Benin">Benin</option>
                                     </select>
-                                </div>
                             </div>
                             <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label class="col-form-label" for="status">Select League</label>
-                                    <select name="status" id="status" class="form-control">
-                                        <option value="1" selected>Search</option>
-                                        <option value="0">Disabled</option>
+                                <label class="col-form-label" for="status">Select League</label>
+                                    <select class="select_league form-control">
+                                        <option></option>
+                                        <option value="Bahamas">Bahamas</option>
+                                        <option value="Bahrain">Bahrain</option>
+                                        <option value="Bangladesh">Bangladesh</option>
+                                        <option value="Barbados">Barbados</option>
+                                        <option value="Belarus">Belarus</option>
+                                        <option value="Belgium">Belgium</option>
+                                        <option value="Belize">Belize</option>
+                                        <option value="Benin">Benin</option>
                                     </select>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -369,13 +388,22 @@
 
             <!-- Custom and plugin javascript -->
             <script src="js/inspinia.js"></script>
-            <script src="js/plugins/pace/pace.min.js"></script>
 
-            <!-- Peity -->
-            <script src="js/plugins/peity/jquery.peity.min.js"></script>
+            <script src="js/plugins/select2/select2.full.min.js"></script>
 
-            <!-- Peity -->
-            <script src="js/demo/peity-demo.js"></script>
+            <script type="text/javascript">
+                $(document).ready(function(){
+                    $(".select_center").select2({
+                        placeholder: "Select or enter value...",
+                    });
+                    $(".select_season").select2({
+                        placeholder: "Select or enter value...",
+                    });
+                    $(".select_league").select2({
+                        placeholder: "Select or enter value...",
+                    });
+                })
+            </script>
 
         </body>
 
