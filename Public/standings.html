@@ -131,47 +131,65 @@
                         <div class="row">
                             <div class="col-sm-4">
                                 <div class="form-group">
-                                    <label class="col-form-label" for="status">Select Center</label>
+                                    <label class="col-form-label" for="status">
+                                        Select Center
+                                        <div v-if="facility_loading">
+                                            <div>
+                                                <div class="sk-spinner sk-spinner-wave">
+                                                    <div class="sk-rect1"></div>
+                                                    <div class="sk-rect2"></div>
+                                                    <div class="sk-rect3"></div>
+                                                    <div class="sk-rect4"></div>
+                                                    <div class="sk-rect5"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </label>
                                     <select class="select_center form-control">
                                         <option></option>
-                                        <option value="Bahamas">Bahamas</option>
-                                        <option value="Bahrain">Bahrain</option>
-                                        <option value="Bangladesh">Bangladesh</option>
-                                        <option value="Barbados">Barbados</option>
-                                        <option value="Belarus">Belarus</option>
-                                        <option value="Belgium">Belgium</option>
-                                        <option value="Belize">Belize</option>
-                                        <option value="Benin">Benin</option>
+                                        <option v-for="center in centers" :value="center.id">{{center.name}}</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-sm-4">
-                                <label class="col-form-label" for="status">Select Season</label>
-                                    <select class="select_season form-control">
-                                        <option></option>
-                                        <option value="Bahamas">Bahamas</option>
-                                        <option value="Bahrain">Bahrain</option>
-                                        <option value="Bangladesh">Bangladesh</option>
-                                        <option value="Barbados">Barbados</option>
-                                        <option value="Belarus">Belarus</option>
-                                        <option value="Belgium">Belgium</option>
-                                        <option value="Belize">Belize</option>
-                                        <option value="Benin">Benin</option>
-                                    </select>
+                                <label class="col-form-label" for="status">
+                                    Select Season
+                                    <div v-if="season_loading">
+                                        <div>
+                                            <div class="sk-spinner sk-spinner-wave">
+                                                <div class="sk-rect1"></div>
+                                                <div class="sk-rect2"></div>
+                                                <div class="sk-rect3"></div>
+                                                <div class="sk-rect4"></div>
+                                                <div class="sk-rect5"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </label>
+                                <select class="select_season form-control">
+                                    <option></option>
+                                    <option v-for="season in seasons" :value="JSON.stringify(season)">{{season.name}}</option>
+                                </select>
                             </div>
                             <div class="col-sm-4">
-                                <label class="col-form-label" for="status">Select League</label>
-                                    <select class="select_league form-control">
-                                        <option></option>
-                                        <option value="Bahamas">Bahamas</option>
-                                        <option value="Bahrain">Bahrain</option>
-                                        <option value="Bangladesh">Bangladesh</option>
-                                        <option value="Barbados">Barbados</option>
-                                        <option value="Belarus">Belarus</option>
-                                        <option value="Belgium">Belgium</option>
-                                        <option value="Belize">Belize</option>
-                                        <option value="Benin">Benin</option>
-                                    </select>
+                                <label class="col-form-label" for="status">
+                                    Select League
+                                    <div v-if="league_loading">
+                                        <div>
+                                            <div class="sk-spinner sk-spinner-wave">
+                                                <div class="sk-rect1"></div>
+                                                <div class="sk-rect2"></div>
+                                                <div class="sk-rect3"></div>
+                                                <div class="sk-rect4"></div>
+                                                <div class="sk-rect5"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </label>
+                                <select class="select_league form-control">
+                                    <option></option>
+                                    <option v-for="league in leagues" :value="league.id">{{league.name}}</option>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -192,7 +210,7 @@
                                 </div>
                                 <div class="ibox-content">
                                     <div>
-                                        <table class="table table-hover margin bottom">
+                                        <table class="table table-hover margin bottom table-responsive">
                                             <thead>
                                                 <tr>
                                                     <th style="width: 1%" class="text-center">No.</th>
@@ -302,7 +320,7 @@
                                 </div>
                                 <div class="ibox-content">
                                     <div>
-                                        <table class="table table-hover margin bottom">
+                                        <table class="table table-hover margin bottom table-responsive">
                                             <thead>
                                                 <tr>
                                                     <th class="text-center">Details</th>
@@ -373,7 +391,7 @@
                             Powered by ScorePlay
                         </div>
                         <div>
-                            <strong>Sofive Soccer Center</strong>
+                            <strong>Sofive Soccer Center </strong>
                         </div>
                     </div>
                 </div>
@@ -391,8 +409,24 @@
 
             <script src="js/plugins/select2/select2.full.min.js"></script>
 
+            <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+            <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/1.5.1/vue-resource.min.js"></script>
+
             <script type="text/javascript">
-                $(document).ready(function(){
+
+                var app = new Vue({
+                  el: '#wrapper',
+                  data: {
+                    centers: [],
+                    seasons: [],
+                    leagues: [],
+                    facility_loading: false,
+                    season_loading: false,
+                    league_loading: false
+                },
+                mounted: function() {
+                    let self = this;
                     $(".select_center").select2({
                         placeholder: "Select or enter value...",
                     });
@@ -402,9 +436,72 @@
                     $(".select_league").select2({
                         placeholder: "Select or enter value...",
                     });
-                })
-            </script>
+                    $('.select_center').on('select2:select', function (e) {
+                        let facility_id = e.target.value
+                        self.getSeasons(facility_id)
+                    });
+                    $('.select_season').on('select2:select', function (e) {
+                        let doc = JSON.parse(e.target.value),
+                        facility_id = doc.facility_id,
+                        season_id = doc.id;
+                        self.getLeagues(facility_id, season_id)
+                    });
+                    $('.select_league').on('select2:select', function (e) {
+                        let league_id = e.target.value
+                        self.getStandings(league_id)
+                    });
+                    this.getCenters()
+                },
+                methods: {
+                    getCenters: function() {
+                        this.facility_loading = true
+                        this.$http.get("http://localhost:8080/facility/")
+                        .then((resp) => {
+                            this.centers = resp.body;
+                            this.facility_loading = false
+                        })
+                        .catch((err) => {
+                            console.log(err.body.errors)
+                        })
+                    },
+                    getSeasons: function(facility_id) {
+                        this.season_loading = true
+                        let url = "http://localhost:8080/facility/"+facility_id+"/seasons"
+                        this.$http.get(url)
+                        .then((resp) => {
+                            this.seasons = resp.body;
+                            this.season_loading = false
+                        })
+                        .catch((err) => {
+                            console.log(err.body.errors)
+                        })
+                    },
+                    getLeagues: function(facility_id, season_id) {
+                        this.league_loading = true
+                        let url = "http://localhost:8080/facility/"+facility_id+"/"+season_id+"/leagues"
+                        this.$http.get(url)
+                        .then((resp) => {
+                            this.leagues = resp.body;
+                            this.league_loading = false
+                        })
+                        .catch((err) => {
+                            console.log(err.body.errors)
+                        })
+                    },
+                    getStandings: function(league_id) {
+                        let url = "http://localhost:8080/league/"+league_id+"/scores"
+                        this.$http.get(url)
+                        .then((resp) => {
+                            console.log(resp)
+                        })
+                        .catch((err) => {
+                            console.log(err.body.errors)
+                        })
+                    },
+                }
+            })
+        </script>
 
-        </body>
+    </body>
 
-        </html>
+    </html>
