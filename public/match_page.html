@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sofive Soccer Center</title>
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="css/animate.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link rel="icon" href="img/sofive/sofive.ico" />
+</head>
+
+<body>
+
+    <div id="wrapper">
+
+        <nav class="navbar-default navbar-static-side" role="navigation">
+            <div class="sidebar-collapse">
+                <ul class="nav metismenu" id="side-menu">
+                    <li class="nav-header">
+                        <div class="dropdown profile-element">
+                            <img alt="image" class="rounded-circle" style="max-width: 50px" src="img/sofive/jd.jpeg" />
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                <span class="block m-t-xs font-bold">Jean-Damien Ladeuil</span>
+                                <span class="text-muted text-xs block">Player<b class="caret"></b></span>
+                            </a>
+                            <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                                <li><a class="dropdown-item" href="profile.html">Profile</a></li>
+                                <li><a class="dropdown-item" href="contacts.html">Contacts</a></li>
+                                <li><a class="dropdown-item" href="mailbox.html">Mailbox</a></li>
+                                <li class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="login.html">Logout</a></li>
+                            </ul>
+                        </div>
+                        <div class="logo-element">
+                            <img alt="image" class="rounded-circle" style="max-width: 50px" src="img/sofive/jd.jpeg" />
+                        </div>
+                    </li>
+                    <li>
+                        <a href="index.html"><i class="fa fa-th-large"></i> <span class="nav-label">Dashboards</span> <span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse">
+                            <li><a href="standings.html">Schedule and standings</a></li>
+                        </ul>
+                    </li>
+
+                    </div>
+                </nav>
+
+                <div id="page-wrapper" class="gray-bg">
+                    <div class="row border-bottom">
+                        <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+                            <div class="navbar-header">
+                                <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
+                                <form role="search" class="navbar-form-custom" action="search_results.html">
+                                    <div class="form-group">
+                                        <input type="text" placeholder="Search for my team..." class="form-control" name="top-search" id="top-search">
+                                    </div>
+                                </form>
+                            </div>
+                            <ul class="nav navbar-top-links navbar-right">
+                                <li>
+                                    <span class="m-r-sm text-muted welcome-message">Welcome to Sofive Soccer Center</span>
+                                </li>
+                                <li class="dropdown">
+                                    <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                                        <i class="fa fa-envelope"></i> <span class="label label-warning">1</span>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-messages">
+                                        <li>
+                                            <div class="dropdown-messages-box">
+                                                <a class="dropdown-item float-left" href="profile.html">
+                                                    <img alt="image" class="rounded-circle" src="img/sofive/charles.jpeg">
+                                                </a>
+                                                <div class="media-body">
+                                                    <small class="float-right">46h ago</small>
+                                                    <strong>Charles Lagayette</strong> invited to join his team <strong> "Paris-Saint-Germain"</strong>.
+                                                    <br>
+                                                    <small class="text-muted">3 days ago at 7:58 pm - 03.06.2019</small>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown">
+                                    <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                                        <i class="fa fa-bell"></i> <span class="label label-primary">1</span>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-alerts">
+                                        <li>
+                                            <a href="grid_options.html" class="dropdown-item">
+                                                <div>
+                                                    <i class="fa fa-upload fa-fw"></i> New match recap available
+                                                    <span class="float-right text-muted small">4 minutes ago</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="dropdown-divider"></li>
+                                        <li>
+                                            <div class="text-center link-block">
+                                                <a href="notifications.html" class="dropdown-item">
+                                                    <strong>See All Alerts</strong>
+                                                    <i class="fa fa-angle-right"></i>
+                                                </a>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <li>
+                                    <a href="login.html">
+                                        <i class="fa fa-sign-out"></i> Log out
+                                    </a>
+                                </li>
+                            </ul>
+
+                        </nav>
+
+                    </div>
+
+
+                    <div class="wrapper wrapper-content animated fadeInRight">
+                        <div class="ibox-title">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item">
+                                    <a href="index.html">Leagues and standings</a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a>Tuesday Men's League, Ligue 1</a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    <strong>Paris-Saint-Germain - Olympique de Marseille</strong>
+                                </li>
+                            </ol>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="ibox ">
+                                    <div class="ibox-content text-center p-md">
+                                        <div class="row">
+                                            <div class="col-sm">
+                                            <a style="font-size: 40px" class="text-center"><strong> <span style="color: #295182"> Paris-Saint-Germain  </span> <span style="color: #4c4949">  9 - 4  </span> <span style="color: #75acda">  Olympique de Marseille </strong></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row animated fadeInRight">
+                            <div class="col-lg-4">
+                                <div class="ibox ">
+                                    <div class="ibox-title">
+                                        <h5>Replay</h5>
+                                    </div>
+                                    <div>
+                                        <div class="ibox-content no-padding border-left-right">
+                                            <img alt="image" class="img-fluid" src="img/sofive/youtube.png">
+                                        </div>
+                                        <div class="ibox-content profile-content">
+                                            <h4><strong>Paris-Saint-Germain 9 - 4 Olympique de Marseille</strong></h4>
+                                            <p><i class="fa fa-map-marker"></i> Sofive Meadowlands, Parc des Princes</p>
+                                            <h5>
+                                                Tuesday Men's League, Ligue 1
+                                            </h5>
+                                            <div class="user-button">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <button type="button" class="btn btn-primary btn-sm btn-block"><i class="fa fa-facebook-square"></i>   Share on Facebook</button>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <button type="button" class="btn btn-default btn-sm btn-block"><i class="fa fa-pencil"></i>   Referee assessment</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="ibox ">
+                                    <div class="ibox-title">
+                                        <h5>Standings</h5>
+                                        <div class="ibox-tools">
+                                            <a class="collapse-link">
+                                                <i class="fa fa-chevron-up"></i>
+                                            </a>
+                                            <a class="close-link">
+                                                <i class="fa fa-times"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="ibox-content">
+                                        <div>
+                                            <table class="table table-hover margin bottom">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="width: 1%" class="text-center">No.</th>
+                                                        <th>Team</th>
+                                                        <th class="text-center">Games</th>
+                                                        <th class="text-center">Points</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="text-center">1</td>
+                                                        <td> <span class="text-navy"> Paris-Saint-Germain
+                                                        </span></td>
+                                                        <td class="text-center">6</td>
+                                                        <td class="text-center"><span>15</span></td>
+
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-center">2</td>
+                                                        <td> Olympique Lyonnais
+                                                        </td>
+                                                        <td class="text-center">6</td>
+                                                        <td class="text-center"><span>11</span></td>
+
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-center">3</td>
+                                                        <td> Fc Nantes
+                                                        </td>
+                                                        <td class="text-center">5</td>
+                                                        <td class="text-center"><span>10</span></td>
+
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-center">4</td>
+                                                        <td> <span class="text-navy"> Olympique de Marseille
+                                                        </span></td>
+                                                        <td class="text-center">6</td>
+                                                        <td class="text-center"><span>9</span></td>
+
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-center">5</td>
+                                                        <td> LOSC
+                                                        </td>
+                                                        <td class="text-center">5</td>
+                                                        <td class="text-center"><span>8</span></td>
+
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-center">6</td>
+                                                        <td> OGC Nice
+                                                        </td>
+                                                        <td class="text-center">5</td>
+                                                        <td class="text-center"><span>2</span></td>
+
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-8">
+                                <div class="ibox ">
+                                    <div class="ibox-title">
+                                        <h5>Live</h5>
+                                        <div class="ibox-tools">
+                                            <a class="collapse-link">
+                                                <i class="fa fa-chevron-up"></i>
+                                            </a>
+                                            <a class="close-link">
+                                                <i class="fa fa-times"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="ibox-content">
+                                        <div class="scroll_content">
+
+                                            <div id="vertical-timeline" class="vertical-container dark-timeline">
+                                                <div class="vertical-timeline-block">
+                                                    <div class="vertical-timeline-icon navy-bg">
+                                                        <i class="fa fa-futbol-o"></i>
+                                                    </div>
+
+                                                    <div class="vertical-timeline-content">
+                                                        <a href="#" class="btn btn-sm btn-primary">Video</a>
+                                                        <h2 style="color: #295182">Paris-Saint-Germain goal</h2>
+                                                        <span class="vertical-date">
+                                                            Paris-Saint-Germain 1 - 0 Olympique de Marseille<br/>
+                                                            <small>3"21</small>
+                                                        </span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="vertical-timeline-block">
+                                                    <div class="vertical-timeline-icon navy-bg">
+                                                        <i class="fa fa-futbol-o"></i>
+                                                    </div>
+
+                                                    <div class="vertical-timeline-content">
+                                                        <a href="#" class="btn btn-sm btn-primary">Video</a>
+                                                        <h2 style="color: #295182">Paris-Saint-Germain goal</h2>
+                                                        <span class="vertical-date">
+                                                            Paris-Saint-Germain 2 - 0 Olympique de Marseille<br/>
+                                                            <small>5"23</small>
+                                                        </span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="vertical-timeline-block">
+                                                    <div class="vertical-timeline-icon navy-bg">
+                                                        <img src="img/sofive/yellow_card.ico" style="margin-top: 10%"></i>
+                                                    </div>
+                                                    <div class="vertical-timeline-content">
+                                                        <a href="#" class="btn btn-sm btn-primary">Video</a>
+                                                        <h2 style="color: #75acda">Olympique de Marseille yellow card</h2>
+                                                        <span class="vertical-date">
+                                                            Paris-Saint-Germain 2 - 0 Olympique de Marseille<br/>
+                                                            <small>6"12</small>
+                                                        </span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="vertical-timeline-block">
+                                                    <div class="vertical-timeline-icon navy-bg">
+                                                        <img src="img/sofive/red_card.ico" style="margin-top: 10%"></i>
+                                                    </div>
+
+                                                    <div class="vertical-timeline-content">
+                                                        <a href="#" class="btn btn-sm btn-primary">Video</a>
+                                                        <h2 style="color: #75acda">Olympique de Marseille red card</h2>
+                                                        <span class="vertical-date">
+                                                            Paris-Saint-Germain 2 - 0 Olympique de Marseille<br/>
+                                                            <small>6"12</small>
+                                                        </span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="vertical-timeline-block">
+                                                    <div class="vertical-timeline-icon navy-bg">
+                                                        <i class="fa fa-futbol-o"></i>
+                                                    </div>
+                                                    <div class="vertical-timeline-content">
+                                                        <a href="#" class="btn btn-sm btn-primary">Video</a>
+                                                        <h2 style="color: #75acda">Olympique de Marseille goal</h2>
+                                                        <span class="vertical-date">
+                                                            Paris-Saint-Germain 2 - 1 Olympique de Marseille<br/>
+                                                            <small>6"59</small>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="ibox ">
+                                    <div class="ibox-title">
+                                        <h5>Roasters</h5>
+                                        <div class="ibox-tools">
+                                            <a class="collapse-link">
+                                                <i class="fa fa-chevron-up"></i>
+                                            </a>
+                                            <a class="close-link">
+                                                <i class="fa fa-times"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="ibox-content">
+
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <table class="table table-hover margin bottom">
+                                                    <thead>
+                                                        <tr>
+                                                            <th style="width: 1%" class="text-center">No.</th>
+                                                            <th>Players</th>
+                                                            <th class="text-center">Goals</th>
+                                                            <th class="text-center">More info</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td class="text-center">1</td>
+                                                            <td> Victorien Tixier
+                                                            </td>
+                                                            <td class="text-center small">10</td>
+                                                            <td style="text-align: center"><a href="#"><span class="label label-primary">card</span></a></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-center">2</td>
+                                                            <td> Loic de Rosnay
+                                                            </td>
+                                                            <td class="text-center small">8</td>
+                                                            <td style="text-align: center"><a href="#"><span class="label label-primary">card</span></a></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-center">3</td>
+                                                            <td> Julien Cuvelier
+                                                            </td>
+                                                            <td class="text-center small">5</td>
+                                                            <td style="text-align: center"><a href="#"><span class="label label-primary">card</span></a></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-center">4</td>
+                                                            <td> Emilien Dhellemmes
+                                                            </td>
+                                                            <td class="text-center small">3</td>
+                                                            <td style="text-align: center"><a href="#"><span class="label label-primary">card</span></a></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-center">5</td>
+                                                            <td> Ismail Zizi
+                                                            </td>
+                                                            <td class="text-center small">2</td>
+                                                            <td style="text-align: center"><a href="#"><span class="label label-primary">card</span></a></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-center">6</td>
+                                                            <td> Xavier Green
+                                                            </td>
+                                                            <td class="text-center small">0</td>
+                                                            <td style="text-align: center"><a href="#"><span class="label label-primary">card</span></a></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <table class="table table-hover margin bottom">
+                                                    <thead>
+                                                        <tr>
+                                                            <th style="width: 1%" class="text-center">No.</th>
+                                                            <th>Player</th>
+                                                            <th class="text-center">Goals</th>
+                                                            <th class="text-center">More info</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td class="text-center">1</td>
+                                                            <td> Jean-Damien Ladeuil
+                                                            </td>
+                                                            <td class="text-center small">15</td>
+                                                            <td style="text-align: center"><a href="#"><span class="label label-primary">card</span></a></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-center">2</td>
+                                                            <td> Charles Lagayette
+                                                            </td>
+                                                            <td class="text-center small">8</td>
+                                                            <td style="text-align: center"><a href="#"><span class="label label-primary">card</span></a></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-center">3</td>
+                                                            <td> Matt Dean
+                                                            </td>
+                                                            <td class="text-center small">6</td>
+                                                            <td style="text-align: center"><a href="#"><span class="label label-primary">card</span></a></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-center">4</td>
+                                                            <td> Martin Lukaschik
+                                                            </td>
+                                                            <td class="text-center small">4</td>
+                                                            <td style="text-align: center"><a href="#"><span class="label label-primary">card</span></a></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-center">5</td>
+                                                            <td> Alex Shuptar
+                                                            </td>
+                                                            <td class="text-center small">2</td>
+                                                            <td style="text-align: center"><a href="#"><span class="label label-primary">card</span></a></td>
+                                                        </tr>
+                                                         <tr>
+                                                            <td class="text-center">6</td>
+                                                            <td> Ashlin Conroy
+                                                            </td>
+                                                            <td class="text-center small">1</td>
+                                                            <td style="text-align: center"><a href="#"><span class="label label-primary">card</span></a></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>                                            
+                                            </div>    
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                        <div class="footer">
+                            <div class="float-right">
+                            Powered by ScorePlay
+                            </div>
+                            <div>
+                                <strong>Sofive Soccer Center</strong>
+                            </div>
+                        </div>
+
+                        <!-- Mainly scripts -->
+                        <script src="js/jquery-3.1.1.min.js"></script>
+                        <script src="js/popper.min.js"></script>
+                        <script src="js/bootstrap.js"></script>
+                        <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
+                        <script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+                        <!-- Custom and plugin javascript -->
+                        <script src="js/inspinia.js"></script>
+                        <script src="js/plugins/pace/pace.min.js"></script>
+
+                        <!-- Peity -->
+                        <script src="js/plugins/peity/jquery.peity.min.js"></script>
+
+                        <!-- Peity -->
+                        <script src="js/demo/peity-demo.js"></script>
+
+                    </body>
+
+                    </html>
