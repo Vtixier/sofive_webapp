@@ -12,7 +12,8 @@
     <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
     <link href="css/animate.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
-    <link rel="icon" href="img/sofive/sofive.ico" />
+    <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-32x32.png" sizes="32x32" />
+    <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" sizes="192x192" />
 </head>
 
 <body class="mini-navbar">
@@ -34,13 +35,13 @@
                 <div class="ibox-title">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">
-                            <a href="index.html">Leagues and standings</a>
+                            <a href="index.html">{{info.season}}</a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a>Tuesday Men's League, Ligue 1</a>
+                            <a>{{info.league}}</a>
                         </li>
-                        <li class="breadcrumb-item active" v-if="title">
-                            <strong>{{title.home.name}} - {{title.away.name}}</strong>
+                        <li class="breadcrumb-item active" v-if="info">
+                            <strong>{{info.home.name}} - {{info.away.name}}</strong>
                         </li>
                     </ol>
                 </div>
@@ -49,8 +50,8 @@
                         <div class="ibox ">
                             <div class="ibox-content text-center p-md">
                                 <div class="row">
-                                    <div class="col-sm" v-if="title">
-                                        <a style="font-size: 40px" class="text-center"><strong> <span style="color: #295182"> {{title.home.name}}</span> <span style="color: #4c4949"> {{title.home.score}} - {{title.away.score}} </span> <span style="color: #75acda"> {{title.away.name}} </strong></a>
+                                    <div class="col-sm" v-if="info">
+                                        <a style="font-size: 40px" class="text-center"><strong> <span style="color: #295182"> {{info.home.name}}</span> <span style="color: #4c4949"> {{info.home.score}} - {{info.away.score}} </span> <span style="color: #75acda"> {{info.away.name}} </strong></a>
                                     </div>
                                 </div>
                             </div>
@@ -70,10 +71,7 @@
                                 </div>
                                 <div class="ibox-content profile-content">
                                     <h4><strong>Paris-Saint-Germain 9 - 4 Olympique de Marseille</strong></h4>
-                                    <p><i class="fa fa-map-marker"></i> Sofive Meadowlands, Parc des Princes</p>
-                                    <h5>
-                                        Tuesday Men's League, Ligue 1
-                                    </h5>
+                                    <p><i class="fa fa-map-marker"></i> {{info.center}}</p>
                                     <div class="user-button">
                                         <div class="row">
                                             <div class="col-md-6">
@@ -113,53 +111,11 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td class="text-center">1</td>
-                                                <td> <span class="text-navy"> Paris-Saint-Germain
-                                                    </span></td>
-                                                <td class="text-center">6</td>
-                                                <td class="text-center"><span>15</span></td>
-
-                                            </tr>
-                                            <tr>
-                                                <td class="text-center">2</td>
-                                                <td> Olympique Lyonnais
-                                                </td>
-                                                <td class="text-center">6</td>
-                                                <td class="text-center"><span>11</span></td>
-
-                                            </tr>
-                                            <tr>
-                                                <td class="text-center">3</td>
-                                                <td> Fc Nantes
-                                                </td>
-                                                <td class="text-center">5</td>
-                                                <td class="text-center"><span>10</span></td>
-
-                                            </tr>
-                                            <tr>
-                                                <td class="text-center">4</td>
-                                                <td> <span class="text-navy"> Olympique de Marseille
-                                                    </span></td>
-                                                <td class="text-center">6</td>
-                                                <td class="text-center"><span>9</span></td>
-
-                                            </tr>
-                                            <tr>
-                                                <td class="text-center">5</td>
-                                                <td> LOSC
-                                                </td>
-                                                <td class="text-center">5</td>
-                                                <td class="text-center"><span>8</span></td>
-
-                                            </tr>
-                                            <tr>
-                                                <td class="text-center">6</td>
-                                                <td> OGC Nice
-                                                </td>
-                                                <td class="text-center">5</td>
-                                                <td class="text-center"><span>2</span></td>
-
+                                            <tr v-for="(standing, index) in info.standings">
+                                                <td class="text-center">{{index+1}}</td>
+                                                <td> <span class="text-navy">{{standing.Team}}</span></td>
+                                                <td class="text-center">{{standing.Games}}</td>
+                                                <td class="text-center"><span>{{standing.Points}}</span></td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -436,13 +392,13 @@
                 var app = new Vue({
                     el: '#wrapper',
                     data: {
-                        title: ""
+                        info: ""
                     },
                     mounted: function() {
                         const params = this.findGetParameter(),
                             origin = params.origin || "";
                         if (origin !== "") {
-                            this.title = JSON.parse(atob(origin))
+                            this.info = JSON.parse(atob(origin))
                         }
                     },
                     methods: {

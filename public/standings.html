@@ -246,7 +246,10 @@
                 league_loading: false,
                 standings: [],
                 standings_loading: false,
-                matches: []
+                matches: [],
+                selected_center: "",
+                selected_season: "",
+                selected_league: ""
             },
             mounted: function() {
                 let self = this;
@@ -262,16 +265,19 @@
                 $('.select_center').on('select2:select', function(e) {
                     let facility_id = e.target.value
                     self.getSeasons(facility_id)
+                    self.selected_center = self.centers.find(c => (c.id == facility_id)).name
                 });
                 $('.select_season').on('select2:select', function(e) {
                     let doc = JSON.parse(e.target.value),
                         facility_id = doc.facility_id,
                         season_id = doc.id;
                     self.getLeagues(facility_id, season_id)
+                    self.selected_season = doc.name
                 });
                 $('.select_league').on('select2:select', function(e) {
                     let league_id = e.target.value
                     self.getStandings(league_id)
+                    self.selected_league = self.leagues.find(l => (l.id == league_id)).name
                 });
                 this.getCenters()
             },
@@ -328,7 +334,11 @@
                                     away: {
                                         name: m.away.name,
                                         score: m.away.score,
-                                    }
+                                    },
+                                    center: this.selected_center,
+                                    season: this.selected_season,
+                                    league: this.selected_league,
+                                    standings: this.standings
                                 }))
                             }))
                             this.standings_loading = false
