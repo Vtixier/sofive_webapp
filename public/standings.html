@@ -21,140 +21,21 @@
 
     <div id="wrapper">
 
-        <nav class="navbar-default navbar-static-side" role="navigation">
-            <div class="sidebar-collapse">
-                <ul class="nav metismenu" id="side-menu">
-                    <li class="nav-header">
-                        <div class="dropdown profile-element">
-                            <img alt="image" class="rounded-circle" style="max-width: 50px" src="img/sofive/jd.jpeg" />
-                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                                <span class="block m-t-xs font-bold">Jean-Damien Ladeuil</span>
-                                <span class="text-muted text-xs block">Player<b class="caret"></b></span>
-                            </a>
-                            <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                                <li><a class="dropdown-item" href="profile.html">Profile</a></li>
-                                <li><a class="dropdown-item" href="contacts.html">Contacts</a></li>
-                                <li><a class="dropdown-item" href="mailbox.html">Mailbox</a></li>
-                                <li class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="login.html">Logout</a></li>
-                            </ul>
-                        </div>
-                        <div class="logo-element">
-                            <img alt="image" class="rounded-circle" style="max-width: 50px" src="img/sofive/jd.jpeg" />
-                        </div>
-                    </li>
-                    <li>
-                        <a href="index.html"><i class="fa fa-th-large"></i> <span class="nav-label">Dashboards</span> <span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level collapse">
-                            <li><a href="standings.html">Schedule and standings</a></li>
-                        </ul>
-                    </li>
+        <div><sofive-left-menu /></div>
 
-                </div>
-            </nav>
+        <div id="page-wrapper" class="gray-bg">
 
-            <div id="page-wrapper" class="gray-bg">
+            <div><sofive-header /></div>
 
-                <div class="row border-bottom">
-                    <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
-                        <div class="navbar-header">
-                            <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
-                            <form role="search" class="navbar-form-custom" action="search_results.html">
-                                <div class="form-group">
-                                    <input type="text" placeholder="Search for my team..." class="form-control" name="top-search" id="top-search">
-                                </div>
-                            </form>
-                        </div>
-                        <ul class="nav navbar-top-links navbar-right">
-                            <li>
-                                <span class="m-r-sm text-muted welcome-message">Welcome to Sofive Soccer Center</span>
-                            </li>
-                            <li class="dropdown">
-                                <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
-                                    <i class="fa fa-envelope"></i> <span class="label label-warning">1</span>
-                                </a>
-                                <ul class="dropdown-menu dropdown-messages">
-                                    <li>
-                                        <div class="dropdown-messages-box">
-                                            <a class="dropdown-item float-left" href="profile.html">
-                                                <img alt="image" class="rounded-circle" src="img/sofive/charles.jpeg">
-                                            </a>
-                                            <div class="media-body">
-                                                <small class="float-right">46h ago</small>
-                                                <strong>Charles Lagayette</strong> invited to join his team <strong> "Paris-Saint-Germain"</strong>.
-                                                <br>
-                                                <small class="text-muted">3 days ago at 7:58 pm - 03.06.2019</small>
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="dropdown">
-                                <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
-                                    <i class="fa fa-bell"></i> <span class="label label-primary">1</span>
-                                </a>
-                                <ul class="dropdown-menu dropdown-alerts">
-                                    <li>
-                                        <a href="grid_options.html" class="dropdown-item">
-                                            <div>
-                                                <i class="fa fa-upload fa-fw"></i> New match recap available
-                                                <span class="float-right text-muted small">4 minutes ago</span>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li class="dropdown-divider"></li>
-                                    <li>
-                                        <div class="text-center link-block">
-                                            <a href="notifications.html" class="dropdown-item">
-                                                <strong>See All Alerts</strong>
-                                                <i class="fa fa-angle-right"></i>
-                                            </a>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </li>
+            <div class="wrapper wrapper-content animated fadeInRight">
 
-                            <li>
-                                <a href="login.html">
-                                    <i class="fa fa-sign-out"></i> Log out
-                                </a>
-                            </li>
-                        </ul>
-
-                    </nav>
-
-                </div>
-
-                <div class="wrapper wrapper-content animated fadeInRight">
-
-                    <div class="ibox-content m-b-sm border-bottom">
-                        <div class="row">
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label class="col-form-label" for="status">
-                                        Select Center
-                                        <div v-if="facility_loading">
-                                            <div>
-                                                <div class="sk-spinner sk-spinner-wave">
-                                                    <div class="sk-rect1"></div>
-                                                    <div class="sk-rect2"></div>
-                                                    <div class="sk-rect3"></div>
-                                                    <div class="sk-rect4"></div>
-                                                    <div class="sk-rect5"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </label>
-                                    <select class="select_center form-control">
-                                        <option></option>
-                                        <option v-for="center in centers" :value="center.id">{{center.name}}</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
+                <div class="ibox-content m-b-sm border-bottom">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
                                 <label class="col-form-label" for="status">
-                                    Select Season
-                                    <div v-if="season_loading">
+                                    Select Center
+                                    <div v-if="facility_loading">
                                         <div>
                                             <div class="sk-spinner sk-spinner-wave">
                                                 <div class="sk-rect1"></div>
@@ -166,100 +47,120 @@
                                         </div>
                                     </div>
                                 </label>
-                                <select class="select_season form-control">
+                                <select class="select_center form-control">
                                     <option></option>
-                                    <option v-for="season in seasons" :value="JSON.stringify(season)">{{season.name}}</option>
+                                    <option v-for="center in centers" :value="center.id">{{center.name}}</option>
                                 </select>
                             </div>
-                            <div class="col-sm-4">
-                                <label class="col-form-label" for="status">
-                                    Select League
-                                    <div v-if="league_loading">
-                                        <div>
-                                            <div class="sk-spinner sk-spinner-wave">
-                                                <div class="sk-rect1"></div>
-                                                <div class="sk-rect2"></div>
-                                                <div class="sk-rect3"></div>
-                                                <div class="sk-rect4"></div>
-                                                <div class="sk-rect5"></div>
-                                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="col-form-label" for="status">
+                                Select Season
+                                <div v-if="season_loading">
+                                    <div>
+                                        <div class="sk-spinner sk-spinner-wave">
+                                            <div class="sk-rect1"></div>
+                                            <div class="sk-rect2"></div>
+                                            <div class="sk-rect3"></div>
+                                            <div class="sk-rect4"></div>
+                                            <div class="sk-rect5"></div>
                                         </div>
                                     </div>
-                                </label>
-                                <select class="select_league form-control">
-                                    <option></option>
-                                    <option v-for="league in leagues" :value="league.id">{{league.name}}</option>
-                                </select>
+                                </div>
+                            </label>
+                            <select class="select_season form-control">
+                                <option></option>
+                                <option v-for="season in seasons" :value="JSON.stringify(season)">{{season.name}}</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="col-form-label" for="status">
+                                Select League
+                                <div v-if="league_loading">
+                                    <div>
+                                        <div class="sk-spinner sk-spinner-wave">
+                                            <div class="sk-rect1"></div>
+                                            <div class="sk-rect2"></div>
+                                            <div class="sk-rect3"></div>
+                                            <div class="sk-rect4"></div>
+                                            <div class="sk-rect5"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </label>
+                            <select class="select_league form-control">
+                                <option></option>
+                                <option v-for="league in leagues" :value="league.id">{{league.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12" v-if="standings_loading">
+                        <div>
+                            <div>
+                                <div class="sk-spinner sk-spinner-wave">
+                                    <div class="sk-rect1"></div>
+                                    <div class="sk-rect2"></div>
+                                    <div class="sk-rect3"></div>
+                                    <div class="sk-rect4"></div>
+                                    <div class="sk-rect5"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
-
-                    <div class="row">
-                        <div class="col-lg-12" v-if="standings_loading">
-                            <div>
-                                <div>
-                                    <div class="sk-spinner sk-spinner-wave">
-                                        <div class="sk-rect1"></div>
-                                        <div class="sk-rect2"></div>
-                                        <div class="sk-rect3"></div>
-                                        <div class="sk-rect4"></div>
-                                        <div class="sk-rect5"></div>
-                                    </div>
+                    <div class="col-lg-12">
+                        <div class="ibox ">
+                            <div class="ibox-title">
+                                <h5>Standings</h5>
+                                <div class="ibox-tools">
+                                    <a class="collapse-link">
+                                        <i class="fa fa-chevron-up"></i>
+                                    </a>
+                                    <a class="close-link">
+                                        <i class="fa fa-times"></i>
+                                    </a>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-lg-12">
-                            <div class="ibox ">
-                                <div class="ibox-title">
-                                    <h5>Standings</h5>
-                                    <div class="ibox-tools">
-                                        <a class="collapse-link">
-                                            <i class="fa fa-chevron-up"></i>
-                                        </a>
-                                        <a class="close-link">
-                                            <i class="fa fa-times"></i>
-                                        </a>
-                                    </div>
+                            <div class="ibox-content">
+                                <div>
+                                    <table class="table table-hover margin bottom table-responsive">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 1%" class="text-center">No.</th>
+                                                <th class="text-center">Team</th>
+                                                <th class="text-center">Games</th>
+                                                <th class="text-center">W</th>
+                                                <th class="text-center">D</th>
+                                                <th class="text-center">L</th>
+                                                <th class="text-center">GF</th>
+                                                <th class="text-center">GA</th>
+                                                <th class="text-center">GD</th>
+                                                <th class="text-center">Pts</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="(standing, index) in standings">
+                                                <td class="text-center">{{index+1}}</td>
+                                                <td class="text-center">{{standing.Team}}</td>
+                                                <td class="text-center">{{standing.Games}}</td>
+                                                <td class="text-center">{{standing.Won}}</td>
+                                                <td class="text-center">{{standing.Draw}}</td>
+                                                <td class="text-center">{{standing.Lost}}</td>
+                                                <td class="text-center">{{standing.GF}}</td>
+                                                <td class="text-center">{{standing.GA}}</td>
+                                                <td class="text-center">{{standing.GD}}</td>
+                                                <td class="text-center">{{standing.Points}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
-                                <div class="ibox-content">
-                                    <div>
-                                        <table class="table table-hover margin bottom table-responsive">
-                                            <thead>
-                                                <tr>
-                                                    <th style="width: 1%" class="text-center">No.</th>
-                                                    <th class="text-center">Team</th>
-                                                    <th class="text-center">Games</th>
-                                                    <th class="text-center">W</th>
-                                                    <th class="text-center">D</th>
-                                                    <th class="text-center">L</th>
-                                                    <th class="text-center">GF</th>
-                                                    <th class="text-center">GA</th>
-                                                    <th class="text-center">GD</th>
-                                                    <th class="text-center">Pts</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr v-for="(standing, index) in standings">
-                                                   <td class="text-center">{{index+1}}</td>
-                                                   <td class="text-center">{{standing.Team}}</td>
-                                                   <td class="text-center">{{standing.Games}}</td>
-                                                   <td class="text-center">{{standing.Won}}</td>
-                                                   <td class="text-center">{{standing.Draw}}</td>
-                                                   <td class="text-center">{{standing.Lost}}</td>
-                                                   <td class="text-center">{{standing.GF}}</td>
-                                                   <td class="text-center">{{standing.GA}}</td>
-                                                   <td class="text-center">{{standing.GD}}</td>
-                                                   <td class="text-center">{{standing.Points}}</td>
-                                               </tr>
-                                           </tbody>
-                                       </table>
-                                   </div>
 
+                            </div>
+                        </div>
 
-                               </div>
-                           </div>
-
-                           <div class="ibox ">
+                        <div class="ibox ">
                             <div class="ibox-title">
                                 <h5>Matches</h5>
                                 <div class="ibox-tools">
@@ -329,104 +230,106 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/1.5.1/vue-resource.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
 
-    <script type="text/javascript">
+    <script type="text/javascript" src="js/navigation.js"></script>
+    <script type="text/javascript" src="js/header.js"></script>
 
+    <script type="text/javascript">
         var app = new Vue({
-          el: '#wrapper',
-          data: {
-            centers: [],
-            seasons: [],
-            leagues: [],
-            facility_loading: false,
-            season_loading: false,
-            league_loading: false,
-            standings: [],
-            standings_loading: false,
-            matches: []
-        },
-        mounted: function() {
-            let self = this;
-            $(".select_center").select2({
-                placeholder: "Select or enter value...",
-            });
-            $(".select_season").select2({
-                placeholder: "Select or enter value...",
-            });
-            $(".select_league").select2({
-                placeholder: "Select or enter value...",
-            });
-            $('.select_center').on('select2:select', function (e) {
-                let facility_id = e.target.value
-                self.getSeasons(facility_id)
-            });
-            $('.select_season').on('select2:select', function (e) {
-                let doc = JSON.parse(e.target.value),
-                facility_id = doc.facility_id,
-                season_id = doc.id;
-                self.getLeagues(facility_id, season_id)
-            });
-            $('.select_league').on('select2:select', function (e) {
-                let league_id = e.target.value
-                self.getStandings(league_id)
-            });
-            this.getCenters()
-        },
-        methods: {
-            getCenters: function() {
-                this.facility_loading = true
-                this.$http.get("http://localhost:8080/facility/")
-                .then((resp) => {
-                    this.centers = resp.body;
-                    this.facility_loading = false
-                })
-                .catch((err) => {
-                    console.log(err.body.errors)
-                })
+            el: '#wrapper',
+            data: {
+                centers: [],
+                seasons: [],
+                leagues: [],
+                facility_loading: false,
+                season_loading: false,
+                league_loading: false,
+                standings: [],
+                standings_loading: false,
+                matches: []
             },
-            getSeasons: function(facility_id) {
-                this.season_loading = true
-                let url = "http://localhost:8080/facility/"+facility_id+"/seasons"
-                this.$http.get(url)
-                .then((resp) => {
-                    this.seasons = resp.body;
-                    this.season_loading = false
-                })
-                .catch((err) => {
-                    console.log(err.body.errors)
-                })
+            mounted: function() {
+                let self = this;
+                $(".select_center").select2({
+                    placeholder: "Select or enter value...",
+                });
+                $(".select_season").select2({
+                    placeholder: "Select or enter value...",
+                });
+                $(".select_league").select2({
+                    placeholder: "Select or enter value...",
+                });
+                $('.select_center').on('select2:select', function(e) {
+                    let facility_id = e.target.value
+                    self.getSeasons(facility_id)
+                });
+                $('.select_season').on('select2:select', function(e) {
+                    let doc = JSON.parse(e.target.value),
+                        facility_id = doc.facility_id,
+                        season_id = doc.id;
+                    self.getLeagues(facility_id, season_id)
+                });
+                $('.select_league').on('select2:select', function(e) {
+                    let league_id = e.target.value
+                    self.getStandings(league_id)
+                });
+                this.getCenters()
             },
-            getLeagues: function(facility_id, season_id) {
-                this.league_loading = true
-                let url = "http://localhost:8080/facility/"+facility_id+"/"+season_id+"/leagues"
-                this.$http.get(url)
-                .then((resp) => {
-                    this.leagues = resp.body;
-                    this.league_loading = false
-                })
-                .catch((err) => {
-                    console.log(err.body.errors)
-                })
-            },
-            getStandings: function(league_id) {
-                this.standings_loading = true
-                let url = "http://localhost:8080/league/"+league_id+"/scores"
-                this.$http.get(url)
-                .then((resp) => {
-                    this.standings = resp.body.leaderboard
-                    this.matches = resp.body.matches.map(m => ({
-                        ...m,
-                        start_parsed: moment(m.start, "YYYY-MM-DDTHH:mm:ss").format("YYYY-MM-DD h:mmA").replace(" ", " at ")
-                    }))
-                    this.standings_loading = false
-                    console.log("Matches", this.matches)
-                })
-                .catch((err) => {
-                    console.log(err)
-                })
-            },
-        }
-    })
-</script>
+            methods: {
+                getCenters: function() {
+                    this.facility_loading = true
+                    this.$http.get("http://localhost:8080/facility/")
+                        .then((resp) => {
+                            this.centers = resp.body;
+                            this.facility_loading = false
+                        })
+                        .catch((err) => {
+                            console.log(err.body.errors)
+                        })
+                },
+                getSeasons: function(facility_id) {
+                    this.season_loading = true
+                    let url = "http://localhost:8080/facility/" + facility_id + "/seasons"
+                    this.$http.get(url)
+                        .then((resp) => {
+                            this.seasons = resp.body;
+                            this.season_loading = false
+                        })
+                        .catch((err) => {
+                            console.log(err.body.errors)
+                        })
+                },
+                getLeagues: function(facility_id, season_id) {
+                    this.league_loading = true
+                    let url = "http://localhost:8080/facility/" + facility_id + "/" + season_id + "/leagues"
+                    this.$http.get(url)
+                        .then((resp) => {
+                            this.leagues = resp.body;
+                            this.league_loading = false
+                        })
+                        .catch((err) => {
+                            console.log(err.body.errors)
+                        })
+                },
+                getStandings: function(league_id) {
+                    this.standings_loading = true
+                    let url = "http://localhost:8080/league/" + league_id + "/scores"
+                    this.$http.get(url)
+                        .then((resp) => {
+                            this.standings = resp.body.leaderboard
+                            this.matches = resp.body.matches.map(m => ({
+                                ...m,
+                                start_parsed: moment(m.start, "YYYY-MM-DDTHH:mm:ss").format("YYYY-MM-DD h:mmA").replace(" ", " at ")
+                            }))
+                            this.standings_loading = false
+                            console.log("Matches", this.matches)
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                },
+            }
+        })
+    </script>
 
 </body>
 
