@@ -195,6 +195,19 @@
                     </div>
 
                     <div class="row">
+                        <div class="col-lg-12" v-if="standings_loading">
+                            <div>
+                                <div>
+                                    <div class="sk-spinner sk-spinner-wave">
+                                        <div class="sk-rect1"></div>
+                                        <div class="sk-rect2"></div>
+                                        <div class="sk-rect3"></div>
+                                        <div class="sk-rect4"></div>
+                                        <div class="sk-rect5"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="col-lg-12">
                             <div class="ibox ">
                                 <div class="ibox-title">
@@ -226,19 +239,6 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <div v-if="standings_loading">
-                                                        <div>
-                                                            <div class="sk-spinner sk-spinner-wave">
-                                                                <div class="sk-rect1"></div>
-                                                                <div class="sk-rect2"></div>
-                                                                <div class="sk-rect3"></div>
-                                                                <div class="sk-rect4"></div>
-                                                                <div class="sk-rect5"></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </tr>
                                                 <tr v-for="(standing, index) in standings">
                                                    <td class="text-center">{{index+1}}</td>
                                                    <td class="text-center">{{standing.Team}}</td>
@@ -284,182 +284,149 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td class="text-center"> 02-19-19 08:00 PM </td>
-                                                <td class="text-center"> Paris-Saint-Germain </td>
-                                                <td class="text-center"> 1 - 1 </td>
-                                                <td class="text-center"> Olympique de Marseille </td>
+                                            <tr v-for="match in matches">
+                                                <td class="text-center">{{match.start_parsed}}</td>
+                                                <td class="text-center">{{match.home.name}}</td>
+                                                <td class="text-center">{{match.home.score}} - {{match.away.score}}</td>
+                                                <td class="text-center">{{match.away.name}}</td>
                                                 <td style="text-align: center"><a href="#"><span class="label label-primary">view more</span></a></td>
-                                                <tr>
-                                                    <td class="text-center"> 02-19-19 08:00 PM </td>
-                                                    <td class="text-center"> Paris-Saint-Germain </td>
-                                                    <td class="text-center"> 1 - 1 </td>
-                                                    <td class="text-center"> Olympique de Marseille </td>
-                                                    <td style="text-align: center"><a href="#"><span class="label label-primary">view more</span></a></td>
-                                                </tr>                                                    <tr>
-                                                    <td class="text-center"> 02-19-19 08:00 PM </td>
-                                                    <td class="text-center"> Paris-Saint-Germain </td>
-                                                    <td class="text-center"> 1 - 1 </td>
-                                                    <td class="text-center"> Olympique de Marseille </td>
-                                                    <td style="text-align: center"><a href="#"><span class="label label-primary">view more</span></a></td>
-                                                </tr>                                                    <tr>
-                                                    <td class="text-center"> 02-19-19 08:00 PM </td>
-                                                    <td class="text-center"> Paris-Saint-Germain </td>
-                                                    <td class="text-center"> 1 - 1 </td>
-                                                    <td class="text-center"> Olympique de Marseille </td>
-                                                    <td style="text-align: center"><a href="#"><span class="label label-primary">view more</span></a></td>
-                                                </tr>                                                    <tr>
-                                                    <td class="text-center"> 02-19-19 08:00 PM </td>
-                                                    <td class="text-center"> Paris-Saint-Germain </td>
-                                                    <td class="text-center"> 1 - 1 </td>
-                                                    <td class="text-center"> Olympique de Marseille </td>
-                                                    <td style="text-align: center"><a href="#"><span class="label label-primary">view more</span></a></td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="text-center"> 02-19-19 08:00 PM </td>
-                                                    <td class="text-center"> Paris-Saint-Germain </td>
-                                                    <td class="text-center"> 1 - 1 </td>
-                                                    <td class="text-center"> Olympique de Marseille </td>
-                                                    <td style="text-align: center"><a href="#"><span class="label label-primary">view more</span></a></td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="text-center"> 02-19-19 08:00 PM </td>
-                                                    <td class="text-center"> Paris-Saint-Germain </td>
-                                                    <td class="text-center"> 1 - 1 </td>
-                                                    <td class="text-center"> Olympique de Marseille </td>
-                                                    <td style="text-align: center"><a href="#"><span class="label label-primary">view more</span></a></td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                 </div>
 
-                <div class="footer">
-                    <div class="float-right">
-                        Powered by ScorePlay
-                    </div>
-                    <div>
-                        <strong>Sofive Soccer Center </strong>
-                    </div>
+            </div>
+
+            <div class="footer">
+                <div class="float-right">
+                    Powered by ScorePlay
+                </div>
+                <div>
+                    <strong>Sofive Soccer Center </strong>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Mainly scripts -->
-        <script src="js/jquery-3.1.1.min.js"></script>
-        <script src="js/popper.min.js"></script>
-        <script src="js/bootstrap.js"></script>
-        <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
-        <script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <!-- Mainly scripts -->
+    <script src="js/jquery-3.1.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
 
-        <!-- Custom and plugin javascript -->
-        <script src="js/inspinia.js"></script>
+    <!-- Custom and plugin javascript -->
+    <script src="js/inspinia.js"></script>
 
-        <script src="js/plugins/select2/select2.full.min.js"></script>
+    <script src="js/plugins/select2/select2.full.min.js"></script>
 
-        <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
 
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/1.5.1/vue-resource.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/1.5.1/vue-resource.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
 
-        <script type="text/javascript">
+    <script type="text/javascript">
 
-            var app = new Vue({
-              el: '#wrapper',
-              data: {
-                centers: [],
-                seasons: [],
-                leagues: [],
-                facility_loading: false,
-                season_loading: false,
-                league_loading: false,
-                standings: [],
-                standings_loading: false,
-                matches: []
+        var app = new Vue({
+          el: '#wrapper',
+          data: {
+            centers: [],
+            seasons: [],
+            leagues: [],
+            facility_loading: false,
+            season_loading: false,
+            league_loading: false,
+            standings: [],
+            standings_loading: false,
+            matches: []
+        },
+        mounted: function() {
+            let self = this;
+            $(".select_center").select2({
+                placeholder: "Select or enter value...",
+            });
+            $(".select_season").select2({
+                placeholder: "Select or enter value...",
+            });
+            $(".select_league").select2({
+                placeholder: "Select or enter value...",
+            });
+            $('.select_center').on('select2:select', function (e) {
+                let facility_id = e.target.value
+                self.getSeasons(facility_id)
+            });
+            $('.select_season').on('select2:select', function (e) {
+                let doc = JSON.parse(e.target.value),
+                facility_id = doc.facility_id,
+                season_id = doc.id;
+                self.getLeagues(facility_id, season_id)
+            });
+            $('.select_league').on('select2:select', function (e) {
+                let league_id = e.target.value
+                self.getStandings(league_id)
+            });
+            this.getCenters()
+        },
+        methods: {
+            getCenters: function() {
+                this.facility_loading = true
+                this.$http.get("http://localhost:8080/facility/")
+                .then((resp) => {
+                    this.centers = resp.body;
+                    this.facility_loading = false
+                })
+                .catch((err) => {
+                    console.log(err.body.errors)
+                })
             },
-            mounted: function() {
-                let self = this;
-                $(".select_center").select2({
-                    placeholder: "Select or enter value...",
-                });
-                $(".select_season").select2({
-                    placeholder: "Select or enter value...",
-                });
-                $(".select_league").select2({
-                    placeholder: "Select or enter value...",
-                });
-                $('.select_center').on('select2:select', function (e) {
-                    let facility_id = e.target.value
-                    self.getSeasons(facility_id)
-                });
-                $('.select_season').on('select2:select', function (e) {
-                    let doc = JSON.parse(e.target.value),
-                    facility_id = doc.facility_id,
-                    season_id = doc.id;
-                    self.getLeagues(facility_id, season_id)
-                });
-                $('.select_league').on('select2:select', function (e) {
-                    let league_id = e.target.value
-                    self.getStandings(league_id)
-                });
-                this.getCenters()
+            getSeasons: function(facility_id) {
+                this.season_loading = true
+                let url = "http://localhost:8080/facility/"+facility_id+"/seasons"
+                this.$http.get(url)
+                .then((resp) => {
+                    this.seasons = resp.body;
+                    this.season_loading = false
+                })
+                .catch((err) => {
+                    console.log(err.body.errors)
+                })
             },
-            methods: {
-                getCenters: function() {
-                    this.facility_loading = true
-                    this.$http.get("http://localhost:8080/facility/")
-                    .then((resp) => {
-                        this.centers = resp.body;
-                        this.facility_loading = false
-                    })
-                    .catch((err) => {
-                        console.log(err.body.errors)
-                    })
-                },
-                getSeasons: function(facility_id) {
-                    this.season_loading = true
-                    let url = "http://localhost:8080/facility/"+facility_id+"/seasons"
-                    this.$http.get(url)
-                    .then((resp) => {
-                        this.seasons = resp.body;
-                        this.season_loading = false
-                    })
-                    .catch((err) => {
-                        console.log(err.body.errors)
-                    })
-                },
-                getLeagues: function(facility_id, season_id) {
-                    this.league_loading = true
-                    let url = "http://localhost:8080/facility/"+facility_id+"/"+season_id+"/leagues"
-                    this.$http.get(url)
-                    .then((resp) => {
-                        this.leagues = resp.body;
-                        this.league_loading = false
-                    })
-                    .catch((err) => {
-                        console.log(err.body.errors)
-                    })
-                },
-                getStandings: function(league_id) {
-                    this.standings_loading = true
-                    let url = "http://localhost:8080/league/"+league_id+"/scores"
-                    this.$http.get(url)
-                    .then((resp) => {
-                        this.standings = resp.body.leaderboard
-                        this.matches = resp.body.matches
-                        this.standings_loading = false
-                    })
-                    .catch((err) => {
-                        console.log(err.body.errors)
-                    })
-                },
-            }
-        })
-    </script>
+            getLeagues: function(facility_id, season_id) {
+                this.league_loading = true
+                let url = "http://localhost:8080/facility/"+facility_id+"/"+season_id+"/leagues"
+                this.$http.get(url)
+                .then((resp) => {
+                    this.leagues = resp.body;
+                    this.league_loading = false
+                })
+                .catch((err) => {
+                    console.log(err.body.errors)
+                })
+            },
+            getStandings: function(league_id) {
+                this.standings_loading = true
+                let url = "http://localhost:8080/league/"+league_id+"/scores"
+                this.$http.get(url)
+                .then((resp) => {
+                    this.standings = resp.body.leaderboard
+                    this.matches = resp.body.matches.map(m => ({
+                        ...m,
+                        start_parsed: moment(m.start, "YYYY-MM-DDTHH:mm:ss").format("YYYY-MM-DD h:mmA").replace(" ", " at ")
+                    }))
+                    this.standings_loading = false
+                    console.log("Matches", this.matches)
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
+            },
+        }
+    })
+</script>
 
 </body>
 
