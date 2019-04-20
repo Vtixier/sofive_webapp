@@ -195,7 +195,7 @@
                                                 <td class="text-center">{{match.home.name}}</td>
                                                 <td class="text-center">{{match.home.score}} - {{match.away.score}}</td>
                                                 <td class="text-center">{{match.away.name}}</td>
-                                                <td style="text-align: center"><a href="#"><span class="label label-primary">view more</span></a></td>
+                                                <td style="text-align: center"><a :href="match.url"><span class="label label-primary">view more</span></a></td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -319,7 +319,17 @@
                             this.standings = resp.body.leaderboard
                             this.matches = resp.body.matches.map(m => ({
                                 ...m,
-                                start_parsed: moment(m.start, "YYYY-MM-DDTHH:mm:ss").format("YYYY-MM-DD h:mmA").replace(" ", " at ")
+                                start_parsed: moment(m.start, "YYYY-MM-DDTHH:mm:ss").format("YYYY-MM-DD h:mmA").replace(" ", " at "),
+                                url: "match.html?id=" + m.id + "&origin=" + btoa(JSON.stringify({
+                                    home: {
+                                        name: m.home.name,
+                                        score: m.home.score,
+                                    },
+                                    away: {
+                                        name: m.away.name,
+                                        score: m.away.score,
+                                    }
+                                }))
                             }))
                             this.standings_loading = false
                             console.log("Matches", this.matches)
