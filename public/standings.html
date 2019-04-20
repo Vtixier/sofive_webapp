@@ -22,11 +22,15 @@
 
     <div id="wrapper">
 
-        <div><sofive-left-menu /></div>
+        <div>
+            <sofive-left-menu />
+        </div>
 
         <div id="page-wrapper" class="gray-bg">
 
-            <div><sofive-header /></div>
+            <div>
+                <sofive-header />
+            </div>
 
             <div class="wrapper wrapper-content animated fadeInRight">
 
@@ -203,7 +207,9 @@
 
             </div>
 
-            <div><sofive-footer /></div>
+            <div>
+                <sofive-footer />
+            </div>
         </div>
     </div>
 
@@ -259,8 +265,8 @@
                 });
                 $('.select_season').on('select2:select', function(e) {
                     let doc = JSON.parse(e.target.value),
-                    facility_id = doc.facility_id,
-                    season_id = doc.id;
+                        facility_id = doc.facility_id,
+                        season_id = doc.id;
                     self.getLeagues(facility_id, season_id)
                 });
                 $('.select_league').on('select2:select', function(e) {
@@ -273,54 +279,54 @@
                 getCenters: function() {
                     this.facility_loading = true
                     this.$http.get("http://localhost:8080/facility/")
-                    .then((resp) => {
-                        this.centers = resp.body;
-                        this.facility_loading = false
-                    })
-                    .catch((err) => {
-                        console.log(err.body.errors)
-                    })
+                        .then((resp) => {
+                            this.centers = resp.body;
+                            this.facility_loading = false
+                        })
+                        .catch((err) => {
+                            console.log(err.body.errors)
+                        })
                 },
                 getSeasons: function(facility_id) {
                     this.season_loading = true
                     let url = "http://localhost:8080/facility/" + facility_id + "/seasons"
                     this.$http.get(url)
-                    .then((resp) => {
-                        this.seasons = resp.body;
-                        this.season_loading = false
-                    })
-                    .catch((err) => {
-                        console.log(err.body.errors)
-                    })
+                        .then((resp) => {
+                            this.seasons = resp.body;
+                            this.season_loading = false
+                        })
+                        .catch((err) => {
+                            console.log(err.body.errors)
+                        })
                 },
                 getLeagues: function(facility_id, season_id) {
                     this.league_loading = true
                     let url = "http://localhost:8080/facility/" + facility_id + "/" + season_id + "/leagues"
                     this.$http.get(url)
-                    .then((resp) => {
-                        this.leagues = resp.body;
-                        this.league_loading = false
-                    })
-                    .catch((err) => {
-                        console.log(err.body.errors)
-                    })
+                        .then((resp) => {
+                            this.leagues = resp.body;
+                            this.league_loading = false
+                        })
+                        .catch((err) => {
+                            console.log(err.body.errors)
+                        })
                 },
                 getStandings: function(league_id) {
                     this.standings_loading = true
                     let url = "http://localhost:8080/league/" + league_id + "/scores"
                     this.$http.get(url)
-                    .then((resp) => {
-                        this.standings = resp.body.leaderboard
-                        this.matches = resp.body.matches.map(m => ({
-                            ...m,
-                            start_parsed: moment(m.start, "YYYY-MM-DDTHH:mm:ss").format("YYYY-MM-DD h:mmA").replace(" ", " at ")
-                        }))
-                        this.standings_loading = false
-                        console.log("Matches", this.matches)
-                    })
-                    .catch((err) => {
-                        console.log(err)
-                    })
+                        .then((resp) => {
+                            this.standings = resp.body.leaderboard
+                            this.matches = resp.body.matches.map(m => ({
+                                ...m,
+                                start_parsed: moment(m.start, "YYYY-MM-DDTHH:mm:ss").format("YYYY-MM-DD h:mmA").replace(" ", " at ")
+                            }))
+                            this.standings_loading = false
+                            console.log("Matches", this.matches)
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
                 },
             }
         })
