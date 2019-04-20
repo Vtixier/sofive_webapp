@@ -14,7 +14,8 @@
     <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
     <link href="css/animate.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
-    <link rel="icon" href="img/sofive/sofive.ico" />
+    <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-32x32.png" sizes="32x32" />
+    <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" sizes="192x192" />
 </head>
 
 <body class="mini-navbar">
@@ -202,14 +203,7 @@
 
             </div>
 
-            <div class="footer">
-                <div class="float-right">
-                    Powered by ScorePlay
-                </div>
-                <div>
-                    <strong>Sofive Soccer Center </strong>
-                </div>
-            </div>
+            <div><sofive-footer /></div>
         </div>
     </div>
 
@@ -232,6 +226,7 @@
 
     <script type="text/javascript" src="js/navigation.js"></script>
     <script type="text/javascript" src="js/header.js"></script>
+    <script type="text/javascript" src="js/footer.js"></script>
 
     <script type="text/javascript">
         var app = new Vue({
@@ -264,8 +259,8 @@
                 });
                 $('.select_season').on('select2:select', function(e) {
                     let doc = JSON.parse(e.target.value),
-                        facility_id = doc.facility_id,
-                        season_id = doc.id;
+                    facility_id = doc.facility_id,
+                    season_id = doc.id;
                     self.getLeagues(facility_id, season_id)
                 });
                 $('.select_league').on('select2:select', function(e) {
@@ -278,54 +273,54 @@
                 getCenters: function() {
                     this.facility_loading = true
                     this.$http.get("http://localhost:8080/facility/")
-                        .then((resp) => {
-                            this.centers = resp.body;
-                            this.facility_loading = false
-                        })
-                        .catch((err) => {
-                            console.log(err.body.errors)
-                        })
+                    .then((resp) => {
+                        this.centers = resp.body;
+                        this.facility_loading = false
+                    })
+                    .catch((err) => {
+                        console.log(err.body.errors)
+                    })
                 },
                 getSeasons: function(facility_id) {
                     this.season_loading = true
                     let url = "http://localhost:8080/facility/" + facility_id + "/seasons"
                     this.$http.get(url)
-                        .then((resp) => {
-                            this.seasons = resp.body;
-                            this.season_loading = false
-                        })
-                        .catch((err) => {
-                            console.log(err.body.errors)
-                        })
+                    .then((resp) => {
+                        this.seasons = resp.body;
+                        this.season_loading = false
+                    })
+                    .catch((err) => {
+                        console.log(err.body.errors)
+                    })
                 },
                 getLeagues: function(facility_id, season_id) {
                     this.league_loading = true
                     let url = "http://localhost:8080/facility/" + facility_id + "/" + season_id + "/leagues"
                     this.$http.get(url)
-                        .then((resp) => {
-                            this.leagues = resp.body;
-                            this.league_loading = false
-                        })
-                        .catch((err) => {
-                            console.log(err.body.errors)
-                        })
+                    .then((resp) => {
+                        this.leagues = resp.body;
+                        this.league_loading = false
+                    })
+                    .catch((err) => {
+                        console.log(err.body.errors)
+                    })
                 },
                 getStandings: function(league_id) {
                     this.standings_loading = true
                     let url = "http://localhost:8080/league/" + league_id + "/scores"
                     this.$http.get(url)
-                        .then((resp) => {
-                            this.standings = resp.body.leaderboard
-                            this.matches = resp.body.matches.map(m => ({
-                                ...m,
-                                start_parsed: moment(m.start, "YYYY-MM-DDTHH:mm:ss").format("YYYY-MM-DD h:mmA").replace(" ", " at ")
-                            }))
-                            this.standings_loading = false
-                            console.log("Matches", this.matches)
-                        })
-                        .catch((err) => {
-                            console.log(err)
-                        })
+                    .then((resp) => {
+                        this.standings = resp.body.leaderboard
+                        this.matches = resp.body.matches.map(m => ({
+                            ...m,
+                            start_parsed: moment(m.start, "YYYY-MM-DDTHH:mm:ss").format("YYYY-MM-DD h:mmA").replace(" ", " at ")
+                        }))
+                        this.standings_loading = false
+                        console.log("Matches", this.matches)
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                    })
                 },
             }
         })
