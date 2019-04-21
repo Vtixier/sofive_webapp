@@ -14,6 +14,7 @@
     <link href="css/style.css" rel="stylesheet">
     <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-32x32.png" sizes="32x32" />
     <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" sizes="192x192" />
+    <link href="css/plugins/nouslider/jquery.nouislider.css" rel="stylesheet">
 </head>
 
 <body class="mini-navbar">
@@ -72,7 +73,7 @@
                                     </figure>
                                 </div>
                                 <div class="ibox-content profile-content">
-                                    <h4><strong>{{info.home.name}} {{info.home.score}} - {{info.away.score}} {{info.away.name}}</strong></h4>
+                                    <h4 v-if="info"><strong>{{info.home.name}} {{info.home.score}} - {{info.away.score}} {{info.away.name}}</strong></h4>
                                     <p />
                                     <p><i class="fa fa-map-marker"></i> {{info.center}}</p>
                                     <p><i class="fa fa-male"></i> {{referee.firstname+" "+referee.lastname}}</p>
@@ -82,7 +83,9 @@
                                                 <button type="button" class="btn btn-primary btn-sm btn-block"><i class="fa fa-facebook-square"></i> Share on Facebook</button>
                                             </div>
                                             <div class="col-md-6">
-                                                <button type="button" class="btn btn-default btn-sm btn-block"><i class="fa fa-pencil"></i> Referee assessment</button>
+                                                <button type="button" class="btn btn-primary btn-sm btn-block" data-toggle="modal" data-target="#myModal">
+                                                    <i class="fa fa-pencil"></i> Referee assessment
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -237,10 +240,33 @@
                     </div>
                 </div>
             </div>
-
-
-
         </div>
+
+        <div class="modal inmodal" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content animated bounceInRight">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <i class="fa fa-address-card-o modal-icon"></i>
+                        <h4 class="modal-title">Rate your match referee</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Rating: <b style="font-size: 15px">{{ref_rating}}/10</b></label>
+                            <div id="basic_slider"></div>
+                            <br />
+                            <label>Comment (optional)</label>
+                            <input placeholder="Enter your comment..." class="form-control">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div>
             <sofive-footer />
         </div>
@@ -251,6 +277,7 @@
         <script src="js/bootstrap.js"></script>
         <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
         <script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+        <script src="js/plugins/nouslider/jquery.nouislider.min.js"></script>
 
         <!-- Custom and plugin javascript -->
         <script src="js/inspinia.js"></script>
@@ -274,9 +301,30 @@
                     events: [],
                     videos: [],
                     home_team: {},
-                    away_team: {}
+                    away_team: {},
+                    ref_rating: 7
                 },
                 mounted: function() {
+
+                    const self = this;
+
+                    $(document).ready(function() {
+                        var basic_slider = document.getElementById('basic_slider');
+                        noUiSlider.create(basic_slider, {
+                            start: 7,
+                            behaviour: 'tap',
+                            connect: 'lower',
+                            range: {
+                                'min': 0,
+                                'max': 10
+                            },
+                            step: 1
+                        });
+                        basic_slider.noUiSlider.on('update.one', function(a) {
+                            self.ref_rating = parseInt(a[0])
+                        });
+                    })
+
                     const params = this.findGetParameter(),
                         origin = params.origin || "";
                     if (origin !== "") {
