@@ -295,7 +295,7 @@
                 },
                 getSeasons: function(facility_id) {
                     this.season_loading = true
-                    let url = "http://localhost:8080/facility/" + facility_id + "/seasons"
+                    let url = "http://localhost:8080/facility/" + facility_id + "/seasons?old=1"
                     this.$http.get(url)
                         .then((resp) => {
                             this.seasons = resp.body;
@@ -328,10 +328,12 @@
                                 start_parsed: moment(m.start, "YYYY-MM-DDTHH:mm:ss").format("YYYY-MM-DD h:mmA").replace(" ", " at "),
                                 url: "match.html?id=" + m.id + "&origin=" + btoa(JSON.stringify({
                                     home: {
+                                        id: m.home.team_id,
                                         name: m.home.name,
                                         score: m.home.score,
                                     },
                                     away: {
+                                        id: m.away.team_id,
                                         name: m.away.name,
                                         score: m.away.score,
                                     },
