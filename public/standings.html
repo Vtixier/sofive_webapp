@@ -9,6 +9,7 @@
     <title>Sofive Soccer Center</title>
 
     <link href="css/plugins/select2/select2.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.css" rel="stylesheet">
 
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
@@ -35,6 +36,12 @@
             <div class="wrapper wrapper-content animated fadeInRight">
 
                 <div class="ibox-content m-b-sm border-bottom">
+                    <div class="row">
+                        <p style="margin-right: 20px">Past leagues</p>
+                        <div class="league_click"><input type="checkbox" class="js-switch" checked /></div>
+                        <p style="margin-left: 20px">Current leagues</p>
+                    </div>
+                    <br />
                     <div class="row">
                         <div class="col-sm-4">
                             <div class="form-group">
@@ -219,6 +226,7 @@
     <script src="js/bootstrap.js"></script>
     <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
     <script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.js"></script>
 
     <!-- Custom and plugin javascript -->
     <script src="js/inspinia.js"></script>
@@ -249,7 +257,11 @@
                 matches: [],
                 selected_center: "",
                 selected_season: "",
-                selected_league: ""
+                selected_league: "",
+                selected: {
+                    facility_id: null,
+                    season_id: null,
+                }
             },
             mounted: function() {
                 let self = this;
@@ -266,6 +278,7 @@
                     let facility_id = e.target.value
                     self.getSeasons(facility_id)
                     self.selected_center = self.centers.find(c => (c.id == facility_id)).name
+                    self.selected.facility_id = facility_id
                 });
                 $('.select_season').on('select2:select', function(e) {
                     let doc = JSON.parse(e.target.value),
@@ -273,17 +286,33 @@
                         season_id = doc.id;
                     self.getLeagues(facility_id, season_id)
                     self.selected_season = doc.name
+                    self.selected.season_id = season_id
                 });
                 $('.select_league').on('select2:select', function(e) {
                     let league_id = e.target.value
                     self.getStandings(league_id)
                     self.selected_league = self.leagues.find(l => (l.id == league_id)).name
                 });
+                const switch_element = document.querySelector('.js-switch')
+                Switchery(
+                    switch_element, {
+                        color: '#1AB394',
+                        size: 'small'
+                    }
+                );
                 this.getCenters()
+                document.querySelector(".league_click").addEventListener("click", function() {
+                    if (self.selected.facility_id) {
+                        self.getSeasons(self.selected.facility_id)
+                    }
+                })
             },
             methods: {
                 getCenters: function() {
                     this.facility_loading = true
+                    this.centers = []
+                    this.seasons = []
+                    this.leagues = []
                     this.$http.get("http://localhost:8080/facility/")
                         .then((resp) => {
                             this.centers = resp.body;
@@ -295,7 +324,13 @@
                 },
                 getSeasons: function(facility_id) {
                     this.season_loading = true
+                    this.seasons = []
+                    this.leagues = []
+                    const current_league = document.querySelector('.js-switch').checked
                     let url = "http://localhost:8080/facility/" + facility_id + "/seasons"
+                    if (!current_league) {
+                        url += "?old=1"
+                    }
                     this.$http.get(url)
                         .then((resp) => {
                             this.seasons = resp.body;
@@ -307,6 +342,7 @@
                 },
                 getLeagues: function(facility_id, season_id) {
                     this.league_loading = true
+                    this.leagues = []
                     let url = "http://localhost:8080/facility/" + facility_id + "/" + season_id + "/leagues"
                     this.$http.get(url)
                         .then((resp) => {
@@ -328,10 +364,12 @@
                                 start_parsed: moment(m.start, "YYYY-MM-DDTHH:mm:ss").format("YYYY-MM-DD h:mmA").replace(" ", " at "),
                                 url: "match.html?id=" + m.id + "&origin=" + btoa(JSON.stringify({
                                     home: {
+                                        id: m.home.team_id,
                                         name: m.home.name,
                                         score: m.home.score,
                                     },
                                     away: {
+                                        id: m.away.team_id,
                                         name: m.away.name,
                                         score: m.away.score,
                                     },
