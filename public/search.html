@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sofive Soccer Center</title>
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="css/animate.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-32x32.png" sizes="32x32" />
+    <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" sizes="192x192" />
+
+    <style type="text/css">
+        .letterpic {
+            width: 60px;
+            height: 60px;
+            margin-right: 5px;
+            border-radius: 30px;
+        }
+    </style>
+
+</head>
+
+<body class="mini-navbar">
+
+    <div id="wrapper">
+
+        <div>
+            <sofive-left-menu />
+        </div>
+
+        <div id="page-wrapper" class="gray-bg">
+
+            <div>
+                <sofive-header />
+            </div>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1>Team search results</h1>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-12">
+
+                    <div class="vote-item" v-for="team in teams">
+                        <div class="row">
+                            <div class="col-md-10">
+                                <a href="#" class="vote-title">
+                                    {{team.name}} <span class="badge badge-info" :style="facilities[team.facility.name]">{{team.facility.name}}</span>
+                                </a>
+                                <div class="vote-info">
+                                    <i class="fa fa-clock-o"></i> <a href="#">Season: <b>{{team.season.name}}</b></a><br />
+                                    <i class="fa fa-user"></i> <a href="#">League: <b>{{team.league.name}}</b></a>
+                                </div>
+                            </div>
+                            <div class="col-md-2 ">
+                                <div class="vote-icon">
+                                    <div class="letterpic" :title="team.name"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+            <div>
+                <sofive-footer />
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- Mainly scripts -->
+    <script src="js/jquery-3.1.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+    <!-- Custom and plugin javascript -->
+    <script src="js/inspinia.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/1.5.1/vue-resource.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script src="js/jquery.letterpic.min.js"></script>
+
+    <script type="text/javascript" src="js/navigation.js"></script>
+    <script type="text/javascript" src="js/header.js"></script>
+    <script type="text/javascript" src="js/footer.js"></script>
+
+    <script type="text/javascript">
+        var app = new Vue({
+            el: '#wrapper',
+            data: {
+                teams: [],
+                colors: ["#1ab394", "#23c6c8", "#1c84c6", "#f8ac59", "#ed5565", "#d1dade"],
+                facilities: {}
+            },
+            mounted: function() {
+                const params = this.findGetParameter(),
+                    query = params.query || "";
+                if (query !== "") {
+                    this.search(query)
+                } else {
+                    window.location = "search.html?query=yid"
+                }
+            },
+            methods: {
+                findGetParameter: function() {
+                    var queryDict = {}
+                    decodeURI(location.search).substr(1).split("&").forEach(function(item) {
+                        queryDict[item.split("=")[0]] = item.split("=")[1]
+                    })
+                    return queryDict
+                },
+                search: function(query) {
+                    this.$http.post("http://localhost:8080/team/", {
+                            name: query
+                        })
+                        .then((resp) => {
+                            resp.body.map(t => {
+                                if (!(t.facility.name in this.facilities)) {
+                                    this.facilities[t.facility.name] = ""
+                                }
+                            })
+                            Object.keys(this.facilities).forEach((key, i) => {
+                                this.facilities[key] = "background-color: " + this.colors[i % (this.colors.length)]
+                            })
+                            this.teams = resp.body
+                            setTimeout(function() {
+                                $(".letterpic").letterpic();
+                            }, 1000)
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                }
+            }
+        })
+    </script>
+
+</body>
+
+</html>
