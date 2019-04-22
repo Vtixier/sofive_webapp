@@ -70,4 +70,15 @@ Vue.component('sofive-header', {
 
             </div>`,
   props: [],
+  mounted: function() {
+    document.getElementById('top-search').onkeypress = function(e) {
+        var event = e || window.event;
+        var charCode = event.which || event.keyCode;
+
+        if ( charCode == '13' ) {
+          window.location = "search.html?query="+e.target.value
+          return false;
+        }
+    }
+  }
 });

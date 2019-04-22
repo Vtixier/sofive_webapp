@@ -49,6 +49,18 @@
             <div class="row">
                 <div class="col-lg-12">
 
+                    <div v-if="loading">
+                        <div>
+                            <div class="sk-spinner sk-spinner-wave">
+                                <div class="sk-rect1"></div>
+                                <div class="sk-rect2"></div>
+                                <div class="sk-rect3"></div>
+                                <div class="sk-rect4"></div>
+                                <div class="sk-rect5"></div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="vote-item" v-for="team in teams">
                         <div class="row">
                             <div class="col-md-10">
@@ -106,15 +118,14 @@
             data: {
                 teams: [],
                 colors: ["#1ab394", "#23c6c8", "#1c84c6", "#f8ac59", "#ed5565", "#d1dade"],
-                facilities: {}
+                facilities: {},
+                loading: false
             },
             mounted: function() {
                 const params = this.findGetParameter(),
                     query = params.query || "";
                 if (query !== "") {
-                    this.search(query)
-                } else {
-                    window.location = "search.html?query=yid"
+                    this.search(encodeURIComponent(query))
                 }
             },
             methods: {
@@ -126,6 +137,7 @@
                     return queryDict
                 },
                 search: function(query) {
+                    this.loading = true
                     this.$http.post("http://localhost:8080/team/", {
                             name: query
                         })
@@ -142,6 +154,7 @@
                             setTimeout(function() {
                                 $(".letterpic").letterpic();
                             }, 1000)
+                            this.loading = false
                         })
                         .catch((err) => {
                             console.log(err)
