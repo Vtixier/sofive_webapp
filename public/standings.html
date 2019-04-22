@@ -9,6 +9,7 @@
     <title>Sofive Soccer Center</title>
 
     <link href="css/plugins/select2/select2.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.css" rel="stylesheet">
 
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
@@ -35,6 +36,12 @@
             <div class="wrapper wrapper-content animated fadeInRight">
 
                 <div class="ibox-content m-b-sm border-bottom">
+                    <div class="row">
+                        <h3 style="margin-right: 20px">Past leagues</h3>
+                        <input type="checkbox" class="js-switch" checked />
+                        <h3 style="margin-left: 20px">Current leagues</h3>
+                    </div>
+                    <br />
                     <div class="row">
                         <div class="col-sm-4">
                             <div class="form-group">
@@ -219,6 +226,7 @@
     <script src="js/bootstrap.js"></script>
     <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
     <script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.js"></script>
 
     <!-- Custom and plugin javascript -->
     <script src="js/inspinia.js"></script>
@@ -279,6 +287,13 @@
                     self.getStandings(league_id)
                     self.selected_league = self.leagues.find(l => (l.id == league_id)).name
                 });
+                const switch_element = document.querySelector('.js-switch')
+                Switchery(
+                    switch_element, {
+                        color: '#1AB394',
+                        size: 'small'
+                    }
+                );
                 this.getCenters()
             },
             methods: {
@@ -295,7 +310,11 @@
                 },
                 getSeasons: function(facility_id) {
                     this.season_loading = true
-                    let url = "http://localhost:8080/facility/" + facility_id + "/seasons?old=1"
+                    const current_league = document.querySelector('.js-switch').checked
+                    let url = "http://localhost:8080/facility/" + facility_id + "/seasons"
+                    if (!current_league) {
+                        url += "?old=1"
+                    }
                     this.$http.get(url)
                         .then((resp) => {
                             this.seasons = resp.body;
