@@ -50,7 +50,7 @@
                 <div class="col-lg-2"></div>
                 <div class="col-lg-8">
                     <div class="form-group">
-                        <input type="text" placeholder="Search for a team..." :value="query" class="form-control" name="top-search" id="top-search">
+                        <input type="text" placeholder="Search for a team..." :value="query" class="form-control" name="top-search" v-on:keyup.enter="searchBis">
                     </div>
                 </div>
             </div>
@@ -135,9 +135,11 @@
                 const params = this.findGetParameter(),
                     query = params.query || "";
                 if (query !== "") {
+                    this.query = query
                     this.search(encodeURIComponent(query))
                 }
                 document.getElementById('top-search').onkeypress = function(e) {
+                    console.log(e)
                     var event = e || window.event;
                     var charCode = event.which || event.keyCode;
 
@@ -179,8 +181,11 @@
                             console.log(err)
                         })
                 },
+                searchBis: function(e) {
+                    this.search(encodeURIComponent(e.target.value))
+                },
                 gotoTeam: function(team) {
-                    window.location = "match.html?team=" + btoa(JSON.stringify({
+                    window.location = "team.html?team=" + btoa(JSON.stringify({
                         ...team
                     }))
                 }
