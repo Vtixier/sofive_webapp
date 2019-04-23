@@ -361,6 +361,7 @@
                             this.standings = resp.body.leaderboard
                             this.matches = resp.body.matches.map(m => ({
                                 ...m,
+                                moment_date: moment(m.start, "YYYY-MM-DDTHH:mm:ss"),
                                 start_parsed: moment(m.start, "YYYY-MM-DDTHH:mm:ss").format("YYYY-MM-DD h:mmA").replace(" ", " at "),
                                 url: "match.html?id=" + m.id + "&origin=" + btoa(JSON.stringify({
                                     home: {
@@ -378,7 +379,7 @@
                                     league: this.selected_league,
                                     standings: this.standings
                                 }))
-                            }))
+                            })).sort(this.dateSortFunc)
                             this.standings_loading = false
                             console.log("Matches", this.matches)
                         })
@@ -386,6 +387,16 @@
                             console.log(err)
                         })
                 },
+                dateSortFunc: function(a,b){
+                    const diff = a.moment_date.diff(b.moment_date, 'seconds')
+                    if (diff > 0) {
+                        return -1
+                    } else if (diff < 0) {
+                        return 1
+                    } else {
+                        return 0
+                    }
+                }
             }
         })
     </script>

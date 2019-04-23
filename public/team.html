@@ -14,6 +14,17 @@
     <link href="css/style.css" rel="stylesheet">
     <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-32x32.png" sizes="32x32" />
     <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" sizes="192x192" />
+
+    <style type="text/css">
+        .red {
+            color: red;
+        }
+
+        .green {
+            color: green;
+        }
+    </style>
+
 </head>
 
 <body class="mini-navbar">
@@ -122,51 +133,11 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td class="text-center">1</td>
-                                            <td> <span class="text-navy"> Paris-Saint-Germain
-                                                </span></td>
-                                            <td class="text-center">6</td>
-                                            <td class="text-center"><span>15</span></td>
-
-                                        </tr>
-                                        <tr>
-                                            <td class="text-center">2</td>
-                                            <td> Olympique Lyonnais
-                                            </td>
-                                            <td class="text-center">6</td>
-                                            <td class="text-center"><span>11</span></td>
-
-                                        </tr>
-                                        <tr>
-                                            <td class="text-center">3</td>
-                                            <td> Fc Nantes
-                                            </td>
-                                            <td class="text-center">5</td>
-                                            <td class="text-center"><span>10</span></td>
-
-                                        </tr>
-                                        <tr>
-                                            <td class="text-center">4</td>
-                                            <td> Olympique de Marseille </td>
-                                            <td class="text-center">6</td>
-                                            <td class="text-center"><span>9</span></td>
-
-                                        </tr>
-                                        <tr>
-                                            <td class="text-center">5</td>
-                                            <td> LOSC
-                                            </td>
-                                            <td class="text-center">5</td>
-                                            <td class="text-center"><span>8</span></td>
-
-                                        </tr>
-                                        <tr>
-                                            <td class="text-center">6</td>
-                                            <td> OGC Nice
-                                            </td>
-                                            <td class="text-center">5</td>
-                                            <td class="text-center"><span>2</span></td>
+                                        <tr v-for="(leader, index) in leaderboard">
+                                            <td class="text-center">{{index+1}}</td>
+                                            <td> <span :class="{'text-navy': team.name === leader.Team}"> {{leader.Team}}</span></td>
+                                            <td class="text-center">{{leader.Games}}</td>
+                                            <td class="text-center"><span>{{leader.Points}}</span></td>
 
                                         </tr>
                                     </tbody>
@@ -199,66 +170,23 @@
                                 <div class="sk-rect4"></div>
                                 <div class="sk-rect5"></div>
                             </div>
-                            <div class="scroll_content">
+                            <div class="scroll_content" style="height: 76vh; overflow: scroll;">
 
                                 <div id="vertical-timeline" class="vertical-container dark-timeline">
 
-                                    <div class="vertical-timeline-block">
-                                        <div class="vertical-timeline-icon navy-bg">
+                                    <div class="vertical-timeline-block" v-for="match in matches">
+                                        <div class="vertical-timeline-icon navy-bg" v-if="match.won">
                                             <i class="fa fa-check"></i>
                                         </div>
-
-                                        <div class="vertical-timeline-content">
-                                            <a href="#" class="btn btn-sm btn-primary">Video</a>
-                                            <h2> <span style="color: green"> Paris-Saint-Germain 9 - 4 Olympique de Marseille</h2>
-                                            <a>
-                                                new rank : 1st<br />
-                                                03/11 11:15pm
-                                            </a>
-                                        </div>
-                                    </div>
-
-                                    <div class="vertical-timeline-block">
-                                        <div class="vertical-timeline-icon" style="background-color: red">
+                                        <div class="vertical-timeline-icon" style="background-color: red" v-if="!match.won">
                                             <i style="color: white" class="fa fa-times"></i>
                                         </div>
 
                                         <div class="vertical-timeline-content">
-                                            <a href="#" class="btn btn-sm btn" style="background-color: red; color: white">Video</a>
-                                            <h2 style="color: red"> Paris-Saint-Germain 3 - 5 Olympique Lyonnais </h2>
+                                            <a :href="match.url"><button type="button" class="btn btn-sm" style="border: 1px solid grey; color: grey">Match page</button></a>
+                                            <h2> <span :class="{'green': match.won, 'red': !match.won}"> {{match.home.name}} <b>{{match.home.score}} - {{match.away.score}}</b> {{match.away.name}}</h2>
                                             <a>
-                                                new rank : 2nd<br />
-                                                03/6 9:15pm
-                                            </a>
-                                        </div>
-                                    </div>
-
-                                    <div class="vertical-timeline-block">
-                                        <div class="vertical-timeline-icon navy-bg">
-                                            <i class="fa fa-check"></i>
-                                        </div>
-
-                                        <div class="vertical-timeline-content">
-                                            <a href="#" class="btn btn-sm btn-primary">Video</a>
-                                            <h2> <span style="color: green"> Paris-Saint-Germain 3 - 1 FC Nantes </h2>
-                                            <a>
-                                                new rank : 1st<br />
-                                                03/03 10:45pm
-                                            </a>
-                                        </div>
-                                    </div>
-
-                                    <div class="vertical-timeline-block">
-                                        <div class="vertical-timeline-icon navy-bg">
-                                            <i class="fa fa-check"></i>
-                                        </div>
-
-                                        <div class="vertical-timeline-content">
-                                            <a href="#" class="btn btn-sm btn-primary">Video</a>
-                                            <h2> <span style="color: green"> Paris-Saint-Germain 5 - 4 LOSC </h2>
-                                            <a>
-                                                new rank : 1st<br />
-                                                02/26 9:30pm
+                                                {{match.start_parsed}}
                                             </a>
                                         </div>
                                     </div>
@@ -405,7 +333,9 @@
                     results: true,
                     roster: true
                 },
-                roster: []
+                roster: [],
+                leaderboard: [],
+                matches: []
             },
             mounted: function() {
                 const params = this.findGetParameter(),
@@ -413,6 +343,7 @@
                 if (team !== "") {
                     this.team = JSON.parse(atob(team))
                     this.getRoster()
+                    this.getResults()
                 } else {
                     window.location = "team.html?team=eyJuYW1lIjoiUGFyaXMtU2FpbnQtR2VybWFpbiIsImZhY2lsaXR5Ijp7Im5hbWUiOiJTb2ZpdmUgTWVhZG93bGFuZHMifSwic2Vhc29uIjp7Im5hbWUiOiJUdWVzZGF5IE1lbidzIExlYWd1ZSwgTGlndWUgMSJ9LCJsZWFndWUiOnsibmFtZSI6IkFkdWx0IGxlYWd1ZSJ9fQ=="
                 }
@@ -429,7 +360,7 @@
                     return queryDict
                 },
                 getRoster: function() {
-                    let url = "http://localhost:8080/team/" + this.team.id 
+                    let url = "http://localhost:8080/team/" + this.team.id
                     this.$http.get(url)
                         .then((resp) => {
                             this.roster = resp.body.roster
@@ -438,6 +369,49 @@
                         .catch((err) => {
                             console.log(err.body.errors)
                         })
+                },
+                getResults: function() {
+                    let url = "http://localhost:8080/league/" + this.team.league.id + "/scores"
+                    this.$http.get(url)
+                        .then((resp) => {
+                            this.leaderboard = resp.body.leaderboard
+                            this.matches = resp.body.matches.filter(m => (m.home.name == this.team.name || m.away.name == this.team.name)).map(m => ({
+                                ...m,
+                                moment_date: moment(m.start, "YYYY-MM-DDTHH:mm:ss"),
+                                start_parsed: moment(m.start, "YYYY-MM-DDTHH:mm:ss").format("YYYY-MM-DD h:mmA").replace(" ", " at "),
+                                won: (m.home.name == this.team.name) ? (m.home.score >= m.away.score) : (m.home.score <= m.away.score),
+                                url: "match.html?id=" + m.id + "&origin=" + btoa(JSON.stringify({
+                                    home: {
+                                        id: m.home.team_id,
+                                        name: m.home.name,
+                                        score: m.home.score,
+                                    },
+                                    away: {
+                                        id: m.away.team_id,
+                                        name: m.away.name,
+                                        score: m.away.score,
+                                    },
+                                    center: this.team.facility.name,
+                                    season: this.team.season.name,
+                                    league: this.team.league.name,
+                                    standings: this.leaderboard
+                                }))
+                            })).sort(this.dateSortFunc)
+                            this.loading.results = false
+                        })
+                        .catch((err) => {
+                            console.log(err.body.errors)
+                        })
+                },
+                dateSortFunc: function(a,b){
+                    const diff = a.moment_date.diff(b.moment_date, 'seconds')
+                    if (diff > 0) {
+                        return -1
+                    } else if (diff < 0) {
+                        return 1
+                    } else {
+                        return 0
+                    }
                 }
             }
         })
