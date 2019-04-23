@@ -92,11 +92,52 @@
                                     </div>
                                 </div>
                                 <br />
-                                <div class="ibox-content profile-content" v-if="info">
+                                <!--                                 <div class="ibox-content profile-content" v-if="info">
                                     <h4><strong>Next match:</strong></h4>
                                     <p />
                                     <p><i class="fa fa-calendar"></i> <i>{{info.home.name}}</i> vs. {{info.home.name}} on <b>12/05/2019</b></p>
                                     <p><i class="fa fa-calendar"></i> {{info.away.name}} vs. <i>{{info.away.name}}</i> on <b>12/05/2019</b></p>
+                                </div> -->
+                                <div class="ibox ">
+                                    <div class="ibox-title">
+                                        <h5>Standings</h5>
+                                        <div class="ibox-tools">
+                                            <a class="collapse-link">
+                                                <i class="fa fa-chevron-up"></i>
+                                            </a>
+                                            <a class="close-link">
+                                                <i class="fa fa-times"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="ibox-content">
+                                        <div>
+                                            <table class="table table-hover margin bottom">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="width: 1%" class="text-center">No.</th>
+                                                        <th>Team</th>
+                                                        <th class="text-center">Games</th>
+                                                        <th class="text-center">Points</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr v-for="(standing, index) in info.standings">
+                                                        <td class="text-center">{{index+1}}</td>
+                                                        <td>
+                                                            <span class="text-navy" v-if="standing.Team == info.home.name">{{standing.Team}}</span>
+                                                            <span class="text-navy" v-if="standing.Team == info.away.name">{{standing.Team}}</span>
+                                                            <span v-if="(standing.Team !== info.home.name) && (standing.Team !== info.away.name)">{{standing.Team}}</span>
+                                                        </td>
+                                                        <td class="text-center">{{standing.Games}}</td>
+                                                        <td class="text-center"><span>{{standing.Points}}</span></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -141,56 +182,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-lg-4 col-sm-12">
-                    <div class="ibox ">
-                        <div class="ibox-title">
-                            <h5>Standings</h5>
-                            <div class="ibox-tools">
-                                <a class="collapse-link">
-                                    <i class="fa fa-chevron-up"></i>
-                                </a>
-                                <a class="close-link">
-                                    <i class="fa fa-times"></i>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="ibox-content">
-                            <div>
-                                <table class="table table-hover margin bottom">
-                                    <thead>
-                                        <tr>
-                                            <th style="width: 1%" class="text-center">No.</th>
-                                            <th>Team</th>
-                                            <th class="text-center">Games</th>
-                                            <th class="text-center">Points</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr v-for="(standing, index) in info.standings">
-                                            <td class="text-center">{{index+1}}</td>
-                                            <td>
-                                                <span class="text-navy" v-if="standing.Team == info.home.name">{{standing.Team}}</span>
-                                                <span class="text-navy" v-if="standing.Team == info.away.name">{{standing.Team}}</span>
-                                                <span v-if="(standing.Team !== info.home.name) && (standing.Team !== info.away.name)">{{standing.Team}}</span>
-                                            </td>
-                                            <td class="text-center">{{standing.Games}}</td>
-                                            <td class="text-center"><span>{{standing.Points}}</span></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-
-
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-8 col-sm-12">
-                    <div class="ibox ">
+                        <div class="ibox ">
                         <div class="ibox-title">
                             <h5>Roasters</h5>
                             <div class="ibox-tools">
@@ -201,7 +193,7 @@
                                     <i class="fa fa-times"></i>
                                 </a>
                             </div>
-                        </div>
+                        </div><br/>
                         <div class="ibox-content">
 
                             <div class="row">
@@ -250,8 +242,10 @@
                             </div>
                         </div>
                     </div>
+                    </div>
                 </div>
             </div>
+
         </div>
 
         <div class="modal inmodal" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
