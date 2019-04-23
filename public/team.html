@@ -63,6 +63,7 @@
                                 <div class="col-sm">
                                     <a style="font-size: 40px; color: #295182" class="text-center"><strong>{{team.name}}</strong></a>
                                     <h3>{{team.season.name}}</h3>
+                                    <p><i class="fa fa-map-marker"></i> {{team.facility.name}}</p>
                                 </div>
                             </div>
                         </div>
@@ -73,34 +74,6 @@
             <div class="row animated fadeInRight">
 
                 <div class="col-lg-4">
-
-                    <div class="ibox ">
-                        <div class="ibox-title">
-                            <h5>Team</h5>
-                        </div>
-                        <div>
-                            <div class="ibox-content no-padding border-left-right">
-                                <img alt="image" class="img-fluid" src="img/sofive/team.jpg">
-                            </div>
-                            <div class="ibox-content profile-content">
-                                <h4><strong>{{team.name}}</strong></h4>
-                                <p><i class="fa fa-map-marker"></i> {{team.facility.name}}</p>
-                                <h5>
-                                    {{team.season.name}}
-                                </h5>
-                                <div class="user-button">
-                                    <div class="row" style="margin-top: 5%">
-                                        <div class="col-md-6">
-                                            <button type="button" class="btn btn-primary btn-sm btn-block"><i class="fa fa-facebook-square"></i> Share on Facebook</button>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <button type="button" class="btn btn-default btn-sm btn-block"><i class="fa fa-pencil"></i> Modify info</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
                     <div class="ibox">
                         <div class="ibox-title">
@@ -145,6 +118,75 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="ibox ">
+                        <div class="ibox-title">
+                            <h5>Rosters</h5>
+                            <div class="ibox-tools">
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                                <a class="close-link">
+                                    <i class="fa fa-times"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div :class="{'ibox-content': true, 'sk-loading': loading.roster}">
+                            <div class="sk-spinner sk-spinner-wave">
+                                <div class="sk-rect1"></div>
+                                <div class="sk-rect2"></div>
+                                <div class="sk-rect3"></div>
+                                <div class="sk-rect4"></div>
+                                <div class="sk-rect5"></div>
+                            </div>
+                            <table class="table table-hover margin bottom">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 1%" class="text-center">No.</th>
+                                        <th>Player</th>
+                                        <th class="text-center">More info</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(player, index) in roster">
+                                        <td class="text-center">{{index+1}}</td>
+                                        <td> {{player.name}}
+                                        </td>
+                                        <td style="text-align: center"><a href="#"><span class="label label-primary">card</span></a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!--                     <div class="ibox ">
+                        <div class="ibox-title">
+                            <h5>Team</h5>
+                        </div>
+                        <div>
+                            <div class="ibox-content no-padding border-left-right">
+                                <img alt="image" class="img-fluid" src="img/sofive/team.jpg">
+                            </div>
+                            <div class="ibox-content profile-content">
+                                <h4><strong>{{team.name}}</strong></h4>
+                                <p><i class="fa fa-map-marker"></i> {{team.facility.name}}</p>
+                                <h5>
+                                    {{team.season.name}}
+                                </h5>
+                                <div class="user-button">
+                                    <div class="row" style="margin-top: 5%">
+                                        <div class="col-md-6">
+                                            <button type="button" class="btn btn-primary btn-sm btn-block"><i class="fa fa-facebook-square"></i> Share on Facebook</button>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <button type="button" class="btn btn-default btn-sm btn-block"><i class="fa fa-pencil"></i> Modify info</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+
                 </div>
 
                 <div class="col-lg-8">
@@ -174,7 +216,7 @@
 
                                 <div id="vertical-timeline" class="vertical-container dark-timeline">
 
-                                    <div class="vertical-timeline-block" v-for="match in matches">
+                                    <div class="vertical-timeline-block" v-for="match in matches" v-if="match.home.score !== (-1) && match.away.score !== (-1)">
                                         <div class="vertical-timeline-icon navy-bg" v-if="match.won">
                                             <i class="fa fa-check"></i>
                                         </div>
@@ -214,31 +256,17 @@
 
                                     <div id="vertical-timeline" class="vertical-container dark-timeline">
 
-                                        <div class="vertical-timeline-block">
+                                        <div class="vertical-timeline-block" v-for="match in next_matches">
                                             <div class="vertical-timeline-icon navy-bg">
                                                 <i class="fa fa-soccer-ball-o"></i>
                                             </div>
 
                                             <div class="vertical-timeline-content">
                                                 <a href="#" class="btn btn-sm btn-primary">More info</a>
-                                                <h2> <span style="color: green"> VS. Real Madrid </h2>
+                                                <h2> <span style="color: green"> VS. {{(match.home.name === team.name) ? match.away.name : match.home.name}} </h2>
                                                 <a>
-                                                    12/11/18 - 3:30pm <br />
+                                                    {{match.start_parsed}} <br />
                                                     <span style="color: green"> Opponent rank : 3rd </span>
-                                                </a>
-                                            </div>
-                                        </div>
-
-                                        <div class="vertical-timeline-block">
-                                            <div class="vertical-timeline-icon navy-bg">
-                                                <i class="fa fa-soccer-ball-o"></i>
-                                            </div>
-                                            <div class="vertical-timeline-content">
-                                                <a href="#" class="btn btn-sm btn-primary">More info</a>
-                                                <h2> <span style="color: green"> VS. FC Barcelona </h2>
-                                                <a>
-                                                    10/02/18 - 1:10pm <br />
-                                                    <span style="color: green"> Opponent rank : 1st </span>
                                                 </a>
                                             </div>
                                         </div>
@@ -247,50 +275,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="ibox ">
-                        <div class="ibox-title">
-                            <h5>Roasters</h5>
-                            <div class="ibox-tools">
-                                <a class="collapse-link">
-                                    <i class="fa fa-chevron-up"></i>
-                                </a>
-                                <a class="close-link">
-                                    <i class="fa fa-times"></i>
-                                </a>
-                            </div>
-                        </div>
-                        <div :class="{'ibox-content': true, 'sk-loading': loading.roster}">
-                            <div class="sk-spinner sk-spinner-wave">
-                                <div class="sk-rect1"></div>
-                                <div class="sk-rect2"></div>
-                                <div class="sk-rect3"></div>
-                                <div class="sk-rect4"></div>
-                                <div class="sk-rect5"></div>
-                            </div>
-                            <table class="table table-hover margin bottom">
-                                <thead>
-                                    <tr>
-                                        <th style="width: 1%" class="text-center">No.</th>
-                                        <th>Player</th>
-                                        <th class="text-center">More info</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="(player, index) in roster">
-                                        <td class="text-center">{{index+1}}</td>
-                                        <td> {{player.name}}
-                                        </td>
-                                        <td style="text-align: center"><a href="#"><span class="label label-primary">card</span></a></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div><br />
                 </div>
             </div>
 
@@ -335,7 +319,8 @@
                 },
                 roster: [],
                 leaderboard: [],
-                matches: []
+                matches: [],
+                next_matches: []
             },
             mounted: function() {
                 const params = this.findGetParameter(),
@@ -397,13 +382,14 @@
                                     standings: this.leaderboard
                                 }))
                             })).sort(this.dateSortFunc)
+                            this.next_matches = this.matches.filter(m => (m.home.score === (-1) || m.away.score === (-1)))
                             this.loading.results = false
                         })
                         .catch((err) => {
                             console.log(err.body.errors)
                         })
                 },
-                dateSortFunc: function(a,b){
+                dateSortFunc: function(a, b) {
                     const diff = a.moment_date.diff(b.moment_date, 'seconds')
                     if (diff > 0) {
                         return -1

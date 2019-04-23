@@ -387,7 +387,7 @@
                             console.log(err)
                         })
                 },
-                dateSortFunc: function(a,b){
+                dateSortFunc: function(a, b) {
                     const diff = a.moment_date.diff(b.moment_date, 'seconds')
                     if (diff > 0) {
                         return -1
