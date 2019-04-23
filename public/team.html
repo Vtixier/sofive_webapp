@@ -349,51 +349,14 @@
                                     <tr>
                                         <th style="width: 1%" class="text-center">No.</th>
                                         <th>Player</th>
-                                        <th class="text-center">Goals</th>
                                         <th class="text-center">More info</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td class="text-center">1</td>
-                                        <td> Jean-Damien Ladeuil
+                                    <tr v-for="(player, index) in roster">
+                                        <td class="text-center">{{index+1}}</td>
+                                        <td> {{player.name}}
                                         </td>
-                                        <td class="text-center small">15</td>
-                                        <td style="text-align: center"><a href="#"><span class="label label-primary">card</span></a></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-center">2</td>
-                                        <td> Charles Lagayette
-                                        </td>
-                                        <td class="text-center small">8</td>
-                                        <td style="text-align: center"><a href="#"><span class="label label-primary">card</span></a></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-center">3</td>
-                                        <td> Matt Dean
-                                        </td>
-                                        <td class="text-center small">6</td>
-                                        <td style="text-align: center"><a href="#"><span class="label label-primary">card</span></a></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-center">4</td>
-                                        <td> Martin Lukaschik
-                                        </td>
-                                        <td class="text-center small">4</td>
-                                        <td style="text-align: center"><a href="#"><span class="label label-primary">card</span></a></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-center">5</td>
-                                        <td> Alex Shuptar
-                                        </td>
-                                        <td class="text-center small">2</td>
-                                        <td style="text-align: center"><a href="#"><span class="label label-primary">card</span></a></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-center">6</td>
-                                        <td> Ashlin Conroy
-                                        </td>
-                                        <td class="text-center small">1</td>
                                         <td style="text-align: center"><a href="#"><span class="label label-primary">card</span></a></td>
                                     </tr>
                                 </tbody>
@@ -441,13 +404,15 @@
                 loading: {
                     results: true,
                     roster: true
-                }
+                },
+                roster: []
             },
             mounted: function() {
                 const params = this.findGetParameter(),
                     team = params.team || "";
                 if (team !== "") {
                     this.team = JSON.parse(atob(team))
+                    this.getRoster()
                 } else {
                     window.location = "team.html?team=eyJuYW1lIjoiUGFyaXMtU2FpbnQtR2VybWFpbiIsImZhY2lsaXR5Ijp7Im5hbWUiOiJTb2ZpdmUgTWVhZG93bGFuZHMifSwic2Vhc29uIjp7Im5hbWUiOiJUdWVzZGF5IE1lbidzIExlYWd1ZSwgTGlndWUgMSJ9LCJsZWFndWUiOnsibmFtZSI6IkFkdWx0IGxlYWd1ZSJ9fQ=="
                 }
@@ -463,6 +428,17 @@
                     })
                     return queryDict
                 },
+                getRoster: function() {
+                    let url = "http://localhost:8080/team/" + this.team.id 
+                    this.$http.get(url)
+                        .then((resp) => {
+                            this.roster = resp.body.roster
+                            this.loading.roster = false
+                        })
+                        .catch((err) => {
+                            console.log(err.body.errors)
+                        })
+                }
             }
         })
     </script>
