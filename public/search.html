@@ -71,7 +71,7 @@
                     </div>
 
                     <div class="vote-item" v-for="team in teams">
-                        <div class="row">
+                        <div class="row" v-on:click="gotoTeam(team)">
                             <div class="col-md-10">
                                 <a href="#" class="vote-title">
                                     {{team.name}} <span class="badge badge-info" :style="facilities[team.facility.name]">{{team.facility.name}}</span>
@@ -178,6 +178,11 @@
                         .catch((err) => {
                             console.log(err)
                         })
+                },
+                gotoTeam: function(team) {
+                    window.location = "match.html?team=" + btoa(JSON.stringify({
+                        ...team
+                    }))
                 }
             }
         })
