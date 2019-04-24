@@ -53,7 +53,7 @@
                             <div class="ibox-content text-center p-md">
                                 <div class="row">
                                     <div class="col-sm" v-if="info">
-                                        <a style="font-size: 40px" class="text-center"><strong> <span style="color: #295182"> {{info.home.name}}</span> <span style="color: #4c4949"> {{info.home.score}} - {{info.away.score}} </span> <span style="color: #75acda"> {{info.away.name}} </strong></a>
+                                        <a style="font-size: 40px" class="text-center"><strong> <span style="color: #295182" v-on:click="gotoTeam(info.home.id)"> {{info.home.name}}</span> <span style="color: #4c4949"> {{info.home.score}} - {{info.away.score}} </span> <span style="color: #75acda" v-on:click="gotoTeam(info.away.id)"> {{info.away.name}} </strong></a>
                                     </div>
                                 </div>
                             </div>
@@ -377,6 +377,9 @@
                             .catch((err) => {
                                 console.log(err)
                             })
+                    },
+                    gotoTeam: function(id) {
+                        window.location = "team.html?id=" + id
                     }
                 }
             })

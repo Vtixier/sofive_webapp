@@ -31,7 +31,7 @@ Vue.component('sofive-standings', {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(standing, index) in standings">
+                            <tr v-for="(standing, index) in standings" style="cursor: pointer;" v-on:click="gotoTeam(standing.id)">
                                 <td class="text-center">{{index+1}}</td>
                                 <td>
                                     <span class="text-navy" v-if="standing.Team == team">{{standing.Team}}</span>
@@ -47,4 +47,9 @@ Vue.component('sofive-standings', {
             </div>
         </div>`,
   props: ['standings', 'team', 'opponent', 'loading'],
+  methods: {
+    gotoTeam: function(id) {
+        window.location = "team.html?id=" + id
+    }
+  }
 });
