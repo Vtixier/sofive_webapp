@@ -45,7 +45,7 @@
             <div class="ibox-title">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
-                        <a href="index.html">Leagues and standings</a>
+                        <a href="standings.html">Leagues and standings</a>
                     </li>
                     <li class="breadcrumb-item">
                         <a>{{team.season.name}}</a>
@@ -75,49 +75,7 @@
 
                 <div class="col-lg-4">
 
-                    <div class="ibox">
-                        <div class="ibox-title">
-                            <h5>Standings</h5>
-                            <div class="ibox-tools">
-                                <a class="collapse-link">
-                                    <i class="fa fa-chevron-up"></i>
-                                </a>
-                                <a class="close-link">
-                                    <i class="fa fa-times"></i>
-                                </a>
-                            </div>
-                        </div>
-                        <div :class="{'ibox-content': true, 'sk-loading': loading.results}">
-                            <div class="sk-spinner sk-spinner-wave">
-                                <div class="sk-rect1"></div>
-                                <div class="sk-rect2"></div>
-                                <div class="sk-rect3"></div>
-                                <div class="sk-rect4"></div>
-                                <div class="sk-rect5"></div>
-                            </div>
-                            <div>
-                                <table class="table table-hover margin bottom">
-                                    <thead>
-                                        <tr>
-                                            <th style="width: 1%" class="text-center">No.</th>
-                                            <th>Team</th>
-                                            <th class="text-center">Games</th>
-                                            <th class="text-center">Points</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr v-for="(leader, index) in leaderboard">
-                                            <td class="text-center">{{index+1}}</td>
-                                            <td> <span :class="{'text-navy': team.name === leader.Team}"> {{leader.Team}}</span></td>
-                                            <td class="text-center">{{leader.Games}}</td>
-                                            <td class="text-center"><span>{{leader.Points}}</span></td>
-
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
+                    <sofive-standings :standings="leaderboard" :team="team.name" :loading="loading.results" />
 
                     <div class="ibox ">
                         <div class="ibox-title">
@@ -273,7 +231,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div><br />
                     </div>
                 </div>
             </div>
@@ -303,12 +261,15 @@
     <script type="text/javascript" src="js/navigation.js"></script>
     <script type="text/javascript" src="js/header.js"></script>
     <script type="text/javascript" src="js/footer.js"></script>
+    <script type="text/javascript" src="js/standings.js"></script>
 
     <script type="text/javascript">
         var app = new Vue({
             el: '#wrapper',
             data: {
+                team_id: "",
                 team: {
+                    name: "Loading...",
                     facility: {},
                     season: {},
                     league: {}
@@ -324,17 +285,11 @@
             },
             mounted: function() {
                 const params = this.findGetParameter(),
-                    team = params.team || "";
-                if (team !== "") {
-                    this.team = JSON.parse(atob(team))
-                    this.getRoster()
-                    this.getResults()
-                } else {
-                    window.location = "team.html?team=eyJuYW1lIjoiUGFyaXMtU2FpbnQtR2VybWFpbiIsImZhY2lsaXR5Ijp7Im5hbWUiOiJTb2ZpdmUgTWVhZG93bGFuZHMifSwic2Vhc29uIjp7Im5hbWUiOiJUdWVzZGF5IE1lbidzIExlYWd1ZSwgTGlndWUgMSJ9LCJsZWFndWUiOnsibmFtZSI6IkFkdWx0IGxlYWd1ZSJ9fQ=="
+                    id = params.id || "";
+                if (id !== "") {
+                    this.team_id = id
+                    this.getTeam()
                 }
-
-                // TODO: make league call to get standings, scores and next match
-                // make team call to get roster
             },
             methods: {
                 findGetParameter: function() {
@@ -344,12 +299,14 @@
                     })
                     return queryDict
                 },
-                getRoster: function() {
-                    let url = "http://localhost:8080/team/" + this.team.id
+                getTeam: function() {
+                    let url = "http://localhost:8080/team/" + this.team_id
                     this.$http.get(url)
                         .then((resp) => {
+                            this.team = resp.body
                             this.roster = resp.body.roster
                             this.loading.roster = false
+                            this.getResults()
                         })
                         .catch((err) => {
                             console.log(err.body.errors)

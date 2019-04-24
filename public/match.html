@@ -98,47 +98,7 @@
                                     <p><i class="fa fa-calendar"></i> <i>{{info.home.name}}</i> vs. {{info.home.name}} on <b>12/05/2019</b></p>
                                     <p><i class="fa fa-calendar"></i> {{info.away.name}} vs. <i>{{info.away.name}}</i> on <b>12/05/2019</b></p>
                                 </div> -->
-                                <div class="ibox ">
-                                    <div class="ibox-title">
-                                        <h5>Standings</h5>
-                                        <div class="ibox-tools">
-                                            <a class="collapse-link">
-                                                <i class="fa fa-chevron-up"></i>
-                                            </a>
-                                            <a class="close-link">
-                                                <i class="fa fa-times"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="ibox-content">
-                                        <div>
-                                            <table class="table table-hover margin bottom">
-                                                <thead>
-                                                    <tr>
-                                                        <th style="width: 1%" class="text-center">No.</th>
-                                                        <th>Team</th>
-                                                        <th class="text-center">Games</th>
-                                                        <th class="text-center">Points</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr v-for="(standing, index) in info.standings">
-                                                        <td class="text-center">{{index+1}}</td>
-                                                        <td>
-                                                            <span class="text-navy" v-if="standing.Team == info.home.name">{{standing.Team}}</span>
-                                                            <span class="text-navy" v-if="standing.Team == info.away.name">{{standing.Team}}</span>
-                                                            <span v-if="(standing.Team !== info.home.name) && (standing.Team !== info.away.name)">{{standing.Team}}</span>
-                                                        </td>
-                                                        <td class="text-center">{{standing.Games}}</td>
-                                                        <td class="text-center"><span>{{standing.Points}}</span></td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-
-
-                                    </div>
-                                </div>
+                                <sofive-standings :standings="info.standings" :team="info.home.name" :opponent="info.away.name" />
                             </div>
                         </div>
                     </div>
@@ -181,67 +141,67 @@
                                     </div>
                                 </div>
                             </div>
-                        </div><br/>
+                        </div><br />
                         <div class="ibox">
-                        <div class="ibox-title">
-                            <h5>Rosters</h5>
-                            <div class="ibox-tools">
-                                <a class="collapse-link">
-                                    <i class="fa fa-chevron-up"></i>
-                                </a>
-                                <a class="close-link">
-                                    <i class="fa fa-times"></i>
-                                </a>
+                            <div class="ibox-title">
+                                <h5>Rosters</h5>
+                                <div class="ibox-tools">
+                                    <a class="collapse-link">
+                                        <i class="fa fa-chevron-up"></i>
+                                    </a>
+                                    <a class="close-link">
+                                        <i class="fa fa-times"></i>
+                                    </a>
+                                </div>
                             </div>
-                        </div>
-                        <div class="ibox-content">
+                            <div class="ibox-content">
 
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <table class="table table-hover margin bottom">
-                                        <thead>
-                                            <tr>
-                                                <th style="width: 1%" class="text-center">No.</th>
-                                                <th>Players</th>
-                                                <th class="text-center">Goals</th>
-                                                <th class="text-center">More info</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody v-if="home_team">
-                                            <tr v-for="(player, index) in home_team.roster">
-                                                <td class="text-center">{{index+1}}</td>
-                                                <td> {{player.name}}
-                                                </td>
-                                                <td class="text-center small">0</td>
-                                                <td style="text-align: center"><a href="#"><span class="label label-primary">card</span></a></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="col-lg-6">
-                                    <table class="table table-hover margin bottom">
-                                        <thead>
-                                            <tr>
-                                                <th style="width: 1%" class="text-center">No.</th>
-                                                <th>Player</th>
-                                                <th class="text-center">Goals</th>
-                                                <th class="text-center">More info</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody v-if="away_team">
-                                            <tr v-for="(player, index) in away_team.roster">
-                                                <td class="text-center">{{index+1}}</td>
-                                                <td> {{player.name}}
-                                                </td>
-                                                <td class="text-center small">0</td>
-                                                <td style="text-align: center"><a href="#"><span class="label label-primary">card</span></a></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <table class="table table-hover margin bottom">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width: 1%" class="text-center">No.</th>
+                                                    <th>Players</th>
+                                                    <th class="text-center">Goals</th>
+                                                    <th class="text-center">More info</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody v-if="home_team">
+                                                <tr v-for="(player, index) in home_team.roster">
+                                                    <td class="text-center">{{index+1}}</td>
+                                                    <td> {{player.name}}
+                                                    </td>
+                                                    <td class="text-center small">0</td>
+                                                    <td style="text-align: center"><a href="#"><span class="label label-primary">card</span></a></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <table class="table table-hover margin bottom">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width: 1%" class="text-center">No.</th>
+                                                    <th>Player</th>
+                                                    <th class="text-center">Goals</th>
+                                                    <th class="text-center">More info</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody v-if="away_team">
+                                                <tr v-for="(player, index) in away_team.roster">
+                                                    <td class="text-center">{{index+1}}</td>
+                                                    <td> {{player.name}}
+                                                    </td>
+                                                    <td class="text-center small">0</td>
+                                                    <td style="text-align: center"><a href="#"><span class="label label-primary">card</span></a></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
                     </div>
                 </div>
             </div>
@@ -296,12 +256,16 @@
         <script type="text/javascript" src="js/navigation.js"></script>
         <script type="text/javascript" src="js/header.js"></script>
         <script type="text/javascript" src="js/footer.js"></script>
+        <script type="text/javascript" src="js/standings.js"></script>
 
         <script type="text/javascript">
             var app = new Vue({
                 el: '#wrapper',
                 data: {
-                    info: "",
+                    info: {
+                        home: {},
+                        away: {}
+                    },
                     matchID: "",
                     referee: "",
                     events: [],
@@ -335,6 +299,7 @@
                         origin = params.origin || "";
                     if (origin !== "") {
                         this.info = JSON.parse(atob(origin))
+                        console.log(this.info)
                         this.getTeamsDetails(this.info.home.id, this.info.away.id)
                     }
                     this.matchID = params.id

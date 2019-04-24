@@ -14,6 +14,9 @@ Vue.component('sofive-left-menu', {
                     <li>
                         <a href="standings.html"><i class="fa fa-trophy"></i><span class="nav-label">Schedule and standings</span></a>
                     </li>
+                    <li>
+                        <a href="search.html"><i class="fa fa-users"></i><span class="nav-label">Team</span></a>
+                    </li>
                 </ul>
             </div>
         </nav>`,

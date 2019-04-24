@@ -185,9 +185,7 @@
                     this.search(encodeURIComponent(e.target.value))
                 },
                 gotoTeam: function(team) {
-                    window.location = "team.html?team=" + btoa(JSON.stringify({
-                        ...team
-                    }))
+                    window.location = "team.html?id=" + team.id
                 }
             }
         })
