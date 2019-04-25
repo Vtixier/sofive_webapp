@@ -81,8 +81,8 @@
                             </div>
                             <div>
                                 <div class="ibox-content no-padding border-left-right">
-                                    <figure v-for="video in videos">
-                                        <iframe width="420" height="270" allow="autoplay" :src="video.embed" frameborder="0" allowfullscreen></iframe>
+                                    <figure v-for="video in videos" style="margin: 0">
+                                        <iframe width="375" height="250" allow="autoplay" :src="video.embed" frameborder="0" allowfullscreen></iframe>
                                     </figure>
                                 </div>
                                 <div class="ibox-content profile-content">
@@ -336,7 +336,7 @@
                                 this.setupEvents(resp.body.events)
                                 this.videos = resp.body.videos.map(v => ({
                                     ...v,
-                                    embed: "https://www.dailymotion.com/embed/video/" + v.id + "?start=0"
+                                    embed: "https://www.dailymotion.com/embed/video/" + v.id + "?queue-enable=false&queue-autoplay-next=false&ui-start-screen-info=false"
                                 }))
                             })
                             .catch((err) => {
