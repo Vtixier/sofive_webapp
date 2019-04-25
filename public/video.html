@@ -111,6 +111,11 @@
             </div>
 
             <div class="row text-center">
+                <div class="col-sm-12">
+                    <p>Don't find your video ? Try narrowing down your research with the filters above !</p>
+                    </p>
+                </div>
+
                 <div class="col-lg-12" v-if="loading">
                     <div>
                         <div>
@@ -124,17 +129,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-12">
-                    <p>Don't find your video ? Try narrowing down your research with the filters above !</p>
-                    </p>
-                </div>
 
                 <div class="row wrapper">
                     <div class="col-md-3" v-for="rec in filtered_recordings.slice(0, 20)">
                         <div class="ibox">
-                            <!--                             <div class="ibox-title">
-                                <h5 style="font-size: 13px">{{rec.field}} - {{rec.start_date}}</h5>
-                            </div> -->
                             <div>
                                 <div class="ibox-content no-padding border-left-right">
                                     <iframe v-on:load="onMyFrameLoad" frameborder="0" :src="rec.embed" allowfullscreen style="width: 100%"></iframe>
@@ -168,10 +166,12 @@
                     </div>
                 </div><br /><br />
 
-                <div>
-                    <sofive-footer />
-                </div>
             </div>
+
+            <div>
+                <sofive-footer />
+            </div>
+
         </div>
 
         <!-- Mainly scripts -->
