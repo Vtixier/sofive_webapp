@@ -3,8 +3,8 @@ Vue.component('sofive-header', {
 		<div class="row border-bottom">
                 <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
                     <div class="navbar-header">
-                        <!-- <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a> -->
-                        <a class="minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-search"></i> </a>
+                        <a class="navbar-minimalize minimalize-styl-2 btn btn-primary hide-lg" href="#"><i class="fa fa-bars"></i> </a>
+                        <a class="minimalize-styl-2 btn btn-primary hide-sm" href="#"><i class="fa fa-search"></i> </a>
                         <form role="search" class="navbar-form-custom" action="search_results.html">
                             <div class="form-group">
                                 <input type="text" placeholder="Search for my team..." class="form-control" name="top-search" id="top-search">

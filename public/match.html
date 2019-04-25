@@ -52,7 +52,7 @@
                                 <div class="row">
                                     <div class="col-sm">
                                         <a style="font-size: 40px" class="text-center"><strong> <span style="color: #295182" v-on:click="gotoTeam(match.home.team_id)"> {{match.home.name}}</span> <span style="color: #4c4949" v-if="match.home.score>=0"> {{match.home.score}}</span> - <span style="color: #4c4949" v-if="match.away.score>=0">{{match.away.score}}</span> </span> <span style="color: #75acda" v-on:click="gotoTeam(match.away.team_id)"> {{match.away.name}} </strong></a>
-                                        <p style="margin: 8px"><b>{{league.name}}</b></p>
+                                        <p style="margin: 8px; cursor: pointer;" v-on:click="gotoLeague(league.id)"><b>{{league.name}}</b></p>
                                         <p>{{season.name}}</p>
                                     </div>
                                 </div>
@@ -395,6 +395,9 @@
                     },
                     gotoTeam: function(id) {
                         window.location = "team.html?id=" + id
+                    },
+                    gotoLeague: function(league_id) {
+                        window.location = "league.html?id=" + league_id
                     }
                 }
             })
