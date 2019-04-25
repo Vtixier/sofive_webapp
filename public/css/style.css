@@ -4554,7 +4554,7 @@ video {
   padding: 0 15px;
   position: relative !important;
   flex-shrink: 1;
-  width: calc(100% - 220px);
+  width: calc(100% - 200px);
 }
 @media (min-width: 768px) {
   #page-wrapper {
@@ -9476,7 +9476,7 @@ body.md-skin {
   }
   .navbar-static-side {
     z-index: 2001;
-    width: 220px;
+    width: 200px;
   }
   .navbar-top-links .dropdown-messages,
   .navbar-top-links .dropdown-tasks,
