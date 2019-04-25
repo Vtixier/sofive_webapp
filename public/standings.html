@@ -365,22 +365,7 @@
                                 ...m,
                                 moment_date: moment(m.start, "YYYY-MM-DDTHH:mm:ss"),
                                 start_parsed: moment(m.start, "YYYY-MM-DDTHH:mm:ss").format("YYYY-MM-DD h:mmA").replace(" ", " at "),
-                                url: "match.html?id=" + m.id + "&origin=" + btoa(JSON.stringify({
-                                    home: {
-                                        id: m.home.team_id,
-                                        name: m.home.name,
-                                        score: m.home.score,
-                                    },
-                                    away: {
-                                        id: m.away.team_id,
-                                        name: m.away.name,
-                                        score: m.away.score,
-                                    },
-                                    center: this.selected_center,
-                                    season: this.selected_season,
-                                    league: this.selected_league,
-                                    standings: this.standings
-                                }))
+                                url: "match.html?id=" + m.id
                             })).sort(this.dateSortFunc)
                             this.standings_loading = false
                             console.log("Matches", this.matches)

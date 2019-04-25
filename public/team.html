@@ -151,44 +151,44 @@
 
                     <div class="ibox">
 
-                            <div class="ibox-title">
-                                <h5>Next matches</h5>
-                                <div class="ibox-tools">
-                                    <a class="collapse-link">
-                                        <i class="fa fa-chevron-up"></i>
-                                    </a>
-                                    <a class="close-link">
-                                        <i class="fa fa-times"></i>
-                                    </a>
-                                </div>
+                        <div class="ibox-title">
+                            <h5>Next matches</h5>
+                            <div class="ibox-tools">
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                                <a class="close-link">
+                                    <i class="fa fa-times"></i>
+                                </a>
                             </div>
+                        </div>
 
-                            <div class="ibox-content">
-                                <h2 v-if="next_matches.length === 0">No future matches scheduled at this point</h2>
-                                <div class="scroll_content" v-if="next_matches.length">
+                        <div class="ibox-content">
+                            <h2 v-if="next_matches.length === 0">No future matches scheduled at this point</h2>
+                            <div class="scroll_content" v-if="next_matches.length">
 
-                                    <div id="vertical-timeline" class="vertical-container dark-timeline">
+                                <div id="vertical-timeline" class="vertical-container dark-timeline">
 
-                                        <div class="vertical-timeline-block" v-for="match in next_matches.slice(0,2)">
-                                            <div class="vertical-timeline-icon navy-bg">
-                                                <i class="fa fa-soccer-ball-o"></i>
-                                            </div>
-
-                                            <div class="vertical-timeline-content">
-                                                <a href="#" class="btn btn-sm btn-primary">More info</a>
-                                                <h2> <span style="color: green"> vs. {{(match.home.name === team.name) ? match.away.name : match.home.name}} </h2>
-                                                <a>
-                                                    {{match.start_parsed}} <br />
-                                                    <span style="color: green"> Opponent rank : 3rd </span>
-                                                </a>
-                                            </div>
+                                    <div class="vertical-timeline-block" v-for="match in next_matches.slice(0,2)">
+                                        <div class="vertical-timeline-icon navy-bg">
+                                            <i class="fa fa-soccer-ball-o"></i>
                                         </div>
 
+                                        <div class="vertical-timeline-content">
+                                            <a href="#" class="btn btn-sm btn-primary">More info</a>
+                                            <h2> <span style="color: green"> vs. {{(match.home.name === team.name) ? match.away.name : match.home.name}} </h2>
+                                            <a>
+                                                {{match.start_parsed}} <br />
+                                                <span style="color: green"> Opponent rank : 3rd </span>
+                                            </a>
+                                        </div>
                                     </div>
 
                                 </div>
+
                             </div>
-                        </div><br />
+                        </div>
+                    </div><br />
 
                     <div class="ibox ">
                         <div class="ibox-title">

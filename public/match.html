@@ -48,13 +48,13 @@
                 <div class="ibox-title">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">
-                            <a href="standings.html">{{info.season}}</a>
+                            <a>{{season.name}}</a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a>{{info.league}}</a>
+                            <a :href="'league.html?id='+league.id">{{league.name}}</a>
                         </li>
-                        <li class="breadcrumb-item active" v-if="info">
-                            <strong>{{info.home.name}} - {{info.away.name}}</strong>
+                        <li class="breadcrumb-item active">
+                            <strong>{{match.home.name}} - {{match.away.name}}</strong>
                         </li>
                     </ol>
                 </div>
@@ -63,8 +63,9 @@
                         <div class="ibox ">
                             <div class="ibox-content text-center p-md">
                                 <div class="row">
-                                    <div class="col-sm" v-if="info">
-                                        <a style="font-size: 40px" class="text-center"><strong> <span style="color: #295182" v-on:click="gotoTeam(info.home.id)"> {{info.home.name}}</span> <span style="color: #4c4949"> {{info.home.score}} - {{info.away.score}} </span> <span style="color: #75acda" v-on:click="gotoTeam(info.away.id)"> {{info.away.name}} </strong></a>
+                                    <div class="col-sm">
+                                        <a style="font-size: 40px" class="text-center"><strong> <span style="color: #295182" v-on:click="gotoTeam(match.home.team_id)"> {{match.home.name}}</span> <span style="color: #4c4949" v-if="match.home.score>=0"> {{match.home.score}}</span> - <span style="color: #4c4949" v-if="match.away.score>=0">{{match.away.score}}</span> </span> <span style="color: #75acda" v-on:click="gotoTeam(match.away.team_id)"> {{match.away.name}} </strong></a>
+                                        <p><i class="fa fa-map-marker"></i> {{facility.name}}</p>
                                     </div>
                                 </div>
                             </div>
@@ -85,9 +86,9 @@
                                     </figure>
                                 </div>
                                 <div class="ibox-content profile-content">
-                                    <h4 v-if="info"><strong>{{info.home.name}} {{info.home.score}} - {{info.away.score}} {{info.away.name}}</strong></h4>
+                                    <h4><strong>{{match.home.name}} <span v-if="match.home.score>=0">{{match.home.score}}</span> - <span v-if="match.away.score>=0">{{match.away.score}}</span> {{match.away.name}}</strong></h4>
                                     <p />
-                                    <p><i class="fa fa-map-marker"></i> {{info.center}}</p>
+                                    <p><i class="fa fa-map-marker"></i> {{facility.name}}</p>
                                     <p><i class="fa fa-male"></i> {{referee.firstname+" "+referee.lastname}}</p>
                                     <div class="user-button">
                                         <div class="row">
@@ -103,13 +104,7 @@
                                     </div>
                                 </div>
                                 <br />
-                                <!--                                 <div class="ibox-content profile-content" v-if="info">
-                                    <h4><strong>Next match:</strong></h4>
-                                    <p />
-                                    <p><i class="fa fa-calendar"></i> <i>{{info.home.name}}</i> vs. {{info.home.name}} on <b>12/05/2019</b></p>
-                                    <p><i class="fa fa-calendar"></i> {{info.away.name}} vs. <i>{{info.away.name}}</i> on <b>12/05/2019</b></p>
-                                </div> -->
-                                <sofive-standings :standings="info.standings" :team="info.home.name" :opponent="info.away.name" />
+                                <sofive-standings :standings="leaderboard" :team="match.home.name" :opponent="match.away.name" />
                             </div>
                         </div>
                     </div>
@@ -142,8 +137,8 @@
                                             </div>
 
                                             <div :class="{'vertical-timeline-content': true,
-                                            'float-right': (info.home.name === event.side),
-                                            'float-left': (info.home.name !== event.side)}" style="padding: 10px">
+                                            'float-right': (match.home.name === event.side),
+                                            'float-left': (match.home.name !== event.side)}" style="padding: 10px">
                                                 <!-- <a href="#" class="btn btn-sm btn-primary">Video</a> -->
                                                 <h2>{{event.date}} <b>{{event.type}}</b> from <b>{{event.side}}</b></h2>
                                                 <div v-html="event.subtitle"></div>
@@ -278,10 +273,14 @@
             var app = new Vue({
                 el: '#wrapper',
                 data: {
-                    info: {
+                    match: {
                         home: {},
                         away: {}
                     },
+                    facility: {},
+                    season: {},
+                    league: {},
+                    leaderboard: [],
                     matchID: "",
                     referee: "",
                     events: [],
@@ -291,18 +290,9 @@
                     ref_rating: 0
                 },
                 mounted: function() {
-
-                    const self = this;
-
-                    const params = this.findGetParameter(),
-                        origin = params.origin || "";
-                    if (origin !== "") {
-                        this.info = JSON.parse(atob(origin))
-                        console.log(this.info)
-                        this.getTeamsDetails(this.info.home.id, this.info.away.id)
-                    }
+                    const params = this.findGetParameter()
                     this.matchID = params.id
-                    this.getMatchDetails()
+                    this.getDashMatch()
                 },
                 methods: {
                     findGetParameter: function() {
@@ -311,6 +301,32 @@
                             queryDict[item.split("=")[0]] = item.split("=")[1]
                         })
                         return queryDict
+                    },
+                    getDashMatch: function() {
+                        let url = "http://localhost:8080/match/" + this.matchID
+                        this.$http.get(url)
+                            .then((resp) => {
+                                this.match = resp.body
+                                this.getTeamsDetails(this.match.home.team_id, this.match.away.team_id)
+                                this.getLeagueDetails(this.match.league_id)
+                                this.getResults(this.match.league_id)
+                                this.getMatchDetails()
+                            })
+                            .catch((err) => {
+                                console.log(err)
+                            })
+                    },
+                    getLeagueDetails: function(league_id) {
+                        let url = "http://localhost:8080/league/" + league_id
+                        this.$http.get(url)
+                            .then((resp) => {
+                                this.facility = resp.body.facility
+                                this.season = resp.body.season
+                                this.league = resp.body.league
+                            })
+                            .catch((err) => {
+                                console.log(err)
+                            })
                     },
                     getMatchDetails: function() {
                         let url = "https://app.scoreplay.io/match?id=" + this.matchID //29845" // TODO: replace with this.matchID
@@ -327,9 +343,39 @@
                                 console.log(err)
                             })
                     },
+                    getTeamsDetails: function(home_id, away_id) {
+                        Promise.all([this.getTeamDetails(home_id, true), this.getTeamDetails(away_id, false)])
+                    },
+                    getTeamDetails: function(id, home) {
+                        let url = "http://localhost:8080/team/" + id
+                        this.$http.get(url)
+                            .then((resp) => {
+                                if (home) {
+                                    this.home_team = resp.body
+                                } else {
+                                    this.away_team = resp.body
+                                }
+                            })
+                            .catch((err) => {
+                                console.log(err)
+                            })
+                    },
+                    getResults: function(league_id) {
+                        let url = "http://localhost:8080/league/" + league_id + "/scores"
+                        this.$http.get(url)
+                            .then((resp) => {
+                                this.leaderboard = resp.body.leaderboard
+                            })
+                            .catch((err) => {
+                                console.log(err.body.errors)
+                            })
+                    },
                     setupEvents: function(events) {
-                        const home = this.info.home.name,
-                            away = this.info.away.name,
+                        if (events.length === 0) {
+                            return
+                        }
+                        const home = this.match.home.name,
+                            away = this.match.away.name,
                             match_start = moment(events[0].date, "YYYY-MM-DD HH:mm:ss");
                         let final_events = [],
                             home_score = 0,
@@ -360,23 +406,6 @@
                             }
                         })
                         this.events = final_events
-                    },
-                    getTeamsDetails: function(home_id, away_id) {
-                        Promise.all([this.getTeamDetails(home_id, true), this.getTeamDetails(away_id, false)])
-                    },
-                    getTeamDetails: function(id, home) {
-                        let url = "http://localhost:8080/team/" + id
-                        this.$http.get(url)
-                            .then((resp) => {
-                                if (home) {
-                                    this.home_team = resp.body
-                                } else {
-                                    this.away_team = resp.body
-                                }
-                            })
-                            .catch((err) => {
-                                console.log(err)
-                            })
                     },
                     gotoTeam: function(id) {
                         window.location = "team.html?id=" + id

@@ -17,6 +17,9 @@ Vue.component('sofive-left-menu', {
                     <li>
                         <a href="search.html"><i class="fa fa-users"></i><span class="nav-label">Team</span></a>
                     </li>
+                    <li>
+                        <a href="video.html"><i class="fa fa-video-camera"></i><span class="nav-label">Videos</span></a>
+                    </li>
                 </ul>
             </div>
         </nav>`,

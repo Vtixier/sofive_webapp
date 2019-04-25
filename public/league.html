@@ -36,11 +36,9 @@
                         <div class="ibox-content text-center p-md">
                             <div class="row">
                                 <div class="col-sm">
-                                    <a style="font-size: 40px" class="text-center">
-                                        <strong>
-                                            <span style="color: #295182">{{name}}</span>
-                                        </strong>
-                                    </a>
+                                    <a style="font-size: 40px; color: #295182" class="text-center"><strong>{{name}}</strong></a>
+                                    <h3>{{season.name}}</h3>
+                                    <p><i class="fa fa-map-marker"></i> {{facility.name}}</p>
                                 </div>
                             </div>
                         </div>
@@ -190,13 +188,17 @@
                 name: "Loading...",
                 standings: [],
                 standings_loading: false,
-                matches: []
+                matches: [],
+                facility: {},
+                season: {},
+                league: {},
             },
             mounted: function() {
                 const params = this.findGetParameter(),
                     id = params.id || "";
                 if (id !== "") {
                     this.getStandings(id)
+                    this.getLeagueDetails(id)
                 }
             },
             methods: {
@@ -206,6 +208,18 @@
                         queryDict[item.split("=")[0]] = item.split("=")[1]
                     })
                     return queryDict
+                },
+                getLeagueDetails: function(league_id) {
+                    let url = "http://localhost:8080/league/" + league_id
+                    this.$http.get(url)
+                        .then((resp) => {
+                            this.facility = resp.body.facility
+                            this.season = resp.body.season
+                            this.league = resp.body.league
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
                 },
                 getStandings: function(league_id) {
                     this.standings_loading = true
@@ -219,22 +233,7 @@
                                 ...m,
                                 moment_date: moment(m.start, "YYYY-MM-DDTHH:mm:ss"),
                                 start_parsed: moment(m.start, "YYYY-MM-DDTHH:mm:ss").format("YYYY-MM-DD h:mmA").replace(" ", " at "),
-                                url: "match.html?id=" + m.id + "&origin=" + btoa(JSON.stringify({
-                                    home: {
-                                        id: m.home.team_id,
-                                        name: m.home.name,
-                                        score: m.home.score,
-                                    },
-                                    away: {
-                                        id: m.away.team_id,
-                                        name: m.away.name,
-                                        score: m.away.score,
-                                    },
-                                    center: this.selected_center,
-                                    season: this.selected_season,
-                                    league: this.selected_league,
-                                    standings: this.standings
-                                }))
+                                url: "match.html?id=" + m.id
                             })).sort(this.dateSortFunc)
                             this.standings_loading = false
                             console.log("Matches", this.matches)
