@@ -48,7 +48,7 @@
                         <a href="standings.html">Leagues and standings</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a>{{team.season.name}}</a>
+                        <a :href="'league.html?id='+team.league.id">{{team.league.name}}</a>
                     </li>
                     <li class="breadcrumb-item active">
                         <strong>{{team.name}}</strong>
@@ -75,7 +75,7 @@
 
                 <div class="col-lg-4">
 
-                    <sofive-standings :standings="leaderboard" :team="team.name" :loading="loading.results" />
+                    <sofive-standings :standings="leaderboard" :team="team.name" :loading="loading.results"></sofive-standings>
 
                     <div class="ibox ">
                         <div class="ibox-title">
@@ -149,6 +149,47 @@
 
                 <div class="col-lg-8">
 
+                    <div class="ibox">
+
+                            <div class="ibox-title">
+                                <h5>Next matches</h5>
+                                <div class="ibox-tools">
+                                    <a class="collapse-link">
+                                        <i class="fa fa-chevron-up"></i>
+                                    </a>
+                                    <a class="close-link">
+                                        <i class="fa fa-times"></i>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="ibox-content">
+                                <h2 v-if="next_matches.length === 0">No future matches scheduled at this point</h2>
+                                <div class="scroll_content" v-if="next_matches.length">
+
+                                    <div id="vertical-timeline" class="vertical-container dark-timeline">
+
+                                        <div class="vertical-timeline-block" v-for="match in next_matches.slice(0,2)">
+                                            <div class="vertical-timeline-icon navy-bg">
+                                                <i class="fa fa-soccer-ball-o"></i>
+                                            </div>
+
+                                            <div class="vertical-timeline-content">
+                                                <a href="#" class="btn btn-sm btn-primary">More info</a>
+                                                <h2> <span style="color: green"> vs. {{(match.home.name === team.name) ? match.away.name : match.home.name}} </h2>
+                                                <a>
+                                                    {{match.start_parsed}} <br />
+                                                    <span style="color: green"> Opponent rank : 3rd </span>
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div><br />
+
                     <div class="ibox ">
                         <div class="ibox-title">
                             <h5>Last Results</h5>
@@ -195,43 +236,6 @@
                         </div>
 
                         <br />
-                        <div class="ibox">
-
-                            <div class="ibox-title">
-                                <h5>Next matches</h5>
-                                <div class="ibox-tools">
-                                    <a class="collapse-link">
-                                        <i class="fa fa-chevron-up"></i>
-                                    </a>
-                                    <a class="close-link">
-                                        <i class="fa fa-times"></i>
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div class="ibox-content">
-                                <div class="scroll_content">
-
-                                    <div id="vertical-timeline" class="vertical-container dark-timeline">
-
-                                        <div class="vertical-timeline-block" v-for="match in next_matches">
-                                            <div class="vertical-timeline-icon navy-bg">
-                                                <i class="fa fa-soccer-ball-o"></i>
-                                            </div>
-
-                                            <div class="vertical-timeline-content">
-                                                <a href="#" class="btn btn-sm btn-primary">More info</a>
-                                                <h2> <span style="color: green"> VS. {{(match.home.name === team.name) ? match.away.name : match.home.name}} </h2>
-                                                <a>
-                                                    {{match.start_parsed}} <br />
-                                                    <span style="color: green"> Opponent rank : 3rd </span>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div><br />
                     </div>
                 </div>
             </div>
@@ -339,7 +343,7 @@
                                     standings: this.leaderboard
                                 }))
                             })).sort(this.dateSortFunc)
-                            this.next_matches = this.matches.filter(m => (m.home.score === (-1) || m.away.score === (-1)))
+                            this.next_matches = this.matches.filter(m => ((m.home.score === (-1) || m.away.score === (-1)) && (moment.duration(moment().diff(m.moment_date)).get("minutes") < 0)))
                             this.loading.results = false
                         })
                         .catch((err) => {
