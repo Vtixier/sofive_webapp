@@ -16,6 +16,18 @@
     <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" sizes="192x192" />
     <link href="css/plugins/nouslider/jquery.nouislider.css" rel="stylesheet">
 
+    <style type="text/css">
+        .float-left {
+            float: left;
+            color: #295182
+        }
+
+        .float-right {
+            float: right;
+            color: #75acda
+        }
+    </style>
+
 </head>
 
 <body class="mini-navbar">
@@ -37,7 +49,7 @@
                 <div class="ibox-title">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">
-                            <a href="index.html">{{info.season}}</a>
+                            <a href="standings.html">{{info.season}}</a>
                         </li>
                         <li class="breadcrumb-item">
                             <a>{{info.league}}</a>
@@ -119,9 +131,9 @@
                             <div class="ibox-content" style="height: 76vh; overflow: scroll;">
                                 <div class="scroll_content">
 
-                                    <div id="vertical-timeline" class="vertical-container dark-timeline">
+                                    <div id="vertical-timeline" class="vertical-container dark-timeline center-orientation">
 
-                                        <div class="vertical-timeline-block" v-for="event in events">
+                                        <div class="vertical-timeline-block" v-for="event in events" style="margin: 25px">
                                             <div class="vertical-timeline-icon navy-bg">
                                                 <i class="fa fa-soccer-ball-o" v-if="event.type == 'goal'"></i>
                                                 <i class="fa fa-meh-o" v-if="event.type == 'foul'"></i>
@@ -129,13 +141,12 @@
                                                 <img src="img/sofive/red_card.ico" style="margin-top: 10%" v-if="event.type == 'red_card'" />
                                             </div>
 
-                                            <div class="vertical-timeline-content">
+                                            <div :class="{'vertical-timeline-content': true,
+                                            'float-right': (info.home.name === event.side),
+                                            'float-left': (info.home.name !== event.side)}" style="padding: 10px">
                                                 <!-- <a href="#" class="btn btn-sm btn-primary">Video</a> -->
-                                                <h2 style="color: #295182">{{event.side}} <b>{{event.type}}</b></h2>
-                                                <span class="vertical-date">
-                                                    <div v-html="event.subtitle" /><br />
-                                                    <small>{{event.side}}</small>
-                                                </span>
+                                                <h2>{{event.date}} <b>{{event.type}}</b> from <b>{{event.side}}</b></h2>
+                                                <div v-html="event.subtitle"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -206,6 +217,10 @@
                 </div>
             </div>
 
+            <div>
+                <sofive-footer />
+            </div>
+
         </div>
 
         <div class="modal inmodal" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -218,9 +233,15 @@
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <label>Rating: <b style="font-size: 15px">{{ref_rating}}/10</b></label>
-                            <div id="basic_slider"></div>
-                            <br />
+                            <label>Rating:
+                                <!-- <b style="font-size: 15px">{{ref_rating}}/10</b> --></label><br />
+                            <button class="btn btn-warning btn-circle" type="button" v-for="i in ref_rating" style="margin-right: 5px">
+                                <i class="fa fa-star"></i>
+                            </button>
+                            <button class="btn btn-warning btn-circle btn-outline" type="button" v-for="i in (10-ref_rating)" style="margin-right: 5px">
+                                <i class="fa fa-star"></i>
+                            </button>
+                            <br /><br />
                             <label>Comment (optional)</label>
                             <input placeholder="Enter your comment..." class="form-control">
                         </div>
@@ -233,17 +254,12 @@
             </div>
         </div>
 
-        <div>
-            <sofive-footer />
-        </div>
-
         <!-- Mainly scripts -->
         <script src="js/jquery-3.1.1.min.js"></script>
         <script src="js/popper.min.js"></script>
         <script src="js/bootstrap.js"></script>
         <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
         <script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
-        <script src="js/plugins/nouslider/jquery.nouislider.min.js"></script>
 
         <!-- Custom and plugin javascript -->
         <script src="js/inspinia.js"></script>
@@ -272,28 +288,11 @@
                     videos: [],
                     home_team: {},
                     away_team: {},
-                    ref_rating: 7
+                    ref_rating: 0
                 },
                 mounted: function() {
 
                     const self = this;
-
-                    $(document).ready(function() {
-                        var basic_slider = document.getElementById('basic_slider');
-                        noUiSlider.create(basic_slider, {
-                            start: 7,
-                            behaviour: 'tap',
-                            connect: 'lower',
-                            range: {
-                                'min': 0,
-                                'max': 10
-                            },
-                            step: 1
-                        });
-                        basic_slider.noUiSlider.on('update.one', function(a) {
-                            self.ref_rating = parseInt(a[0])
-                        });
-                    })
 
                     const params = this.findGetParameter(),
                         origin = params.origin || "";
@@ -314,7 +313,7 @@
                         return queryDict
                     },
                     getMatchDetails: function() {
-                        let url = "https://app.scoreplay.io/match?id="+this.matchID //29845" // TODO: replace with this.matchID
+                        let url = "https://app.scoreplay.io/match?id=" + this.matchID //29845" // TODO: replace with this.matchID
                         this.$http.get(url)
                             .then((resp) => {
                                 this.referee = resp.body.ref
@@ -330,7 +329,8 @@
                     },
                     setupEvents: function(events) {
                         const home = this.info.home.name,
-                            away = this.info.away.name;
+                            away = this.info.away.name,
+                            match_start = moment(events[0].date, "YYYY-MM-DD HH:mm:ss");
                         let final_events = [],
                             home_score = 0,
                             away_score = 0;
@@ -344,7 +344,7 @@
                                 final_events.push({
                                     side: ev.details.side === "home" ? home : away,
                                     type: "goal",
-                                    date: ev.date,
+                                    date: moment.duration(moment(ev.date, "YYYY-MM-DD HH:mm:ss").diff(match_start)).get("minutes") + "\"",
                                     subtitle: home + " <b>" + home_score + " - " + away_score + "</b> " + away
                                 })
                             } else {
@@ -353,7 +353,7 @@
                                     final_events.push({
                                         side: ev.details.side === "home" ? home : away,
                                         type: tp,
-                                        date: ev.date,
+                                        date: moment.duration(moment(ev.date, "YYYY-MM-DD HH:mm:ss").diff(match_start)).get("minutes") + "\"",
                                         subtitle: home + " <b>" + home_score + " - " + away_score + "</b> " + away
                                     })
                                 }
