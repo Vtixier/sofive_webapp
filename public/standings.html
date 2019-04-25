@@ -198,7 +198,7 @@
                                         </thead>
                                         <tbody>
                                             <tr v-for="match in matches">
-                                                <td class="text-center">{{match.start_parsed}}</td>
+                                                <td class="text-center">{{match.start_parsed}} - {{match.match_type}}</td>
                                                 <td class="text-center">{{match.home.name}}</td>
                                                 <td class="text-center"><span v-if="match.home.score !== (-1) && match.away.score !== (-1)">{{match.home.score}} - {{match.away.score}}</span></td>
                                                 <td class="text-center">{{match.away.name}}</td>

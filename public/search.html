@@ -182,7 +182,7 @@
                         })
                 },
                 searchBis: function(e) {
-                    this.search(encodeURIComponent(e.target.value))
+                    window.location = "search.html?query=" + encodeURIComponent(e.target.value)
                 },
                 gotoTeam: function(team) {
                     window.location = "team.html?id=" + team.id

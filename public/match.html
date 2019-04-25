@@ -314,7 +314,7 @@
                         return queryDict
                     },
                     getMatchDetails: function() {
-                        let url = "https://app.scoreplay.io/match?id=29845" // TODO: replace with this.matchID
+                        let url = "https://app.scoreplay.io/match?id="+this.matchID //29845" // TODO: replace with this.matchID
                         this.$http.get(url)
                             .then((resp) => {
                                 this.referee = resp.body.ref
