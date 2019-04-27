@@ -37,33 +37,20 @@
 
         <div id="page-wrapper" class="gray-bg">
 
+<!--
             <div>
-                <sofive-header />
-            </div>
-
-
-            <div class="ibox-title">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item">
-                        <a href="standings.html">Leagues and standings</a>
-                    </li>
-                    <li class="breadcrumb-item">
-                        <a :href="'league.html?id='+team.league.id">{{team.league.name}}</a>
-                    </li>
-                    <li class="breadcrumb-item active">
-                        <strong>{{team.name}}</strong>
-                    </li>
-                </ol>
-            </div>
+                <sofive-header> 
+            </div>   <-->
+                    
             <div class="row">
                 <div class="col-lg-12">
                     <div class="ibox ">
-                        <div class="ibox-content text-center p-md">
+                        <div class="ibox-content text-center p-md" style="background-color: #f3f3f4">
                             <div class="row">
                                 <div class="col-sm">
-                                    <a style="font-size: 40px; color: #295182" class="text-center"><strong>{{team.name}}</strong></a>
-                                    <h3>{{team.season.name}}</h3>
-                                    <p><i class="fa fa-map-marker"></i> {{team.facility.name}}</p>
+                                    <a style="font-size: 50px; color: #295182" class="text-center"><strong>{{team.name}}</strong></a>
+                                    <h2>{{team.season.name}}</h2>
+                                    <h3><i class="fa fa-map-marker"></i> {{team.facility.name}}</h3>
                                 </div>
                             </div>
                         </div>

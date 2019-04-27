@@ -5,18 +5,19 @@ Vue.component('sofive-left-menu', {
                 <ul class="nav metismenu" id="side-menu">
                     <li class="nav-header">
                         <div class="dropdown profile-element">
-                            <img alt="image" class="image" style="max-width: 150px"
-                                src="img/sofive-blue.png" />
+                        <a href="index.html"> <img alt="image" class="image" style="max-width: 150px"
+                                src="img/sofive/sofivemdl.png" /> </a>
                             <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                             <br/><br/>
                             <span class="text-muted text-xs block" style="color: white !important">Change center <b class="caret"></b></span>
                             </a>
                             <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                                <li><a class="dropdown-item" href="profile.html">Sofive Brooklyn</a></li>
-                                <li><a class="dropdown-item" href="contacts.html">Sofive Rockville</a></li>
-                                <li><a class="dropdown-item" href="mailbox.html">Sofive Elkins-Park</a></li>
-                                <li><a class="dropdown-item" href="mailbox.html">Sofive Columbia</a></li>
+                                <li><a class="dropdown-item" href="index.html">Sofive Brooklyn</a></li>
+                                <li><a class="dropdown-item" href="index.html">Sofive Rockville</a></li>
+                                <li><a class="dropdown-item" href="index.html">Sofive Elkins-Park</a></li>
+                                <li><a class="dropdown-item" href="index.html">Sofive Columbia</a></li>
                             </ul>
+                            <ul>
                         </div>
                         <div class="logo-element">
                             <img alt="image" class="rounded-circle" style="max-width: 50px" src="https://t3.ftcdn.net/jpg/01/16/24/84/240_F_116248442_MurRgP9ZlF2HAoddH2D7i3Csl7xAPwEb.jpg" />
@@ -35,4 +36,15 @@ Vue.component('sofive-left-menu', {
             </div>
         </nav>`,
   props: [],
+  mounted: function() {
+    document.getElementById('top-search').onkeypress = function(e) {
+        var event = e || window.event;
+        var charCode = event.which || event.keyCode;
+
+        if ( charCode == '13' ) {
+          window.location = "search.html?query="+e.target.value
+          return false;
+        }
+    }
+  }
 });

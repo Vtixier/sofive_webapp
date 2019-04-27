@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sofive Soccer Center</title>
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="css/animate.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-32x32.png" sizes="32x32" />
+    <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" sizes="192x192" />
+</head>
+
+<body class="fixed-sidebar">
+
+    <div id="wrapper">
+
+        <div>
+            <sofive-left-menu />
+        </div>
+
+
+        <div id="page-wrapper" class="gray-bg">
+
+            <div>
+                <sofive-header />
+            </div>
+
+            <div class="row" style="text-align: center; background-color: rgba(232, 232, 232, 0.43); border: 1px solid #e6eaec;">
+                <div class="col-lg-12">
+                    <div class="ibox" style="margin-top: 3%; margin-bottom: 4%">
+                        <a style="font-size: 50px; color: #676a6c"><strong>Welcome to <span style="color: #03793e"> Sofive Meadowlands </span></strong></a>
+                        <div class="dropdown profile-element" style="text-align: center">
+                            <button data-toggle="dropdown" class="btn btn-default dropdown-toggle">Change center</button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="index.html">Sofive Brooklyn</a></li>
+                                <li><a class="dropdown-item" href="index.html">Sofive Rockville</a></li>
+                                <li><a class="dropdown-item" href="index.html">Sofive Elkins-Park</a></li>
+                                <li><a class="dropdown-item" href="index.html">Sofive Columbia</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+<section  class="container features">
+    <div class="row">
+        <div class="col-lg-12 text-center" style="margin-top: 3%">
+            <div class="navy-line"></div>
+            <h1>After your game keep enjoying the Sofive experience!</h1>
+            <p>Use the left menu to navigate through the different components.</p>
+        </div>
+    </div>
+
+     </section>
+
+ <div class="row">
+ 
+        <div class="col-lg-6 text-center">
+            <img src="img/sofive/videopage.png" alt="dashboard" class="img-fluid" style="max-width: 80%; margin-top:3%">
+                <h2>Watch the video replay of your last rental<h2>
+                    <a href="video.html"><button class="btn btn-outline btn-primary btn-sm">search</button></a> 
+        </div>
+        <div class="col-lg-6 text-center" style="margin-bottom: 15%">
+            <img src="img/sofive/teampage.png" alt="dashboard" class="img-fluid" style="max-width: 80%; margin-top:3%">
+                <h2>Get all the info on your league<h2>
+                    <a href="standings.html"><button class="btn btn-outline btn-primary btn-sm">search</button></a>
+        </div>
+</div>
+
+
+
+
+            <div>
+                <sofive-footer />
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Mainly scripts -->
+    <script src="js/jquery-3.1.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+    <!-- Custom and plugin javascript -->
+    <script src="js/inspinia.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/1.5.1/vue-resource.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+
+    <script type="text/javascript" src="js/navigation.js"></script>
+    <script type="text/javascript" src="js/header.js"></script>
+    <script type="text/javascript" src="js/footer.js"></script>
+
+    <script type="text/javascript">
+        var app = new Vue({
+            el: '#wrapper',
+            data: {
+                info: ""
+            },
+            mounted: function() {
+                const params = this.findGetParameter(),
+                    origin = params.origin || "";
+                if (origin !== "") {
+                    this.info = JSON.parse(atob(origin))
+                }
+            },
+            methods: {
+                findGetParameter: function() {
+                    var queryDict = {}
+                    decodeURI(location.search).substr(1).split("&").forEach(function(item) {
+                        queryDict[item.split("=")[0]] = item.split("=")[1]
+                    })
+                    return queryDict
+                },
+            }
+        })
+    </script>
+
+</body>
+
+</html>

@@ -39,21 +39,23 @@
 
         <div id="page-wrapper" class="gray-bg">
 
+            <!--
+
             <div>
                 <sofive-header />
-            </div>
+            </div> <-->
 
 
             <div class="wrapper wrapper-content animated fadeInRight">
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="ibox ">
-                            <div class="ibox-content text-center p-md">
+                            <div class="ibox-content text-center p-md" style="background-color: rgba(232, 232, 232, 0.43); border: 1px solid #e6eaec;">
                                 <div class="row">
                                     <div class="col-sm">
-                                        <a style="font-size: 40px" class="text-center"><strong> <span style="color: #295182" v-on:click="gotoTeam(match.home.team_id)"> {{match.home.name}}</span> <span style="color: #4c4949" v-if="match.home.score>=0"> {{match.home.score}}</span> - <span style="color: #4c4949" v-if="match.away.score>=0">{{match.away.score}}</span> </span> <span style="color: #75acda" v-on:click="gotoTeam(match.away.team_id)"> {{match.away.name}} </strong></a>
-                                        <p style="margin: 8px; cursor: pointer;" v-on:click="gotoLeague(league.id)"><b>{{league.name}}</b></p>
-                                        <p>{{season.name}}</p>
+                                        <a style="font-size: 50px" class="text-center"><strong> <span style="color: #295182" v-on:click="gotoTeam(match.home.team_id)"> {{match.home.name}}</span> <span style="color: #4c4949" v-if="match.home.score>=0"> {{match.home.score}}</span> - <span style="color: #4c4949" v-if="match.away.score>=0">{{match.away.score}}</span> </span> <span style="color: #75acda" v-on:click="gotoTeam(match.away.team_id)"> {{match.away.name}} </strong></a>
+                                        <h3 style="margin: 8px; cursor: pointer;" v-on:click="gotoLeague(league.id)"><b>{{league.name}}</b></h3>
+                                        <h3>{{season.name}}</h3>
                                     </div>
                                 </div>
                             </div>
@@ -80,13 +82,13 @@
                                     <p><i class="fa fa-male"></i> {{referee.firstname+" "+referee.lastname}}</p>
                                     <div class="user-button">
                                         <div class="row">
-                                        <div class="col-md-6">
-                                            <button type="button" class="btn btn-primary btn-sm btn-block" style="background-color: #4267b2; border-color: #4267b2"><i class="fa fa-facebook-square"></i> Share on Facebook</button>
+                                            <div class="col-md-6">
+                                                <button type="button" class="btn btn-primary btn-sm btn-block" style="background-color: #4267b2; border-color: #4267b2"><i class="fa fa-facebook-square"></i> Share on Facebook</button>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <button type="button" class="btn btn-default btn-sm btn-block"><i class="fa fa-pencil"></i> Referee assessment</button>
+                                            </div>
                                         </div>
-                                        <div class="col-md-6">
-                                            <button type="button" class="btn btn-default btn-sm btn-block"><i class="fa fa-pencil"></i> Referee assessment</button>
-                                        </div>
-                                    </div>
                                     </div>
                                 </div>
                                 <br />
