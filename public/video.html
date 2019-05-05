@@ -55,8 +55,7 @@
                                 </div>
                             </label>
                             <select class="select_season form-control" v-model="selected.center">
-                                <option value="0">Select center</option>
-                                <option v-for="center in centers" :value="center.id">{{center.name}}</option>
+                                <option v-for="center in centers" :value="center">{{center}}</option>
                             </select>
                         </div>
                         <div class="col-sm-2">
@@ -203,13 +202,13 @@
                 el: '#wrapper',
                 data: {
                     date: "",
-                    centers: [],
+                    centers: ["Meadowlands", "Brooklyn", "Rockville", "Elkins Park"],
                     facility_loading: false,
                     recordings: [],
                     times: ["12 am", "7 am", "8 am", "9 am", "10 am", "11 am", "12 pm", "1 pm", "2 pm", "3 pm", "4 pm", "5 pm", "6 pm", "7 pm", "8 pm", "9 pm", "10 pm", "11 pm"],
                     selected: {
                         time: "0",
-                        center: "0",
+                        center: "Meadowlands",
                         field: "0",
                         league: "0",
                         level: "0"
@@ -254,10 +253,10 @@
                         })
                     },
                     filtered_recordings: function() {
-                        let recs = [...this.recordings]
-                        if (this.selected.center !== "0") {
-                            recs = recs.filter((rec) => (rec.center === this.selected.center))
-                        }
+                        let recs = [...this.recordings].filter((rec) => (rec.center === this.selected.center))
+                        // if (this.selected.center !== "0") {
+                        //     recs = recs.filter((rec) => (rec.center === this.selected.center))
+                        // }
                         if (this.selected.field !== "0") {
                             recs = recs.filter((rec) => (rec.field === this.selected.field))
                         }
@@ -301,7 +300,7 @@
                     const self = this;
                     this.date = moment().subtract(1, "d").format("MM-DD-YYYY")
                     this.resetLoaded()
-                    this.getCenters()
+                    // this.getCenters()
                     $('.input-group.date').datepicker({
                         todayBtn: "linked",
                         keyboardNavigation: false,
@@ -327,7 +326,7 @@
                             })
                     },
                     getRecordings: function() {
-                        this.$http.get('https://app.scoreplay.io/recordings?date=' + this.date)
+                        this.$http.get('https://app.scoreplay.io/recordings?date=' + this.date+'&center='+this.selected.center)
                             .then((resp) => {
                                 let clips = 0
                                 this.recordings = resp.data.map((rec) => {
