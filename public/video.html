@@ -129,8 +129,8 @@
                     </div>
                 </div>
 
-                <div class="row wrapper">
-                    <div class="col-md-3" v-for="rec in filtered_recordings.slice(0, 20)">
+                <div class="row wrapper" style="width: 100%">
+                    <div class="col-lg-3" v-for="rec in filtered_recordings.slice(0, 20)">
                         <div class="ibox">
                             <div>
                                 <div class="ibox-content no-padding border-left-right">
@@ -202,7 +202,7 @@
                 el: '#wrapper',
                 data: {
                     date: "",
-                    centers: ["Meadowlands", "Brooklyn", "Rockville", "Elkins Park"],
+                    centers: ["Meadowlands", "Brooklyn", "Rockville", "ElkinsPark"],
                     facility_loading: false,
                     recordings: [],
                     times: ["12 am", "7 am", "8 am", "9 am", "10 am", "11 am", "12 pm", "1 pm", "2 pm", "3 pm", "4 pm", "5 pm", "6 pm", "7 pm", "8 pm", "9 pm", "10 pm", "11 pm"],
