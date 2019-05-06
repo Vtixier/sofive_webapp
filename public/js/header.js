@@ -3,7 +3,7 @@ Vue.component('sofive-header', {
 		<div class="row border-bottom">
                 <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
                     <div class="navbar-header">
-                        <a class="navbar-minimalize minimalize-styl-2 btn btn-outline btn-default hide-lg" href="#"><i class="fa fa-bars"></i> <b>Sofive Meadowlands</b></a>
+                        <a class="navbar-minimalize minimalize-styl-2 btn btn-outline btn-default hide-lg" href="#"><i class="fa fa-bars"></i> <b>Menu</b></a>
                         <a class="minimalize-styl-2 btn btn-outline btn-default hide-sm" href="#"><i class="fa fa-search"></i> </a>
                         <form role="search" class="navbar-form-custom" action="search_results.html">
                             <div class="form-group">

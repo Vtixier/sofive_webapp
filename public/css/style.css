@@ -13,6 +13,9 @@
 }
 
 @media (max-width: 768px) {
+  .espace {
+    margin-bottom: 15%;
+  }
   .video {
     width: 100%;
   }
@@ -21,6 +24,9 @@
   }
 }
 @media (min-width: 768px) {
+  .espace {
+    margin-bottom: 0;
+  }
   .video {
     width: 375px;
     height: 250px;

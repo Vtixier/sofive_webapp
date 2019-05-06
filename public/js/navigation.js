@@ -6,8 +6,8 @@ Vue.component('sofive-left-menu', {
                     <li class="nav-header">
                         <div class="dropdown profile-element">
                         <a href="index.html"> <img alt="image" class="image" style="max-width: 150px"
-                                src="img/sofive/sofivemdl.png" /> </a>
-                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                src="img/sofive/sofive.png" /> </a>
+                            <!--<a data-toggle="dropdown" class="dropdown-toggle" href="#">
                             <br/><br/>
                             <span class="text-muted text-xs block" style="color: white !important">Change center <b class="caret"></b></span>
                             </a>
@@ -17,6 +17,7 @@ Vue.component('sofive-left-menu', {
                                 <li><a class="dropdown-item" href="index.html">Sofive Elkins-Park</a></li>
                                 <li><a class="dropdown-item" href="index.html">Sofive Columbia</a></li>
                             </ul>
+                            -->
                             <ul>
                         </div>
                         <div class="logo-element">

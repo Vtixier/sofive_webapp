@@ -326,7 +326,7 @@
                             })
                     },
                     getRecordings: function() {
-                        this.$http.get('https://app.scoreplay.io/recordings?date=' + this.date+'&center='+this.selected.center)
+                        this.$http.get('https://app.scoreplay.io/recordings?date=' + this.date + '&center=' + this.selected.center)
                             .then((resp) => {
                                 let clips = 0
                                 this.recordings = resp.data.map((rec) => {
