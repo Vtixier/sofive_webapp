@@ -54,7 +54,7 @@
                                     </div>
                                 </div>
                             </label>
-                            <select class="select_season form-control" v-model="selected.center">
+                            <select class="select_season form-control" v-model="selected.center" v-on:change="getRecordings">
                                 <option v-for="center in centers" :value="center">{{center}}</option>
                             </select>
                         </div>
@@ -64,7 +64,7 @@
                                     Date
                                 </label>
                                 <div class="input-group date">
-                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control" :value="moment().subtract(1, 'd').format('MM/DD/YYYY')">
+                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control" :value="date">
                                 </div>
                             </div>
                         </div>
@@ -311,6 +311,10 @@
                         self.date = moment(e.date).format("MM-DD-YYYY")
                         self.resetLoaded()
                     });
+                    $('.input-group.date').on('changeDate', function(e) {
+                        self.date = moment(e.date).format("MM-DD-YYYY")
+                        self.resetLoaded()
+                    });
                 },
                 methods: {
                     getCenters: function() {
@@ -326,6 +330,7 @@
                             })
                     },
                     getRecordings: function() {
+                        this.loading = true
                         this.$http.get('https://app.scoreplay.io/recordings?date=' + this.date + '&center=' + this.selected.center)
                             .then((resp) => {
                                 let clips = 0
@@ -350,14 +355,15 @@
                                         }).sort(this.dateSortFunc)
                                     }
                                 }).sort(this.dateSortFunc)
+                                this.loading = false
                             })
                             .catch((err) => {
+                                this.loading = false
                                 console.log(err)
                             })
                     },
                     resetLoaded: function() {
                         this.loaded = 0
-                        this.loading = true
                         this.getRecordings()
                     },
                     onMyFrameLoad: function() {
