@@ -13,6 +13,9 @@
 }
 
 @media (max-width: 768px) {
+  .marge {
+    margin-top: 15%;
+  }
   .espace {
     margin-bottom: 15%;
   }
@@ -24,6 +27,9 @@
   }
 }
 @media (min-width: 768px) {
+  .marge {
+    margin-top: 5%;
+  }
   .espace {
     margin-bottom: 0;
   }

@@ -125,8 +125,8 @@
                                             </div>
 
                                             <div :class="{'vertical-timeline-content': true,
-                                            'float-right': (match.home.name === event.side),
-                                            'float-left': (match.home.name !== event.side)}" style="padding: 10px">
+                                            'float-right': (match.home.name !== event.side),
+                                            'float-left': (match.home.name === event.side)}" style="padding: 10px">
                                                 <!-- <a href="#" class="btn btn-sm btn-primary">Video</a> -->
                                                 <h2>{{event.date}} <b>{{event.type}}</b> from <b>{{event.side}}</b></h2>
                                                 <div v-html="event.subtitle"></div>
@@ -158,7 +158,6 @@
                                                     <th style="width: 1%" class="text-center">No.</th>
                                                     <th>Players</th>
                                                     <th class="text-center">Goals</th>
-                                                    <th class="text-center">More info</th>
                                                 </tr>
                                             </thead>
                                             <tbody v-if="home_team">
@@ -167,7 +166,6 @@
                                                     <td> {{player.name}}
                                                     </td>
                                                     <td class="text-center small">0</td>
-                                                    <td style="text-align: center"><a href="#"><span class="label label-primary">card</span></a></td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -179,7 +177,6 @@
                                                     <th style="width: 1%" class="text-center">No.</th>
                                                     <th>Player</th>
                                                     <th class="text-center">Goals</th>
-                                                    <th class="text-center">More info</th>
                                                 </tr>
                                             </thead>
                                             <tbody v-if="away_team">
@@ -188,7 +185,6 @@
                                                     <td> {{player.name}}
                                                     </td>
                                                     <td class="text-center small">0</td>
-                                                    <td style="text-align: center"><a href="#"><span class="label label-primary">card</span></a></td>
                                                 </tr>
                                             </tbody>
                                         </table>
