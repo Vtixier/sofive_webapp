@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sofive Soccer Center</title>
+
+    <link href="css/plugins/select2/select2.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.css" rel="stylesheet">
+
+    <link href="css/plugins/datapicker/datepicker3.css" rel="stylesheet">
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="css/animate.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-32x32.png" sizes="32x32" />
+    <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" sizes="192x192" />
+</head>
+
+<body>
+
+    <div id="app" style="width: 100%">
+
+        <div class="gray-bg">
+
+            <div class="wrapper wrapper-content animated fadeInRight" style="padding-bottom: 15px">
+
+                <div class="ibox-content m-b-sm border-bottom">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label class="col-form-label" for="status">
+                                    Date
+                                </label>
+                                <div class="input-group date">
+                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control" :value="date">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <label class="col-form-label" for="status">
+                                Start time
+                            </label>
+                            <select class="select_season form-control" v-model="selected.time">
+                                <option value="0">Any time</option>
+                                <option v-for="time in times" :value="time">{{time}}</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-2">
+                            <label class="col-form-label" for="status">
+                                Field
+                            </label>
+                            <select class="select_league form-control" v-model="selected.field">
+                                <option value="0">All fields</option>
+                                <option v-for="field in fields" :value="field">{{field}}</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-2">
+                            <label class="col-form-label" for="status">
+                                League
+                            </label>
+                            <select class="select_league form-control" v-model="selected.league">
+                                <option value="0">All leagues</option>
+                                <option v-for="league in leagues" :value="league.value">{{league.display}}</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-2">
+                            <label class="col-form-label" for="status">
+                                Division
+                            </label>
+                            <select class="select_league form-control" v-model="selected.level">
+                                <option value="0">All divisions</option>
+                                <option v-for="level in levels" :value="level.value">{{level.display}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row text-center">
+                <div class="col-sm-12">
+                    <p>Don't find your video ? Try narrowing down your research with the filters above !</p>
+                    </p>
+                </div>
+
+                <div class="col-lg-12" v-if="loading">
+                    <div>
+                        <div>
+                            <div class="sk-spinner sk-spinner-wave">
+                                <div class="sk-rect1"></div>
+                                <div class="sk-rect2"></div>
+                                <div class="sk-rect3"></div>
+                                <div class="sk-rect4"></div>
+                                <div class="sk-rect5"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row wrapper" style="width: 100%; margin: 0">
+                    <div class="col-lg-3" v-for="rec in filtered_recordings.slice(0, 20)">
+                        <div class="ibox">
+                            <div>
+                                <div class="ibox-content no-padding border-left-right">
+                                    <iframe v-on:load="onMyFrameLoad" frameborder="0" :src="rec.embed" allowfullscreen style="width: 100%"></iframe>
+                                </div>
+                                <div class="ibox-content profile-content">
+                                    <p><i class="fa fa-calendar"></i> {{rec.full_date}}</p>
+                                    <p><i class="fa fa-thumb-tack"></i> {{rec.field}}</p>
+                                    <p><i class="fa fa-map-marker"></i> {{rec.center}}</p>
+                                    <div v-if="rec.matches.length>0">
+                                        <h4>League matches</h4>
+                                        <table class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Date</th>
+                                                    <th>Home</th>
+                                                    <th>Away</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-for="(match, index) in rec.matches" v-on:click="gotoMatch(match.id)">
+                                                    <td>{{match.time}}</td>
+                                                    <td class="text-navy">{{match.home}}</td>
+                                                    <td>{{match.away}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><br /><br />
+
+            </div>
+
+        </div>
+
+        <!-- Mainly scripts -->
+        <script src="js/jquery-3.1.1.min.js"></script>
+        <script src="js/popper.min.js"></script>
+        <script src="js/bootstrap.js"></script>
+        <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
+        <script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.js"></script>
+
+        <!-- Custom and plugin javascript -->
+        <script src="js/inspinia.js"></script>
+
+        <script src="js/plugins/select2/select2.full.min.js"></script>
+
+        <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/1.5.1/vue-resource.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+        <script src="js/plugins/datapicker/bootstrap-datepicker.js"></script>
+        <script type="text/javascript" src="js/he.js"></script>
+
+        <script type="text/javascript">
+            var app = new Vue({
+                el: '#app',
+                data: {
+                    date: "",
+                    facility_loading: false,
+                    recordings: [],
+                    times: ["12 am", "7 am", "8 am", "9 am", "10 am", "11 am", "12 pm", "1 pm", "2 pm", "3 pm", "4 pm", "5 pm", "6 pm", "7 pm", "8 pm", "9 pm", "10 pm", "11 pm"],
+                    selected: {
+                        time: "0",
+                        center: "Meadowlands",
+                        field: "0",
+                        league: "0",
+                        level: "0"
+                    },
+                    loaded: 0,
+                    loading: false,
+                },
+                computed: {
+                    fields: function() {
+                        return [...new Set(this.recordings.map((rec) => (rec.field)))].sort()
+                    },
+                    leagues: function() {
+                        let l = []
+                        this.recordings.forEach((rec) => {
+                            if (rec.parsed_date.format("MM-DD-YYYY") === this.date) {
+                                rec.matches.forEach((match) => {
+                                    l.push(match.event)
+                                })
+                            }
+                        })
+                        return [...new Set(l)].sort().map((e) => {
+                            return {
+                                value: e,
+                                display: he.decode(e)
+                            }
+                        })
+                    },
+                    levels: function() {
+                        let l = []
+                        this.recordings.forEach((rec) => {
+                            if (rec.parsed_date.format("MM-DD-YYYY") === this.date) {
+                                rec.matches.forEach((match) => {
+                                    l.push(match.level || "Not specified")
+                                })
+                            }
+                        })
+                        return [...new Set(l)].sort().map((e) => {
+                            return {
+                                value: e,
+                                display: he.decode(e)
+                            }
+                        })
+                    },
+                    filtered_recordings: function() {
+                        let recs = [...this.recordings].filter((rec) => (rec.center === this.selected.center))
+                        // if (this.selected.center !== "0") {
+                        //     recs = recs.filter((rec) => (rec.center === this.selected.center))
+                        // }
+                        if (this.selected.field !== "0") {
+                            recs = recs.filter((rec) => (rec.field === this.selected.field))
+                        }
+                        if (this.selected.league !== "0") {
+                            recs = recs.filter((rec) => {
+                                let ok = false
+                                for (let i = 0; i < rec.matches.length; i++) {
+                                    if (rec.matches[i].event == this.selected.league) {
+                                        ok = true
+                                        break
+                                    }
+                                }
+                                return ok
+                            })
+                        }
+                        if (this.selected.level !== "0") {
+                            recs = recs.filter((rec) => {
+                                let ok = false
+                                for (let i = 0; i < rec.matches.length; i++) {
+                                    if (rec.matches[i].level && (rec.matches[i].level == this.selected.level)) {
+                                        ok = true
+                                        break
+                                    }
+                                }
+                                return ok
+                            })
+                        }
+                        if (this.date !== "") {
+                            recs = recs.filter((rec) => (rec.parsed_date.format("MM-DD-YYYY") === this.date))
+                        }
+                        if (this.selected.time !== "0") {
+                            const now = moment(this.date + " " + this.selected.time, "MM-DD-YYYY h a")
+                            recs = recs.filter((rec) => {
+                                return rec.parsed_date.diff(now, 'seconds') >= 0
+                            })
+                        }
+                        return recs
+                    }
+                },
+                mounted: function() {
+                    const self = this;
+                    this.date = moment().subtract(1, "d").format("MM-DD-YYYY")
+                    this.resetLoaded()
+                    // this.getCenters()
+                    $('.input-group.date').datepicker({
+                        todayBtn: "linked",
+                        keyboardNavigation: false,
+                        forceParse: false,
+                        calendarWeeks: true,
+                        autoclose: true
+                    }).on('changeDate', function(e) {
+                        self.date = moment(e.date).format("MM-DD-YYYY")
+                        self.resetLoaded()
+                    });
+                    $('.input-group.date').on('changeDate', function(e) {
+                        self.date = moment(e.date).format("MM-DD-YYYY")
+                        self.resetLoaded()
+                    });
+                },
+                methods: {
+                    getCenters: function() {
+                        // this.facility_loading = true
+                        this.centers = []
+                        this.$http.get("http://localhost:8080/facility/")
+                            .then((resp) => {
+                                this.centers = resp.body;
+                                this.facility_loading = false
+                            })
+                            .catch((err) => {
+                                console.log(err.body.errors)
+                            })
+                    },
+                    getRecordings: function() {
+                        this.loading = true
+                        this.$http.get('https://app.scoreplay.io/recordings?date=' + this.date + '&center=' + this.selected.center)
+                            .then((resp) => {
+                                let clips = 0
+                                this.recordings = resp.data.map((rec) => {
+                                    const moment_date = moment(rec.date, "MM-DD-YYYY h:mma")
+                                    return {
+                                        ...rec,
+                                        embed: "https://www.dailymotion.com/embed/video/" + rec.id + "?queue-enable=false&queue-autoplay-next=false&ui-start-screen-info=false",
+                                        parsed_date: moment_date,
+                                        start_date: moment_date.format("h") + ":00" + moment_date.format("a"),
+                                        full_date: moment_date.format("MM-DD-YYYY h") + ":00" + moment_date.format("a"),
+                                        matches: rec.matches.map((match) => {
+                                            const m_date = moment(match.date, "YYYY-MM-DD HH:mm:ss")
+                                            return {
+                                                time: m_date.format("h:mma"),
+                                                event: match.event,
+                                                home: match.home.teamName,
+                                                away: match.away.teamName,
+                                                parsed_date: m_date,
+                                                id: match.matchID
+                                            }
+                                        }).sort(this.dateSortFunc)
+                                    }
+                                }).sort(this.dateSortFunc)
+                                this.loading = false
+                            })
+                            .catch((err) => {
+                                this.loading = false
+                                console.log(err)
+                            })
+                    },
+                    resetLoaded: function() {
+                        this.loaded = 0
+                        this.getRecordings()
+                    },
+                    onMyFrameLoad: function() {
+                        this.loaded += 1
+                        if (this.loaded >= Math.min(this.filtered_recordings.length, 20)) {
+                            console.log("ALL loaded")
+                            this.loading = false
+                        }
+                    },
+                    dateSortFunc: function(a, b) {
+                        const diff = b.parsed_date.diff(a.parsed_date, 'seconds')
+                        if (diff > 0) {
+                            return -1
+                        } else if (diff < 0) {
+                            return 1
+                        } else {
+                            return 0
+                        }
+                    },
+                    gotoMatch: function(match_id) {
+                        window.location = "match.html?id=" + match_id
+                    }
+                }
+            })
+        </script>
+
+</body>
+
+</html>
