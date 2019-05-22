@@ -302,7 +302,7 @@
                                     const moment_date = moment(rec.date, "MM-DD-YYYY h:mma")
                                     return {
                                         ...rec,
-                                        embed: "https://www.dailymotion.com/embed/video/" + rec.id + "?queue-enable=false&queue-autoplay-next=false&ui-start-screen-info=false",
+                                        embed: "https://www.dailymotion.com/embed/video/" + rec.id + "?queue-enable=false&queue-autoplay-next=false&ui-start-screen-info=false&controls=true",
                                         parsed_date: moment_date,
                                         start_date: moment_date.format("h") + ":00" + moment_date.format("a"),
                                         full_date: moment_date.format("MM-DD-YYYY h") + ":00" + moment_date.format("a"),
