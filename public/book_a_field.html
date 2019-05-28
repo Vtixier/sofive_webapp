@@ -80,13 +80,53 @@
                         </div>
                         <div class="col-sm-3">
                             <label class="col-form-label" for="status">
-                                Hours
+                                Duration
                             </label>
                             <select class="select_league form-control" v-model="selected.field">
                                 <option>1h</option>
                                 <option>1h30</option>
                                 <option>2h</option>
                             </select>
+                        </div>
+                </div>
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-8">
+
+
+                        <div class="col-md-12">
+
+                            <div class="ibox" style="text-align: center">
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading">
+                                           <h4> Field available ! </h4>
+                                        </div>
+                                        <div class="panel-body">
+                                            <h3><i class="fa fa-calendar"></i> Monday 23rd April</h3>
+                                            <h3><i class="fa fa-clock-o"></i> 4:00pm-5:30pm (dur. 1:30)</h3>
+                                            <h3><i class="fa fa-map-marker"></i> Sofive Rockville, field 6 - Maracana</h3>
+                                        <div class="btn-group center" style="margin-top: 1%">
+                                             <a href="payment.html" class="btn btn-primary btn-sm">Select</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+
+                <div class="col-md-4">
+
+                    <div class="ibox" style="text-align: center">
+                        <div class="ibox-title" style="padding: 15px 0px 0px 0px;">
+                            <h5>Support</h5>
+                        </div>
+                        <div class="ibox-content text-center">
+                            <h3><i class="fa fa-phone"></i> +43 100 783 001</h3>
+                            <span class="small">
+                                Please contact with us if you have any questions.
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -96,32 +136,145 @@
 
                 <div class="col-md-8">
 
-                    <div class="row">
-
                         <div class="col-md-12">
 
                             <div class="ibox" style="text-align: center">
-                                <div class="ibox-title" style="padding: 15px 0px 0px 0px;">
-                                    <h5>Field available !</h5>
+                                    <div class="panel panel-grey">
+                                        <div class="panel-heading">
+                                        <h4> Sorry there is no field available at this time</h4>
+                                        </div>
+                                        <div class="panel-body">
+                            <div>
+                                
+                            
+                                <h3> Same Day </h3>
+
+                                <div class="row" style="margin-top: 2%">
+                                <div class="col-lg-4">
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading">
+                                            1h before
+                                        </div>
+                                        <div class="panel-body">
+                                            <h4><i class="fa fa-calendar"></i> Monday 23rd April</h4>
+                                            <h4><i class="fa fa-clock-o"></i><b> 3:00pm-4:30pm</b><br>(dur: 1:30h)</h4>
+                                            <h4><i class="fa fa-map-marker"></i> Sofive Rockville <br> field 6 - Maracana</h4>
+                                        <div class="btn-group center" style="margin-top: 5%">
+                                            <a href="payment.html" class="btn btn-primary btn-sm">Select</a>
+                                        </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="ibox-content">
-                                    <p><i class="fa fa-map-marker"></i> Sofive Rockville</p>
-                                    <h3><i class="fa fa-check-square"></i> Maracana </h3>
-                                    <h3 class="font-bold">Monday 23rd April</h3>
-                                    <h3 class="font-bold">4pm-5:30pm (duration 1:30)</h3>
+                                <div class="col-lg-4">
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading">
+                                            1h after
+                                        </div>
+                                        <div class="panel-body">
+                                            <h4><i class="fa fa-calendar"></i> Monday 23rd April</h4>
+                                            <h4><i class="fa fa-clock-o"></i><b> 5:00pm-6:30pm </b> <br> (dur: 1:30h)</h4>
+                                            <h4><i class="fa fa-map-marker"></i> Sofive Rockville <br> field 6 - Maracana</h4>
+                                        <div class="btn-group center" style="margin-top: 5%">
+                                            <a href="payment.html" class="btn btn-primary btn-sm">Select</a>
+                                        </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="ibox-content">
-                                    <h2 class="font-bold">
-                                        $150,00
-                                    </h2>
-                                    <div class="m-t-sm">
-                                        <div class="btn-group center">
-                                            <a href="#" class="btn btn-primary btn-sm"><i class="fa fa-shopping-cart"></i> Checkout</a>
+                                <div class="col-lg-4">
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading">
+                                            1h of play
+                                        </div>
+                                        <div class="panel-body">
+                                            <h4><i class="fa fa-calendar"></i> Monday 23rd April</h4>
+                                            <h4><i class="fa fa-clock-o"></i> 4:00pm-5:00pm <br><b> (dur: 1h)</b></h4>
+                                            <h4><i class="fa fa-map-marker"></i> Sofive Rockville <br> field 6 - Maracana</h4>
+                                        <div class="btn-group center" style="margin-top: 5%">
+                                           <a href="payment.html" class="btn btn-primary btn-sm">Select</a>
+                                        </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+
+                                <h3> Sunday 22nd April </h3>
+
+                                <div class="row" style="margin-top: 2%">
+                                <div class="col-lg-4">
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading">
+                                            Same time and duration
+                                        </div>
+                                        <div class="panel-body">
+                                            <h4><i class="fa fa-calendar"></i> Sunday 22nd April </h4>
+                                            <h4><i class="fa fa-clock-o"></i> 4:00pm-5:30pm <br> (dur. 1:30)</h4>
+                                            <h4><i class="fa fa-map-marker"></i> Sofive Rockville <br> field 6 - Maracana</h4>
+                                        <div class="btn-group center" style="margin-top: 5%">
+                                            <a href="payment.html" class="btn btn-primary btn-sm">Select</a>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <h3> Tuesday 24th April </h3>
+
+                                <div class="row" style="margin-top: 2%">
+
+                                <div class="col-lg-4">
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading">
+                                            Same time and duration
+                                        </div>
+                                        <div class="panel-body">
+                                            <h4><i class="fa fa-calendar"></i> Tuesday 24th April </h4>
+                                            <h4><i class="fa fa-clock-o"></i> 4:00pm-5:30pm <br> (dur. 1:30)</h4>
+                                            <h4><i class="fa fa-map-marker"></i> Sofive Rockville <br> field 6 - Maracana</h4>
+                                        <div class="btn-group center" style="margin-top: 5%">
+                                            <a href="payment.html" class="btn btn-primary btn-sm">Select</a>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading">
+                                            1h after
+                                        </div>
+                                        <div class="panel-body">
+                                            <h4><i class="fa fa-calendar"></i> Tuesday 24th April </h4>
+                                            <h4><i class="fa fa-clock-o"></i> 4:00pm-5:30pm <br> (dur. 1:30)</h4>
+                                            <h4><i class="fa fa-map-marker"></i> Sofive Rockville <br> field 6 - Maracana</h4>
+                                        <div class="btn-group center" style="margin-top: 5%">
+                                             <a href="payment.html" class="btn btn-primary btn-sm">Select</a>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading">
+                                            1h of play
+                                        </div>
+                                        <div class="panel-body">
+                                            <h4><i class="fa fa-calendar"></i> Tuesday 24th April </h4>
+                                            <h4><i class="fa fa-clock-o"></i> 4:00pm-5:30pm <br> (dur. 1:30)</h4>
+                                            <h4><i class="fa fa-map-marker"></i> Sofive Rockville <br> field 6 - Maracana</h4>
+                                        <div class="btn-group center" style="margin-top: 5%">
+                                             <a href="payment.html" class="btn btn-primary btn-sm">Select</a>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+                            </div>
+                            </div>
+                            </div>
+                            </div>
                     </div>
                 </div>
 
@@ -144,6 +297,10 @@
                     </div>
                 </div>
             </div>
+
+
+
+
             <sofive-footer />
         </div>
 
