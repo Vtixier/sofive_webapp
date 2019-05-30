@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sofive Soccer Center</title>
+
+    <link href="css/plugins/select2/select2.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.css" rel="stylesheet">
+
+    <link href="css/plugins/datapicker/datepicker3.css" rel="stylesheet">
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="css/animate.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-32x32.png" sizes="32x32" />
+    <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" sizes="192x192" />
+</head>
+
+<body class="fixed-sidebar">
+
+    <div id="wrapper">
+
+        <div>
+            <sofive-left-menu />
+        </div>
+
+        <div id="page-wrapper" class="gray-bg">
+
+            <div>
+                <sofive-header />
+            </div>
+
+            <div class="row wrapper border-bottom white-bg page-heading">
+                <div class="col-lg-10">
+                    <h2>Book a field</h2>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <bold>Selection</bold>
+                        </li>
+                    </ol>
+                </div>
+                <div class="col-lg-2">
+                </div>
+            </div>
+
+            <div class="wrapper wrapper-content animated fadeInRight" style="padding-bottom: 5px">
+
+                <div class="ibox-content m-b-sm border-bottom">
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <label class="col-form-label" for="status">
+                                Select Center
+                                <div v-if="facility_loading">
+                                    <div>
+                                        <div class="sk-spinner sk-spinner-wave">
+                                            <div class="sk-rect1"></div>
+                                            <div class="sk-rect2"></div>
+                                            <div class="sk-rect3"></div>
+                                            <div class="sk-rect4"></div>
+                                            <div class="sk-rect5"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </label>
+                            <select class="select_season form-control" v-model="selected.center">
+                                <option value="0">Select center</option>
+                                <option v-for="center in centers" :value="center.id">{{center.name}}</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label class="col-form-label" for="status">
+                                    Date
+                                </label>
+                                <div class="input-group date">
+                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control" :value="moment().format('MM/DD/YYYY')">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <label class="col-form-label" for="status">
+                                Time
+                            </label>
+                            <select class="select_season form-control" v-model="selected.time">
+                                <option value="0">Select time</option>
+                                <option v-for="time in times" :value="time">{{time}}</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-2">
+                            <label class="col-form-label" for="status">
+                                Duration
+                            </label>
+                            <select class="select_league form-control" v-model="selected.duration">
+                                <option value="60">1h</option>
+                                <option value="90">1h30</option>
+                                <option value="120">2h</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-2">
+                            <label class="col-form-label" for="status">
+                                Type
+                            </label>
+                            <select class="select_league form-control" v-model="selected.field">
+                                <option>Outdoor</option>
+                                <option>Indoor</option>
+                            </select>
+                        </div>
+                    </div>
+                    <a v-on:click="search" class="btn btn-primary btn-rounded btn-block btn-outline" href="#"></i>Look for a field</a>
+                </div>
+
+                <div class="row" v-if="fields_loading">
+
+                    <div class="col-lg-12">
+                        <div>
+                            <div>
+                                <div class="sk-spinner sk-spinner-wave">
+                                    <div class="sk-rect1"></div>
+                                    <div class="sk-rect2"></div>
+                                    <div class="sk-rect3"></div>
+                                    <div class="sk-rect4"></div>
+                                    <div class="sk-rect5"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row" v-if="available_field">
+
+                    <div class="col-md-8" style="margin-top: 2%">
+                        <div class="ibox" style="text-align: center">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <h4> Field available ! </h4>
+                                </div>
+                                <div class="panel-body">
+                                    <h3><i class="fa fa-calendar"></i> {{available_field.date}}</h3>
+                                    <h3><i class="fa fa-clock-o"></i> {{available_field.subtitle}}</h3>
+                                    <h3><i class="fa fa-map-marker"></i> {{available_field.name}}</h3>
+                                    <div class="btn-group center" style="margin-top: 1%">
+                                        <a href="confirmation.html" class="btn btn-primary btn-sm">Select</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4" style="margin-top: 2%">
+                        <div class="ibox" style="text-align: center">
+                            <div class="ibox-title" style="padding: 15px 0px 0px 0px;">
+                                <h5>Support</h5>
+                            </div>
+                            <div class="ibox-content text-center">
+                                <h3><i class="fa fa-phone"></i> +43 100 783 001</h3>
+                                <span class="small">
+                                    Please contact with us if you have any questions.
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" v-if="missing">
+
+                    <div class="col-md-8">
+                        <div class="ibox" style="text-align: center">
+                            <div class="panel panel-grey">
+                                <div class="panel-heading">
+                                    <h4> Sorry there is no field available at this time</h4>
+                                </div>
+                                <div class="panel-body">
+                                    <div>
+                                        <h3> Same Day </h3>
+                                        <div class="row" style="margin-top: 2%">
+                                            <div class="col-lg-4">
+                                                <div class="panel panel-primary">
+                                                    <div class="panel-heading">
+                                                        1h before
+                                                    </div>
+                                                    <div class="panel-body">
+                                                        <h4><i class="fa fa-calendar"></i> Monday 23rd April</h4>
+                                                        <h4><i class="fa fa-clock-o"></i><b> 3:00pm-4:30pm</b><br>(dur: 1:30h)</h4>
+                                                        <h4><i class="fa fa-map-marker"></i> Sofive Rockville <br> field 6 - Maracana</h4>
+                                                        <div class="btn-group center" style="margin-top: 5%">
+                                                            <a href="confirmation.html" class="btn btn-primary btn-sm">Select</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="panel panel-primary">
+                                                    <div class="panel-heading">
+                                                        1h after
+                                                    </div>
+                                                    <div class="panel-body">
+                                                        <h4><i class="fa fa-calendar"></i> Monday 23rd April</h4>
+                                                        <h4><i class="fa fa-clock-o"></i><b> 5:00pm-6:30pm </b> <br> (dur: 1:30h)</h4>
+                                                        <h4><i class="fa fa-map-marker"></i> Sofive Rockville <br> field 6 - Maracana</h4>
+                                                        <div class="btn-group center" style="margin-top: 5%">
+                                                            <a href="confirmation.html" class="btn btn-primary btn-sm">Select</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="panel panel-primary">
+                                                    <div class="panel-heading">
+                                                        1h of play
+                                                    </div>
+                                                    <div class="panel-body">
+                                                        <h4><i class="fa fa-calendar"></i> Monday 23rd April</h4>
+                                                        <h4><i class="fa fa-clock-o"></i> 4:00pm-5:00pm <br><b> (dur: 1h)</b></h4>
+                                                        <h4><i class="fa fa-map-marker"></i> Sofive Rockville <br> field 6 - Maracana</h4>
+                                                        <div class="btn-group center" style="margin-top: 5%">
+                                                            <a href="confirmation.html" class="btn btn-primary btn-sm">Select</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <h3> Sunday 22nd April </h3>
+
+                                        <div class="row" style="margin-top: 2%">
+                                            <div class="col-lg-4">
+                                                <div class="panel panel-primary">
+                                                    <div class="panel-heading">
+                                                        Same time and duration
+                                                    </div>
+                                                    <div class="panel-body">
+                                                        <h4><i class="fa fa-calendar"></i> Sunday 22nd April </h4>
+                                                        <h4><i class="fa fa-clock-o"></i> 4:00pm-5:30pm <br> (dur. 1:30)</h4>
+                                                        <h4><i class="fa fa-map-marker"></i> Sofive Rockville <br> field 6 - Maracana</h4>
+                                                        <div class="btn-group center" style="margin-top: 5%">
+                                                            <a href="confirmation.html" class="btn btn-primary btn-sm">Select</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <h3> Tuesday 24th April </h3>
+
+                                        <div class="row" style="margin-top: 2%">
+
+                                            <div class="col-lg-4">
+                                                <div class="panel panel-primary">
+                                                    <div class="panel-heading">
+                                                        Same time and duration
+                                                    </div>
+                                                    <div class="panel-body">
+                                                        <h4><i class="fa fa-calendar"></i> Tuesday 24th April </h4>
+                                                        <h4><i class="fa fa-clock-o"></i> 4:00pm-5:30pm <br> (dur. 1:30)</h4>
+                                                        <h4><i class="fa fa-map-marker"></i> Sofive Rockville <br> field 6 - Maracana</h4>
+                                                        <div class="btn-group center" style="margin-top: 5%">
+                                                            <a href="confirmation.html" class="btn btn-primary btn-sm">Select</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="panel panel-primary">
+                                                    <div class="panel-heading">
+                                                        1h after
+                                                    </div>
+                                                    <div class="panel-body">
+                                                        <h4><i class="fa fa-calendar"></i> Tuesday 24th April </h4>
+                                                        <h4><i class="fa fa-clock-o"></i> 4:00pm-5:30pm <br> (dur. 1:30)</h4>
+                                                        <h4><i class="fa fa-map-marker"></i> Sofive Rockville <br> field 6 - Maracana</h4>
+                                                        <div class="btn-group center" style="margin-top: 5%">
+                                                            <a href="confirmation.html" class="btn btn-primary btn-sm">Select</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="panel panel-primary">
+                                                    <div class="panel-heading">
+                                                        1h of play
+                                                    </div>
+                                                    <div class="panel-body">
+                                                        <h4><i class="fa fa-calendar"></i> Tuesday 24th April </h4>
+                                                        <h4><i class="fa fa-clock-o"></i> 4:00pm-5:30pm <br> (dur. 1:30)</h4>
+                                                        <h4><i class="fa fa-map-marker"></i> Sofive Rockville <br> field 6 - Maracana</h4>
+                                                        <div class="btn-group center" style="margin-top: 5%">
+                                                            <a href="confirmation.html" class="btn btn-primary btn-sm">Select</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+
+                        <div class="ibox" style="text-align: center">
+                            <div class="ibox-title" style="padding: 15px 0px 0px 0px;">
+                                <h5>Support</h5>
+                            </div>
+                            <div class="ibox-content text-center">
+
+
+
+                                <h3><i class="fa fa-phone"></i> +43 100 783 001</h3>
+                                <span class="small">
+                                    Please contact with us if you have any questions.
+                                </span>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <sofive-footer />
+
+        </div>
+
+        <!-- Mainly scripts -->
+        <script src="js/jquery-3.1.1.min.js"></script>
+        <script src="js/popper.min.js"></script>
+        <script src="js/bootstrap.js"></script>
+        <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
+        <script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.js"></script>
+
+        <!-- Custom and plugin javascript -->
+        <script src="js/inspinia.js"></script>
+
+        <script src="js/plugins/select2/select2.full.min.js"></script>
+
+        <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/1.5.1/vue-resource.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+        <script src="js/plugins/datapicker/bootstrap-datepicker.js"></script>
+        <script type="text/javascript" src="js/he.js"></script>
+
+        <script type="text/javascript" src="js/navigation.js"></script>
+        <script type="text/javascript" src="js/header.js"></script>
+        <script type="text/javascript" src="js/footer.js"></script>
+
+        <script type="text/javascript">
+            var app = new Vue({
+                el: '#wrapper',
+                data: {
+                    date: "",
+                    centers: [],
+                    facility_loading: false,
+                    fields_loading: false,
+                    times: ["12:00am", "07:00am", "08:00am", "09:00am", "10:00am", "11:00am", "12:00pm", "01:00pm", "02:00pm", "03:00pm", "04:00pm", "05:00pm", "06:00pm", "07:00pm", "08:00pm", "09:00pm", "10:00pm", "11:00pm"],
+                    selected: {
+                        time: "0",
+                        center: "1",
+                        duration: "60"
+                    },
+                    available_field: null,
+                    missing: false
+                },
+                mounted: function() {
+                    const self = this;
+                    this.date = moment().format("MM-DD-YYYY")
+                    this.getCenters()
+                    $('.input-group.date').datepicker({
+                        todayBtn: "linked",
+                        keyboardNavigation: false,
+                        forceParse: false,
+                        calendarWeeks: true,
+                        autoclose: true
+                    }).on('changeDate', function(e) {
+                        self.date = moment(e.date).format("MM-DD-YYYY")
+                    });
+                },
+                methods: {
+                    getCenters: function() {
+                        // this.facility_loading = true
+                        this.centers = []
+                        this.$http.get("http://localhost:8080/facility/")
+                            .then((resp) => {
+                                this.centers = resp.body;
+                                this.facility_loading = false
+                            })
+                            .catch((err) => {
+                                console.log(err.body.errors)
+                            })
+                    },
+                    search: function() {
+                        this.fields_loading = true
+                        const body = {
+                            facility_id: parseInt(this.selected.center),
+                            date: moment(this.date, "MM-DD-YYYY").format("YYYY-MM-DD"),
+                            time: this.selected.time,
+                            duration: parseInt(this.selected.duration)
+                        }
+                        console.log(body)
+                        this.$http.post("http://localhost:8080/event/", body)
+                            .then((resp) => {
+                                const selected = this.randomFromArray(resp.body.free)
+                                this.available_field = {
+                                    ...selected,
+                                    date: moment(this.date, "MM-DD-YYYY").format("dddd, MMMM Do YYYY"),
+                                    subtitle: this.selected.time + " (duration: " + this.selected.duration + "min)",
+                                }
+                                this.fields_loading = false
+                            })
+                            .catch((err) => {
+                                console.log(err.body.errors)
+                            })
+                    },
+                    randomFromArray: function(items) {
+                        return items[Math.floor(Math.random() * items.length)];
+                    }
+                }
+            })
+        </script>
+
+</body>
+
+</html>
