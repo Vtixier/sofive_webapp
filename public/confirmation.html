@@ -21,6 +21,8 @@
     <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" sizes="192x192" />
     <!-- Toastr style -->
     <link href="css/plugins/toastr/toastr.min.css" rel="stylesheet">
+    <!-- Sweet Alert -->
+    <link href="css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
 </head>
 
 <body class="fixed-sidebar">
@@ -66,24 +68,30 @@
                             <h5>Cart Summary</h5>
                         </div>
                         <div class="ibox-content">
+                            <div class="panel panel-default">
+                               <div class="panel-body" style="text-align: center">
+                                   <h3><i class="fa fa-calendar"></i> Monday 23rd April</h3>
+                                   <h3><i class="fa fa-clock-o"></i> 3:00pm-4:30pm (dur: 1:30h)</h3>
+                                   <h3><i class="fa fa-map-marker"></i> Sofive Rockville field 6 - Maracana</h3>
+                                </div>
+                            </div>
                             <span>
                                 Total
                             </span>
                             <h2 class="font-bold">
-                                $390,00
+                                $150,00
                             </h2>
-
                             <hr>
-                            <span class="text-muted small">
+                            <span class="text">
                             <form role="form" class="form">
-                                <div class="form-group  row"><label class="col-sm-2 col-form-label">Name</label>
-                                    <div class="col-sm-10"><input type="text" class="form-control"></div>
+                                <div class="form-group row"><label class="col-sm-2 col-form-label">Name</label>
+                                    <div class="col-sm-10"><input type="text" placeholder="Enter name" class="form-control"></div>
                                 </div>
-                                <div class="form-group  row"><label class="col-sm-2 col-form-label">Email</label>
-                                    <div class="col-sm-10"><input type="text" class="form-control"></div>
+                                <div class="form-group row"><label class="col-sm-2 col-form-label">Email</label>
+                                    <div class="col-sm-10"><input type="text" placeholder="Enter email" class="form-control"></div>
                                 </div>
                                 <div class="hr-line-dashed"></div>
-                                <div class="form-group row"><label class="col-sm-2 col-form-label">Amount<br/>
+                                <div class="form-group row"><label class="col-sm-2 col-form-label">Preference<br/>
                                 </label>
 
                                     <div class="col-sm-10">
@@ -95,10 +103,17 @@
                             </span>
                             <div class="m-t-sm">
                                 <div class="btn-group">
-                                <a href="#" class="btn btn-primary btn-sm"><i class="fa fa-shopping-cart"></i> Checkout</a>
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal6"><i class="fa fa-shopping-cart"></i> Checkout</button>
                                 <a href="#" class="btn btn-white btn-sm"> Cancel</a>
                                 </div>
                             </div>
+
+                            <form action="http://localhost:8080/event/charge" method="post" class="payment">
+
+                            <input type="hidden" name="amount" value="500" />
+
+                            <script src="js/checkout.js" class="stripe-button" data-key="pk_test_POTzqQ3H0tD01tMZjPsijfhK" data-description="Book a field" data-amount="500" data-locale="auto"></script>
+                        </form>
                         </div>
                     </div>
                     </div>
@@ -160,6 +175,8 @@
     <script type="text/javascript" src="js/footer.js"></script>
     <!-- iCheck -->
     <script src="js/plugins/iCheck/icheck.min.js"></script>
+        <!-- Sweet alert -->
+    <script src="js/plugins/sweetalert/sweetalert.min.js"></script>
         <script>
             $(document).ready(function () {
                 $('.i-checks').iCheck({
@@ -357,6 +374,22 @@
 
 
     </script>
+
+    <script>
+
+    $(document).ready(function () {
+
+        $('.demo1').click(function(){
+            swal({
+                title: "Pay with Stripe",
+                text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+            });
+        });
+
+
+    });
+
+</script>
 
 </body>
 
