@@ -35,11 +35,24 @@
                 <sofive-header />
             </div>
 
+            <div class="row wrapper border-bottom white-bg page-heading">
+            <div class="col-lg-10">
+                <h2>Book a field</h2>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <bold>Selection</bold>
+                    </li>
+                </ol>
+            </div>
+            <div class="col-lg-2">
+            </div>
+        </div>
+
             <div class="wrapper wrapper-content animated fadeInRight" style="padding-bottom: 5px">
 
                 <div class="ibox-content m-b-sm border-bottom">
                     <div class="row">
-                        <div class="col-sm-3">
+                        <div class="col-sm-2">
                             <label class="col-form-label" for="status">
                                 Select Center
                                 <div v-if="facility_loading">
@@ -78,7 +91,7 @@
                                 <option v-for="time in times" :value="time">{{time}}</option>
                             </select>
                         </div>
-                        <div class="col-sm-3">
+                        <div class="col-sm-2">
                             <label class="col-form-label" for="status">
                                 Duration
                             </label>
@@ -88,16 +101,22 @@
                                 <option>2h</option>
                             </select>
                         </div>
+                        <div class="col-sm-2">
+                            <label class="col-form-label" for="status">
+                                Type
+                            </label>
+                            <select class="select_league form-control" v-model="selected.field">
+                                <option>Outdoor</option>
+                                <option>Indoor</option>
+                            </select>
+                        </div>
                     </div>
+                    <a class="btn btn-primary btn-rounded btn-block btn-outline" href="#"></i>Look for a field</a>
                 </div>
 
                 <div class="row">
 
-                    <div class="col-md-8">
-
-
-                        <div class="col-md-12">
-
+                    <div class="col-md-8" style="margin-top: 2%">
                             <div class="ibox" style="text-align: center">
                                 <div class="panel panel-primary">
                                     <div class="panel-heading">
@@ -108,16 +127,14 @@
                                         <h3><i class="fa fa-clock-o"></i> 4:00pm-5:30pm (dur. 1:30)</h3>
                                         <h3><i class="fa fa-map-marker"></i> Sofive Rockville, field 6 - Maracana</h3>
                                         <div class="btn-group center" style="margin-top: 1%">
-                                            <a href="payment.html" class="btn btn-primary btn-sm">Select</a>
+                                            <a href="confirmation.html" class="btn btn-primary btn-sm">Select</a>
                                         </div>
                                     </div>
-                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="col-md-4">
-
+                    <div class="col-md-4" style="margin-top: 2%">
                         <div class="ibox" style="text-align: center">
                             <div class="ibox-title" style="padding: 15px 0px 0px 0px;">
                                 <h5>Support</h5>
@@ -135,9 +152,6 @@
                 <div class="row">
 
                     <div class="col-md-8">
-
-                        <div class="col-md-12">
-
                             <div class="ibox" style="text-align: center">
                                 <div class="panel panel-grey">
                                     <div class="panel-heading">
@@ -145,10 +159,7 @@
                                     </div>
                                     <div class="panel-body">
                                         <div>
-
-
                                             <h3> Same Day </h3>
-
                                             <div class="row" style="margin-top: 2%">
                                                 <div class="col-lg-4">
                                                     <div class="panel panel-primary">
@@ -160,7 +171,7 @@
                                                             <h4><i class="fa fa-clock-o"></i><b> 3:00pm-4:30pm</b><br>(dur: 1:30h)</h4>
                                                             <h4><i class="fa fa-map-marker"></i> Sofive Rockville <br> field 6 - Maracana</h4>
                                                             <div class="btn-group center" style="margin-top: 5%">
-                                                                <a href="payment.html" class="btn btn-primary btn-sm">Select</a>
+                                                                <a href="confirmation.html" class="btn btn-primary btn-sm">Select</a>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -175,7 +186,7 @@
                                                             <h4><i class="fa fa-clock-o"></i><b> 5:00pm-6:30pm </b> <br> (dur: 1:30h)</h4>
                                                             <h4><i class="fa fa-map-marker"></i> Sofive Rockville <br> field 6 - Maracana</h4>
                                                             <div class="btn-group center" style="margin-top: 5%">
-                                                                <a href="payment.html" class="btn btn-primary btn-sm">Select</a>
+                                                                <a href="confirmation.html" class="btn btn-primary btn-sm">Select</a>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -190,7 +201,7 @@
                                                             <h4><i class="fa fa-clock-o"></i> 4:00pm-5:00pm <br><b> (dur: 1h)</b></h4>
                                                             <h4><i class="fa fa-map-marker"></i> Sofive Rockville <br> field 6 - Maracana</h4>
                                                             <div class="btn-group center" style="margin-top: 5%">
-                                                                <a href="payment.html" class="btn btn-primary btn-sm">Select</a>
+                                                                <a href="confirmation.html" class="btn btn-primary btn-sm">Select</a>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -210,7 +221,7 @@
                                                             <h4><i class="fa fa-clock-o"></i> 4:00pm-5:30pm <br> (dur. 1:30)</h4>
                                                             <h4><i class="fa fa-map-marker"></i> Sofive Rockville <br> field 6 - Maracana</h4>
                                                             <div class="btn-group center" style="margin-top: 5%">
-                                                                <a href="payment.html" class="btn btn-primary btn-sm">Select</a>
+                                                                <a href="confirmation.html" class="btn btn-primary btn-sm">Select</a>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -231,7 +242,7 @@
                                                             <h4><i class="fa fa-clock-o"></i> 4:00pm-5:30pm <br> (dur. 1:30)</h4>
                                                             <h4><i class="fa fa-map-marker"></i> Sofive Rockville <br> field 6 - Maracana</h4>
                                                             <div class="btn-group center" style="margin-top: 5%">
-                                                                <a href="payment.html" class="btn btn-primary btn-sm">Select</a>
+                                                                <a href="confirmation.html" class="btn btn-primary btn-sm">Select</a>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -246,7 +257,7 @@
                                                             <h4><i class="fa fa-clock-o"></i> 4:00pm-5:30pm <br> (dur. 1:30)</h4>
                                                             <h4><i class="fa fa-map-marker"></i> Sofive Rockville <br> field 6 - Maracana</h4>
                                                             <div class="btn-group center" style="margin-top: 5%">
-                                                                <a href="payment.html" class="btn btn-primary btn-sm">Select</a>
+                                                                <a href="confirmation.html" class="btn btn-primary btn-sm">Select</a>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -261,19 +272,14 @@
                                                             <h4><i class="fa fa-clock-o"></i> 4:00pm-5:30pm <br> (dur. 1:30)</h4>
                                                             <h4><i class="fa fa-map-marker"></i> Sofive Rockville <br> field 6 - Maracana</h4>
                                                             <div class="btn-group center" style="margin-top: 5%">
-                                                                <a href="payment.html" class="btn btn-primary btn-sm">Select</a>
+                                                                <a href="confirmation.html" class="btn btn-primary btn-sm">Select</a>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-
-
-
-
                                         </div>
                                     </div>
-                                </div>
                             </div>
                         </div>
                     </div>
