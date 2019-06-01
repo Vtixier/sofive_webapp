@@ -173,51 +173,51 @@
                         <div class="ibox" style="text-align: center">
                             <div class="panel panel-grey">
                                 <div class="panel-heading">
-                                    <h4> Sorry there is no field available at this time</h4>
+                                    <h4> Sorry there are no field available at this time</h4>
                                 </div>
                                 <div class="panel-body">
                                     <div>
                                         <h3> Same Day </h3>
                                         <div class="row" style="margin-top: 2%">
-                                            <div class="col-lg-4">
+                                            <div class="col-lg-4" v-if="different_time.before">
                                                 <div class="panel panel-primary">
                                                     <div class="panel-heading">
                                                         1h before
                                                     </div>
                                                     <div class="panel-body">
-                                                        <h4><i class="fa fa-calendar"></i> Monday 23rd April</h4>
-                                                        <h4><i class="fa fa-clock-o"></i><b> 3:00pm-4:30pm</b><br>(dur: 1:30h)</h4>
-                                                        <h4><i class="fa fa-map-marker"></i> Sofive Rockville <br> field 6 - Maracana</h4>
+                                                        <h4><i class="fa fa-calendar"></i> {{different_time.before.date}}</h4>
+                                                        <h4><i class="fa fa-clock-o"></i> <b>{{different_time.before.subtitle}}</b></h4>
+                                                        <h4><i class="fa fa-map-marker"></i> {{different_time.before.name}}</h4>
                                                         <div class="btn-group center" style="margin-top: 5%">
                                                             <a href="confirmation.html" class="btn btn-primary btn-sm">Select</a>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-4">
+                                            <div class="col-lg-4" v-if="different_time.after">
                                                 <div class="panel panel-primary">
                                                     <div class="panel-heading">
                                                         1h after
                                                     </div>
                                                     <div class="panel-body">
-                                                        <h4><i class="fa fa-calendar"></i> Monday 23rd April</h4>
-                                                        <h4><i class="fa fa-clock-o"></i><b> 5:00pm-6:30pm </b> <br> (dur: 1:30h)</h4>
-                                                        <h4><i class="fa fa-map-marker"></i> Sofive Rockville <br> field 6 - Maracana</h4>
+                                                        <h4><i class="fa fa-calendar"></i> {{different_time.after.date}}</h4>
+                                                        <h4><i class="fa fa-clock-o"></i> <b>{{different_time.after.subtitle}}</b></h4>
+                                                        <h4><i class="fa fa-map-marker"></i> {{different_time.after.name}}</h4>
                                                         <div class="btn-group center" style="margin-top: 5%">
                                                             <a href="confirmation.html" class="btn btn-primary btn-sm">Select</a>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-4">
+                                            <div class="col-lg-4" v-if="different_time.other_time">
                                                 <div class="panel panel-primary">
                                                     <div class="panel-heading">
                                                         1h of play
                                                     </div>
                                                     <div class="panel-body">
-                                                        <h4><i class="fa fa-calendar"></i> Monday 23rd April</h4>
-                                                        <h4><i class="fa fa-clock-o"></i> 4:00pm-5:00pm <br><b> (dur: 1h)</b></h4>
-                                                        <h4><i class="fa fa-map-marker"></i> Sofive Rockville <br> field 6 - Maracana</h4>
+                                                        <h4><i class="fa fa-calendar"></i> {{different_time.other_time.date}}</h4>
+                                                        <h4><i class="fa fa-clock-o"></i> <b>{{different_time.other_time.subtitle}}</b></h4>
+                                                        <h4><i class="fa fa-map-marker"></i> {{different_time.other_time.name}}</h4>
                                                         <div class="btn-group center" style="margin-top: 5%">
                                                             <a href="confirmation.html" class="btn btn-primary btn-sm">Select</a>
                                                         </div>
@@ -226,18 +226,18 @@
                                             </div>
                                         </div>
 
-                                        <h3> Sunday 22nd April </h3>
+                                        <h3> {{next_day}} </h3>
 
                                         <div class="row" style="margin-top: 2%">
-                                            <div class="col-lg-4">
+                                            <div class="col-lg-4" v-if="different_time.day_after">
                                                 <div class="panel panel-primary">
                                                     <div class="panel-heading">
                                                         Same time and duration
                                                     </div>
                                                     <div class="panel-body">
-                                                        <h4><i class="fa fa-calendar"></i> Sunday 22nd April </h4>
-                                                        <h4><i class="fa fa-clock-o"></i> 4:00pm-5:30pm <br> (dur. 1:30)</h4>
-                                                        <h4><i class="fa fa-map-marker"></i> Sofive Rockville <br> field 6 - Maracana</h4>
+                                                        <h4><i class="fa fa-calendar"></i> {{different_time.day_after.date}}</h4>
+                                                        <h4><i class="fa fa-clock-o"></i> <b>{{different_time.day_after.subtitle}}</b></h4>
+                                                        <h4><i class="fa fa-map-marker"></i> {{different_time.day_after.name}}</h4>
                                                         <div class="btn-group center" style="margin-top: 5%">
                                                             <a href="confirmation.html" class="btn btn-primary btn-sm">Select</a>
                                                         </div>
@@ -246,56 +246,6 @@
                                             </div>
                                         </div>
 
-                                        <h3> Tuesday 24th April </h3>
-
-                                        <div class="row" style="margin-top: 2%">
-
-                                            <div class="col-lg-4">
-                                                <div class="panel panel-primary">
-                                                    <div class="panel-heading">
-                                                        Same time and duration
-                                                    </div>
-                                                    <div class="panel-body">
-                                                        <h4><i class="fa fa-calendar"></i> Tuesday 24th April </h4>
-                                                        <h4><i class="fa fa-clock-o"></i> 4:00pm-5:30pm <br> (dur. 1:30)</h4>
-                                                        <h4><i class="fa fa-map-marker"></i> Sofive Rockville <br> field 6 - Maracana</h4>
-                                                        <div class="btn-group center" style="margin-top: 5%">
-                                                            <a href="confirmation.html" class="btn btn-primary btn-sm">Select</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-4">
-                                                <div class="panel panel-primary">
-                                                    <div class="panel-heading">
-                                                        1h after
-                                                    </div>
-                                                    <div class="panel-body">
-                                                        <h4><i class="fa fa-calendar"></i> Tuesday 24th April </h4>
-                                                        <h4><i class="fa fa-clock-o"></i> 4:00pm-5:30pm <br> (dur. 1:30)</h4>
-                                                        <h4><i class="fa fa-map-marker"></i> Sofive Rockville <br> field 6 - Maracana</h4>
-                                                        <div class="btn-group center" style="margin-top: 5%">
-                                                            <a href="confirmation.html" class="btn btn-primary btn-sm">Select</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-4">
-                                                <div class="panel panel-primary">
-                                                    <div class="panel-heading">
-                                                        1h of play
-                                                    </div>
-                                                    <div class="panel-body">
-                                                        <h4><i class="fa fa-calendar"></i> Tuesday 24th April </h4>
-                                                        <h4><i class="fa fa-clock-o"></i> 4:00pm-5:30pm <br> (dur. 1:30)</h4>
-                                                        <h4><i class="fa fa-map-marker"></i> Sofive Rockville <br> field 6 - Maracana</h4>
-                                                        <div class="btn-group center" style="margin-top: 5%">
-                                                            <a href="confirmation.html" class="btn btn-primary btn-sm">Select</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -360,6 +310,7 @@
                     centers: [],
                     facility_loading: false,
                     fields_loading: false,
+                    different_day_loading: false,
                     times: ["12:00am", "07:00am", "08:00am", "09:00am", "10:00am", "11:00am", "12:00pm", "01:00pm", "02:00pm", "03:00pm", "04:00pm", "05:00pm", "06:00pm", "07:00pm", "08:00pm", "09:00pm", "10:00pm", "11:00pm"],
                     selected: {
                         time: "0",
@@ -367,7 +318,14 @@
                         duration: "60"
                     },
                     available_field: null,
-                    missing: false
+                    missing: false,
+                    different_time: {
+                        before: null,
+                        after: null,
+                        other_time: null,
+                        day_after: null
+                    },
+                    next_day: ""
                 },
                 mounted: function() {
                     const self = this;
@@ -385,7 +343,7 @@
                 },
                 methods: {
                     getCenters: function() {
-                        // this.facility_loading = true
+                        this.facility_loading = true
                         this.centers = []
                         this.$http.get("http://localhost:8080/facility/")
                             .then((resp) => {
@@ -398,6 +356,14 @@
                     },
                     search: function() {
                         this.fields_loading = true
+                        this.missing = false
+                        this.available_field = null
+                        this.different_time = {
+                            before: null,
+                            after: null,
+                            other_time: null,
+                            day_after: null
+                        }
                         const body = {
                             facility_id: parseInt(this.selected.center),
                             date: moment(this.date, "MM-DD-YYYY").format("YYYY-MM-DD"),
@@ -407,6 +373,12 @@
                         console.log(body)
                         this.$http.post("http://localhost:8080/event/", body)
                             .then((resp) => {
+                                if (resp.body.free.length == 0) {
+                                    this.missing = true
+                                    this.available_field = null
+                                    this.checkOtherTime()
+                                    return
+                                }
                                 const selected = this.randomFromArray(resp.body.free)
                                 this.available_field = {
                                     ...selected,
@@ -416,7 +388,116 @@
                                 this.fields_loading = false
                             })
                             .catch((err) => {
-                                console.log(err.body.errors)
+                                console.log(err)
+                            })
+                    },
+                    checkOtherTime: function() {
+                        Promise.all([this.checkBefore(), this.checkAfter(), this.checkLessTime(), this.checkTomorrow()])
+                            .then(() => {
+                                this.fields_loading = false
+                            })
+                            .catch(err => console.error(err))
+                    },
+                    checkBefore: function() {
+                        const prev_hour = moment(this.selected.time, "hh:mma").subtract(1, "h").format("hh:mma"),
+                            today = moment(this.date, "MM-DD-YYYY")
+                        const body = {
+                            facility_id: parseInt(this.selected.center),
+                            date: today.format("YYYY-MM-DD"),
+                            time: prev_hour,
+                            duration: parseInt(this.selected.duration)
+                        }
+                        this.$http.post("http://localhost:8080/event/", body)
+                            .then((resp) => {
+                                if (resp.body.free.length == 0) {
+                                    return
+                                }
+                                const selected = this.randomFromArray(resp.body.free)
+                                this.different_time.before = {
+                                    ...selected,
+                                    date: today.format("dddd, MMMM Do YYYY"),
+                                    subtitle: prev_hour + " (duration: " + this.selected.duration + "min)",
+                                }
+                            })
+                            .catch((err) => {
+                                console.log(err)
+                            })
+                    },
+                    checkAfter: function() {
+                        const next_hour = moment(this.selected.time, "hh:mma").add(1, "h").format("hh:mma"),
+                            today = moment(this.date, "MM-DD-YYYY")
+                        const body = {
+                            facility_id: parseInt(this.selected.center),
+                            date: today.format("YYYY-MM-DD"),
+                            time: next_hour,
+                            duration: parseInt(this.selected.duration)
+                        }
+                        this.$http.post("http://localhost:8080/event/", body)
+                            .then((resp) => {
+                                if (resp.body.free.length == 0) {
+                                    return
+                                }
+                                const selected = this.randomFromArray(resp.body.free)
+                                this.different_time.after = {
+                                    ...selected,
+                                    date: today.format("dddd, MMMM Do YYYY"),
+                                    subtitle: next_hour + " (duration: " + this.selected.duration + "min)",
+                                }
+                            })
+                            .catch((err) => {
+                                console.log(err)
+                            })
+                    },
+                    checkLessTime: function() {
+                        const today = moment(this.date, "MM-DD-YYYY")
+                        if (parseInt(this.selected.duration) == 60) {
+                            return
+                        }
+                        const body = {
+                            facility_id: parseInt(this.selected.center),
+                            date: today.format("YYYY-MM-DD"),
+                            time: moment(this.selected.time, "hh:mma").format("hh:mma"),
+                            duration: 60
+                        }
+                        this.$http.post("http://localhost:8080/event/", body)
+                            .then((resp) => {
+                                if (resp.body.free.length == 0) {
+                                    return
+                                }
+                                const selected = this.randomFromArray(resp.body.free)
+                                this.different_time.other_time = {
+                                    ...selected,
+                                    date: today.format("dddd, MMMM Do YYYY"),
+                                    subtitle: this.selected.time + " (duration: 60min)",
+                                }
+                            })
+                            .catch((err) => {
+                                console.log(err)
+                            })
+                    },
+                    checkTomorrow: function() {
+                        const tomorrow = moment(this.date, "MM-DD-YYYY").add(1, "d")
+                        this.next_day = tomorrow.format("dddd, MMMM Do YYYY")
+                        const body = {
+                            facility_id: parseInt(this.selected.center),
+                            date: tomorrow.format("YYYY-MM-DD"),
+                            time: this.selected.time,
+                            duration: 60
+                        }
+                        this.$http.post("http://localhost:8080/event/", body)
+                            .then((resp) => {
+                                if (resp.body.free.length == 0) {
+                                    return
+                                }
+                                const selected = this.randomFromArray(resp.body.free)
+                                this.different_time.day_after = {
+                                    ...selected,
+                                    date: tomorrow.format("dddd, MMMM Do YYYY"),
+                                    subtitle: this.selected.time + " (duration: " + this.selected.duration + "min)",
+                                }
+                            })
+                            .catch((err) => {
+                                console.log(err)
                             })
                     },
                     randomFromArray: function(items) {
