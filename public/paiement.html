@@ -39,19 +39,20 @@
                 <sofive-header />
             </div>
 
-            <div class="row wrapper border-bottom white-bg page-heading">
-                <div class="col-lg-10">
-                    <h2>Book a field</h2>
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item">
-                            <a href="book_a_field.html">Selection</a>
-                        </li>
-                        <li class="breadcrumb-item active">
-                            <strong>Confirmation</strong>
-                        </li>
-                    </ol>
-                </div>
-                <div class="col-lg-2">
+            <div class="wrapper wrapper-content animated fadeInRight">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="widget style1 navy-bg">
+                                <div class="row">
+                                    <div class="col-1 text-center">
+                                        <i class="fa fa-check-square fa-5x"></i>
+                                    </div>
+                                    <div class="col-3 text-left">
+                                        <h1 class="font-bold">You're all set!</h1>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -63,7 +64,7 @@
                     <div class="col-md-8">
                         <div class="ibox">
                             <div class="ibox-title">
-                                <h5>Cart Summary</h5>
+                                <h5>booking confirmation</h5>
                             </div>
                             <div class="ibox-content">
                                 <div class="panel panel-default">
@@ -73,42 +74,16 @@
                                         <h3 style="color: #03793E"><i class="fa fa-map-marker"></i> {{data.name}}</h3>
                                     </div>
                                 </div>
-                                <span>
-                                    Total
-                                </span>
-                                <h2 class="font-bold">
-                                    ${{price}},00
-                                </h2>
-                                <hr>
-                                <span class="text">
-                                    <form role="form" class="form">
-                                        <div class="form-group row"><label class="col-sm-2 col-form-label">Name</label>
-                                            <div class="col-sm-10"><input type="text" placeholder="Enter name" class="form-control" v-model="name"></div>
-                                        </div>
-                                        <div class="form-group row"><label class="col-sm-2 col-form-label">Email</label>
-                                            <div class="col-sm-10"><input type="text" placeholder="Enter email" class="form-control" v-model="email"></div>
-                                        </div>
-                                        <div class="hr-line-dashed"></div>
-                                        <div class="form-group row"><label class="col-sm-2 col-form-label">Preference<br />
-                                            </label>
-
-                                            <div class="col-sm-10">
-                                                <div class="i-checks"><label> <input name="a" checked type="radio" value="full"> <i></i>Pay full price</label></div>
-                                                <div class="i-checks"><label> <input name="a" type="radio" value="half"> <i></i> Pay a deposit (50%) </label></div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </span>
-
                             </div>
                         </div>
-                        <button type="button" class="btn btn-primary" style="margin-bottom: 10%" data-toggle="modal" v-on:click="pay"><i class="fa fa-shopping-cart"></i> Checkout</button>
 
                         <div id="error-message"></div>
 
                     </div>
 
                     <div class="col-md-4">
+
+
                         <div class="ibox-content no-padding border-left-right">
                                 <img alt="image" class="img-fluid" src="https://sofive.com/wp-content/uploads/2018/05/YourJourney1.jpg">
                         </div>
@@ -166,12 +141,6 @@
     <script type="text/javascript">
         let stripe = Stripe(`pk_test_POTzqQ3H0tD01tMZjPsijfhK`);
 
-        let priceMap = {
-            60: 135,
-            90: 150,
-            120: 200
-        }
-
         var app = new Vue({
             el: '#wrapper',
             data: {
@@ -180,19 +149,13 @@
                     subtitle: "",
                     name: "",
                     id: 0,
-                    facility_id: 0,
-                },
-                price: 0,
-                name: "",
-                email: "",
+                }
             },
             mounted: function() {
                 const params = this.findGetParameter(),
                     parsed = JSON.parse(atob(params.sel));
                 this.data = parsed
                 console.log(this.data)
-
-                this.price = priceMap[parsed.duration]
 
                 $(document).ready(function() {
                     $('.i-checks').iCheck({
@@ -211,41 +174,20 @@
                     return queryDict
                 },
                 pay: function() {
-                    let paid = this.price
-                    if (document.querySelector('input[name="a"]:checked').value === "half") {
-                        paid = this.price / 2
-                    }
-                    const d = {
-                        customer_name: this.name,
-                        customer_email: this.email,
-                        amount: paid,
-                        facility_id: this.data.facility_id,
-                        field_id: this.data.id,
-                        start: this.data.start,
-                        duration: parseInt(this.data.duration)
-                    }
-                    console.log(d)
-                    this.$http.post("http://localhost:8080/event/book", d)
-                        .then((resp) => {
-                            console.log(resp)
+                    stripe.redirectToCheckout({
+                            items: [{
+                                sku: 'sku_FBJ279YfJ2Qesi',
+                                quantity: 1
+                            }],
+                            successUrl: 'https://scoreplay.io/success',
+                            cancelUrl: 'https://scoreplay.io/canceled',
                         })
-                        .catch((err) => {
-                            console.log(err)
-                        })
-                    // stripe.redirectToCheckout({
-                    //         items: [{
-                    //             sku: 'sku_FBJ279YfJ2Qesi',
-                    //             quantity: 1
-                    //         }],
-                    //         successUrl: 'https://scoreplay.io/success',
-                    //         cancelUrl: 'https://scoreplay.io/canceled',
-                    //     })
-                    //     .then(function(result) {
-                    //         if (result.error) {
-                    //             var displayError = document.getElementById('error-message');
-                    //             displayError.textContent = result.error.message;
-                    //         }
-                    //     });
+                        .then(function(result) {
+                            if (result.error) {
+                                var displayError = document.getElementById('error-message');
+                                displayError.textContent = result.error.message;
+                            }
+                        });
                 }
             }
         })
