@@ -145,7 +145,7 @@
                                     <h3><i class="fa fa-clock-o"></i> {{available_field.subtitle}}</h3>
                                     <h3><i class="fa fa-map-marker"></i> {{available_field.name}}</h3>
                                     <div class="btn-group center" style="margin-top: 1%">
-                                        <a href="confirmation.html" class="btn btn-primary btn-sm">Select</a>
+                                        <a v-on:click="choose(available_field)" class="btn btn-primary btn-sm">Select</a>
                                     </div>
                                 </div>
                             </div>
@@ -189,7 +189,7 @@
                                                         <h4><i class="fa fa-clock-o"></i> <b>{{different_time.before.subtitle}}</b></h4>
                                                         <h4><i class="fa fa-map-marker"></i> {{different_time.before.name}}</h4>
                                                         <div class="btn-group center" style="margin-top: 5%">
-                                                            <a href="confirmation.html" class="btn btn-primary btn-sm">Select</a>
+                                                            <a v-on:click="choose(different_time.before)" class="btn btn-primary btn-sm">Select</a>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -204,7 +204,7 @@
                                                         <h4><i class="fa fa-clock-o"></i> <b>{{different_time.after.subtitle}}</b></h4>
                                                         <h4><i class="fa fa-map-marker"></i> {{different_time.after.name}}</h4>
                                                         <div class="btn-group center" style="margin-top: 5%">
-                                                            <a href="confirmation.html" class="btn btn-primary btn-sm">Select</a>
+                                                            <a v-on:click="choose(different_time.after)" class="btn btn-primary btn-sm">Select</a>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -219,7 +219,7 @@
                                                         <h4><i class="fa fa-clock-o"></i> <b>{{different_time.other_time.subtitle}}</b></h4>
                                                         <h4><i class="fa fa-map-marker"></i> {{different_time.other_time.name}}</h4>
                                                         <div class="btn-group center" style="margin-top: 5%">
-                                                            <a href="confirmation.html" class="btn btn-primary btn-sm">Select</a>
+                                                            <a v-on:click="choose(different_time.other_time)" class="btn btn-primary btn-sm">Select</a>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -239,7 +239,7 @@
                                                         <h4><i class="fa fa-clock-o"></i> <b>{{different_time.day_after.subtitle}}</b></h4>
                                                         <h4><i class="fa fa-map-marker"></i> {{different_time.day_after.name}}</h4>
                                                         <div class="btn-group center" style="margin-top: 5%">
-                                                            <a href="confirmation.html" class="btn btn-primary btn-sm">Select</a>
+                                                            <a v-on:click="choose(different_time.day_after)" class="btn btn-primary btn-sm">Select</a>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -502,6 +502,9 @@
                     },
                     randomFromArray: function(items) {
                         return items[Math.floor(Math.random() * items.length)];
+                    },
+                    choose: function(data) {
+                        window.location = "confirmation.html?sel=" + btoa(JSON.stringify(data))
                     }
                 }
             })
