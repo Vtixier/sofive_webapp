@@ -145,7 +145,7 @@
                                     <h3><i class="fa fa-clock-o"></i> {{available_field.subtitle}}</h3>
                                     <h3><i class="fa fa-map-marker"></i> {{available_field.name}}</h3>
                                     <div class="btn-group center" style="margin-top: 1%">
-                                        <a v-on:click="choose(available_field)" class="btn btn-primary btn-sm">Select</a>
+                                        <a v-on:click="choose(available_field)" class="btn btn-primary btn-sm" style="color: white">Select</a>
                                     </div>
                                 </div>
                             </div>
@@ -189,7 +189,7 @@
                                                         <h4><i class="fa fa-clock-o"></i> <b>{{different_time.before.subtitle}}</b></h4>
                                                         <h4><i class="fa fa-map-marker"></i> {{different_time.before.name}}</h4>
                                                         <div class="btn-group center" style="margin-top: 5%">
-                                                            <a v-on:click="choose(different_time.before)" class="btn btn-primary btn-sm">Select</a>
+                                                            <a v-on:click="choose(different_time.before)" class="btn btn-primary btn-sm" style="color: white">Select</a>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -204,7 +204,7 @@
                                                         <h4><i class="fa fa-clock-o"></i> <b>{{different_time.after.subtitle}}</b></h4>
                                                         <h4><i class="fa fa-map-marker"></i> {{different_time.after.name}}</h4>
                                                         <div class="btn-group center" style="margin-top: 5%">
-                                                            <a v-on:click="choose(different_time.after)" class="btn btn-primary btn-sm">Select</a>
+                                                            <a v-on:click="choose(different_time.after)" class="btn btn-primary btn-sm" style="color: white">Select</a>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -219,7 +219,7 @@
                                                         <h4><i class="fa fa-clock-o"></i> <b>{{different_time.other_time.subtitle}}</b></h4>
                                                         <h4><i class="fa fa-map-marker"></i> {{different_time.other_time.name}}</h4>
                                                         <div class="btn-group center" style="margin-top: 5%">
-                                                            <a v-on:click="choose(different_time.other_time)" class="btn btn-primary btn-sm">Select</a>
+                                                            <a v-on:click="choose(different_time.other_time)" class="btn btn-primary btn-sm" style="color: white">Select</a>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -239,7 +239,7 @@
                                                         <h4><i class="fa fa-clock-o"></i> <b>{{different_time.day_after.subtitle}}</b></h4>
                                                         <h4><i class="fa fa-map-marker"></i> {{different_time.day_after.name}}</h4>
                                                         <div class="btn-group center" style="margin-top: 5%">
-                                                            <a v-on:click="choose(different_time.day_after)" class="btn btn-primary btn-sm">Select</a>
+                                                            <a v-on:click="choose(different_time.day_after)" class="btn btn-primary btn-sm" style="color: white">Select</a>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -384,6 +384,8 @@
                                     ...selected,
                                     date: moment(this.date, "MM-DD-YYYY").format("dddd, MMMM Do YYYY"),
                                     subtitle: this.selected.time + " (duration: " + this.selected.duration + "min)",
+                                    duration: this.selected.duration,
+                                    start: moment(this.date + " " + this.selected.time, "MM-DD-YYYY hh:mma").format("YYYY-MM-DD hh:mma")
                                 }
                                 this.fields_loading = false
                             })
@@ -417,6 +419,8 @@
                                     ...selected,
                                     date: today.format("dddd, MMMM Do YYYY"),
                                     subtitle: prev_hour + " (duration: " + this.selected.duration + "min)",
+                                    duration: this.selected.duration,
+                                    start: moment(this.date + " " + prev_hour, "MM-DD-YYYY hh:mma").format("YYYY-MM-DD hh:mma")
                                 }
                             })
                             .catch((err) => {
@@ -442,6 +446,8 @@
                                     ...selected,
                                     date: today.format("dddd, MMMM Do YYYY"),
                                     subtitle: next_hour + " (duration: " + this.selected.duration + "min)",
+                                    duration: this.selected.duration,
+                                    start: moment(this.date + " " + next_hour, "MM-DD-YYYY hh:mma").format("YYYY-MM-DD hh:mma")
                                 }
                             })
                             .catch((err) => {
@@ -469,6 +475,8 @@
                                     ...selected,
                                     date: today.format("dddd, MMMM Do YYYY"),
                                     subtitle: this.selected.time + " (duration: 60min)",
+                                    duration: 60,
+                                    start: moment(this.date + " " + this.selected.time, "MM-DD-YYYY hh:mma").format("YYYY-MM-DD hh:mma")
                                 }
                             })
                             .catch((err) => {
@@ -494,6 +502,8 @@
                                     ...selected,
                                     date: tomorrow.format("dddd, MMMM Do YYYY"),
                                     subtitle: this.selected.time + " (duration: " + this.selected.duration + "min)",
+                                    duration: this.selected.duration,
+                                    start: moment(this.date + " " + this.selected.time, "MM-DD-YYYY hh:mma").add(1, "d").format("YYYY-MM-DD hh:mma")
                                 }
                             })
                             .catch((err) => {
@@ -504,7 +514,11 @@
                         return items[Math.floor(Math.random() * items.length)];
                     },
                     choose: function(data) {
-                        window.location = "confirmation.html?sel=" + btoa(JSON.stringify(data))
+                        const d = {
+                            ...data,
+                            facility_id: parseInt(this.selected.center)
+                        }
+                        window.location = "confirmation.html?sel=" + btoa(JSON.stringify(d))
                     }
                 }
             })

@@ -77,24 +77,24 @@
                                     Total
                                 </span>
                                 <h2 class="font-bold">
-                                    $150,00
+                                    ${{price}},00
                                 </h2>
                                 <hr>
                                 <span class="text">
                                     <form role="form" class="form">
                                         <div class="form-group row"><label class="col-sm-2 col-form-label">Name</label>
-                                            <div class="col-sm-10"><input type="text" placeholder="Enter name" class="form-control"></div>
+                                            <div class="col-sm-10"><input type="text" placeholder="Enter name" class="form-control" v-model="name"></div>
                                         </div>
                                         <div class="form-group row"><label class="col-sm-2 col-form-label">Email</label>
-                                            <div class="col-sm-10"><input type="text" placeholder="Enter email" class="form-control"></div>
+                                            <div class="col-sm-10"><input type="text" placeholder="Enter email" class="form-control" v-model="email"></div>
                                         </div>
                                         <div class="hr-line-dashed"></div>
                                         <div class="form-group row"><label class="col-sm-2 col-form-label">Preference<br />
                                             </label>
 
                                             <div class="col-sm-10">
-                                                <div class="i-checks"><label> <input type="radio" value="option1" name="a"> <i></i>Pay full price</label></div>
-                                                <div class="i-checks"><label> <input type="radio" checked="" value="option2" name="a"> <i></i> Pay a deposit (50%) </label></div>
+                                                <div class="i-checks"><label> <input name="a" checked type="radio" value="full"> <i></i>Pay full price</label></div>
+                                                <div class="i-checks"><label> <input name="a" type="radio" value="half"> <i></i> Pay a deposit (50%) </label></div>
                                             </div>
                                         </div>
                                     </form>
@@ -168,6 +168,12 @@
     <script type="text/javascript">
         let stripe = Stripe(`pk_test_POTzqQ3H0tD01tMZjPsijfhK`);
 
+        let priceMap = {
+            60: 135,
+            90: 150,
+            120: 200
+        }
+
         var app = new Vue({
             el: '#wrapper',
             data: {
@@ -176,13 +182,19 @@
                     subtitle: "",
                     name: "",
                     id: 0,
-                }
+                    facility_id: 0,
+                },
+                price: 0,
+                name: "",
+                email: "",
             },
             mounted: function() {
                 const params = this.findGetParameter(),
                     parsed = JSON.parse(atob(params.sel));
                 this.data = parsed
                 console.log(this.data)
+
+                this.price = priceMap[parsed.duration]
 
                 $(document).ready(function() {
                     $('.i-checks').iCheck({
@@ -201,20 +213,41 @@
                     return queryDict
                 },
                 pay: function() {
-                    stripe.redirectToCheckout({
-                            items: [{
-                                sku: 'sku_FBJ279YfJ2Qesi',
-                                quantity: 1
-                            }],
-                            successUrl: 'https://scoreplay.io/success',
-                            cancelUrl: 'https://scoreplay.io/canceled',
+                    let paid = this.price
+                    if (document.querySelector('input[name="a"]:checked').value === "half") {
+                        paid = this.price / 2
+                    }
+                    const d = {
+                        customer_name: this.name,
+                        customer_email: this.email,
+                        amount: paid,
+                        facility_id: this.data.facility_id,
+                        field_id: this.data.id,
+                        start: this.data.start,
+                        duration: parseInt(this.data.duration)
+                    }
+                    console.log(d)
+                    this.$http.post("http://localhost:8080/event/book", d)
+                        .then((resp) => {
+                            console.log(resp)
                         })
-                        .then(function(result) {
-                            if (result.error) {
-                                var displayError = document.getElementById('error-message');
-                                displayError.textContent = result.error.message;
-                            }
-                        });
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                    // stripe.redirectToCheckout({
+                    //         items: [{
+                    //             sku: 'sku_FBJ279YfJ2Qesi',
+                    //             quantity: 1
+                    //         }],
+                    //         successUrl: 'https://scoreplay.io/success',
+                    //         cancelUrl: 'https://scoreplay.io/canceled',
+                    //     })
+                    //     .then(function(result) {
+                    //         if (result.error) {
+                    //             var displayError = document.getElementById('error-message');
+                    //             displayError.textContent = result.error.message;
+                    //         }
+                    //     });
                 }
             }
         })
