@@ -43,14 +43,14 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="widget style1 navy-bg">
-                                <div class="row">
-                                    <div class="col-1 text-center">
-                                        <i class="fa fa-check-square fa-5x"></i>
-                                    </div>
-                                    <div class="col-3 text-left">
-                                        <h1 class="font-bold">You're all set!</h1>
-                                    </div>
+                            <div class="row">
+                                <div class="col-1 text-center">
+                                    <i class="fa fa-check-square fa-5x"></i>
                                 </div>
+                                <div class="col-3 text-left">
+                                    <h1 class="font-bold">You're all set!</h1>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -85,7 +85,7 @@
 
 
                         <div class="ibox-content no-padding border-left-right">
-                                <img alt="image" class="img-fluid" src="https://sofive.com/wp-content/uploads/2018/05/YourJourney1.jpg">
+                            <img alt="image" class="img-fluid" src="https://sofive.com/wp-content/uploads/2018/05/YourJourney1.jpg">
                         </div>
                         <div class="ibox" style="text-align: center">
                             <div class="ibox-title" style="padding: 15px 0px 0px 0px;">
@@ -157,13 +157,6 @@
                 this.data = parsed
                 console.log(this.data)
 
-                $(document).ready(function() {
-                    $('.i-checks').iCheck({
-                        checkboxClass: 'icheckbox_square-green',
-                        radioClass: 'iradio_square-green',
-                    });
-                });
-
             },
             methods: {
                 findGetParameter: function() {
@@ -173,22 +166,6 @@
                     })
                     return queryDict
                 },
-                pay: function() {
-                    stripe.redirectToCheckout({
-                            items: [{
-                                sku: 'sku_FBJ279YfJ2Qesi',
-                                quantity: 1
-                            }],
-                            successUrl: 'https://scoreplay.io/success',
-                            cancelUrl: 'https://scoreplay.io/canceled',
-                        })
-                        .then(function(result) {
-                            if (result.error) {
-                                var displayError = document.getElementById('error-message');
-                                displayError.textContent = result.error.message;
-                            }
-                        });
-                }
             }
         })
     </script>

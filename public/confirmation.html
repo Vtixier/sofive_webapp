@@ -110,7 +110,7 @@
 
                     <div class="col-md-4">
                         <div class="ibox-content no-padding border-left-right">
-                                <img alt="image" class="img-fluid" src="https://sofive.com/wp-content/uploads/2018/05/YourJourney1.jpg">
+                            <img alt="image" class="img-fluid" src="https://sofive.com/wp-content/uploads/2018/05/YourJourney1.jpg">
                         </div>
                         <div class="ibox" style="text-align: center">
                             <div class="ibox-title" style="padding: 15px 0px 0px 0px;">
@@ -185,6 +185,7 @@
                 price: 0,
                 name: "",
                 email: "",
+                sel: "",
             },
             mounted: function() {
                 const params = this.findGetParameter(),
@@ -193,6 +194,7 @@
                 console.log(this.data)
 
                 this.price = priceMap[parsed.duration]
+                this.sel = params.sel
 
                 $(document).ready(function() {
                     $('.i-checks').iCheck({
@@ -228,24 +230,28 @@
                     this.$http.post("http://localhost:8080/event/book", d)
                         .then((resp) => {
                             console.log(resp)
+                            this.stripeRedirect()
                         })
                         .catch((err) => {
                             console.log(err)
                         })
-                    // stripe.redirectToCheckout({
-                    //         items: [{
-                    //             sku: 'sku_FBJ279YfJ2Qesi',
-                    //             quantity: 1
-                    //         }],
-                    //         successUrl: 'https://scoreplay.io/success',
-                    //         cancelUrl: 'https://scoreplay.io/canceled',
-                    //     })
-                    //     .then(function(result) {
-                    //         if (result.error) {
-                    //             var displayError = document.getElementById('error-message');
-                    //             displayError.textContent = result.error.message;
-                    //         }
-                    //     });
+                },
+                stripeRedirect: function() {
+                    const redirect_url = 'http://localhost/paiement.html?sel=' + this.sel
+                    stripe.redirectToCheckout({
+                            items: [{
+                                sku: 'sku_FBJ279YfJ2Qesi',
+                                quantity: 1
+                            }],
+                            successUrl: redirect_url,
+                            cancelUrl: 'https://scoreplay.io/canceled',
+                        })
+                        .then(function(result) {
+                            if (result.error) {
+                                var displayError = document.getElementById('error-message');
+                                displayError.textContent = result.error.message;
+                            }
+                        });
                 }
             }
         })
