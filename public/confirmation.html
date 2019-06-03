@@ -226,18 +226,17 @@
                         start: this.data.start,
                         duration: parseInt(this.data.duration)
                     }
-                    console.log(d)
                     this.$http.post("http://localhost:8080/event/book", d)
                         .then((resp) => {
                             console.log(resp)
-                            this.stripeRedirect()
+                            this.stripeRedirect(resp.body.booking_id)
                         })
                         .catch((err) => {
                             console.log(err)
                         })
                 },
-                stripeRedirect: function() {
-                    const redirect_url = 'http://localhost/paiement.html?sel=' + this.sel
+                stripeRedirect: function(booking_id) {
+                    const redirect_url = 'http://localhost:8080/event/confirm/' + booking_id + '?sel=' + this.sel
                     stripe.redirectToCheckout({
                             items: [{
                                 sku: 'sku_FBJ279YfJ2Qesi',
