@@ -7,17 +7,17 @@ Vue.component('sofive-left-menu', {
                         <div class="dropdown profile-element">
                         <a href="index.html"> <img alt="image" class="image" style="max-width: 150px"
                                 src="img/sofive/sofive.png" /> </a>
-                            <!--<a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                             <br/><br/>
                             <span class="text-muted text-xs block" style="color: white !important">Change center <b class="caret"></b></span>
                             </a>
                             <ul class="dropdown-menu animated fadeInRight m-t-xs">
                                 <li><a class="dropdown-item" href="index.html">Sofive Brooklyn</a></li>
-                                <li><a class="dropdown-item" href="index.html">Sofive Rockville</a></li>
-                                <li><a class="dropdown-item" href="index.html">Sofive Elkins-Park</a></li>
                                 <li><a class="dropdown-item" href="index.html">Sofive Columbia</a></li>
+                                <li><a class="dropdown-item" href="index.html">Sofive Meadowlands</a></li>
+                                <li><a class="dropdown-item" href="index.html">Sofive Elkins-Park</a></li>
+                                <li><a class="dropdown-item" href="index.html">Sofive Rockville</a></li>
                             </ul>
-                            -->
                             <ul>
                         </div>
                         <div class="logo-element">

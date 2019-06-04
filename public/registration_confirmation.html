@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sofive Soccer Center</title>
+
+    <link href="css/plugins/select2/select2.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.css" rel="stylesheet">
+
+    <link href="css/plugins/datapicker/datepicker3.css" rel="stylesheet">
+    <link href="css/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="css/animate.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-32x32.png" sizes="32x32" />
+    <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" sizes="192x192" />
+    <!-- Toastr style -->
+    <link href="css/plugins/toastr/toastr.min.css" rel="stylesheet">
+    <!-- Sweet Alert -->
+    <link href="css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+</head>
+
+<body class="fixed-sidebar">
+
+    <div id="wrapper">
+
+        <div>
+            <sofive-left-menu />
+        </div>
+
+        <div id="page-wrapper" class="gray-bg">
+
+            <div>
+                <sofive-header />
+            </div>
+
+            <div class="row wrapper border-bottom white-bg page-heading">
+                <div class="col-lg-10">
+                    <h2>Book a field</h2>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="book_a_field.html">Selection</a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            <strong>Confirmation</strong>
+                        </li>
+                    </ol>
+                </div>
+                <div class="col-lg-2">
+                </div>
+            </div>
+
+
+            <div class="wrapper wrapper-content animated fadeInRight" style="padding-bottom: 5px">
+
+                <div class="row">
+
+                    <div class="col-md-8">
+                        <div class="ibox">
+                            <div class="ibox-title">
+                                <h5>Cart Summary</h5>
+                            </div>
+                            <div class="ibox-content">
+                                <div class="panel panel-default">
+                                    <div class="panel-body" style="text-align: center">
+                                        <h3 style="color: #03793E"><i class="fa fa-futbol-o"></i> Thursday Men’s Over 30 5v5 League – Premier League</h3>
+                                        <h3 style="color: #03793E"><i class="fa fa-clock-o"></i> April 18 @ 8:00 pm - 11:00 pm / 10 weeks</h3>
+                                        <h3 style="color: #03793E"><i class="fa fa-map-marker"></i> Sofive Meadowlands</h3>
+                                    </div>
+                                </div>
+                                <span>
+                                    Total
+                                </span>
+                                <h2 class="font-bold">
+                                    ${{price}},00
+                                </h2>
+                                <hr>
+                                <span class="text">
+                                    <form role="form" class="form">
+                                        <div class="form-group row"><label class="col-sm-2 col-form-label">Name</label>
+                                            <div class="col-sm-10"><input type="text" placeholder="Enter name" class="form-control" v-model="name"></div>
+                                        </div>
+                                        <div class="form-group row"><label class="col-sm-2 col-form-label">Email</label>
+                                            <div class="col-sm-10"><input type="text" placeholder="Enter email" class="form-control" v-model="email"></div>
+                                        </div>
+
+                                        <div class="form-group row"><label class="col-sm-2 col-form-label">Team name</label>
+                                        <div class="col-sm-10" style="margin-top: 1%">
+                                            <div class="i-checks" style="margin-bottom: 1%"><label> <input name="a" checked type="radio" value="full"> <i></i>Register existing team and roster</label></div>
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Team search</label>
+                                            <div class="col-sm-9"><input type="text" placeholder="Search team" class="form-control" v-model="name"></div>
+                                        </div>
+
+                                            <div class="i-checks" style="margin-bottom: 1%"><label> <input name="a" type="radio" value="half"> <i></i> Register new team</label></div>
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Team name</label>
+                                            <div class="col-sm-9"><input type="text" placeholder="Enter team name" class="form-control" v-model="email"></div>
+                                        </div>
+                                        </div>
+                                    </div>
+
+                                        <div class="form-group row"><label class="col-sm-2 col-form-label">Team</label>
+                                        <div class="col-sm-10" style="margin-top: 1%">
+                                            <div class="i-checks" style="margin-bottom: 1%"><label> <input name="a" checked type="radio" value="full"> <i></i>Register as a free agent</label></div>
+                                            <div class="i-checks" style="margin-bottom: 1%"><label> <input name="a" type="radio" value="half"> <i></i> Register in an existing team</label></div>
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Team search</label>
+                                            <div class="col-sm-9"><input type="text" placeholder="Search team" class="form-control" v-model="name"></div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                        
+                                        <div class="hr-line-dashed"></div>
+                                        <div class="form-group row"><label class="col-sm-2 col-form-label">Preference<br />
+                                            </label>
+
+                                            <div class="col-sm-10">
+                                                <div class="i-checks"><label> <input name="a" checked type="radio" value="full"> <i></i>Pay full price</label></div>
+                                                <div class="i-checks"><label> <input name="a" type="radio" value="half"> <i></i> Pay a deposit (50%) </label></div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </span>
+
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-primary" style="margin-bottom: 10%" data-toggle="modal" v-on:click="pay"><i class="fa fa-shopping-cart"></i> Checkout</button>
+
+                        <div id="error-message"></div>
+
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="ibox-content no-padding border-left-right">
+                            <img alt="image" class="img-fluid" src="https://sofive.com/wp-content/uploads/2018/05/YourJourney1.jpg">
+                        </div>
+                        <div class="ibox" style="text-align: center">
+                            <div class="ibox-title" style="padding: 15px 0px 0px 0px;">
+                                <h5>Support</h5>
+                            </div>
+                            <div class="ibox-content text-center">
+                                <h3><i class="fa fa-phone"></i> +43 100 783 001</h3>
+                                <span class="medium">
+                                    Please contact with us if you have any questions.
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <sofive-footer />
+        </div>
+
+    </div>
+
+    <!-- Mainly scripts -->
+    <script src="js/jquery-3.1.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.js"></script>
+
+    <!-- Custom and plugin javascript -->
+    <script src="js/inspinia.js"></script>
+
+    <script src="js/plugins/select2/select2.full.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/1.5.1/vue-resource.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script src="js/plugins/datapicker/bootstrap-datepicker.js"></script>
+    <script type="text/javascript" src="js/he.js"></script>
+
+    <script type="text/javascript" src="js/navigation.js"></script>
+    <script type="text/javascript" src="js/header.js"></script>
+    <script type="text/javascript" src="js/footer.js"></script>
+    <!-- iCheck -->
+    <script src="js/plugins/iCheck/icheck.min.js"></script>
+    <script src="js/plugins/sweetalert/sweetalert.min.js"></script>
+
+    <script src="https://js.stripe.com/v3/"></script>
+
+    <script type="text/javascript">
+        let stripe = Stripe(`pk_test_POTzqQ3H0tD01tMZjPsijfhK`);
+
+        let priceMap = {
+            60: 135,
+            90: 150,
+            120: 200
+        }
+
+        var app = new Vue({
+            el: '#wrapper',
+            data: {
+                data: {
+                    date: "",
+                    subtitle: "",
+                    name: "",
+                    id: 0,
+                    facility_id: 0,
+                },
+                price: 0,
+                name: "",
+                email: "",
+                sel: "",
+            },
+            mounted: function() {
+                const params = this.findGetParameter(),
+                    parsed = JSON.parse(atob(params.sel));
+                this.data = parsed
+                console.log(this.data)
+
+                this.price = priceMap[parsed.duration]
+                this.sel = params.sel
+
+                $(document).ready(function() {
+                    $('.i-checks').iCheck({
+                        checkboxClass: 'icheckbox_square-green',
+                        radioClass: 'iradio_square-green',
+                    });
+                });
+
+            },
+            methods: {
+                findGetParameter: function() {
+                    var queryDict = {}
+                    decodeURI(location.search).substr(1).split("&").forEach(function(item) {
+                        queryDict[item.split("=")[0]] = item.split("=")[1]
+                    })
+                    return queryDict
+                },
+                pay: function() {
+                    let paid = this.price
+                    if (document.querySelector('input[name="a"]:checked').value === "half") {
+                        paid = this.price / 2
+                    }
+                    const d = {
+                        customer_name: this.name,
+                        customer_email: this.email,
+                        amount: paid,
+                        facility_id: this.data.facility_id,
+                        field_id: this.data.id,
+                        start: this.data.start,
+                        duration: parseInt(this.data.duration)
+                    }
+                    console.log(d)
+                    this.$http.post("http://localhost:8080/event/book", d)
+                        .then((resp) => {
+                            console.log(resp)
+                            this.stripeRedirect()
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                },
+                stripeRedirect: function() {
+                    const redirect_url = 'http://localhost/paiement.html?sel=' + this.sel
+                    stripe.redirectToCheckout({
+                            items: [{
+                                sku: 'sku_FBJ279YfJ2Qesi',
+                                quantity: 1
+                            }],
+                            successUrl: redirect_url,
+                            cancelUrl: 'https://scoreplay.io/canceled',
+                        })
+                        .then(function(result) {
+                            if (result.error) {
+                                var displayError = document.getElementById('error-message');
+                                displayError.textContent = result.error.message;
+                            }
+                        });
+                }
+            }
+        })
+    </script>
+
+</body>
+
+</html>
