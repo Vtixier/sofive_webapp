@@ -31,6 +31,12 @@ Vue.component('sofive-left-menu', {
                     <li>
                         <a href="video.html"><i class="fa fa-video-camera"></i><span class="nav-label">Videos</span></a>
                     </li>
+                    <li>
+                        <a href="booking.html"><i class="fa fa-calendar"></i><span class="nav-label">Field booking</span></a>
+                    </li>
+                    <li>
+                        <a href="registration.html"><i class="fa fa-plus-square-o"></i><span class="nav-label">Leagues & tournaments registration</span></a>
+                    </li>
                 </ul>
             </div>
         </nav>
