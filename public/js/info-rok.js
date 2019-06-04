@@ -1,4 +1,4 @@
-Vue.component('sofive-mdl-info', {
+Vue.component('sofive-rok-info', {
 	template: `
 	<div class="wpb_wrapper">
             <h3><i class="fa fa-phone"></i> +1 301-321-8484</h3>

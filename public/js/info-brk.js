@@ -1,4 +1,4 @@
-Vue.component('sofive-mdl-info', {
+Vue.component('sofive-brk-info', {
 	template: `
 	<div class="wpb_wrapper">
             <h3><i class="fa fa-phone"></i> +1 347-745-7544</h3>

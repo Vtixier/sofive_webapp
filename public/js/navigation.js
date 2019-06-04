@@ -95,15 +95,6 @@ Vue.component('sofive-left-menu', {
         document.querySelector("#auto-open").click()
     }
     this.getCenterImage()
-    document.getElementById('top-search').onkeypress = function(e) {
-        var event = e || window.event;
-        var charCode = event.which || event.keyCode;
-
-        if ( charCode == '13' ) {
-          window.location = "search.html?query="+e.target.value
-          return false;
-        }
-    }
   },
   methods: {
     getCenterImage: function() {

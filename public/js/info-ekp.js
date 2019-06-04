@@ -1,4 +1,4 @@
-Vue.component('sofive-mdl-info', {
+Vue.component('sofive-ekp-info', {
 	template: `
 	<div class="wpb_wrapper">
             <h3><i class="fa fa-phone"></i> +1 215-544-2626</h3>

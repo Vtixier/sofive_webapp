@@ -1,4 +1,4 @@
-Vue.component('sofive-mdl-info', {
+Vue.component('sofive-col-info', {
 	template: `
 	<div class="wpb_wrapper">
             <h3><i class="fa fa-phone"></i> +1 410-505-0595</h3>
