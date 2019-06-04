@@ -1,5 +1,6 @@
 Vue.component('sofive-left-menu', {
   template: `
+        <div>
 		<nav class="navbar-default navbar-static-side" role="navigation">
             <div class="sidebar-collapse">
                 <ul class="nav metismenu" id="side-menu">
@@ -32,13 +33,61 @@ Vue.component('sofive-left-menu', {
                     </li>
                 </ul>
             </div>
-        </nav>`,
+        </nav>
+        <div class="modal inmodal fade" id="myModal5" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Select center location</h4>
+                        <small class="font-bold">Please select your prefered location</small>
+                    </div>
+                    <div class="modal-body">
+                        <label class="col-form-label" for="status">
+                            <div v-if="facility_loading">
+                                <div>
+                                    <div class="sk-spinner sk-spinner-wave">
+                                        <div class="sk-rect1"></div>
+                                        <div class="sk-rect2"></div>
+                                        <div class="sk-rect3"></div>
+                                        <div class="sk-rect4"></div>
+                                        <div class="sk-rect5"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </label>
+                        <select class="select_season form-control" v-model="selected.center">
+                            <option value="0">Pick a location</option>
+                            <option v-for="center in centers" :value="center.id">{{center.name}}</option>
+                        </select>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" v-on:click="save" class="btn btn-primary" data-dismiss="modal">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button id="auto-open" type="button" style="display: none" data-toggle="modal" data-target="#myModal5">
+            Large Modal
+        </button>
+        </div>`,
   data() {
     return {
-        img: "img/sofive/sofive.png"
+        img: "img/sofive/sofive.png",
+        open: false,
+        centers: [],
+        facility_loading: false,
+        selected: {
+            center: "0",
+        }
     }
   },
   mounted: function() {
+    this.getCenters()
+    const c = this.getCookie("center")
+    if (!c) {
+        document.querySelector("#auto-open").click()
+    }
     this.getCenterImage()
     document.getElementById('top-search').onkeypress = function(e) {
         var event = e || window.event;
@@ -54,8 +103,9 @@ Vue.component('sofive-left-menu', {
     getCenterImage: function() {
         const c = this.getCookie("center"),
         self = this;
+        console.log("Get center image", c)
         if (!c) {
-            setTimeout(self.getCenterImage, 5000) // wait for cookie to be set
+            return setTimeout(self.getCenterImage, 5000) // wait for cookie to be set
         }
         let img = "img/sofive/sofive.png"
         switch (c) {
@@ -77,6 +127,23 @@ Vue.component('sofive-left-menu', {
             default:
         }
         this.img = img
+    },
+    getCenters: function() {
+        this.facility_loading = true
+        this.centers = []
+        this.$http.get("http://localhost:8080/facility/")
+            .then((resp) => {
+                this.centers = resp.body;
+                this.facility_loading = false
+            })
+            .catch((err) => {
+                console.log(err.body.errors)
+            })
+    },
+    save: function() {
+        if (this.selected.center !== "0") {
+            this.setCookie(this.selected.center)
+        }
     },
     setCookie: function(value) {
         var date = new Date();
