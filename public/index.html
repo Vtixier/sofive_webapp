@@ -34,7 +34,7 @@
             <div class="row" style="text-align: center; background-color: rgba(232, 232, 232, 0.43); border: 1px solid #e6eaec;">
                 <div class="col-lg-12">
                     <div class="ibox" style="margin-top: 2%; margin-bottom: 2%">
-                        <h1 style="color: #676a6c">Enjoy your online experience at<strong> <span style="color: #03793e"> Sofive Meadowlands</span> </strong> !</h1>
+                        <h1 style="color: #676a6c">Enjoy your online experience at<strong> <span style="color: #03793e"> {{name}}</span> </strong> !</h1>
                         <p>*Use the left menu to navigate through the different components.</p>
                         <div class="dropdown profile-element" style="text-align: center">
                             <button style="margin-bottom: 2%" data-toggle="dropdown" class="btn btn-default dropdown-toggle">Change center</button>
@@ -101,9 +101,11 @@
         var app = new Vue({
             el: '#wrapper',
             data: {
-                info: ""
+                info: "",
+                name: "Sofive"
             },
             mounted: function() {
+                this.getCenterName()
                 const params = this.findGetParameter(),
                     origin = params.origin || "";
                 if (origin !== "") {
@@ -111,6 +113,33 @@
                 }
             },
             methods: {
+                getCenterName: function() {
+                    const c = this.getCookie("center"),
+                        self = this;
+                    if (!c) {
+                        return setTimeout(self.getCenterName, 2000) // wait for cookie to be set
+                    }
+                    let name = "Sofive"
+                    switch (c) {
+                        case "1":
+                            name += " Meadowlands"
+                            break;
+                        case "2":
+                            name += " Elkins Park"
+                            break;
+                        case "3":
+                            name += " Brooklyn"
+                            break;
+                        case "4":
+                            name += " Rockville"
+                            break;
+                        case "5":
+                            name += " Columbia"
+                            break;
+                        default:
+                    }
+                    this.name = name
+                },
                 findGetParameter: function() {
                     var queryDict = {}
                     decodeURI(location.search).substr(1).split("&").forEach(function(item) {
@@ -118,11 +147,21 @@
                     })
                     return queryDict
                 },
+                getCookie: function(name) {
+                    var nameEQ = name + "=";
+                    var ca = document.cookie.split(';');
+                    for (var i = 0; i < ca.length; i++) {
+                        var c = ca[i];
+                        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+                    }
+                    return null;
+                },
                 setCookie: function(value) {
                     var date = new Date();
-                    date.setTime(date.getTime() + (9999*24*60*60*1000));
+                    date.setTime(date.getTime() + (9999 * 24 * 60 * 60 * 1000));
                     let expires = "; expires=" + date.toUTCString();
-                    document.cookie = "center=" + (value || "")  + expires + "; path=/";
+                    document.cookie = "center=" + (value || "") + expires + "; path=/";
                     window.location = "index.html"
                 },
             }
