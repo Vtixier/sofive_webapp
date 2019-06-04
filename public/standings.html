@@ -271,6 +271,8 @@
                 }
             },
             mounted: function() {
+                const center = this.getCenterCookie()
+                this.selected_center = center
                 let self = this;
                 $(".select_center").select2({
                     placeholder: "Select or enter value...",
@@ -391,6 +393,16 @@
                 },
                 gotoTeam: function(id) {
                     window.location = "team.html?id=" + id
+                },
+                getCenterCookie: function() {
+                    var nameEQ = "center=";
+                    var ca = document.cookie.split(';');
+                    for(var i=0;i < ca.length;i++) {
+                        var c = ca[i];
+                        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+                        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+                    }
+                    return null;
                 }
             }
         })

@@ -329,6 +329,8 @@
                 },
                 mounted: function() {
                     const self = this;
+                    const center = this.getCenterCookie()
+                    this.selected.center = center
                     this.date = moment().format("MM-DD-YYYY")
                     this.getCenters()
                     $('.input-group.date').datepicker({
@@ -519,6 +521,16 @@
                             facility_id: parseInt(this.selected.center)
                         }
                         window.location = "confirmation.html?sel=" + btoa(JSON.stringify(d))
+                    },
+                    getCenterCookie: function() {
+                        var nameEQ = "center=";
+                        var ca = document.cookie.split(';');
+                        for(var i=0;i < ca.length;i++) {
+                            var c = ca[i];
+                            while (c.charAt(0)==' ') c = c.substring(1,c.length);
+                            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+                        }
+                        return null;
                     }
                 }
             })
