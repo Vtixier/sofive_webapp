@@ -14,6 +14,9 @@
     <link href="css/style.css" rel="stylesheet">
     <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-32x32.png" sizes="32x32" />
     <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" sizes="192x192" />
+        <!-- FooTable -->
+    <link href="css/plugins/footable/footable.core.css" rel="stylesheet">
+
 </head>
 
 <body class="fixed-sidebar">
@@ -32,22 +35,96 @@
 
             <div class="row wrapper border-bottom white-bg page-heading">
                 <div class="col-sm-4">
-                    <h2>Book a field</h2>
+                    <h2>Online registration</h2>
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item">
-                            <a href="index.html">Reservation</a>
-                        </li>
                         <li class="breadcrumb-item active">
-                            <strong>Book a field</strong>
+                            <strong>Registration option</strong>
                         </li>
                     </ol>
                 </div>
             </div>
 
-
-
+            Adult
 
             <div class="wrapper wrapper-content animated fadeInRight">
+                <div class="ibox-content m-b-sm border-bottom">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label class="col-form-label" for="status">
+                                    Select Center
+                                    <div v-if="facility_loading">
+                                        <div>
+                                            <div class="sk-spinner sk-spinner-wave">
+                                                <div class="sk-rect1"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </label>
+                                <select class="select_center form-control">
+                                    <option></option>
+                                    <option v-for="center in centers" :value="center.id">{{center.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <label class="col-form-label" for="status">
+                                Select Product
+                                <div v-if="season_loading">
+                                    <div>
+                                        <div class="sk-spinner sk-spinner-wave">
+                                            <div class="sk-rect1"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </label>
+                            <select class="select_season form-control">
+                                <option></option>
+                                <option v-for="season in seasons" :value="JSON.stringify(season)">{{season.name}}</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-3">
+                            <label class="col-form-label" for="status">
+                                Select Season
+                                <div v-if="league_loading">
+                                    <div>
+                                        <div class="sk-spinner sk-spinner-wave">
+                                            <div class="sk-rect1"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </label>
+                            <select class="select_league form-control">
+                                <option></option>
+                                <option v-for="league in leagues" :value="league.id">{{league.name}}</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-3">
+                            <label class="col-form-label" for="status">
+                                Select Levels (optionnal)
+                                <div v-if="league_loading">
+                                    <div>
+                                        <div class="sk-spinner sk-spinner-wave">
+                                            <div class="sk-rect1"></div>
+                                            <div class="sk-rect2"></div>
+                                            <div class="sk-rect3"></div>
+                                            <div class="sk-rect4"></div>
+                                            <div class="sk-rect5"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </label>
+                            <select class="select_league form-control">
+                                <option></option>
+                                <option v-for="league in leagues" :value="league.id">{{league.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                Youth
+
+                <div class="wrapper wrapper-content animated fadeInRight">
                 <div class="ibox-content m-b-sm border-bottom">
                     <div class="row">
                         <div class="col-sm-3">
@@ -79,10 +156,6 @@
                                     <div>
                                         <div class="sk-spinner sk-spinner-wave">
                                             <div class="sk-rect1"></div>
-                                            <div class="sk-rect2"></div>
-                                            <div class="sk-rect3"></div>
-                                            <div class="sk-rect4"></div>
-                                            <div class="sk-rect5"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -94,7 +167,7 @@
                         </div>
                         <div class="col-sm-3">
                             <label class="col-form-label" for="status">
-                                Select League
+                                Select Season
                                 <div v-if="league_loading">
                                     <div>
                                         <div class="sk-spinner sk-spinner-wave">
@@ -114,7 +187,7 @@
                         </div>
                         <div class="col-sm-3">
                             <label class="col-form-label" for="status">
-                                Select League
+                                Select Age Group
                                 <div v-if="league_loading">
                                     <div>
                                         <div class="sk-spinner sk-spinner-wave">
@@ -183,8 +256,8 @@
                                             </div>
                                             <div class="modal-footer" style="text-align: left">
                                                 <div>
-                                                    <button class="btn btn-primary float-right">Register as team</button>
-                                                    <button class="btn btn-primary float-right">Register as an individual</button>
+                                                    <button class="btn btn-primary">Register as team</button>
+                                                    <button class="btn btn-primary">Register as an individual</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -374,16 +447,61 @@
                         </div>
 
 
+
+
                     </div>
 
                 </div>
 
             </div>
 
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox ">
+                        <div class="ibox-title">
+                            <h5>Events available</h5>
+                        </div>
+                        <div class="ibox-content">
 
+                            <input type="text" class="form-control form-control-sm m-b-xs" id="filter"
+                                   placeholder="Search in table">
 
+                            <table class="footable table table-stripped" data-filter=#filter>
+                                <thead>
+                                <tr>
+                                    <th data-toggle="true">Date</th>
+                                    <th>Day</th>
+                                    <th>Type</th>
+                                    <th>Duration</th>
+                                    <th>Price</th>
+                                    <th>Status</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>01 Dec</td>
+                                    <td>Saturday</td>
+                                    <td>U12G under 12 boy</td>
+                                    <td>18 min</td>
+                                    <td>$250</td>
+                                    <td><button type="button" class="btn btn-primary">More info</button><td>
+                                </tr>
+                                <tr>
+                                    <td>01 Dec</td>
+                                    <td>Holiday</td>
+                                    <td>U12G under 12 boy</td>
+                                    <td>18 min</td>
+                                    <td>$250</td>
+                                    <td><button type="button" class="btn btn-primary">More info</button><td>
+                                </tr>
+                                </tbody>
+                            </table>
 
-
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
             <sofive-footer />
         </div>
@@ -441,7 +559,7 @@
                 }
             })
 
-            <!-- Mainly scripts -->
+    <!-- Mainly scripts -->
             <
             script src = "js/jquery-3.1.1.min.js" >
     </script>
@@ -464,6 +582,8 @@
     <script type="text/javascript" src="js/navigation.js"></script>
     <script type="text/javascript" src="js/header.js"></script>
     <script type="text/javascript" src="js/footer.js"></script>
+            <!-- FooTable -->
+    <script src="js/plugins/footable/footable.all.min.js"></script>
 
     <script type="text/javascript">
         var app = new Vue({
@@ -626,6 +746,18 @@
             }
         })
     </script>
+        <!-- Page-Level Scripts -->
+    <script>
+        $(document).ready(function() {
+
+            $('.footable').footable();
+            $('.footable2').footable();
+
+        });
+
+    </script>
+
+
 
 </body>
 
