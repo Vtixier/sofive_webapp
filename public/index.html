@@ -39,10 +39,11 @@
                         <div class="dropdown profile-element" style="text-align: center">
                             <button style="margin-bottom: 2%" data-toggle="dropdown" class="btn btn-default dropdown-toggle">Change center</button>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="index.html">Sofive Brooklyn</a></li>
-                                <li><a class="dropdown-item" href="index.html">Sofive Rockville</a></li>
-                                <li><a class="dropdown-item" href="index.html">Sofive Elkins-Park</a></li>
-                                <li><a class="dropdown-item" href="index.html">Sofive Columbia</a></li>
+                                <li><a class="dropdown-item" v-on:click="setCookie('1')">Sofive Meadowlands</a></li>
+                                <li><a class="dropdown-item" v-on:click="setCookie('3')">Sofive Brooklyn</a></li>
+                                <li><a class="dropdown-item" v-on:click="setCookie('4')">Sofive Rockville</a></li>
+                                <li><a class="dropdown-item" v-on:click="setCookie('2')">Sofive Elkins-Park</a></li>
+                                <li><a class="dropdown-item" v-on:click="setCookie('5')">Sofive Columbia</a></li>
                             </ul>
                         </div>
                     </div>
@@ -116,6 +117,13 @@
                         queryDict[item.split("=")[0]] = item.split("=")[1]
                     })
                     return queryDict
+                },
+                setCookie: function(value) {
+                    var date = new Date();
+                    date.setTime(date.getTime() + (9999*24*60*60*1000));
+                    let expires = "; expires=" + date.toUTCString();
+                    document.cookie = "center=" + (value || "")  + expires + "; path=/";
+                    window.location = "index.html"
                 },
             }
         })
