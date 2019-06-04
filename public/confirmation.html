@@ -11,6 +11,8 @@
     <link href="css/plugins/select2/select2.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.css" rel="stylesheet">
 
+    <link href="css/plugins/ladda/ladda-themeless.min.css" rel="stylesheet">
+
     <link href="css/plugins/datapicker/datepicker3.css" rel="stylesheet">
     <link href="css/plugins/iCheck/custom.css" rel="stylesheet">
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -74,11 +76,8 @@
                                     </div>
                                 </div>
                                 <span>
-                                    Total
+                                    Total : <span class="font-bold" style="font-size: 2em">${{price}},00</span>
                                 </span>
-                                <h2 class="font-bold">
-                                    ${{price}},00
-                                </h2>
                                 <hr>
                                 <span class="text">
                                     <form role="form" class="form">
@@ -94,7 +93,7 @@
 
                                             <div class="col-sm-10">
                                                 <div class="i-checks"><label> <input name="a" checked type="radio" value="full"> <i></i>Pay full price</label></div>
-                                                <div class="i-checks"><label> <input name="a" type="radio" value="half"> <i></i> Pay a deposit (50%) </label></div>
+                                                <div class="i-checks"><label> <input name="a" type="radio" value="deposit"> <i></i> Pay a flat $50 deposit </label></div>
                                             </div>
                                         </div>
                                     </form>
@@ -102,7 +101,7 @@
 
                             </div>
                         </div>
-                        <button type="button" class="btn btn-primary" style="margin-bottom: 10%" data-toggle="modal" v-on:click="pay"><i class="fa fa-shopping-cart"></i> Checkout</button>
+                        <button type="button" class="ladda-button ladda-button-checkout btn btn-primary" style="margin-bottom: 10%" v-on:click="pay" data-style="zoom-in"><i class="fa fa-shopping-cart"></i> Checkout</button>
 
                         <div id="error-message"></div>
 
@@ -161,16 +160,14 @@
     <script src="js/plugins/iCheck/icheck.min.js"></script>
     <script src="js/plugins/sweetalert/sweetalert.min.js"></script>
 
+    <script src="js/plugins/ladda/spin.min.js"></script>
+    <script src="js/plugins/ladda/ladda.min.js"></script>
+    <script src="js/plugins/ladda/ladda.jquery.min.js"></script>
+
     <script src="https://js.stripe.com/v3/"></script>
 
     <script type="text/javascript">
-        let stripe = Stripe(`pk_test_POTzqQ3H0tD01tMZjPsijfhK`);
-
-        let priceMap = {
-            60: 135,
-            90: 150,
-            120: 200
-        }
+        let stripe = Stripe(`pk_test_1AfVoOISnSBi3YL546sR6wVO00z2t7grwj`);
 
         var app = new Vue({
             el: '#wrapper',
@@ -183,6 +180,8 @@
                     facility_id: 0,
                 },
                 price: 0,
+                sku: "",
+                deposit_sku: "",
                 name: "",
                 email: "",
                 sel: "",
@@ -191,9 +190,10 @@
                 const params = this.findGetParameter(),
                     parsed = JSON.parse(atob(params.sel));
                 this.data = parsed
-                console.log(this.data)
 
-                this.price = priceMap[parsed.duration]
+                this.price = parseInt(parsed.product.price)
+                this.sku = parsed.product.sku
+                this.deposit_sku = parsed.product.deposit_sku
                 this.sel = params.sel
 
                 $(document).ready(function() {
@@ -202,6 +202,8 @@
                         radioClass: 'iradio_square-green',
                     });
                 });
+
+                var l = Ladda.bind('.ladda-button-checkout');
 
             },
             methods: {
@@ -214,8 +216,10 @@
                 },
                 pay: function() {
                     let paid = this.price
-                    if (document.querySelector('input[name="a"]:checked').value === "half") {
-                        paid = this.price / 2
+                    let deposit = false
+                    if (document.querySelector('input[name="a"]:checked').value === "deposit") {
+                        paid = 50
+                        deposit = true
                     }
                     const d = {
                         customer_name: this.name,
@@ -229,17 +233,21 @@
                     this.$http.post("http://localhost:8080/event/book", d)
                         .then((resp) => {
                             console.log(resp)
-                            this.stripeRedirect(resp.body.booking_id)
+                            this.stripeRedirect(resp.body.booking_id, deposit)
                         })
                         .catch((err) => {
                             console.log(err)
                         })
                 },
-                stripeRedirect: function(booking_id) {
+                stripeRedirect: function(booking_id, deposit) {
                     const redirect_url = 'http://localhost:8080/event/confirm/' + booking_id + '?sel=' + this.sel
+                    let sku = this.sku
+                    if (deposit) {
+                        sku = this.deposit_sku
+                    }
                     stripe.redirectToCheckout({
                             items: [{
-                                sku: 'sku_FBJ279YfJ2Qesi',
+                                sku: sku,
                                 quantity: 1
                             }],
                             successUrl: redirect_url,

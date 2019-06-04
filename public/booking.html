@@ -156,84 +156,98 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="ibox" style="text-align: center" v-if="missing">
-                        <div class="panel panel-grey">
-                            <div class="panel-heading">
-                                <h4> Sorry there are no field available at this time</h4>
-                            </div>
-                            <div class="panel-body">
-                                <div>
-                                    <h3> Same Day </h3>
-                                    <div class="row" style="margin-top: 2%">
-                                        <div class="col-lg-4" v-if="different_time.before">
-                                            <div class="panel panel-primary">
-                                                <div class="panel-heading">
-                                                    1h before
+                        <div class="ibox" style="text-align: center" v-if="missing">
+                            <div class="panel panel-grey">
+                                <div class="panel-heading">
+                                    <h4> Sorry there are no field available at this time</h4>
+                                </div>
+                                <div class="panel-body">
+                                    <div>
+                                        <h3 v-if="(different_time.before || different_time.after || different_time.other_time || loading.today)"> Same Day </h3>
+                                        <div class="sk-spinner sk-spinner-wave" v-if="loading.today">
+                                            <div class="sk-rect1"></div>
+                                            <div class="sk-rect2"></div>
+                                            <div class="sk-rect3"></div>
+                                            <div class="sk-rect4"></div>
+                                            <div class="sk-rect5"></div>
+                                        </div>
+                                        <div class="row" style="margin-top: 2%">
+                                            <div class="col-lg-4" v-if="different_time.before">
+                                                <div class="panel panel-primary">
+                                                    <div class="panel-heading">
+                                                        1h before
+                                                    </div>
+                                                    <div class="panel-body">
+                                                        <h4><i class="fa fa-calendar"></i> {{different_time.before.date}}</h4>
+                                                        <h4><i class="fa fa-clock-o"></i> <b>{{different_time.before.subtitle}}</b></h4>
+                                                        <h4><i class="fa fa-map-marker"></i> {{different_time.before.name}}</h4>
+                                                        <div class="btn-group center" style="margin-top: 5%">
+                                                            <a v-on:click="choose(different_time.before)" class="btn btn-primary btn-sm" style="color: white">Select</a>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div class="panel-body">
-                                                    <h4><i class="fa fa-calendar"></i> {{different_time.before.date}}</h4>
-                                                    <h4><i class="fa fa-clock-o"></i> <b>{{different_time.before.subtitle}}</b></h4>
-                                                    <h4><i class="fa fa-map-marker"></i> {{different_time.before.name}}</h4>
-                                                    <div class="btn-group center" style="margin-top: 5%">
-                                                        <a v-on:click="choose(different_time.before)" class="btn btn-primary btn-sm" style="color: white">Select</a>
+                                            </div>
+                                            <div class="col-lg-4" v-if="different_time.after">
+                                                <div class="panel panel-primary">
+                                                    <div class="panel-heading">
+                                                        1h after
+                                                    </div>
+                                                    <div class="panel-body">
+                                                        <h4><i class="fa fa-calendar"></i> {{different_time.after.date}}</h4>
+                                                        <h4><i class="fa fa-clock-o"></i> <b>{{different_time.after.subtitle}}</b></h4>
+                                                        <h4><i class="fa fa-map-marker"></i> {{different_time.after.name}}</h4>
+                                                        <div class="btn-group center" style="margin-top: 5%">
+                                                            <a v-on:click="choose(different_time.after)" class="btn btn-primary btn-sm" style="color: white">Select</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4" v-if="different_time.other_time">
+                                                <div class="panel panel-primary">
+                                                    <div class="panel-heading">
+                                                        1h of play
+                                                    </div>
+                                                    <div class="panel-body">
+                                                        <h4><i class="fa fa-calendar"></i> {{different_time.other_time.date}}</h4>
+                                                        <h4><i class="fa fa-clock-o"></i> <b>{{different_time.other_time.subtitle}}</b></h4>
+                                                        <h4><i class="fa fa-map-marker"></i> {{different_time.other_time.name}}</h4>
+                                                        <div class="btn-group center" style="margin-top: 5%">
+                                                            <a v-on:click="choose(different_time.other_time)" class="btn btn-primary btn-sm" style="color: white">Select</a>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-lg-4" v-if="different_time.after">
-                                            <div class="panel panel-primary">
-                                                <div class="panel-heading">
-                                                    1h after
-                                                </div>
-                                                <div class="panel-body">
-                                                    <h4><i class="fa fa-calendar"></i> {{different_time.after.date}}</h4>
-                                                    <h4><i class="fa fa-clock-o"></i> <b>{{different_time.after.subtitle}}</b></h4>
-                                                    <h4><i class="fa fa-map-marker"></i> {{different_time.after.name}}</h4>
-                                                    <div class="btn-group center" style="margin-top: 5%">
-                                                        <a v-on:click="choose(different_time.after)" class="btn btn-primary btn-sm" style="color: white">Select</a>
+
+                                        <h3 v-if="(different_time.day_after || loading.tomorrow)"> {{next_day}} </h3>
+                                        <div class="sk-spinner sk-spinner-wave" v-if="loading.tomorrow">
+                                            <div class="sk-rect1"></div>
+                                            <div class="sk-rect2"></div>
+                                            <div class="sk-rect3"></div>
+                                            <div class="sk-rect4"></div>
+                                            <div class="sk-rect5"></div>
+                                        </div>
+
+                                        <div class="row" style="margin-top: 2%">
+                                            <div class="col-lg-4" v-if="different_time.day_after">
+                                                <div class="panel panel-primary">
+                                                    <div class="panel-heading">
+                                                        Same time and duration
+                                                    </div>
+                                                    <div class="panel-body">
+                                                        <h4><i class="fa fa-calendar"></i> {{different_time.day_after.date}}</h4>
+                                                        <h4><i class="fa fa-clock-o"></i> <b>{{different_time.day_after.subtitle}}</b></h4>
+                                                        <h4><i class="fa fa-map-marker"></i> {{different_time.day_after.name}}</h4>
+                                                        <div class="btn-group center" style="margin-top: 5%">
+                                                            <a v-on:click="choose(different_time.day_after)" class="btn btn-primary btn-sm" style="color: white">Select</a>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-lg-4" v-if="different_time.other_time">
-                                            <div class="panel panel-primary">
-                                                <div class="panel-heading">
-                                                    1h of play
-                                                </div>
-                                                <div class="panel-body">
-                                                    <h4><i class="fa fa-calendar"></i> {{different_time.other_time.date}}</h4>
-                                                    <h4><i class="fa fa-clock-o"></i> <b>{{different_time.other_time.subtitle}}</b></h4>
-                                                    <h4><i class="fa fa-map-marker"></i> {{different_time.other_time.name}}</h4>
-                                                    <div class="btn-group center" style="margin-top: 5%">
-                                                        <a v-on:click="choose(different_time.other_time)" class="btn btn-primary btn-sm" style="color: white">Select</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+
                                     </div>
-
-                                    <h3> {{next_day}} </h3>
-
-                                    <div class="row" style="margin-top: 2%">
-                                        <div class="col-lg-4" v-if="different_time.day_after">
-                                            <div class="panel panel-primary">
-                                                <div class="panel-heading">
-                                                    Same time and duration
-                                                </div>
-                                                <div class="panel-body">
-                                                    <h4><i class="fa fa-calendar"></i> {{different_time.day_after.date}}</h4>
-                                                    <h4><i class="fa fa-clock-o"></i> <b>{{different_time.day_after.subtitle}}</b></h4>
-                                                    <h4><i class="fa fa-map-marker"></i> {{different_time.day_after.name}}</h4>
-                                                    <div class="btn-group center" style="margin-top: 5%">
-                                                        <a v-on:click="choose(different_time.day_after)" class="btn btn-primary btn-sm" style="color: white">Select</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
                                 </div>
                             </div>
                         </div>
@@ -327,7 +341,11 @@
                         other_time: null,
                         day_after: null
                     },
-                    next_day: ""
+                    next_day: "",
+                    loading: {
+                        today: false,
+                        tomorrow: false
+                    }
                 },
                 mounted: function() {
                     const self = this;
@@ -414,7 +432,7 @@
                                     date: moment(this.date, "MM-DD-YYYY").format("dddd, MMMM Do YYYY"),
                                     subtitle: time + " (duration: " + this.selected.duration + "min)",
                                     duration: this.selected.duration,
-                                    start: moment(this.date + " " + this.selected.time, "MM-DD-YYYY hh:mma").format("YYYY-MM-DD hh:mma")
+                                    start: moment(this.date + " " + time, "MM-DD-YYYY hh:mma").format("YYYY-MM-DD hh:mma")
                                 }
                                 this.fields_loading = false
                             })
@@ -423,10 +441,10 @@
                             })
                     },
                     checkOtherTime: function() {
+                        this.fields_loading = false
+                        this.loading.today = true
+                        this.loading.tomorrow = true
                         Promise.all([this.checkBefore(), this.checkAfter(), this.checkLessTime(), this.checkTomorrow()])
-                            .then(() => {
-                                this.fields_loading = false
-                            })
                             .catch(err => console.error(err))
                     },
                     checkBefore: function() {
@@ -452,8 +470,10 @@
                                     duration: this.selected.duration,
                                     start: moment(this.date + " " + prev_hour, "MM-DD-YYYY hh:mma").format("YYYY-MM-DD hh:mma")
                                 }
+                                this.loading.today = false
                             })
                             .catch((err) => {
+                                this.loading.today = false
                                 console.log(err)
                             })
                     },
@@ -480,8 +500,10 @@
                                     duration: this.selected.duration,
                                     start: moment(this.date + " " + next_hour, "MM-DD-YYYY hh:mma").format("YYYY-MM-DD hh:mma")
                                 }
+                                this.loading.today = false
                             })
                             .catch((err) => {
+                                this.loading.today = false
                                 console.log(err)
                             })
                     },
@@ -510,18 +532,21 @@
                                     duration: 60,
                                     start: moment(this.date + " " + time, "MM-DD-YYYY hh:mma").format("YYYY-MM-DD hh:mma")
                                 }
+                                this.loading.today = false
                             })
                             .catch((err) => {
+                                this.loading.today = false
                                 console.log(err)
                             })
                     },
                     checkTomorrow: function() {
                         const tomorrow = moment(this.date, "MM-DD-YYYY").add(1, "d")
                         this.next_day = tomorrow.format("dddd, MMMM Do YYYY")
+                        let time = this.getTime()
                         const body = {
                             facility_id: parseInt(this.selected.center),
                             date: tomorrow.format("YYYY-MM-DD"),
-                            time: this.selected.time,
+                            time: time,
                             duration: 60
                         }
                         this.$http.post("http://localhost:8080/event/", body)
@@ -535,10 +560,12 @@
                                     date: tomorrow.format("dddd, MMMM Do YYYY"),
                                     subtitle: time + " (duration: " + this.selected.duration + "min)",
                                     duration: this.selected.duration,
-                                    start: moment(this.date + " " + this.selected.time, "MM-DD-YYYY hh:mma").add(1, "d").format("YYYY-MM-DD hh:mma")
+                                    start: moment(this.date + " " + time, "MM-DD-YYYY hh:mma").add(1, "d").format("YYYY-MM-DD hh:mma")
                                 }
+                                this.loading.tomorrow = false
                             })
                             .catch((err) => {
+                                this.loading.tomorrow = false
                                 console.log(err)
                             })
                     },
