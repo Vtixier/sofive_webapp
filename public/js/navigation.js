@@ -156,7 +156,7 @@ Vue.component('sofive-left-menu', {
         date.setTime(date.getTime() + (9999*24*60*60*1000));
         let expires = "; expires=" + date.toUTCString();
         document.cookie = "center=" + (value || "")  + expires + "; path=/";
-        this.getCenterImage()
+        window.location.reload(false)
     },
     getCookie: function(name) {
         var nameEQ = name + "=";

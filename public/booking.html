@@ -82,16 +82,25 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-3">
+                        <div class="col-sm-2">
                             <label class="col-form-label" for="status">
-                                Time
+                                Hour
                             </label>
-                            <select class="select_season form-control" v-model="selected.time">
-                                <option value="0">Select time</option>
-                                <option v-for="time in times" :value="time">{{time}}</option>
+                            <select class="select_season form-control" v-model="selected.hour">
+                                <option value="0">Select hour</option>
+                                <option v-for="hour in hours" :value="hour">{{hour}}</option>
                             </select>
                         </div>
                         <div class="col-sm-2">
+                            <label class="col-form-label" for="status">
+                                Minute
+                            </label>
+                            <select class="select_season form-control" v-model="selected.minute">
+                                <option value="0">Select minute</option>
+                                <option v-for="minute in minutes" :value="minute">{{minute}}</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-1">
                             <label class="col-form-label" for="status">
                                 Duration
                             </label>
@@ -101,17 +110,18 @@
                                 <option value="120">2h</option>
                             </select>
                         </div>
-                        <div class="col-sm-2">
+                        <div class="col-sm-2" v-if="selected.center==='2'">
                             <label class="col-form-label" for="status">
                                 Type
                             </label>
                             <select class="select_league form-control" v-model="selected.field">
-                                <option>Outdoor</option>
-                                <option>Indoor</option>
+                                <option value="Indoor">Indoor</option>
+                                <option value="Outdoor">Outdoor</option>
+                                <option value="6 vs. 6">6 vs. 6</option>
                             </select>
                         </div>
                     </div>
-                    <a v-on:click="search" class="btn btn-primary btn-rounded btn-block btn-outline" href="#"></i>Look for a field</a>
+                    <a v-on:click="search" class="btn btn-primary btn-rounded btn-block btn-outline" href="#"></i>Book a field</a>
                 </div>
 
                 <div class="row" v-if="fields_loading">
@@ -312,10 +322,16 @@
                     fields_loading: false,
                     different_day_loading: false,
                     times: ["12:00am", "07:00am", "08:00am", "09:00am", "10:00am", "11:00am", "12:00pm", "01:00pm", "02:00pm", "03:00pm", "04:00pm", "05:00pm", "06:00pm", "07:00pm", "08:00pm", "09:00pm", "10:00pm", "11:00pm"],
+                    hours: ["7am", "8am", "9am", "10am", "11am", "12pm", "1pm", "2pm", "3pm", "4pm", "5pm", "6pm",
+                        "7pm", "8pm", "9pm", "10pm", "11pm", "12am", "1am"
+                    ],
+                    minutes: ["00", "30"],
                     selected: {
-                        time: "0",
-                        center: "1",
-                        duration: "60"
+                        center: "0",
+                        duration: "60",
+                        field: "Indoor",
+                        hour: "0",
+                        minute: "0"
                     },
                     available_field: null,
                     missing: false,
@@ -356,6 +372,26 @@
                                 console.log(err.body.errors)
                             })
                     },
+                    getTime: function() {
+                        let time = ""
+                        if (this.selected.hour.indexOf('am') !== (-1)) {
+                            const spl = this.selected.hour.split('am')
+                            let hour = spl[0]
+                            console.log(hour, (hour.length === 1))
+                            if (hour.length === 1) {
+                                hour = "0" + hour
+                            }
+                            time = hour + ":" + this.selected.minute + "am"
+                        } else {
+                            const spl = this.selected.hour.split('pm')
+                            let hour = spl[0]
+                            if (hour.length === 1) {
+                                hour = "0" + hour
+                            }
+                            time = hour + ":" + this.selected.minute + "pm"
+                        }
+                        return time
+                    },
                     search: function() {
                         this.fields_loading = true
                         this.missing = false
@@ -366,10 +402,12 @@
                             other_time: null,
                             day_after: null
                         }
+                        let time = this.getTime()
+
                         const body = {
                             facility_id: parseInt(this.selected.center),
                             date: moment(this.date, "MM-DD-YYYY").format("YYYY-MM-DD"),
-                            time: this.selected.time,
+                            time: time,
                             duration: parseInt(this.selected.duration)
                         }
                         console.log(body)
@@ -385,7 +423,7 @@
                                 this.available_field = {
                                     ...selected,
                                     date: moment(this.date, "MM-DD-YYYY").format("dddd, MMMM Do YYYY"),
-                                    subtitle: this.selected.time + " (duration: " + this.selected.duration + "min)",
+                                    subtitle: time + " (duration: " + this.selected.duration + "min)",
                                     duration: this.selected.duration,
                                     start: moment(this.date + " " + this.selected.time, "MM-DD-YYYY hh:mma").format("YYYY-MM-DD hh:mma")
                                 }
@@ -403,7 +441,8 @@
                             .catch(err => console.error(err))
                     },
                     checkBefore: function() {
-                        const prev_hour = moment(this.selected.time, "hh:mma").subtract(1, "h").format("hh:mma"),
+                        let time = this.getTime()
+                        const prev_hour = moment(time, "hh:mma").subtract(1, "h").format("hh:mma"),
                             today = moment(this.date, "MM-DD-YYYY")
                         const body = {
                             facility_id: parseInt(this.selected.center),
@@ -430,7 +469,8 @@
                             })
                     },
                     checkAfter: function() {
-                        const next_hour = moment(this.selected.time, "hh:mma").add(1, "h").format("hh:mma"),
+                        let time = this.getTime()
+                        const next_hour = moment(time, "hh:mma").add(1, "h").format("hh:mma"),
                             today = moment(this.date, "MM-DD-YYYY")
                         const body = {
                             facility_id: parseInt(this.selected.center),
@@ -461,10 +501,11 @@
                         if (parseInt(this.selected.duration) == 60) {
                             return
                         }
+                        let time = this.getTime()
                         const body = {
                             facility_id: parseInt(this.selected.center),
                             date: today.format("YYYY-MM-DD"),
-                            time: moment(this.selected.time, "hh:mma").format("hh:mma"),
+                            time: time,
                             duration: 60
                         }
                         this.$http.post("http://localhost:8080/event/", body)
@@ -476,9 +517,9 @@
                                 this.different_time.other_time = {
                                     ...selected,
                                     date: today.format("dddd, MMMM Do YYYY"),
-                                    subtitle: this.selected.time + " (duration: 60min)",
+                                    subtitle: time + " (duration: 60min)",
                                     duration: 60,
-                                    start: moment(this.date + " " + this.selected.time, "MM-DD-YYYY hh:mma").format("YYYY-MM-DD hh:mma")
+                                    start: moment(this.date + " " + time, "MM-DD-YYYY hh:mma").format("YYYY-MM-DD hh:mma")
                                 }
                             })
                             .catch((err) => {
@@ -503,7 +544,7 @@
                                 this.different_time.day_after = {
                                     ...selected,
                                     date: tomorrow.format("dddd, MMMM Do YYYY"),
-                                    subtitle: this.selected.time + " (duration: " + this.selected.duration + "min)",
+                                    subtitle: time + " (duration: " + this.selected.duration + "min)",
                                     duration: this.selected.duration,
                                     start: moment(this.date + " " + this.selected.time, "MM-DD-YYYY hh:mma").add(1, "d").format("YYYY-MM-DD hh:mma")
                                 }
@@ -525,10 +566,10 @@
                     getCenterCookie: function() {
                         var nameEQ = "center=";
                         var ca = document.cookie.split(';');
-                        for(var i=0;i < ca.length;i++) {
+                        for (var i = 0; i < ca.length; i++) {
                             var c = ca[i];
-                            while (c.charAt(0)==' ') c = c.substring(1,c.length);
-                            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+                            while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
                         }
                         return null;
                     }
