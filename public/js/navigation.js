@@ -16,7 +16,7 @@ Vue.component('sofive-left-menu', {
                                 <li><a class="dropdown-item" v-on:click="setCookie('1')">Sofive Meadowlands</a></li>
                                 <li><a class="dropdown-item" v-on:click="setCookie('3')">Sofive Brooklyn</a></li>
                                 <li><a class="dropdown-item" v-on:click="setCookie('4')">Sofive Rockville</a></li>
-                                <li><a class="dropdown-item" v-on:click="setCookie('2')">Sofive Elkins-Park</a></li>
+                                <li><a class="dropdown-item" v-on:click="setCookie('2')">Sofive Elkins Park</a></li>
                                 <li><a class="dropdown-item" v-on:click="setCookie('5')">Sofive Columbia</a></li>
                             </ul>
                             <ul>
