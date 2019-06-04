@@ -1,7 +1,7 @@
 Vue.component('sofive-mdl-info', {
 	template: `
 	<div class="wpb_wrapper">
-            <h3><i class="fa fa-phone"></i> +1 201-345-5434</h3>
+            <h3><i class="fa fa-phone"></i> +1 215-544-2626</h3>
         <span class="medium">
             Please contact with us if you have any questions.
         </span><br/><br/>
@@ -16,9 +16,9 @@ Vue.component('sofive-mdl-info', {
                 </span></div>
             <div class="wpb_text_column wpb_content_element ">
                 <div class="wpb_wrapper">
-                    <p style="text-align: left;">Address: <a style="text-decoration: underline;">2 Palmer Terrace, Carlstadt, NJ 07072</a><br>
-                        Email: meadowlands@sofive.com<br>
-                        Open weekdays from 9:00 am to 1:00 am and weekends 7:00 am to 1:00 am</p>
+                    <p style="text-align: left;">Address: <a style="text-decoration: underline;">46 Church Road, Elkins Park, PA 19027</a><br>
+                        Email: elkinspark@sofive.com<br>
+                        Open weekdays from 9:00 am to 12:00 am and weekends from 7:00 am to 12:00 am</p>
                 </div>
             </div>
             <div class="wpb_text_column wpb_content_element ">
@@ -48,12 +48,12 @@ Vue.component('sofive-mdl-info', {
                     <p>
                         <span data-type="normal" class="qode_icon_shortcode  q_font_awsome_icon fa-lg  " style=" ">
                             <i class="qode_icon_font_awesome fa fa-futbol-o qode_icon_element" style="color: #04b2e2;"></i>
-                        </span>&nbsp; &nbsp; 8 indoor fields
+                        </span>&nbsp; &nbsp; 7 indoor fields and 4 outdoor fields
                     </p>
                     <p>
                         <span data-type="normal" class="qode_icon_shortcode  q_font_awsome_icon fa-lg  " style=" ">
                             <i class="qode_icon_font_awesome fa fa-video-camera qode_icon_element" style="color: #04b2e2;"></i>
-                        </span>&nbsp; &nbsp; All fields equipped with video cameras & scoreboards
+                        </span>&nbsp; &nbsp; 7 fields equipped with video cameras & scoreboards
                     </p>
                     <p>
                         <span data-type="normal" class="qode_icon_shortcode  q_font_awsome_icon fa-lg  " style=" ">

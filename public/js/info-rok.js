@@ -1,7 +1,7 @@
 Vue.component('sofive-mdl-info', {
 	template: `
 	<div class="wpb_wrapper">
-            <h3><i class="fa fa-phone"></i> +1 201-345-5434</h3>
+            <h3><i class="fa fa-phone"></i> +1 301-321-8484</h3>
         <span class="medium">
             Please contact with us if you have any questions.
         </span><br/><br/>
@@ -16,8 +16,8 @@ Vue.component('sofive-mdl-info', {
                 </span></div>
             <div class="wpb_text_column wpb_content_element ">
                 <div class="wpb_wrapper">
-                    <p style="text-align: left;">Address: <a style="text-decoration: underline;">2 Palmer Terrace, Carlstadt, NJ 07072</a><br>
-                        Email: meadowlands@sofive.com<br>
+                    <p style="text-align: left;">Address: <a style="text-decoration: underline;">1008 Westmore Ave, Rockville, MD 20850</a><br>
+                        Email: rockville@sofive.com<br>
                         Open weekdays from 9:00 am to 1:00 am and weekends 7:00 am to 1:00 am</p>
                 </div>
             </div>
