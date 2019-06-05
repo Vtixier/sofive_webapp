@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sofive Soccer Center</title>
+
+    <link href="css/plugins/select2/select2.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.css" rel="stylesheet">
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="css/animate.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-32x32.png" sizes="32x32" />
+    <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" sizes="192x192" />
+
+</head>
+
+<body class="fixed-sidebar">
+
+    <div id="wrapper">
+
+        <div class="modal inmodal fade" id="more_info_modal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="font-bold">{{selected.league.season.name}}</h4>
+                        <h4 class="modal-title">{{selected.league.name}}</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p v-if="selected.league.description">{{he.decode(selected.league.description)}}</p>
+                        <div class="mediums m-t-xs">
+                            Starts on : {{selected.league.start}}<br />
+                            <span v-if="selected.league.start !== selected.league.end">Ends on : {{selected.league.end}}</span>
+                            <br /><br />${{selected.league.price}} Teams / $140 Free Agents
+                            <br>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="text-align: left">
+                        <div>
+                            <button class="btn btn-primary">Register as team</button>
+                            <button class="btn btn-primary">Register as an individual</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <sofive-left-menu />
+        </div>
+
+        <div id="page-wrapper" class="gray-bg">
+
+            <div>
+                <sofive-header />
+            </div>
+
+            <div class="wrapper wrapper-content animated fadeInRight">
+
+                <div class="ibox-content m-b-sm border-bottom">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label class="col-form-label" for="status">
+                                    <div v-if="loading.facility">
+                                        <div>
+                                            <div class="sk-spinner sk-spinner-wave">
+                                                <div class="sk-rect1"></div>
+                                                <div class="sk-rect2"></div>
+                                                <div class="sk-rect3"></div>
+                                                <div class="sk-rect4"></div>
+                                                <div class="sk-rect5"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </label>
+                                <select class="select_center form-control">
+                                    <option></option>
+                                    <option v-for="center in centers" :value="center.id">{{center.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <label class="col-form-label" for="status">
+                                <div v-if="loading.product">
+                                    <div>
+                                        <div class="sk-spinner sk-spinner-wave">
+                                            <div class="sk-rect1"></div>
+                                            <div class="sk-rect2"></div>
+                                            <div class="sk-rect3"></div>
+                                            <div class="sk-rect4"></div>
+                                            <div class="sk-rect5"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </label>
+                            <select class="select_product form-control">
+                                <option></option>
+                                <option v-for="product in products" :value="JSON.stringify(product)">{{product.name}}</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-3">
+                            <label class="col-form-label" for="status">
+                                <div v-if="loading.season">
+                                    <div>
+                                        <div class="sk-spinner sk-spinner-wave">
+                                            <div class="sk-rect1"></div>
+                                            <div class="sk-rect2"></div>
+                                            <div class="sk-rect3"></div>
+                                            <div class="sk-rect4"></div>
+                                            <div class="sk-rect5"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </label>
+                            <select class="select_season form-control">
+                                <option></option>
+                                <option v-for="season in seasons" :value="JSON.stringify(season)">{{season.name}}</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-3" v-bind:style=" youth ? 'display:block' : 'display:none' ">
+                            <label class="col-form-label" for="status">
+                                <div v-if="loading.ages">
+                                    <div>
+                                        <div class="sk-spinner sk-spinner-wave">
+                                            <div class="sk-rect1"></div>
+                                            <div class="sk-rect2"></div>
+                                            <div class="sk-rect3"></div>
+                                            <div class="sk-rect4"></div>
+                                            <div class="sk-rect5"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </label>
+                            <select class="select_age form-control" style="width: 100%">
+                                <option></option>
+                                <option v-for="age in ages" :value="age">{{age}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col-lg-12" v-if="loading.league">
+                    <div>
+                        <div>
+                            <div class="sk-spinner sk-spinner-wave">
+                                <div class="sk-rect1"></div>
+                                <div class="sk-rect2"></div>
+                                <div class="sk-rect3"></div>
+                                <div class="sk-rect4"></div>
+                                <div class="sk-rect5"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4" v-for="league in filtered_leagues">
+                    <div class="ibox">
+                        <div class="ibox-content product-box">
+                            <div class="product-desc">
+                                <small class="text-muted">{{league.season.name}}</small>
+                                <a href="#" class="product-name">{{league.name}}</a>
+                                <div class="mediums m-t-xs">
+                                    Starts on : {{league.start}}<br />
+                                    <span v-if="league.start !== league.end">Ends on : {{league.end}}</span>
+                                    <br>${{league.price}} Teams / $140 Free Agents
+                                    <br>
+                                </div>
+                                <button v-on:click="selectLeague(league)" type="button" class="btn btn-outline btn btn-primary" style="margin-top: 5%" data-toggle="modal" data-target="#more_info_modal">
+                                    Find out more
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <sofive-footer />
+            </div>
+        </div>
+    </div>
+
+    <!-- Mainly scripts -->
+    <script src="js/jquery-3.1.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.js"></script>
+
+    <!-- Custom and plugin javascript -->
+    <script src="js/inspinia.js"></script>
+
+    <script src="js/plugins/select2/select2.full.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/1.5.1/vue-resource.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script type="text/javascript" src="js/he.js"></script>
+
+    <script type="text/javascript" src="js/navigation.js"></script>
+    <script type="text/javascript" src="js/header.js"></script>
+    <script type="text/javascript" src="js/footer.js"></script>
+
+    <script type="text/javascript">
+        var app = new Vue({
+            el: '#wrapper',
+            data: {
+                centers: [],
+                products: [],
+                seasons: [],
+                leagues: [],
+                selected: {
+                    facility_id: "1",
+                    product: {},
+                    season: {},
+                    age: "",
+                    league: {
+                        season: {}
+                    }
+                },
+                loading: {
+                    facility: false,
+                    products: false,
+                    seasons: false,
+                    age: false,
+                    league: false
+                }
+            },
+            computed: {
+                youth: function() {
+                    if (!this.selected.product.name) {
+                        return false
+                    }
+                    return (this.selected.product.name.toLowerCase().indexOf('youth') !== (-1))
+                },
+                ages: function() {
+                    const ages = this.leagues.map((l) => (l.age))
+                    return [...new Set(ages)].sort()
+                },
+                filtered_leagues: function() {
+                    if (!this.youth) {
+                        return this.leagues
+                    }
+                    if (this.selected.age === "") {
+                        return this.leagues
+                    }
+                    return this.leagues.filter(l => (l.age === this.selected.age))
+                }
+            },
+            mounted: function() {
+                const center = this.getCenterCookie()
+                if (center) {
+                    this.selected.facility_id = center
+                }
+                let self = this;
+                $(".select_center").select2({
+                    placeholder: "Select center...",
+                });
+                $(".select_season").select2({
+                    placeholder: "Select season...",
+                });
+                $(".select_product").select2({
+                    placeholder: "Select program...",
+                });
+                $('.select_center').on('select2:select', function(e) {
+                    let facility_id = e.target.value
+                    self.selected.facility_id = facility_id
+                });
+                $('.select_product').on('select2:select', function(e) {
+                    let doc = JSON.parse(e.target.value)
+                    self.selected.product = doc
+                    self.getSeasons()
+                });
+                $('.select_season').on('select2:select', function(e) {
+                    let doc = JSON.parse(e.target.value)
+                    self.selected.season = doc
+                    self.getEvents(doc.id)
+                });
+                $('.select_age').on('select2:select', function(e) {
+                    self.selected.age = e.target.value
+                });
+                this.getCenters()
+                this.getProducts()
+            },
+            methods: {
+                getCenters: function() {
+                    this.loading.facility = true
+                    this.centers = []
+                    return this.$http.get("http://localhost:8080/facility/")
+                        .then((resp) => {
+                            this.centers = resp.body;
+                            this.loading.facility = false
+                        })
+                        .catch((err) => {
+                            console.log(err.body.errors)
+                        })
+                },
+                getProducts: function() {
+                    this.products = []
+                    this.loading.product = true
+                    this.$http.get("http://localhost:8080/program/")
+                        .then((resp) => {
+                            this.products = resp.body;
+                            this.loading.product = false
+                            this.$nextTick(function() {
+                                $(".select_age").select2({
+                                    placeholder: "Select age group...",
+                                });
+                            })
+                        })
+                        .catch((err) => {
+                            console.log(err.body.errors)
+                        })
+                },
+                getSeasons: function(facility_id) {
+                    this.seasons = []
+                    this.loading.season = true
+                    const body = {
+                        "facility_id": this.selected.facility_id,
+                        "program_id": this.selected.product.id,
+                        "date": "2019-06-04"
+                    }
+                    this.$http.post("http://localhost:8080/program/seasons", body)
+                        .then((resp) => {
+                            this.seasons = resp.body;
+                            this.loading.season = false
+                        })
+                        .catch((err) => {
+                            console.log(err.body.errors)
+                        })
+                },
+                getEvents: function(season_id) {
+                    this.leagues = []
+                    this.loading.league = true
+                    const body = {
+                        "season_id": season_id,
+                    }
+                    this.$http.post("http://localhost:8080/program/leagues", body)
+                        .then((resp) => {
+                            this.leagues = resp.body.map(l => {
+                                const season = this.seasons.find(s => (parseInt(s.id) === l.season_id))
+                                let age = ""
+                                if (this.youth) {
+                                    if (l.sex === "m") {
+                                        age = "Boys " + l.age.name
+                                    } else {
+                                        age = "Girls " + l.age.name
+                                    }
+                                }
+                                console.log("Age", age)
+                                return {
+                                    ...l,
+                                    season,
+                                    start: moment(season.start_date, "YYYY-MM-DDTHH:mm:ss").format("MM-DD-YYYY"),
+                                    end: moment(season.end_date, "YYYY-MM-DDTHH:mm:ss").format("MM-DD-YYYY"),
+                                    age,
+                                }
+                            });
+                            this.loading.league = false
+                        })
+                        .catch((err) => {
+                            console.log(err.body.errors)
+                        })
+                },
+                dateSortFunc: function(a, b) {
+                    const diff = a.moment_date.diff(b.moment_date, 'seconds')
+                    if (diff > 0) {
+                        return 1
+                    } else if (diff < 0) {
+                        return -1
+                    } else {
+                        return 0
+                    }
+                },
+                getCenterCookie: function() {
+                    var nameEQ = "center=";
+                    var ca = document.cookie.split(';');
+                    for (var i = 0; i < ca.length; i++) {
+                        var c = ca[i];
+                        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+                    }
+                    return null;
+                },
+                selectLeague: function(league) {
+                    this.selected.league = league
+                }
+            }
+        })
+    </script>
+
+</body>
+
+</html>
