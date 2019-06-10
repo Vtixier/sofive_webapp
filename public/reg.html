@@ -117,7 +117,7 @@
                                 <option v-for="product in products" :value="JSON.stringify(product)">{{product.name}}</option>
                             </select>
                         </div>
-                        <div class="col-sm-3">
+                        <div class="col-sm-3" v-bind:style=" (seasons.length>1 || loading.season) ? 'display:block' : 'display:none' ">
                             <label class="col-form-label" for="status">
                                 <div v-if="loading.season">
                                     <div>
@@ -131,7 +131,7 @@
                                     </div>
                                 </div>
                             </label>
-                            <select class="select_season form-control">
+                            <select class="select_season form-control" style="width: 100%">
                                 <option></option>
                                 <option v-for="season in seasons" :value="JSON.stringify(season)">{{season.name}}</option>
                             </select>
@@ -153,6 +153,14 @@
                             <select class="select_age form-control" style="width: 100%">
                                 <option></option>
                                 <option v-for="age in ages" :value="age">{{age}}</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-3" v-bind:style=" tournaments.length ? 'display:block' : 'display:none' ">
+                            <label class="col-form-label" for="status">
+                            </label>
+                            <select class="select_tournament_age form-control" style="width: 100%">
+                                <option></option>
+                                <option v-for="age in tournament_ages" :value="age">{{age}}</option>
                             </select>
                         </div>
                     </div>
@@ -199,11 +207,11 @@
                 <div class="col-lg-12">
                     <div class="ibox ">
                         <div class="ibox-title">
-                            <h5>Events available</h5>
+                            <h5>GotSoccer tournaments open for registration</h5>
                         </div>
                         <div class="ibox-content">
 
-                            <input type="text" class="form-control form-control-sm m-b-xs" id="filter" placeholder="Search in table">
+                            <input type="text" class="form-control form-control-sm m-b-xs" id="filter" placeholder="Search for a tournament">
 
                             <table class="footable table table-stripped" data-filter=#filter>
                                 <thead>
@@ -217,13 +225,13 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="tournament in tournaments">
+                                    <tr v-for="tournament in filtered_tournaments">
                                         <td>{{tournament.date}}</td>
                                         <td>{{tournament.day}}</td>
                                         <td>{{tournament.age}}</td>
                                         <td>{{tournament.duration}}</td>
                                         <td>{{tournament.price}}</td>
-                                        <td><button type="button" class="btn btn-primary">More info</button></td>
+                                        <td><button type="button" class="btn btn-primary" v-on:click="gotoGotsoccer(tournament.link)">More info</button></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -276,11 +284,12 @@
                 selected: {
                     facility_id: "1",
                     product: {},
-                    season: {},
+                    season: "",
                     age: "",
                     league: {
                         season: {}
-                    }
+                    },
+                    tournament_age: ""
                 },
                 loading: {
                     facility: false,
@@ -292,6 +301,9 @@
             },
             computed: {
                 youth: function() {
+                    if (this.selected.product.name === "Youth Tournament") {
+                        return false
+                    }
                     if (!this.selected.product.name) {
                         return false
                     }
@@ -302,13 +314,27 @@
                     return [...new Set(ages)].sort()
                 },
                 filtered_leagues: function() {
+                    let filtered = this.leagues
+                    if (this.selected.season !== "") {
+                        filtered = this.leagues.filter(l => (l.season.id === this.selected.season))
+                    }
                     if (!this.youth) {
-                        return this.leagues
+                        return filtered
                     }
                     if (this.selected.age === "") {
-                        return this.leagues
+                        return filtered
                     }
-                    return this.leagues.filter(l => (l.age === this.selected.age))
+                    return filtered.filter(l => (l.age === this.selected.age))
+                },
+                tournament_ages: function() {
+                    const ages = this.tournaments.map((l) => (l.age))
+                    return [...new Set(ages)].sort()
+                },
+                filtered_tournaments: function() {
+                    if (this.selected.tournament_age === "") {
+                        return this.tournaments
+                    }
+                    return this.tournaments.filter(t => (t.age === this.selected.tournament_age))
                 }
             },
             mounted: function() {
@@ -340,11 +366,14 @@
                 });
                 $('.select_season').on('select2:select', function(e) {
                     let doc = JSON.parse(e.target.value)
-                    self.selected.season = doc
-                    self.getEvents(doc.id)
+                    self.selected.season = doc.id
+                    // self.getEvents(doc.id)
                 });
                 $('.select_age').on('select2:select', function(e) {
                     self.selected.age = e.target.value
+                });
+                $('.select_tournament_age').on('select2:select', function(e) {
+                    self.selected.tournament_age = e.target.value
                 });
                 this.getCenters()
                 this.getProducts()
@@ -365,6 +394,8 @@
                 getProducts: function() {
                     this.products = []
                     this.loading.product = true
+                    this.selected.season = ""
+                    this.selected.age = ""
                     this.$http.get("http://localhost:8080/program/")
                         .then((resp) => {
                             this.products = resp.body;
@@ -381,7 +412,10 @@
                 },
                 getSeasons: function(facility_id) {
                     this.seasons = []
+                    this.tournaments = []
                     this.loading.season = true
+                    this.selected.season = ""
+                    this.selected.age = ""
                     const body = {
                         "facility_id": this.selected.facility_id,
                         "program_id": this.selected.product.id,
@@ -391,47 +425,58 @@
                         .then((resp) => {
                             this.seasons = resp.body;
                             this.loading.season = false
+                            console.log("Seasons", this.seasons)
+                            var p = []
+                            this.seasons.forEach(s => {
+                                p.push(this.getEvents(s.id))
+                            })
+                            this.loading.league = true
+                            Promise.all(p)
+                                .then((leagues) => {
+                                    this.loading.league = false
+                                    this.leagues = this.flatten(leagues)
+                                    console.log("Leagues", leagues)
+                                })
                         })
                         .catch((err) => {
                             console.log(err.body.errors)
                         })
                 },
                 getEvents: function(season_id) {
+                    console.log("Season", season_id)
                     this.leagues = []
-                    this.loading.league = true
                     const body = {
                         "season_id": season_id,
                     }
-                    this.$http.post("http://localhost:8080/program/leagues", body)
-                        .then((resp) => {
-                            this.leagues = resp.body.map(l => {
-                                const season = this.seasons.find(s => (parseInt(s.id) === l.season_id))
-                                let age = ""
-                                if (this.youth) {
-                                    if (l.sex === "m") {
-                                        age = "Boys " + l.age.name
-                                    } else {
-                                        age = "Girls " + l.age.name
+                    return new Promise((yes, no) => {
+                        this.$http.post("http://localhost:8080/program/leagues", body)
+                            .then((resp) => {
+                                return yes(resp.body.map(l => {
+                                    const season = this.seasons.find(s => (parseInt(s.id) === l.season_id))
+                                    let age = ""
+                                    if (this.youth) {
+                                        if (l.sex === "m") {
+                                            age = "Boys " + l.age.name
+                                        } else {
+                                            age = "Girls " + l.age.name
+                                        }
                                     }
-                                }
-                                console.log("Age", age)
-                                return {
-                                    ...l,
-                                    season,
-                                    start: moment(season.start_date, "YYYY-MM-DDTHH:mm:ss").format("MM-DD-YYYY"),
-                                    end: moment(season.end_date, "YYYY-MM-DDTHH:mm:ss").format("MM-DD-YYYY"),
-                                    age,
-                                }
-                            });
-                            this.loading.league = false
-                        })
-                        .catch((err) => {
-                            console.log(err.body.errors)
-                        })
+                                    return {
+                                        ...l,
+                                        season,
+                                        start: moment(season.start_date, "YYYY-MM-DDTHH:mm:ss").format("MM-DD-YYYY"),
+                                        end: moment(season.end_date, "YYYY-MM-DDTHH:mm:ss").format("MM-DD-YYYY"),
+                                        age,
+                                    }
+                                }));
+                            })
+                            .catch(no)
+                    })
                 },
                 getTournaments: function() {
+                    this.leagues = []
                     const body = {
-                        "facility_id": this.selected.facility_id,
+                        "facility_id": parseInt(this.selected.facility_id),
                     }
                     this.$http.post("http://localhost:8080/program/tournaments", body)
                         .then((resp) => {
@@ -440,19 +485,28 @@
                                     i = t.description.indexOf("Fee: $"),
                                     j = t.description.indexOf(" per team"),
                                     price = t.description.slice(i + 5, j),
-                                    k = str.indexOf(" minutes each"),
-                                    duration = str.slice(k - 2, k) + " min";
+                                    k = t.description.indexOf(" minutes each"),
+                                    duration = t.description.slice(k - 2, k) + " min";
                                 return {
                                     ...t,
-                                    day: d.format("DDD"),
+                                    day: d.format("dddd"),
                                     price,
                                     duration
                                 }
                             })
+                            this.$nextTick(function() {
+                                $(".select_tournament_age").select2({
+                                    placeholder: "Select age group...",
+                                });
+                            })
                         })
                         .catch((err) => {
-                            console.log(err.body.errors)
+                            console.log(err)
                         })
+                },
+                gotoGotsoccer: function(link) {
+                    var win = window.open(link, '_blank');
+                    win.focus();
                 },
                 dateSortFunc: function(a, b) {
                     const diff = a.moment_date.diff(b.moment_date, 'seconds')
@@ -476,6 +530,12 @@
                 },
                 selectLeague: function(league) {
                     this.selected.league = league
+                },
+                flatten: function(arr) {
+                    const self = this;
+                    return arr.reduce(function(flat, toFlatten) {
+                        return flat.concat(Array.isArray(toFlatten) ? self.flatten(toFlatten) : toFlatten);
+                    }, []);
                 }
             }
         })
