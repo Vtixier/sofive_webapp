@@ -253,27 +253,52 @@
                         </div>
                     </div>
 
-                    <div class="col-md-4" style="margin-top: 2%">
-                        <div class="ibox" style="text-align: center">
-                            <div class="ibox-content text-center">
+                    <div class="col-md-4" style="margin-top: 2%">                              
                                 <div v-if="selected.center === '1'">
-                                    <sofive-mdl-info />
+                                    <div class="ibox-content no-padding border-left-right">
+                                    <img alt="image" class="img-fluid" src="/img/sofive/mdl.jpg">
+                                    </div>  
                                 </div>
                                 <div v-if="selected.center === '2'">
-                                    <sofive-ekp-info />
+                                    <div class="ibox-content no-padding border-left-right">
+                                    <img alt="image" class="img-fluid" src="/img/sofive/ekp.jpg">
+                                    </div>  
                                 </div>
                                 <div v-if="selected.center === '3'">
-                                    <sofive-brk-info />
+                                    <div class="ibox-content no-padding border-left-right">
+                                    <img alt="image" class="img-fluid" src="/img/sofive/brk.jpg">
+                                    </div>  
                                 </div>
                                 <div v-if="selected.center === '4'">
-                                    <sofive-rok-info />
+                                    <div class="ibox-content no-padding border-left-right">
+                                    <img alt="image" class="img-fluid" src="/img/sofive/rok.jpg">
+                                    </div>  
                                 </div>
                                 <div v-if="selected.center === '5'">
-                                    <sofive-col-info />
+                                    <div class="ibox-content no-padding border-left-right">
+                                    <img alt="image" class="img-fluid" src="/img/sofive/col.jpg">
+                                    </div>  
                                 </div>
-                            </div>
+                                <div class="ibox" style="text-align: center">
+                                    <div class="ibox-content text-center">
+                                        <div v-if="selected.center === '1'">
+                                            <sofive-mdl-info />
+                                        </div>
+                                        <div v-if="selected.center === '2'">
+                                            <sofive-ekp-info />
+                                        </div>
+                                        <div v-if="selected.center === '3'">
+                                            <sofive-brk-info />
+                                        </div>
+                                        <div v-if="selected.center === '4'">
+                                            <sofive-rok-info />
+                                        </div>
+                                        <div v-if="selected.center === '5'">
+                                            <sofive-col-info />
+                                        </div>
+                                    </div>
+                                </div>
                         </div>
-                    </div>
                 </div>
 
             </div>

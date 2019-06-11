@@ -119,7 +119,7 @@ Vue.component('sofive-left-menu', {
                 img = "img/sofive/sofiverok.png"
                 break;
             case "5":
-                img = "img/sofive/sofiverok.png"
+                img = "img/sofive/sofivecol.png"
                 break;
             default:
         }
