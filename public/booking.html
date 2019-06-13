@@ -78,6 +78,14 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-sm-2" v-if="selected.center==='2'">
+                            <label class="col-form-label" for="status">
+                                Type
+                            </label>
+                            <select class="select_league form-control" v-model="selected.field">
+                                <option v-for="field_type in field_types" :value="field_type.type">{{field_type.label}}</option>
+                            </select>
+                        </div>
                         <div class="col-sm-2">
                             <label class="col-form-label" for="status">
                                 Time
@@ -86,7 +94,7 @@
                                 <div class="form-group">
                                     <select class="select_season form-control" v-model="selected.hour">
                                         <option value="0">Hour</option>
-                                        <option v-for="hour in hours" :value="hour">{{hour}}</option>
+                                        <option v-for="hour in filtered_times" :value="hour">{{hour}}</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -104,16 +112,6 @@
                                 <option value="60">1h</option>
                                 <option value="90">1h30</option>
                                 <option value="120">2h</option>
-                            </select>
-                        </div>
-                        <div class="col-sm-2" v-if="selected.center==='2'">
-                            <label class="col-form-label" for="status">
-                                Type
-                            </label>
-                            <select class="select_league form-control" v-model="selected.field">
-                                <option value="Indoor">Indoor</option>
-                                <option value="Outdoor">Outdoor</option>
-                                <option value="6 vs. 6">6 vs. 6</option>
                             </select>
                         </div>
                     </div>
@@ -253,52 +251,52 @@
                         </div>
                     </div>
 
-                    <div class="col-md-4" style="margin-top: 2%">                              
+                    <div class="col-md-4" style="margin-top: 2%">
+                        <div v-if="selected.center === '1'">
+                            <div class="ibox-content no-padding border-left-right">
+                                <img alt="image" class="img-fluid" src="/img/sofive/mdl.jpg">
+                            </div>
+                        </div>
+                        <div v-if="selected.center === '2'">
+                            <div class="ibox-content no-padding border-left-right">
+                                <img alt="image" class="img-fluid" src="/img/sofive/ekp.jpg">
+                            </div>
+                        </div>
+                        <div v-if="selected.center === '3'">
+                            <div class="ibox-content no-padding border-left-right">
+                                <img alt="image" class="img-fluid" src="/img/sofive/brk.jpg">
+                            </div>
+                        </div>
+                        <div v-if="selected.center === '4'">
+                            <div class="ibox-content no-padding border-left-right">
+                                <img alt="image" class="img-fluid" src="/img/sofive/rok.jpg">
+                            </div>
+                        </div>
+                        <div v-if="selected.center === '5'">
+                            <div class="ibox-content no-padding border-left-right">
+                                <img alt="image" class="img-fluid" src="/img/sofive/col.jpg">
+                            </div>
+                        </div>
+                        <div class="ibox" style="text-align: center">
+                            <div class="ibox-content text-center">
                                 <div v-if="selected.center === '1'">
-                                    <div class="ibox-content no-padding border-left-right">
-                                    <img alt="image" class="img-fluid" src="/img/sofive/mdl.jpg">
-                                    </div>  
+                                    <sofive-mdl-info />
                                 </div>
                                 <div v-if="selected.center === '2'">
-                                    <div class="ibox-content no-padding border-left-right">
-                                    <img alt="image" class="img-fluid" src="/img/sofive/ekp.jpg">
-                                    </div>  
+                                    <sofive-ekp-info />
                                 </div>
                                 <div v-if="selected.center === '3'">
-                                    <div class="ibox-content no-padding border-left-right">
-                                    <img alt="image" class="img-fluid" src="/img/sofive/brk.jpg">
-                                    </div>  
+                                    <sofive-brk-info />
                                 </div>
                                 <div v-if="selected.center === '4'">
-                                    <div class="ibox-content no-padding border-left-right">
-                                    <img alt="image" class="img-fluid" src="/img/sofive/rok.jpg">
-                                    </div>  
+                                    <sofive-rok-info />
                                 </div>
                                 <div v-if="selected.center === '5'">
-                                    <div class="ibox-content no-padding border-left-right">
-                                    <img alt="image" class="img-fluid" src="/img/sofive/col.jpg">
-                                    </div>  
+                                    <sofive-col-info />
                                 </div>
-                                <div class="ibox" style="text-align: center">
-                                    <div class="ibox-content text-center">
-                                        <div v-if="selected.center === '1'">
-                                            <sofive-mdl-info />
-                                        </div>
-                                        <div v-if="selected.center === '2'">
-                                            <sofive-ekp-info />
-                                        </div>
-                                        <div v-if="selected.center === '3'">
-                                            <sofive-brk-info />
-                                        </div>
-                                        <div v-if="selected.center === '4'">
-                                            <sofive-rok-info />
-                                        </div>
-                                        <div v-if="selected.center === '5'">
-                                            <sofive-col-info />
-                                        </div>
-                                    </div>
-                                </div>
+                            </div>
                         </div>
+                    </div>
                 </div>
 
             </div>
@@ -351,10 +349,27 @@
                         "7pm", "8pm", "9pm", "10pm", "11pm", "12am", "1am"
                     ],
                     minutes: ["00", "30"],
+                    field_types: [{
+                            type: "5v5_indoor",
+                            label: "5v5 Indoor"
+                        },
+                        {
+                            type: "6v6_indoor",
+                            label: "6v6 Indoor"
+                        },
+                        {
+                            type: "5v5_outdoor",
+                            label: "5v5 Outdoor"
+                        },
+                        {
+                            type: "6v6_outdoor",
+                            label: "6v6 Outdoor"
+                        },
+                    ],
                     selected: {
                         center: "0",
                         duration: "60",
-                        field: "Indoor",
+                        field: "5v5_indoor",
                         hour: "0",
                         minute: "00"
                     },
@@ -371,6 +386,24 @@
                         today: false,
                         tomorrow: false
                     }
+                },
+                computed: {
+                    filtered_times: function() {
+                        const current_day = moment(this.date, "MM-DD-YYYY").day()
+                        if (this.selected.center !== "2") {
+                            if ((current_day === 6) || (current_day === 7)) {
+                                return this.hours
+                            }
+                            return this.hours.slice(2, 19)
+                        }
+                        if (this.selected.field.indexOf("outdoor") !== (-1)) { // specific times in ekp
+                            return this.hours.slice(3, 16) // 10am to 10pm
+                        }
+                        if ((current_day === 6) || (current_day === 7)) {
+                            return this.hours.slice(0, 18)
+                        }
+                        return this.hours.slice(2, 18) // ekp closes at midnight
+                    },
                 },
                 mounted: function() {
                     const self = this;
@@ -600,7 +633,12 @@
                     choose: function(data) {
                         const d = {
                             ...data,
-                            facility_id: parseInt(this.selected.center)
+                            facility_id: parseInt(this.selected.center),
+                            booking: {
+                                center: this.centers.find(c => (c.id === this.selected.center)).name,
+                                duration: parseInt(this.selected.duration),
+                                field_type: this.selected.field.split("_")[0],
+                            }
                         }
                         window.location = "confirmation.html?sel=" + btoa(JSON.stringify(d))
                     },
