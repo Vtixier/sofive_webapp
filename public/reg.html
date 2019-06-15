@@ -44,8 +44,8 @@
                     </div>
                     <div class="modal-footer" style="text-align: left">
                         <div>
-                            <button class="btn btn-primary">Register as team</button>
-                            <button class="btn btn-primary">Register as an individual</button>
+                            <button v-on:click="choose('team')" class="btn btn-primary">Register as team</button>
+                            <button v-on:click="choose('individual')" class="btn btn-primary">Register as an individual</button>
                         </div>
                     </div>
                 </div>
@@ -94,7 +94,7 @@
                                 </label>
                                 <select class="select_center form-control">
                                     <option></option>
-                                    <option v-for="center in centers" :value="center.id">{{center.name}}</option>
+                                    <option v-for="center in centers" :value="JSON.stringify(center)">{{center.name}}</option>
                                 </select>
                             </div>
                         </div>
@@ -283,6 +283,7 @@
                 tournaments: [],
                 selected: {
                     facility_id: "1",
+                    center: "",
                     product: {},
                     season: "",
                     age: "",
@@ -353,8 +354,9 @@
                     placeholder: "Select program...",
                 });
                 $('.select_center').on('select2:select', function(e) {
-                    let facility_id = e.target.value
-                    self.selected.facility_id = facility_id
+                    let doc = JSON.parse(e.target.value)
+                    self.selected.facility_id = doc.id
+                    self.selected.center = doc.name
                 });
                 $('.select_product').on('select2:select', function(e) {
                     let doc = JSON.parse(e.target.value)
@@ -536,7 +538,17 @@
                     return arr.reduce(function(flat, toFlatten) {
                         return flat.concat(Array.isArray(toFlatten) ? self.flatten(toFlatten) : toFlatten);
                     }, []);
-                }
+                },
+                choose: function(reg_type) {
+                    const d = {
+                        facility_id: parseInt(this.selected.center),
+                        ...this.selected.league,
+                        reg_type,
+                        product_type: this.selected.product.name,
+                        center: this.selected.center
+                    }
+                    window.location = "registration_confirmation.html?sel=" + btoa(JSON.stringify(d))
+                },
             }
         })
     </script>

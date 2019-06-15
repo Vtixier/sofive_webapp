@@ -31,6 +31,10 @@
 
         <div id="page-wrapper" class="gray-bg">
 
+            <div>
+                <sofive-header />
+            </div>
+
             <div class="row wrapper border-bottom white-bg page-heading">
                 <div class="col-lg-10">
                     <h2>Book a field</h2>
@@ -109,9 +113,7 @@
                                 Duration
                             </label>
                             <select class="select_league form-control" v-model="selected.duration">
-                                <option value="60">1h</option>
-                                <option value="90">1h30</option>
-                                <option value="120">2h</option>
+                                <option v-for="dur in filtered_duration" :value="dur.type">{{dur.label}}</option>
                             </select>
                         </div>
                     </div>
@@ -366,9 +368,22 @@
                             label: "6v6 Outdoor"
                         },
                     ],
+                    durations: [{
+                            type: 60,
+                            label: "1h"
+                        },
+                        {
+                            type: 90,
+                            label: "1h30"
+                        },
+                        {
+                            type: 120,
+                            label: "2h"
+                        },
+                    ],
                     selected: {
                         center: "0",
-                        duration: "60",
+                        duration: 60,
                         field: "5v5_indoor",
                         hour: "0",
                         minute: "00"
@@ -397,13 +412,19 @@
                             return this.hours.slice(2, 19)
                         }
                         if (this.selected.field.indexOf("outdoor") !== (-1)) { // specific times in ekp
-                            return this.hours.slice(3, 16) // 10am to 10pm
+                            return this.hours.slice(3, 15) // 10am to 10pm
                         }
                         if ((current_day === 6) || (current_day === 7)) {
                             return this.hours.slice(0, 18)
                         }
                         return this.hours.slice(2, 18) // ekp closes at midnight
                     },
+                    filtered_duration: function() {
+                        if (this.selected.hour === this.filtered_times[this.filtered_times.length - 1]) {
+                            return [this.durations[0]]
+                        }
+                        return this.durations
+                    }
                 },
                 mounted: function() {
                     const self = this;

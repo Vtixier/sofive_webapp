@@ -23,6 +23,29 @@
     <link href="css/plugins/toastr/toastr.min.css" rel="stylesheet">
     <!-- Sweet Alert -->
     <link href="css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+
+    <style type="text/css">
+        @media only screen and (max-width: 768px) {
+            .hide-if-mob {
+                display: none;
+            }
+
+            .hide-if-not-mob {
+                display: block
+            }
+        }
+
+        @media only screen and (min-width: 768px) {
+            .hide-if-mob {
+                display: block;
+            }
+
+            .hide-if-not-mob {
+                display: none
+            }
+        }
+    </style>
+
 </head>
 
 <body class="fixed-sidebar">
@@ -41,13 +64,25 @@
 
             <div class="wrapper wrapper-content animated fadeInRight">
                 <div class="row">
-                    <div class="col-lg-12">
+                    <div class="col-12 hide-if-mob">
                         <div class="widget style1 navy-bg">
                             <div class="row">
                                 <div class="col-1 text-center">
                                     <i class="fa fa-check-square fa-5x"></i>
                                 </div>
                                 <div class="col-3 text-left">
+                                    <h1 class="font-bold">You're all set!</h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 hide-if-not-mob">
+                        <div class="widget style1 navy-bg">
+                            <div class="row">
+                                <div class="col-3 text-center">
+                                    <i class="fa fa-check-square fa-5x"></i>
+                                </div>
+                                <div class="col-9 text-right">
                                     <h1 class="font-bold">You're all set!</h1>
                                 </div>
                             </div>
@@ -165,7 +200,7 @@
                         queryDict[item.split("=")[0]] = item.split("=")[1]
                     })
                     return queryDict
-                },
+                }
             }
         })
     </script>

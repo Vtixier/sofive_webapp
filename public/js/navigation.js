@@ -35,7 +35,7 @@ Vue.component('sofive-left-menu', {
                         <a href="booking.html"><i class="fa fa-calendar"></i><span class="nav-label">Field booking</span></a>
                     </li>
                     <li>
-                        <a href="registration.html"><i class="fa fa-plus-square-o"></i><span class="nav-label">Leagues & tournaments registration</span></a>
+                        <a href="reg.html"><i class="fa fa-plus-square-o"></i><span class="nav-label">Leagues & tournaments registration</span></a>
                     </li>
                 </ul>
             </div>

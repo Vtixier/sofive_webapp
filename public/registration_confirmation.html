@@ -68,46 +68,40 @@
                             <div class="ibox-content">
                                 <div class="panel panel-default">
                                     <div class="panel-body" style="text-align: center">
-                                        <h3 style="color: #03793E"><i class="fa fa-futbol-o"></i> Thursday Men’s Over 30 5v5 League – Premier League</h3>
-                                        <h3 style="color: #03793E"><i class="fa fa-clock-o"></i> April 18 @ 8:00 pm - 11:00 pm / 10 weeks</h3>
-                                        <h3 style="color: #03793E"><i class="fa fa-map-marker"></i> Sofive Meadowlands</h3>
+                                        <h3 style="color: #03793E"><i class="fa fa-futbol-o"></i> {{data.name}}</h3>
+                                        <h3 style="color: #03793E"><i class="fa fa-clock-o"></i> Start: {{data.start}} | End: {{data.end}}</h3>
+                                        <h3 style="color: #03793E"><i class="fa fa-map-marker"></i> {{data.season.name}}</h3>
                                     </div>
                                 </div>
                                 <span>
                                     Total
                                 </span>
                                 <h2 class="font-bold">
-                                    ${{price}},00
+                                    ${{data.price}}
                                 </h2>
                                 <hr>
                                 <span class="text">
                                     <form role="form" class="form">
                                         <div class="form-group row"><label class="col-sm-2 col-form-label">Name</label>
-                                            <div class="col-sm-10"><input type="text" placeholder="Enter name" class="form-control" v-model="name"></div>
+                                            <div class="col-sm-10"><input type="text" placeholder="Enter name" class="form-control" v-model="customer"></div>
                                         </div>
                                         <div class="form-group row"><label class="col-sm-2 col-form-label">Email</label>
                                             <div class="col-sm-10"><input type="text" placeholder="Enter email" class="form-control" v-model="email"></div>
                                         </div>
                                         <div class="form-group row"><label class="col-sm-2 col-form-label">Phone</label>
-                                            <div class="col-sm-10"><input type="text" placeholder="Enter email" class="form-control" v-model="email"></div>
+                                            <div class="col-sm-10"><input type="text" placeholder="Enter phone" class="form-control" v-model="phone"></div>
                                         </div>
-                                        <div class="form-group row"><label class="col-sm-2 col-form-label">Team name</label>
+                                        <div class="form-group row" v-if="team"><label class="col-sm-2 col-form-label">Team name</label>
                                             <div class="col-sm-10" style="margin-top: 1%">
                                                 <div class="i-checks" style="margin-bottom: 1%"><label> <input name="a" checked type="radio" value="full"> <i></i>Register existing team and roster</label></div>
                                                 <div class="form-group row"><label class="col-sm-3 col-form-label">Team search</label>
-                                                    <div class="col-sm-9"><input type="text" placeholder="Search team" class="form-control" v-model="name"></div>
+                                                    <div class="col-sm-9"><input type="text" placeholder="Search team" class="form-control"></div>
                                                 </div>
 
                                                 <div class="i-checks" style="margin-bottom: 1%"><label> <input name="a" type="radio" value="half"> <i></i> Register new team</label></div>
                                                 <div class="form-group row"><label class="col-sm-3 col-form-label">Team name</label>
-                                                    <div class="col-sm-9"><input type="text" placeholder="Enter team name" class="form-control" v-model="email"></div>
+                                                    <div class="col-sm-9"><input type="text" placeholder="Enter team name" class="form-control" v-model="name"></div>
                                                 </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row"><label class="col-sm-2 col-form-label">Team</label>
-                                            <div class="col-sm-10" style="margin-top: 1%">
-                                                <div class="i-checks" style="margin-bottom: 1%"><label> <input name="a" checked type="radio" value="full"> <i></i>Register as a free agent</label></div>
                                             </div>
                                         </div>
 
@@ -116,8 +110,8 @@
                                             </label>
 
                                             <div class="col-sm-10">
-                                                <div class="i-checks"><label> <input name="a" checked type="radio" value="full"> <i></i>Pay full price</label></div>
-                                                <div class="i-checks"><label> <input name="a" type="radio" value="half"> <i></i> Pay a deposit (50%) </label></div>
+                                                <div class="i-checks"><label> <input name="b" checked type="radio" value="full"> <i></i>Pay full price</label></div>
+                                                <div class="i-checks"><label> <input name="b" type="radio" value="deposit"> <i></i> Pay a deposit ($195,00) </label></div>
                                             </div>
                                         </div>
                                     </form>
@@ -125,25 +119,66 @@
 
                             </div>
                         </div>
-                        <button type="button" class="btn btn-primary" style="margin-bottom: 10%" data-toggle="modal" v-on:click="pay"><i class="fa fa-shopping-cart"></i> Checkout</button>
+                        <!--                         <div class="ibox ">
+                            <div class="ibox-title">
+                                <h5>Loading collection</h5>
+                            </div>
+                            <div class="ibox-content">
+                                <p>
+                                    Load collection from json file <span class="text-muted">(type 'Arg...')</span>
+                                </p>
+                                <input type="text" placeholder="item..." class="typeahead_2 form-control" />
+                            </div>
+                        </div> -->
+                        <button type="button" class="btn btn-primary" style="margin-bottom: 10%" v-on:click="register"><i class="fa fa-shopping-cart"></i> Checkout</button>
 
                         <div id="error-message"></div>
 
                     </div>
 
                     <div class="col-md-4">
-                        <div class="ibox-content no-padding border-left-right">
-                            <img alt="image" class="img-fluid" src="https://sofive.com/wp-content/uploads/2018/05/YourJourney1.jpg">
+                        <div v-if="selected.center === '1'">
+                            <div class="ibox-content no-padding border-left-right">
+                                <img alt="image" class="img-fluid" src="/img/sofive/mdl.jpg">
+                            </div>
+                        </div>
+                        <div v-if="selected.center === '2'">
+                            <div class="ibox-content no-padding border-left-right">
+                                <img alt="image" class="img-fluid" src="/img/sofive/ekp.jpg">
+                            </div>
+                        </div>
+                        <div v-if="selected.center === '3'">
+                            <div class="ibox-content no-padding border-left-right">
+                                <img alt="image" class="img-fluid" src="/img/sofive/brk.jpg">
+                            </div>
+                        </div>
+                        <div v-if="selected.center === '4'">
+                            <div class="ibox-content no-padding border-left-right">
+                                <img alt="image" class="img-fluid" src="/img/sofive/rok.jpg">
+                            </div>
+                        </div>
+                        <div v-if="selected.center === '5'">
+                            <div class="ibox-content no-padding border-left-right">
+                                <img alt="image" class="img-fluid" src="/img/sofive/col.jpg">
+                            </div>
                         </div>
                         <div class="ibox" style="text-align: center">
-                            <div class="ibox-title" style="padding: 15px 0px 0px 0px;">
-                                <h5>Support</h5>
-                            </div>
                             <div class="ibox-content text-center">
-                                <h3><i class="fa fa-phone"></i> +43 100 783 001</h3>
-                                <span class="medium">
-                                    Please contact with us if you have any questions.
-                                </span>
+                                <div v-if="selected.center === '1'">
+                                    <sofive-mdl-info />
+                                </div>
+                                <div v-if="selected.center === '2'">
+                                    <sofive-ekp-info />
+                                </div>
+                                <div v-if="selected.center === '3'">
+                                    <sofive-brk-info />
+                                </div>
+                                <div v-if="selected.center === '4'">
+                                    <sofive-rok-info />
+                                </div>
+                                <div v-if="selected.center === '5'">
+                                    <sofive-col-info />
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -180,14 +215,21 @@
     <script type="text/javascript" src="js/navigation.js"></script>
     <script type="text/javascript" src="js/header.js"></script>
     <script type="text/javascript" src="js/footer.js"></script>
+
+    <script type="text/javascript" src="js/info-mdl.js"></script>
+    <script type="text/javascript" src="js/info-brk.js"></script>
+    <script type="text/javascript" src="js/info-col.js"></script>
+    <script type="text/javascript" src="js/info-rok.js"></script>
+    <script type="text/javascript" src="js/info-ekp.js"></script>
     <!-- iCheck -->
     <script src="js/plugins/iCheck/icheck.min.js"></script>
     <script src="js/plugins/sweetalert/sweetalert.min.js"></script>
 
     <script src="https://js.stripe.com/v3/"></script>
+    <script src="js/plugins/typehead/bootstrap3-typeahead.min.js"></script>
 
     <script type="text/javascript">
-        let stripe = Stripe(`pk_test_POTzqQ3H0tD01tMZjPsijfhK`);
+        let stripe = Stripe(`pk_test_1AfVoOISnSBi3YL546sR6wVO00z2t7grwj`);
 
         let priceMap = {
             60: 135,
@@ -199,31 +241,44 @@
             el: '#wrapper',
             data: {
                 data: {
-                    date: "",
-                    subtitle: "",
-                    name: "",
-                    id: 0,
-                    facility_id: 0,
+                    season: {}
                 },
-                price: 0,
                 name: "",
+                customer: "",
                 email: "",
-                sel: "",
+                phone: "",
+                team: false,
+                selected: {
+                    center: "1"
+                }
             },
             mounted: function() {
                 const params = this.findGetParameter(),
                     parsed = JSON.parse(atob(params.sel));
                 this.data = parsed
-                console.log(this.data)
+                if (parsed.reg_type === "team") {
+                    this.team = true
+                }
 
-                this.price = priceMap[parsed.duration]
-                this.sel = params.sel
+                const center = this.getCenterCookie()
+                if (center) {
+                    this.selected.center = center
+                }
 
                 $(document).ready(function() {
                     $('.i-checks').iCheck({
                         checkboxClass: 'icheckbox_square-green',
                         radioClass: 'iradio_square-green',
                     });
+                    // $(".typeahead_2").typeahead({
+                    //     onSelect: function(item) {
+                    //         console.log(item);
+                    //     },
+                    //     ajax: {
+                    //         url: "http://localhost:8080/team",
+                    //         method: "get",
+                    //     }
+                    // });
                 });
 
             },
@@ -259,14 +314,63 @@
                             console.log(err)
                         })
                 },
-                stripeRedirect: function() {
-                    const redirect_url = 'http://localhost/paiement.html?sel=' + this.sel
+                register: function() {
+                    let payment = "Team Fee"
+                    if (this.data.reg_type !== "team") {
+                        payment = "Individual"
+                    }
+                    let paid = this.data.price
+                    let deposit = "No"
+                    if (document.querySelector('input[name="b"]:checked').value === "deposit") {
+                        paid = 195
+                        deposit = "Yes"
+                    }
+                    let season = "Summer"
+                    if (this.data.season.name.indexOf("Fall") !== (-1)) {
+                        season = "Fall"
+                    }
+                    if (this.data.season.name.indexOf("Spring") !== (-1)) {
+                        season = "Spring"
+                    }
+                    if (this.data.season.name.indexOf("Winter 1") !== (-1)) {
+                        season = "Winter 1"
+                    }
+                    if (this.data.season.name.indexOf("Winter 2") !== (-1)) {
+                        season = "Winter 2"
+                    }
+                    const d = {
+                        "product_type": this.data.product_type,
+                        "early_bird": "No", // TODO
+                        "center": this.data.center,
+                        "payment": payment,
+                        "deposit": deposit,
+                        "price": this.data.price,
+                        "name": this.data.name,
+                        "season": season,
+                        "date": moment().format("DD/MM/YYYY"),
+                        "team": this.name,
+                        "customer": this.customer,
+                        "email": this.email,
+                        "phone": this.phone,
+                        "paid": paid
+                    }
+                    console.log(d)
+                    this.$http.post("http://localhost:8080/product/registration", d)
+                        .then((resp) => {
+                            console.log(resp)
+                            this.stripeRedirect(resp.body.product.sku)
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                },
+                stripeRedirect: function(sku) {
                     stripe.redirectToCheckout({
                             items: [{
-                                sku: 'sku_FBJ279YfJ2Qesi',
+                                sku: sku,
                                 quantity: 1
                             }],
-                            successUrl: redirect_url,
+                            successUrl: 'https://scoreplay.io/',
                             cancelUrl: 'https://scoreplay.io/canceled',
                         })
                         .then(function(result) {
@@ -275,7 +379,17 @@
                                 displayError.textContent = result.error.message;
                             }
                         });
-                }
+                },
+                getCenterCookie: function() {
+                    var nameEQ = "center=";
+                    var ca = document.cookie.split(';');
+                    for (var i = 0; i < ca.length; i++) {
+                        var c = ca[i];
+                        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+                    }
+                    return null;
+                },
             }
         })
     </script>

@@ -221,12 +221,14 @@
                 name: "",
                 email: "",
                 product: {},
-                deposit: {}
+                deposit: {},
+                sel: ""
             },
             mounted: function() {
                 const params = this.findGetParameter(),
                     parsed = JSON.parse(atob(params.sel));
                 this.data = parsed
+                this.sel = params.sel
 
                 this.getPricing()
 
@@ -255,12 +257,14 @@
                     this.getPricingDetails("No")
                         .then((d) => {
                             this.product = d
+                            let p = this.product.price
+                            this.product.full_price = p
                             if (d.center === "Sofive Rockville, MD") {
-                                this.product.price = this.product.price / 1.1
+                                this.product.price = p / 1.1
                                 this.product["tax"] = "10%"
                             }
-                            if (this.selected.center === "4") {
-                                this.product.price = this.product.price / 1.05
+                            if (d.center === "Sofive Columbia, MD") {
+                                this.product.price = p / 1.05
                                 this.product["tax"] = "5%"
                             }
                             return this.getPricingDetails("Yes")
@@ -293,7 +297,7 @@
                     })
                 },
                 pay: function() {
-                    let paid = this.price
+                    let paid = this.product.full_price
                     let deposit = false
                     if (document.querySelector('input[name="a"]:checked').value === "deposit") {
                         paid = 50
