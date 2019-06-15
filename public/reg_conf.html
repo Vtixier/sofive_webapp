@@ -29,6 +29,42 @@
 
     <div id="wrapper">
 
+        <div class="modal inmodal fade" id="more_info_modal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Select your current team</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div v-if="team_search_loading">
+                            <div>
+                                <div class="sk-spinner sk-spinner-wave">
+                                    <div class="sk-rect1"></div>
+                                    <div class="sk-rect2"></div>
+                                    <div class="sk-rect3"></div>
+                                    <div class="sk-rect4"></div>
+                                    <div class="sk-rect5"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="vote-item" v-for="team in teams">
+                            <div class="row" v-on:click="selectTeam(team)">
+                                <div class="col-md-10">
+                                    <a href="#" class="vote-title">
+                                        {{team.name}}
+                                    </a>
+                                    <div class="vote-info">
+                                        <i class="fa fa-clock-o"></i> <a href="#">Season: <b>{{team.season.name}}</b></a><br />
+                                        <i class="fa fa-user"></i> <a href="#">League: <b>{{team.league.name}}</b></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div>
             <sofive-left-menu />
         </div>
@@ -66,6 +102,9 @@
                                 <h5>Cart Summary</h5>
                             </div>
                             <div class="ibox-content">
+                                <div v-if="data.early_bird" class="product-imitation" style="padding: 6px 0; color: white; background-color: #03793E">
+                                    {{data.early_bird}} !
+                                </div>
                                 <div class="panel panel-default">
                                     <div class="panel-body" style="text-align: center">
                                         <h3 style="color: #03793E"><i class="fa fa-futbol-o"></i> {{data.name}}</h3>
@@ -77,10 +116,10 @@
                                     Total
                                 </span>
                                 <h2 class="font-bold" v-if="team">
-                                    ${{data.price}}
+                                    ${{product.price/100}} <small v-if="product.tax">(+{{product.tax}} tax)</small>
                                 </h2>
                                 <h2 class="font-bold" v-else>
-                                    $100,00
+                                    $100,00 <small v-if="product.tax">(+{{product.tax}} tax)</small>
                                 </h2>
                                 <hr>
                                 <span class="text">
@@ -96,12 +135,15 @@
                                         </div>
                                         <div class="form-group row" v-if="team"><label class="col-sm-2 col-form-label">Team name</label>
                                             <div class="col-sm-10" style="margin-top: 1%">
-                                                <div class="i-checks" style="margin-bottom: 1%"><label> <input name="a" checked type="radio" value="full"> <i></i>Register existing team and roster</label></div>
+                                                <div class="i-checks" style="margin-bottom: 1%"><label> <input name="a" checked type="radio" value="existing"> <i></i>Register existing team and roster</label></div>
                                                 <div class="form-group row"><label class="col-sm-3 col-form-label">Team search</label>
-                                                    <div class="col-sm-9"><input type="text" placeholder="Search team" class="form-control"></div>
+                                                    <div class="col-sm-9">
+                                                        <div class="input-group"><input type="text" placeholder="Search team" class="form-control" v-on:keyup="search" v-model="team_search"><span class="input-group-append"> <button v-on:click="searchTeam()" type="button" class="btn btn-primary">Search
+                                                                </button> </span></div>
+                                                    </div>
                                                 </div>
 
-                                                <div class="i-checks" style="margin-bottom: 1%"><label> <input name="a" type="radio" value="half"> <i></i> Register new team</label></div>
+                                                <div class="i-checks" style="margin-bottom: 1%"><label> <input name="a" type="radio" value="new"> <i></i> Register new team</label></div>
                                                 <div class="form-group row"><label class="col-sm-3 col-form-label">Team name</label>
                                                     <div class="col-sm-9"><input type="text" placeholder="Enter team name" class="form-control" v-model="name"></div>
                                                 </div>
@@ -133,7 +175,7 @@
                                 <input type="text" placeholder="item..." class="typeahead_2 form-control" />
                             </div>
                         </div> -->
-                        <button type="button" class="btn btn-primary" style="margin-bottom: 10%" v-on:click="register"><i class="fa fa-shopping-cart"></i> Checkout</button>
+                        <button type="button" class="btn btn-primary" style="margin-bottom: 10%" v-on:click="stripeRedirect"><i class="fa fa-shopping-cart"></i> Checkout</button>
 
                         <div id="error-message"></div>
 
@@ -252,8 +294,12 @@
                 phone: "",
                 team: false,
                 selected: {
-                    center: "1"
-                }
+                    center: "1",
+                },
+                product: {},
+                teams: [],
+                team_search: "",
+                team_search_loading: false
             },
             mounted: function() {
                 const params = this.findGetParameter(),
@@ -270,20 +316,13 @@
                     this.selected.center = center
                 }
 
+                this.getRegistration()
+
                 $(document).ready(function() {
                     $('.i-checks').iCheck({
                         checkboxClass: 'icheckbox_square-green',
                         radioClass: 'iradio_square-green',
                     });
-                    // $(".typeahead_2").typeahead({
-                    //     onSelect: function(item) {
-                    //         console.log(item);
-                    //     },
-                    //     ajax: {
-                    //         url: "http://localhost:8080/team",
-                    //         method: "get",
-                    //     }
-                    // });
                 });
 
             },
@@ -319,15 +358,15 @@
                             console.log(err)
                         })
                 },
-                register: function() {
+                getBody: function() {
                     let payment = "Team Fee"
                     let paid = this.data.price
+                    let deposit = "No"
                     if (this.data.reg_type !== "team") {
                         payment = "Individual"
                         paid = 100
                     }
-                    let deposit = "No"
-                    if (document.querySelector('input[name="b"]:checked').value === "deposit") {
+                    if (document.querySelector('input[name="b"]:checked') && document.querySelector('input[name="b"]:checked').value === "deposit") {
                         paid = 195
                         deposit = "Yes"
                     }
@@ -344,39 +383,63 @@
                     if (this.data.season.name.indexOf("Winter 2") !== (-1)) {
                         season = "Winter 2"
                     }
-                    const d = {
+                    let early_bird = "No"
+                    if (this.data.early_bird) {
+                        early_bird = "Yes"
+                    }
+                    let team = this.name
+                    if (document.querySelector('input[name="a"]:checked') && document.querySelector('input[name="a"]:checked').value === "existing") {
+                        team = this.team_search
+                    }
+                    return {
                         "product_type": this.data.product_type,
-                        "early_bird": "No", // TODO
+                        "early_bird": early_bird,
                         "center": this.data.center,
                         "payment": payment,
                         "deposit": deposit,
                         "price": this.data.price,
                         "name": this.data.name,
                         "season": season,
-                        "date": moment().format("DD/MM/YYYY"),
-                        "team": this.name,
+                        "date": moment().format("DD/MM/YYYY HH:mm"),
+                        "team": team,
                         "customer": this.customer,
                         "email": this.email,
                         "phone": this.phone,
                         "paid": paid
                     }
-                    console.log(d)
-                    this.$http.post("http://localhost:8080/product/registration", d)
+                },
+                getRegistration: function() {
+                    const d = this.getBody()
+                    this.$http.post("http://localhost:8080/product/registration/get", d)
                         .then((resp) => {
                             console.log(resp)
-                            this.stripeRedirect(resp.body.product.sku)
+                            this.product = resp.body.product
+                            let p = this.product.price
+                            this.product.full_price = p
+                            if (d.center === "Sofive Rockville, MD") {
+                                this.product.price = Math.round(p / 1.1 * 100) / 100
+                                this.product["tax"] = "10%"
+                            }
+                            if (d.center === "Sofive Columbia, MD") {
+                                this.product.price = Math.round(p / 1.05 * 100) / 100
+                                this.product["tax"] = "5%"
+                            }
+                            // this.stripeRedirect(resp.body.product.sku)
                         })
                         .catch((err) => {
                             console.log(err)
                         })
                 },
-                stripeRedirect: function(sku) {
+                stripeRedirect: function() {
+                    const d = this.getBody(),
+                        self = this;
+                    const redirect_url = 'http://localhost/reg_done.html' + '?sel=' + btoa(JSON.stringify(d))
                     stripe.redirectToCheckout({
                             items: [{
-                                sku: sku,
+                                sku: self.product.sku,
                                 quantity: 1
                             }],
-                            successUrl: 'https://scoreplay.io/',
+                            successUrl: redirect_url,
                             cancelUrl: 'https://scoreplay.io/canceled',
                         })
                         .then(function(result) {
@@ -395,6 +458,34 @@
                         if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
                     }
                     return null;
+                },
+                selectTeam: function(team) {
+                    this.team_search = team.name + " (" + team.id + ")"
+                    $('#more_info_modal').modal('hide')
+                },
+                search: function(ele) {
+                    console.log("Search")
+                    if (ele.key === 'Enter') {
+                        console.log("Enter")
+                        this.searchTeam();
+                    }
+                },
+                searchTeam: function() {
+                    $('#more_info_modal').modal({
+                        keyboard: false
+                    })
+                    this.team_search_loading = true
+                    this.$http.post("http://localhost:8080/team/", {
+                            name: this.team_search,
+                            facility_id: this.selected.center
+                        })
+                        .then((resp) => {
+                            this.teams = resp.body
+                            this.team_search_loading = false
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
                 },
             }
         })

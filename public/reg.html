@@ -40,14 +40,16 @@
                         <div class="mediums m-t-xs">
                             Starts on : {{selected.league.start}}<br />
                             <span v-if="selected.league.start !== selected.league.end">Ends on : {{selected.league.end}}</span>
-                            <br /><br />${{selected.league.price}} Teams / $100 Free Agents
+                            <br /><br />
+                            <div v-if="selected.league.class">${{selected.league.price}} per class</div>
+                            <div v-else>${{selected.league.price}} Teams <span v-if="selected.league.agent">/ ${{selected.league.agent}} Free Agents</span></div>
                             <br>
                         </div>
                     </div>
                     <div class="modal-footer" style="text-align: left">
                         <div>
                             <button v-on:click="choose('team')" class="btn btn-primary">Register as team</button>
-                            <button v-on:click="choose('individual')" class="btn btn-primary">Register as an individual</button>
+                            <button v-on:click="choose('individual')" class="btn btn-primary">Register as a free agent</button>
                         </div>
                     </div>
                 </div>
@@ -196,7 +198,9 @@
                                 <div class="mediums m-t-xs">
                                     Starts on : {{league.start}}<br />
                                     <span v-if="league.start !== league.end">Ends on : {{league.end}}</span>
-                                    <br>${{league.price}} Teams / $100 Free Agents
+                                    <br>
+                                    <div v-if="league.class">${{league.price}} per class</div>
+                                    <div v-else>${{league.price}} Teams <span v-if="league.agent">/ ${{league.agent}} Free Agents</span></div>
                                     <br>
                                 </div>
                                 <button v-on:click="selectLeague(league)" type="button" class="btn btn-outline btn btn-primary" style="margin-top: 5%">
@@ -487,6 +491,16 @@
                                         const i = d.description.indexOf('Early Bird: ')
                                         d.early_bird = d.description.slice(i, i + 33)
                                     }
+                                    if (this.selected.product.name.toLowerCase().indexOf('league') !== (-1)) {
+                                        if (this.selected.product.name.toLowerCase().indexOf('adult') !== (-1)) {
+                                            d.agent = 100
+                                        } else {
+                                            d.agent = 160
+                                        }
+                                    }
+                                    if (this.selected.product.name.toLowerCase().indexOf('class') !== (-1)) {
+                                        d.class = true
+                                    }
                                     return d
                                 }));
                             })
@@ -552,7 +566,6 @@
                                                 .css('font-size', 'inherit');
                                         }
                                     }]
-
                                 });
                                 $(".select_tournament_age").select2({
                                     placeholder: "Select age group...",
@@ -607,7 +620,7 @@
                         product_type: this.selected.product.name,
                         center: this.selected.center
                     }
-                    window.location = "registration_confirmation.html?sel=" + btoa(JSON.stringify(d))
+                    window.location = "reg_conf.html?sel=" + btoa(JSON.stringify(d))
                 },
             }
         })

@@ -204,9 +204,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
 
-    <script src="js/plugins/dataTables/datatables.min.js"></script>
-    <script src="js/plugins/dataTables/dataTables.bootstrap4.min.js"></script>
-
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/1.5.1/vue-resource.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script src="js/plugins/datapicker/bootstrap-datepicker.js"></script>
@@ -221,6 +218,9 @@
     <script type="text/javascript" src="js/info-col.js"></script>
     <script type="text/javascript" src="js/info-rok.js"></script>
     <script type="text/javascript" src="js/info-ekp.js"></script>
+
+    <script src="js/plugins/dataTables/datatables.min.js"></script>
+    <script src="js/plugins/dataTables/dataTables.bootstrap4.min.js"></script>
 
     <!-- Page-Level Scripts -->
     <script>
@@ -303,7 +303,7 @@
                 this.selected.center = center
                 this.date = moment().format("MM-DD-YYYY")
                 endDate = moment().add(8, 'd').format("MM-DD-YYYY")
-                this.getCenters()
+                // this.getCenters()
                 $('.input-group.date').datepicker({
                     todayBtn: "linked",
                     keyboardNavigation: false,

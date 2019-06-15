@@ -260,11 +260,11 @@
                             let p = this.product.price
                             this.product.full_price = p
                             if (d.center === "Sofive Rockville, MD") {
-                                this.product.price = p / 1.1
+                                this.product.price = Math.round(p / 1.1 * 100) / 100
                                 this.product["tax"] = "10%"
                             }
                             if (d.center === "Sofive Columbia, MD") {
-                                this.product.price = p / 1.05
+                                this.product.price = Math.round(p / 1.05 * 100) / 100
                                 this.product["tax"] = "5%"
                             }
                             return this.getPricingDetails("Yes")
