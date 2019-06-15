@@ -33,7 +33,7 @@ Vue.component('sofive-col-info', {
                     <p>
                         <span data-type="normal" class="qode_icon_shortcode q_font_awsome_icon fa-lg  ">
                             <i class="qode_icon_font_awesome fa fa-thermometer-half qode_icon_element" style="color: #04b2e2;"></i>
-                        </span>&nbsp; &nbsp; Climate controlled lounge and field house
+                        </span>&nbsp; &nbsp; Fully AC-ed (incl. fieldhouse)
                     </p>
                     <p>
                         <span data-type="normal" class="qode_icon_shortcode q_font_awsome_icon fa-lg  ">

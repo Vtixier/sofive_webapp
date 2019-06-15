@@ -34,11 +34,11 @@
                         <h4 class="modal-title">{{selected.league.name}}</h4>
                     </div>
                     <div class="modal-body">
-                        <p v-if="selected.league.description">{{he.decode(selected.league.description)}}</p>
+                        <div v-if="selected.league.description" class="league_desc" v-html="selected.league.description"></div><br />
                         <div class="mediums m-t-xs">
                             Starts on : {{selected.league.start}}<br />
                             <span v-if="selected.league.start !== selected.league.end">Ends on : {{selected.league.end}}</span>
-                            <br /><br />${{selected.league.price}} Teams / $140 Free Agents
+                            <br /><br />${{selected.league.price}} Teams / $100 Free Agents
                             <br>
                         </div>
                     </div>
@@ -77,7 +77,7 @@
 
                 <div class="ibox-content m-b-sm border-bottom">
                     <div class="row">
-                        <div class="col-sm-3">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label class="col-form-label" for="status">
                                     <div v-if="loading.facility">
@@ -98,7 +98,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-sm-3">
+                        <div class="col-md-3">
                             <label class="col-form-label" for="status">
                                 <div v-if="loading.product">
                                     <div>
@@ -117,7 +117,7 @@
                                 <option v-for="product in products" :value="JSON.stringify(product)">{{product.name}}</option>
                             </select>
                         </div>
-                        <div class="col-sm-3" v-bind:style=" (seasons.length>1 || loading.season) ? 'display:block' : 'display:none' ">
+                        <div class="col-md-3 col-sm-12" v-bind:style=" (seasons.length>1 || loading.season) ? 'display:block' : 'display:none' ">
                             <label class="col-form-label" for="status">
                                 <div v-if="loading.season">
                                     <div>
@@ -136,7 +136,7 @@
                                 <option v-for="season in seasons" :value="JSON.stringify(season)">{{season.name}}</option>
                             </select>
                         </div>
-                        <div class="col-sm-3" v-bind:style=" youth ? 'display:block' : 'display:none' ">
+                        <div class="col-md-3 col-sm-12" v-bind:style=" youth ? 'display:block' : 'display:none' ">
                             <label class="col-form-label" for="status">
                                 <div v-if="loading.ages">
                                     <div>
@@ -155,7 +155,7 @@
                                 <option v-for="age in ages" :value="age">{{age}}</option>
                             </select>
                         </div>
-                        <div class="col-sm-3" v-bind:style=" tournaments.length ? 'display:block' : 'display:none' ">
+                        <div class="col-md-3 col-sm-12" v-bind:style=" tournaments.length ? 'display:block' : 'display:none' ">
                             <label class="col-form-label" for="status">
                             </label>
                             <select class="select_tournament_age form-control" style="width: 100%">
@@ -185,16 +185,19 @@
                 <div class="col-md-4" v-for="league in filtered_leagues">
                     <div class="ibox">
                         <div class="ibox-content product-box">
+                            <div v-if="league.early_bird" class="product-imitation" style="padding: 6px 0; color: white; background-color: #03793E">
+                                {{league.early_bird}} !
+                            </div>
                             <div class="product-desc">
                                 <small class="text-muted">{{league.season.name}}</small>
                                 <a href="#" class="product-name">{{league.name}}</a>
                                 <div class="mediums m-t-xs">
                                     Starts on : {{league.start}}<br />
                                     <span v-if="league.start !== league.end">Ends on : {{league.end}}</span>
-                                    <br>${{league.price}} Teams / $140 Free Agents
+                                    <br>${{league.price}} Teams / $100 Free Agents
                                     <br>
                                 </div>
-                                <button v-on:click="selectLeague(league)" type="button" class="btn btn-outline btn btn-primary" style="margin-top: 5%" data-toggle="modal" data-target="#more_info_modal">
+                                <button v-on:click="selectLeague(league)" type="button" class="btn btn-outline btn btn-primary" style="margin-top: 5%">
                                     Find out more
                                 </button>
                             </div>
@@ -264,7 +267,6 @@
 
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/1.5.1/vue-resource.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
-    <script type="text/javascript" src="js/he.js"></script>
 
     <script type="text/javascript" src="js/navigation.js"></script>
     <script type="text/javascript" src="js/header.js"></script>
@@ -384,6 +386,10 @@
                 getCenters: function() {
                     this.loading.facility = true
                     this.centers = []
+                    this.products = []
+                    this.selected.product = {}
+                    this.selected.season = ""
+                    this.selected.age = ""
                     return this.$http.get("http://localhost:8080/facility/")
                         .then((resp) => {
                             this.centers = resp.body;
@@ -463,13 +469,18 @@
                                             age = "Girls " + l.age.name
                                         }
                                     }
-                                    return {
+                                    let d = {
                                         ...l,
                                         season,
                                         start: moment(season.start_date, "YYYY-MM-DDTHH:mm:ss").format("MM-DD-YYYY"),
                                         end: moment(season.end_date, "YYYY-MM-DDTHH:mm:ss").format("MM-DD-YYYY"),
                                         age,
                                     }
+                                    if (d.description.indexOf("Early Bird: ") !== (-1)) {
+                                        const i = d.description.indexOf('Early Bird: ')
+                                        d.early_bird = d.description.slice(i, i + 33)
+                                    }
+                                    return d
                                 }));
                             })
                             .catch(no)
@@ -532,6 +543,9 @@
                 },
                 selectLeague: function(league) {
                     this.selected.league = league
+                    $('#more_info_modal').modal({
+                        keyboard: false
+                    })
                 },
                 flatten: function(arr) {
                     const self = this;

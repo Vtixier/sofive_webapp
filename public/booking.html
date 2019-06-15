@@ -19,6 +19,21 @@
     <link href="css/style.css" rel="stylesheet">
     <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-32x32.png" sizes="32x32" />
     <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" sizes="192x192" />
+
+    <style type="text/css">
+        @media only screen and (max-width: 768px) {
+            .pad-if-mob {
+                padding-top: 5%;
+            }
+        }
+
+        @media only screen and (min-width: 768px) {
+            .pad-if-mob {
+                padding-top: 0;
+            }
+        }
+    </style>
+
 </head>
 
 <body class="fixed-sidebar">
@@ -117,7 +132,9 @@
                             </select>
                         </div>
                     </div>
-                    <a v-on:click="search" class="btn btn-primary btn-rounded btn-block btn-outline" href="#"></i>Book a field</a>
+                    <div class="row pad-if-mob">
+                        <a v-on:click="search" class="btn btn-primary btn-rounded btn-block btn-outline" href="#"></i>Book a field</a>
+                    </div>
                 </div>
 
                 <div class="row" v-if="fields_loading">

@@ -76,8 +76,11 @@
                                 <span>
                                     Total
                                 </span>
-                                <h2 class="font-bold">
+                                <h2 class="font-bold" v-if="team">
                                     ${{data.price}}
+                                </h2>
+                                <h2 class="font-bold" v-else>
+                                    $100,00
                                 </h2>
                                 <hr>
                                 <span class="text">
@@ -106,7 +109,7 @@
                                         </div>
 
                                         <div class="hr-line-dashed"></div>
-                                        <div class="form-group row"><label class="col-sm-2 col-form-label">Preference<br />
+                                        <div class="form-group row" v-if="team"><label class="col-sm-2 col-form-label">Preference<br />
                                             </label>
 
                                             <div class="col-sm-10">
@@ -260,6 +263,8 @@
                     this.team = true
                 }
 
+                console.log("Parsed", parsed)
+
                 const center = this.getCenterCookie()
                 if (center) {
                     this.selected.center = center
@@ -316,10 +321,11 @@
                 },
                 register: function() {
                     let payment = "Team Fee"
+                    let paid = this.data.price
                     if (this.data.reg_type !== "team") {
                         payment = "Individual"
+                        paid = 100
                     }
-                    let paid = this.data.price
                     let deposit = "No"
                     if (document.querySelector('input[name="b"]:checked').value === "deposit") {
                         paid = 195
