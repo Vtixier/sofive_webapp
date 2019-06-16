@@ -93,7 +93,7 @@
                                     Date
                                 </label>
                                 <div class="input-group date">
-                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control" :value="moment().format('MM/DD/YYYY')">
+                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control" :value="date">
                                 </div>
                             </div>
                         </div>
@@ -480,7 +480,6 @@
                         if (this.selected.hour.indexOf('am') !== (-1)) {
                             const spl = this.selected.hour.split('am')
                             let hour = spl[0]
-                            console.log(hour, (hour.length === 1))
                             if (hour.length === 1) {
                                 hour = "0" + hour
                             }
@@ -513,7 +512,6 @@
                             time: time,
                             duration: parseInt(this.selected.duration)
                         }
-                        console.log(body)
                         this.$http.post("http://localhost:8080/event/", body)
                             .then((resp) => {
                                 if (resp.body.free.length == 0) {

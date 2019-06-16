@@ -272,8 +272,6 @@
                                     this.deposit = {
                                         ...dep
                                     }
-                                    console.log("Prod", this.product)
-                                    console.log("Deposit", this.deposit)
                                 })
                                 .catch((err) => {
                                     console.log(err)
@@ -314,7 +312,6 @@
                     }
                     this.$http.post("http://localhost:8080/event/book", d)
                         .then((resp) => {
-                            console.log(resp)
                             this.stripeRedirect(resp.body.booking_id, deposit)
                         })
                         .catch((err) => {
