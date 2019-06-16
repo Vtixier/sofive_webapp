@@ -118,7 +118,7 @@
                                 </div>
                                 <div class="form-group">
                                     <select class="select_season form-control" v-model="selected.minute">
-                                        <option v-for="minute in minutes" :value="minute">{{minute}}</option>
+                                        <option v-for="minute in filtered_minutes" :value="minute">{{minute}}</option>
                                     </select>
                                 </div>
                             </form>
@@ -440,7 +440,19 @@
                         if (this.selected.hour === this.filtered_times[this.filtered_times.length - 1]) {
                             return [this.durations[0]]
                         }
+                        if (this.selected.hour === this.filtered_times[this.filtered_times.length - 2]) {
+                            if (this.selected.minute === "00") {
+                                return this.durations
+                            }
+                            return this.durations.slice(0, 2)
+                        }
                         return this.durations
+                    },
+                    filtered_minutes: function() {
+                        if (this.selected.hour === this.filtered_times[this.filtered_times.length - 1]) {
+                            return [this.minutes[0]]
+                        }
+                        return this.minutes
                     }
                 },
                 mounted: function() {
