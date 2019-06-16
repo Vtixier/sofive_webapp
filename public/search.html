@@ -138,16 +138,6 @@
                     this.query = query
                     this.search(encodeURIComponent(query))
                 }
-                document.getElementById('top-search').onkeypress = function(e) {
-                    console.log(e)
-                    var event = e || window.event;
-                    var charCode = event.which || event.keyCode;
-
-                    if (charCode == '13') {
-                        window.location = "search.html?query=" + e.target.value
-                        return false;
-                    }
-                }
             },
             methods: {
                 findGetParameter: function() {

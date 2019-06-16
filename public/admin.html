@@ -70,14 +70,14 @@
                                             <td>{{registration.registration.email}}</td>
                                             <td>{{registration.registration.phone}}</td>
                                             <td>${{registration.product.price/100}}</td>
-                                            <td><input type="checkbox" class="i-checks" v-model="reg_done"></td>
+                                            <td><input name="validated" type="checkbox" class="i-checks" :value="registration.registration.id" v-model="reg_done"></td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
 
                             <div class="row">
-                                <div class="col-sm-12"><button type="button" class="btn btn-block btn-outline btn-primary">Validate</button></div>
+                                <div class="col-sm-12"><button type="button" class="btn btn-block btn-outline btn-primary" v-on:click="validate">Validate</button></div>
                             </div>
 
                         </div>
@@ -204,6 +204,18 @@
                             console.log(err.body.errors)
                         })
                 },
+                validate: function() {
+                    const validated = [...document.querySelectorAll('input[name="validated"]:checked')].map(e => (e.value))
+                    this.$http.post("http://localhost:8080/product/registrations/validate", {
+                            ids: validated
+                        })
+                        .then((resp) => {
+                            window.location.reload(false)
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                }
             }
         })
     </script>
