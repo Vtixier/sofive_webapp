@@ -101,9 +101,9 @@
                                         </div>
                                     </div>
                                 </label>
-                                <select class="select_center form-control">
-                                    <option></option>
-                                    <option v-for="center in centers" :value="JSON.stringify(center)">{{center.name}}</option>
+                                <select class="select_center form-control" v-model="selected.facility_id">
+                                    <option value="0">Select center</option>
+                                    <option v-for="center in centers" :value="center.id">{{center.name}}</option>
                                 </select>
                             </div>
                         </div>
@@ -298,8 +298,7 @@
                 leagues: [],
                 tournaments: [],
                 selected: {
-                    facility_id: "1",
-                    center: "",
+                    facility_id: "0",
                     product: {},
                     season: "",
                     age: "",
@@ -358,24 +357,24 @@
                     this.selected.facility_id = center
                 }
                 let self = this;
-                $(".select_center").select2({
-                    placeholder: "Select center...",
-                });
+                // $(".select_center").select2({
+                //     placeholder: "Select center...",
+                // });
                 $(".select_season").select2({
                     placeholder: "Select season...",
                 });
                 $(".select_product").select2({
                     placeholder: "Select program...",
                 });
-                $('.select_center').on('select2:select', function(e) {
-                    let doc = JSON.parse(e.target.value)
-                    self.selected.facility_id = doc.id
-                    self.selected.center = doc.name
-                    self.selected.product = {}
-                    $(".select_product").select2({
-                        placeholder: "Select program...",
-                    });
-                });
+                // $('.select_center').on('select2:select', function(e) {
+                //     let doc = JSON.parse(e.target.value)
+                //     self.selected.facility_id = doc.id
+                //     self.selected.center = doc.name
+                //     self.selected.product = {}
+                //     $(".select_product").select2({
+                //         placeholder: "Select program...",
+                //     });
+                // });
                 $('.select_product').on('select2:select', function(e) {
                     let doc = JSON.parse(e.target.value)
                     self.selected.product = doc
@@ -619,7 +618,7 @@
                 },
                 choose: function(reg_type) {
                     const d = {
-                        facility_id: parseInt(this.selected.center),
+                        facility_id: parseInt(this.centers.find(c => (c.id === this.selected.facility_id)).name),
                         ...this.selected.league,
                         reg_type,
                         product_type: this.selected.product.name,

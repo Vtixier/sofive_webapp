@@ -22,10 +22,6 @@
 
 <body class="fixed-sidebar">
 
-    <!--         <div class="alert alert-info text-center" style="margin-bottom: 0; background-color: #2f4050; color: white; border-width: 0;position: fixed; top: 0; left:0; width: 100%; height: 50px; z-index: 999;">
-        You are currently viewing the webapp for the <a class="alert-link" style="color: white" href="#">Sofive Broolyn</a> center.
-    </div> -->
-
     <div id="wrapper">
 
         <div>
@@ -73,8 +69,8 @@
                                         </div>
                                     </div>
                                 </label>
-                                <select class="select_center form-control">
-                                    <option></option>
+                                <select class="select_center form-control" v-model="selected.facility_id">
+                                    <option value="0"></option>
                                     <option v-for="center in centers" :value="center.id">{{center.name}}</option>
                                 </select>
                             </div>
@@ -271,33 +267,35 @@
                 standings: [],
                 standings_loading: false,
                 matches: [],
-                selected_center: "",
                 selected_season: "",
                 selected_league: "",
                 selected: {
-                    facility_id: null,
+                    facility_id: "0",
                     season_id: null,
                 }
             },
             mounted: function() {
                 const center = this.getCenterCookie()
-                this.selected_center = center
+                if (center) {
+                    this.selected.facility_id = center
+                    this.getSeasons(center)
+                }
                 let self = this;
-                $(".select_center").select2({
-                    placeholder: "Select or enter value...",
-                });
+                // $(".select_center").select2({
+                //     placeholder: "Select or enter value...",
+                // });
                 $(".select_season").select2({
                     placeholder: "Select or enter value...",
                 });
                 $(".select_league").select2({
                     placeholder: "Select or enter value...",
                 });
-                $('.select_center').on('select2:select', function(e) {
-                    let facility_id = e.target.value
-                    self.getSeasons(facility_id)
-                    self.selected_center = self.centers.find(c => (c.id == facility_id)).name
-                    self.selected.facility_id = facility_id
-                });
+                // $('.select_center').on('select2:select', function(e) {
+                //     let facility_id = e.target.value
+                //     self.getSeasons(facility_id)
+                //     self.selected_center = self.centers.find(c => (c.id == facility_id)).name
+                //     self.selected.facility_id = facility_id
+                // });
                 $('.select_season').on('select2:select', function(e) {
                     let doc = JSON.parse(e.target.value),
                         facility_id = doc.facility_id,
