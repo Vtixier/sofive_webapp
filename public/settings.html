@@ -84,6 +84,10 @@
                 info: ""
             },
             mounted: function() {
+                let isAdmin = this.getAdminCookie()
+                if (!isAdmin) {
+                    window.location = "http://localhost/login.html?url=http://localhost/setting.html"
+                }
                 const self = this;
                 $('.custom-file-input').on('change', function() {
                     let fileName = $(this).val().split('\\').pop();
@@ -92,6 +96,16 @@
                 });
             },
             methods: {
+                getAdminCookie: function() {
+                    var nameEQ = "admin=";
+                    var ca = document.cookie.split(';');
+                    for (var i = 0; i < ca.length; i++) {
+                        var c = ca[i];
+                        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+                    }
+                    return null;
+                },
                 uploadFile: function() {
 
                     if (document.querySelector('.custom-file-input').files.length == 0) {

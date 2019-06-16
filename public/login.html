@@ -34,11 +34,10 @@
 
                 <div class="middle-box text-center loginscreen animated fadeInDown">
                     <div>
-                        <form class="m-t" role="form" action="index.html">
-                            <div class="form-group">
-                                <input type="password" class="form-control" placeholder="Password" required="">
-                            </div>
-                            <button type="submit" class="btn btn-primary block full-width m-b">Login</button>
+                        <div class="form-group">
+                            <input type="password" class="form-control" placeholder="Password" required="" v-model="password">
+                        </div>
+                        <button v-on:click="setCookie" class="btn btn-primary block full-width m-b">Login</button>
                     </div>
                 </div>
                 <div>
@@ -71,189 +70,100 @@
     <script type="text/javascript" src="js/footer.js"></script>
 
     <script type="text/javascript">
+        var md5 = function(d) {
+            result = M(V(Y(X(d), 8 * d.length)));
+            return result.toLowerCase()
+        };
+
+        function M(d) {
+            for (var _, m = "0123456789ABCDEF", f = "", r = 0; r < d.length; r++) _ = d.charCodeAt(r), f += m.charAt(_ >>> 4 & 15) + m.charAt(15 & _);
+            return f
+        }
+
+        function X(d) {
+            for (var _ = Array(d.length >> 2), m = 0; m < _.length; m++) _[m] = 0;
+            for (m = 0; m < 8 * d.length; m += 8) _[m >> 5] |= (255 & d.charCodeAt(m / 8)) << m % 32;
+            return _
+        }
+
+        function V(d) {
+            for (var _ = "", m = 0; m < 32 * d.length; m += 8) _ += String.fromCharCode(d[m >> 5] >>> m % 32 & 255);
+            return _
+        }
+
+        function Y(d, _) {
+            d[_ >> 5] |= 128 << _ % 32, d[14 + (_ + 64 >>> 9 << 4)] = _;
+            for (var m = 1732584193, f = -271733879, r = -1732584194, i = 271733878, n = 0; n < d.length; n += 16) {
+                var h = m,
+                    t = f,
+                    g = r,
+                    e = i;
+                f = md5_ii(f = md5_ii(f = md5_ii(f = md5_ii(f = md5_hh(f = md5_hh(f = md5_hh(f = md5_hh(f = md5_gg(f = md5_gg(f = md5_gg(f = md5_gg(f = md5_ff(f = md5_ff(f = md5_ff(f = md5_ff(f, r = md5_ff(r, i = md5_ff(i, m = md5_ff(m, f, r, i, d[n + 0], 7, -680876936), f, r, d[n + 1], 12, -389564586), m, f, d[n + 2], 17, 606105819), i, m, d[n + 3], 22, -1044525330), r = md5_ff(r, i = md5_ff(i, m = md5_ff(m, f, r, i, d[n + 4], 7, -176418897), f, r, d[n + 5], 12, 1200080426), m, f, d[n + 6], 17, -1473231341), i, m, d[n + 7], 22, -45705983), r = md5_ff(r, i = md5_ff(i, m = md5_ff(m, f, r, i, d[n + 8], 7, 1770035416), f, r, d[n + 9], 12, -1958414417), m, f, d[n + 10], 17, -42063), i, m, d[n + 11], 22, -1990404162), r = md5_ff(r, i = md5_ff(i, m = md5_ff(m, f, r, i, d[n + 12], 7, 1804603682), f, r, d[n + 13], 12, -40341101), m, f, d[n + 14], 17, -1502002290), i, m, d[n + 15], 22, 1236535329), r = md5_gg(r, i = md5_gg(i, m = md5_gg(m, f, r, i, d[n + 1], 5, -165796510), f, r, d[n + 6], 9, -1069501632), m, f, d[n + 11], 14, 643717713), i, m, d[n + 0], 20, -373897302), r = md5_gg(r, i = md5_gg(i, m = md5_gg(m, f, r, i, d[n + 5], 5, -701558691), f, r, d[n + 10], 9, 38016083), m, f, d[n + 15], 14, -660478335), i, m, d[n + 4], 20, -405537848), r = md5_gg(r, i = md5_gg(i, m = md5_gg(m, f, r, i, d[n + 9], 5, 568446438), f, r, d[n + 14], 9, -1019803690), m, f, d[n + 3], 14, -187363961), i, m, d[n + 8], 20, 1163531501), r = md5_gg(r, i = md5_gg(i, m = md5_gg(m, f, r, i, d[n + 13], 5, -1444681467), f, r, d[n + 2], 9, -51403784), m, f, d[n + 7], 14, 1735328473), i, m, d[n + 12], 20, -1926607734), r = md5_hh(r, i = md5_hh(i, m = md5_hh(m, f, r, i, d[n + 5], 4, -378558), f, r, d[n + 8], 11, -2022574463), m, f, d[n + 11], 16, 1839030562), i, m, d[n + 14], 23, -35309556), r = md5_hh(r, i = md5_hh(i, m = md5_hh(m, f, r, i, d[n + 1], 4, -1530992060), f, r, d[n + 4], 11, 1272893353), m, f, d[n + 7], 16, -155497632), i, m, d[n + 10], 23, -1094730640), r = md5_hh(r, i = md5_hh(i, m = md5_hh(m, f, r, i, d[n + 13], 4, 681279174), f, r, d[n + 0], 11, -358537222), m, f, d[n + 3], 16, -722521979), i, m, d[n + 6], 23, 76029189), r = md5_hh(r, i = md5_hh(i, m = md5_hh(m, f, r, i, d[n + 9], 4, -640364487), f, r, d[n + 12], 11, -421815835), m, f, d[n + 15], 16, 530742520), i, m, d[n + 2], 23, -995338651), r = md5_ii(r, i = md5_ii(i, m = md5_ii(m, f, r, i, d[n + 0], 6, -198630844), f, r, d[n + 7], 10, 1126891415), m, f, d[n + 14], 15, -1416354905), i, m, d[n + 5], 21, -57434055), r = md5_ii(r, i = md5_ii(i, m = md5_ii(m, f, r, i, d[n + 12], 6, 1700485571), f, r, d[n + 3], 10, -1894986606), m, f, d[n + 10], 15, -1051523), i, m, d[n + 1], 21, -2054922799), r = md5_ii(r, i = md5_ii(i, m = md5_ii(m, f, r, i, d[n + 8], 6, 1873313359), f, r, d[n + 15], 10, -30611744), m, f, d[n + 6], 15, -1560198380), i, m, d[n + 13], 21, 1309151649), r = md5_ii(r, i = md5_ii(i, m = md5_ii(m, f, r, i, d[n + 4], 6, -145523070), f, r, d[n + 11], 10, -1120210379), m, f, d[n + 2], 15, 718787259), i, m, d[n + 9], 21, -343485551), m = safe_add(m, h), f = safe_add(f, t), r = safe_add(r, g), i = safe_add(i, e)
+            }
+            return Array(m, f, r, i)
+        }
+
+        function md5_cmn(d, _, m, f, r, i) {
+            return safe_add(bit_rol(safe_add(safe_add(_, d), safe_add(f, i)), r), m)
+        }
+
+        function md5_ff(d, _, m, f, r, i, n) {
+            return md5_cmn(_ & m | ~_ & f, d, _, r, i, n)
+        }
+
+        function md5_gg(d, _, m, f, r, i, n) {
+            return md5_cmn(_ & f | m & ~f, d, _, r, i, n)
+        }
+
+        function md5_hh(d, _, m, f, r, i, n) {
+            return md5_cmn(_ ^ m ^ f, d, _, r, i, n)
+        }
+
+        function md5_ii(d, _, m, f, r, i, n) {
+            return md5_cmn(m ^ (_ | ~f), d, _, r, i, n)
+        }
+
+        function safe_add(d, _) {
+            var m = (65535 & d) + (65535 & _);
+            return (d >> 16) + (_ >> 16) + (m >> 16) << 16 | 65535 & m
+        }
+
+        function bit_rol(d, _) {
+            return d << _ | d >>> 32 - _
+        }
+
+
         var app = new Vue({
             el: '#wrapper',
             data: {
-                centers: [],
-                products: [],
-                seasons: [],
-                leagues: [],
-                selected: {
-                    facility_id: "1",
-                    product: {},
-                    season: {},
-                    age: "",
-                    league: {
-                        season: {}
-                    }
-                },
-                loading: {
-                    facility: false,
-                    products: false,
-                    seasons: false,
-                    age: false,
-                    league: false
-                }
-            },
-            computed: {
-                youth: function() {
-                    if (!this.selected.product.name) {
-                        return false
-                    }
-                    return (this.selected.product.name.toLowerCase().indexOf('youth') !== (-1))
-                },
-                ages: function() {
-                    const ages = this.leagues.map((l) => (l.age))
-                    return [...new Set(ages)].sort()
-                },
-                filtered_leagues: function() {
-                    if (!this.youth) {
-                        return this.leagues
-                    }
-                    if (this.selected.age === "") {
-                        return this.leagues
-                    }
-                    return this.leagues.filter(l => (l.age === this.selected.age))
-                }
+                password: "",
+                url: ""
             },
             mounted: function() {
-                const center = this.getCenterCookie()
-                if (center) {
-                    this.selected.facility_id = center
-                }
-                let self = this;
-                $(".select_center").select2({
-                    placeholder: "Select center...",
-                });
-                $(".select_season").select2({
-                    placeholder: "Select season...",
-                });
-                $(".select_product").select2({
-                    placeholder: "Select program...",
-                });
-                $('.select_center').on('select2:select', function(e) {
-                    let facility_id = e.target.value
-                    self.selected.facility_id = facility_id
-                });
-                $('.select_product').on('select2:select', function(e) {
-                    let doc = JSON.parse(e.target.value)
-                    self.selected.product = doc
-                    self.getSeasons()
-                });
-                $('.select_season').on('select2:select', function(e) {
-                    let doc = JSON.parse(e.target.value)
-                    self.selected.season = doc
-                    self.getEvents(doc.id)
-                });
-                $('.select_age').on('select2:select', function(e) {
-                    self.selected.age = e.target.value
-                });
-                this.getCenters()
-                this.getProducts()
+                const params = this.findGetParameter()
+                this.url = params.url;
             },
             methods: {
-                getCenters: function() {
-                    this.loading.facility = true
-                    this.centers = []
-                    return this.$http.get("http://localhost:8080/facility/")
-                        .then((resp) => {
-                            this.centers = resp.body;
-                            this.loading.facility = false
-                        })
-                        .catch((err) => {
-                            console.log(err.body.errors)
-                        })
+                findGetParameter: function() {
+                    var queryDict = {}
+                    decodeURI(location.search).substr(1).split("&").forEach(function(item) {
+                        queryDict[item.split("=")[0]] = item.split("=")[1]
+                    })
+                    return queryDict
                 },
-                getProducts: function() {
-                    this.products = []
-                    this.loading.product = true
-                    this.$http.get("http://localhost:8080/program/")
-                        .then((resp) => {
-                            this.products = resp.body;
-                            this.loading.product = false
-                            this.$nextTick(function() {
-                                $(".select_age").select2({
-                                    placeholder: "Select age group...",
-                                });
-                            })
-                        })
-                        .catch((err) => {
-                            console.log(err.body.errors)
-                        })
-                },
-                getSeasons: function(facility_id) {
-                    this.seasons = []
-                    this.loading.season = true
-                    const body = {
-                        "facility_id": this.selected.facility_id,
-                        "program_id": this.selected.product.id,
-                        "date": "2019-06-04"
+                setCookie: function() {
+                    const hashed = md5(this.password)
+                    console.log("Hashed", hashed)
+                    if (hashed !== "93c8402bb6229cc5ae31b043838af97b") {
+                        console.log("Wrong password !")
+                        return
                     }
-                    this.$http.post("http://localhost:8080/program/seasons", body)
-                        .then((resp) => {
-                            this.seasons = resp.body;
-                            this.loading.season = false
-                        })
-                        .catch((err) => {
-                            console.log(err.body.errors)
-                        })
+                    var date = new Date();
+                    date.setTime(date.getTime() + (9999 * 24 * 60 * 60 * 1000));
+                    let expires = "; expires=" + date.toUTCString();
+                    document.cookie = "admin=true" + expires + "; path=/";
+                    window.location = this.url
                 },
-                getEvents: function(season_id) {
-                    this.leagues = []
-                    this.loading.league = true
-                    const body = {
-                        "season_id": season_id,
-                    }
-                    this.$http.post("http://localhost:8080/program/leagues", body)
-                        .then((resp) => {
-                            this.leagues = resp.body.map(l => {
-                                const season = this.seasons.find(s => (parseInt(s.id) === l.season_id))
-                                let age = ""
-                                if (this.youth) {
-                                    if (l.sex === "m") {
-                                        age = "Boys " + l.age.name
-                                    } else {
-                                        age = "Girls " + l.age.name
-                                    }
-                                }
-                                console.log("Age", age)
-                                return {
-                                    ...l,
-                                    season,
-                                    start: moment(season.start_date, "YYYY-MM-DDTHH:mm:ss").format("MM-DD-YYYY"),
-                                    end: moment(season.end_date, "YYYY-MM-DDTHH:mm:ss").format("MM-DD-YYYY"),
-                                    age,
-                                }
-                            });
-                            this.loading.league = false
-                        })
-                        .catch((err) => {
-                            console.log(err.body.errors)
-                        })
-                },
-                dateSortFunc: function(a, b) {
-                    const diff = a.moment_date.diff(b.moment_date, 'seconds')
-                    if (diff > 0) {
-                        return 1
-                    } else if (diff < 0) {
-                        return -1
-                    } else {
-                        return 0
-                    }
-                },
-                getCenterCookie: function() {
-                    var nameEQ = "center=";
-                    var ca = document.cookie.split(';');
-                    for (var i = 0; i < ca.length; i++) {
-                        var c = ca[i];
-                        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
-                        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
-                    }
-                    return null;
-                },
-                selectLeague: function(league) {
-                    this.selected.league = league
-                }
             }
         })
     </script>

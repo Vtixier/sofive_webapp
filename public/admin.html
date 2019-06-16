@@ -127,9 +127,23 @@
                 reg_done: []
             },
             mounted: function() {
+                let isAdmin = this.getAdminCookie()
+                if (!isAdmin) {
+                    window.location = "http://localhost/login.html?url=http://localhost/admin.html"
+                }
                 this.getRegistrations()
             },
             methods: {
+                getAdminCookie: function() {
+                    var nameEQ = "admin=";
+                    var ca = document.cookie.split(';');
+                    for (var i = 0; i < ca.length; i++) {
+                        var c = ca[i];
+                        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+                    }
+                    return null;
+                },
                 getRegistrations: function() {
                     this.registrations = []
                     this.$http.get("http://localhost:8080/product/registrations")
