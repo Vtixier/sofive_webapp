@@ -3,10 +3,7 @@ Vue.component("sofive-footer", {
   <div class="marge">
 		<div class="footer">
             <div class="float-right">
-                Powered by <a href="https://scoreplay.io">ScorePlay</a>
-            </div>
-            <div>
-                <strong> <img src="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-32x32.png" style="width: 20px" /> Sofive Soccer Center</strong>
+                <strong> Powered by : <a href="https://scoreplay.io"> <img src="img/sofive/logo_vert.png" style="width: 115px; margin-bottom: 2%;"/></strong></a>
             </div>
         </div>
   </div>`,
