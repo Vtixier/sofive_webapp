@@ -4,17 +4,11 @@ Vue.component('sofive-header', {
                 <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
                     <div class="navbar-header">
                         <a class="navbar-minimalize minimalize-styl-2 btn btn-outline btn-default hide-lg" href="#"><i class="fa fa-bars"></i> <b>Menu</b></a>
-                        <a class="minimalize-styl-2 btn btn-outline btn-default hide-sm" href="#"><i class="fa fa-search"></i> </a>
-                        <form role="search" class="navbar-form-custom" action="search_results.html">
-                            <div class="form-group">
-                                <input type="text" placeholder="Search for my team..." class="form-control" name="top-search" id="top-search">
-                           </div>
-                        </form>
                     </div>
                     <ul class="nav navbar-top-links navbar-right">
-                        <li>
+                        <!-- <li>
                             <span class="m-r-sm text-muted welcome-message">Welcome to Sofive Soccer Center</span>
-                        </li>
+                        </li> -->
                         <!-- <li class="dropdown">
                             <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
                                 <i class="fa fa-envelope"></i> <span class="label label-warning">1</span>
@@ -70,16 +64,4 @@ Vue.component('sofive-header', {
                 </nav>
 
             </div>`,
-  props: [],
-  mounted: function() {
-    document.getElementById('top-search').onkeypress = function(e) {
-        var event = e || window.event;
-        var charCode = event.which || event.keyCode;
-
-        if ( charCode == '13' ) {
-          window.location = "search.html?query="+e.target.value
-          return false;
-        }
-    }
-  }
 });

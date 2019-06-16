@@ -391,6 +391,9 @@
                     if (document.querySelector('input[name="a"]:checked') && document.querySelector('input[name="a"]:checked').value === "existing") {
                         team = this.team_search
                     }
+                    if (!this.team) {
+                        team = "Free Agent"
+                    }
                     return {
                         "product_type": this.data.product_type,
                         "early_bird": early_bird,
@@ -400,7 +403,7 @@
                         "price": this.data.price,
                         "name": this.data.name,
                         "season": season,
-                        "date": moment().format("DD/MM/YYYY HH:mm"),
+                        "date": moment().format("DD/MM/YYYY h:mmA"),
                         "team": team,
                         "customer": this.customer,
                         "email": this.email,
