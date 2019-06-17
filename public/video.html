@@ -198,11 +198,20 @@
         <script type="text/javascript" src="js/footer.js"></script>
 
         <script type="text/javascript">
+
+            const facilityMap = {
+                "1": "Meadowlands",
+                "2": "ElkinsPark",
+                "3": "Brooklyn",
+                "4": "Rockville",
+                "5": "Columbia",
+            }
+
             var app = new Vue({
                 el: '#wrapper',
                 data: {
                     date: "",
-                    centers: ["Meadowlands", "Brooklyn", "Rockville", "ElkinsPark"],
+                    centers: ["Meadowlands", "Brooklyn", "Rockville", "ElkinsPark", "Columbia"],
                     facility_loading: false,
                     recordings: [],
                     times: ["12 am", "7 am", "8 am", "9 am", "10 am", "11 am", "12 pm", "1 pm", "2 pm", "3 pm", "4 pm", "5 pm", "6 pm", "7 pm", "8 pm", "9 pm", "10 pm", "11 pm"],
@@ -297,6 +306,10 @@
                     }
                 },
                 mounted: function() {
+                    const center = this.getCenterCookie()
+                    if (center) {
+                        this.selected.center = facilityMap[center]
+                    }
                     const self = this;
                     this.date = moment().subtract(1, "d").format("MM-DD-YYYY")
                     this.resetLoaded()
