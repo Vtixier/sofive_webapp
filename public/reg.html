@@ -86,7 +86,7 @@
 
                 <div class="ibox-content m-b-sm border-bottom">
                     <div class="row">
-                        <div class="col-md-3 col-sm-12">
+                        <div class="col-sm-12 col-md-3">
                             <div class="form-group">
                                 <label class="col-form-label" for="status">
                                     <div v-if="loading.facility">
@@ -107,7 +107,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-3 col-sm-12">
+                        <div class="col-sm-12 col-md-3">
                             <label class="col-form-label" for="status">
                                 <div v-if="loading.product">
                                     <div>
@@ -618,11 +618,11 @@
                 },
                 choose: function(reg_type) {
                     const d = {
-                        facility_id: parseInt(this.centers.find(c => (c.id === this.selected.facility_id)).name),
+                        facility_id: parseInt(this.selected.facility_id),
                         ...this.selected.league,
                         reg_type,
                         product_type: this.selected.product.name,
-                        center: this.selected.center
+                        center: this.centers.find(c => (c.id === this.selected.facility_id)).name
                     }
                     window.location = "reg_conf.html?sel=" + btoa(JSON.stringify(d))
                 },
