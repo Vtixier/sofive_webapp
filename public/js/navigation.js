@@ -26,16 +26,16 @@ Vue.component('sofive-left-menu', {
                         <a href="standings.html"><i class="fa fa-trophy"></i><span class="nav-label">Schedule & standings</span></a>
                     </li>
                     <li>
-                        <a href="search.html"><i class="fa fa-users"></i><span class="nav-label">Team</span></a>
+                        <a href="search.html"><i class="fa fa-users"></i><span class="nav-label">Find your team</span></a>
                     </li>
                     <li>
                         <a href="video.html"><i class="fa fa-video-camera"></i><span class="nav-label">Videos</span></a>
                     </li>
                     <li>
-                        <a href="book.html"><i class="fa fa-calendar"></i><span class="nav-label">Field booking</span></a>
+                        <a href="book.html"><i class="fa fa-calendar"></i><span class="nav-label">Book a field</span></a>
                     </li>
                     <li>
-                        <a href="reg.html"><i class="fa fa-plus-square-o"></i><span class="nav-label">Leagues & tournaments registration</span></a>
+                        <a href="reg.html"><i class="fa fa-plus-square-o"></i><span class="nav-label">League & tournament registration</span></a>
                     </li>
                 </ul>
             </div>

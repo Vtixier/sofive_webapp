@@ -1,7 +1,7 @@
 Vue.component('sofive-brk-info', {
 	template: `
 	<div class="wpb_wrapper">
-            <h3><i class="fa fa-phone"></i> +1 347-745-7544</h3>
+            <h3><i class="fa fa-phone"></i><a href="tel:+13477457544"> +1 347-745-7544</h3></a>
         <span class="medium">
             Please contact with us if you have any questions.
         </span><br/><br/>
@@ -16,8 +16,8 @@ Vue.component('sofive-brk-info', {
                 </span></div>
             <div class="wpb_text_column wpb_content_element ">
                 <div class="wpb_wrapper">
-                    <p style="text-align: left;">Address: <a style="text-decoration: underline;">2015 Pitkin Ave, Brooklyn, NY 11207</a><br>
-                        Email: brooklyn@sofive.com<br>
+                    <p style="text-align: left;">Address: <a href="https://www.google.com/maps/place/Sofive+Brooklyn/@40.672456,-73.9005097,17z/data=!3m1!4b1!4m5!3m4!1s0x89c25df263532bbf:0x2513639a2bb1c454!8m2!3d40.672456!4d-73.898321">2015 Pitkin Ave, Brooklyn, NY 11207</a><br>
+                        Email: <a href="mailto:brooklyn@sofive.com"> brooklyn@sofive.com<br></a>
                         Open weekdays from 9:00 am to 1:00 am and weekends 7:00 am to 1:00 am</p>
                 </div>
             </div>

@@ -1,7 +1,7 @@
 Vue.component('sofive-rok-info', {
 	template: `
 	<div class="wpb_wrapper">
-            <h3><i class="fa fa-phone"></i> +1 301-321-8484</h3>
+            <h3><i class="fa fa-phone"></i><a href="tel:+13013218484"> +1 301-321-8484</a></h3>
         <span class="medium">
             Please contact with us if you have any questions.
         </span><br/><br/>
@@ -16,8 +16,8 @@ Vue.component('sofive-rok-info', {
                 </span></div>
             <div class="wpb_text_column wpb_content_element ">
                 <div class="wpb_wrapper">
-                    <p style="text-align: left;">Address: <a style="text-decoration: underline;">1008 Westmore Ave, Rockville, MD 20850</a><br>
-                        Email: rockville@sofive.com<br>
+                    <p style="text-align: left;">Address: <a href="https://www.google.com/maps/place/Sofive+Rockville/@39.0984284,-77.1515139,17z/data=!3m1!4b1!4m5!3m4!1s0x89b7cd2df8b52db5:0x79bca813a07af612!8m2!3d39.0984284!4d-77.1493252">1008 Westmore Ave, Rockville, MD 20850</a><br>
+                        Email: <a href:"mailto:rockville@sofive.com">rockville@sofive.com</a><br>
                         Open weekdays from 9:00 am to 1:00 am and weekends 7:00 am to 1:00 am</p>
                 </div>
             </div>

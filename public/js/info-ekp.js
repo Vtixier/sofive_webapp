@@ -1,7 +1,7 @@
 Vue.component('sofive-ekp-info', {
 	template: `
 	<div class="wpb_wrapper">
-            <h3><i class="fa fa-phone"></i> +1 215-544-2626</h3>
+            <h3><i class="fa fa-phone"></i><a href="tel:+12155442626"> +1 215-544-2626</a></h3>
         <span class="medium">
             Please contact with us if you have any questions.
         </span><br/><br/>
@@ -16,8 +16,8 @@ Vue.component('sofive-ekp-info', {
                 </span></div>
             <div class="wpb_text_column wpb_content_element ">
                 <div class="wpb_wrapper">
-                    <p style="text-align: left;">Address: <a style="text-decoration: underline;">46 Church Road, Elkins Park, PA 19027</a><br>
-                        Email: elkinspark@sofive.com<br>
+                    <p style="text-align: left;">Address: <a href="https://www.google.com/maps/place/Sofive+Elkins+Park/@40.069564,-75.1072147,17z/data=!3m1!4b1!4m5!3m4!1s0x89c6b6d5007423b9:0x54f10a48bb80b6be!8m2!3d40.069564!4d-75.105026">46 Church Road, Elkins Park, PA 19027</a><br>
+                        Email:<a href:"mailto:elkinspark@sofive.com" elkinspark@sofive.com<br>
                         Open weekdays from 9:00 am to 12:00 am and weekends from 7:00 am to 12:00 am</p>
                 </div>
             </div>

@@ -1,7 +1,7 @@
 Vue.component('sofive-mdl-info', {
 	template: `
 	<div class="wpb_wrapper">
-            <h3><i class="fa fa-phone"></i> +1 201-345-5434</h3>
+            <h3><i class="fa fa-phone"></i><a href="tel:+12013455434"> +1 201-345-5434</a></h3>
         <span class="medium">
             Please contact with us if you have any questions.
         </span><br/><br/>
@@ -16,8 +16,8 @@ Vue.component('sofive-mdl-info', {
                 </span></div>
             <div class="wpb_text_column wpb_content_element ">
                 <div class="wpb_wrapper">
-                    <p style="text-align: left;">Address: <a style="text-decoration: underline;">2 Palmer Terrace, Carlstadt, NJ 07072</a><br>
-                        Email: meadowlands@sofive.com<br>
+                    <p style="text-align: left;">Address: <a href="https://www.google.com/maps/place/Sofive+Meadowlands/@40.069564,-75.1072147,17z/data=!4m5!3m4!1s0x89c2f867012e1e37:0xc9dab7b2ca03874a!8m2!3d40.824785!4d-74.068268">2 Palmer Terrace, Carlstadt, NJ 07072</a><br>
+                        Email: <a href:"mailto:meadowlands@sofive.com">meadowlands@sofive.com</a><br>
                         Open weekdays from 9:00 am to 1:00 am and weekends 7:00 am to 1:00 am</p>
                 </div>
             </div>
