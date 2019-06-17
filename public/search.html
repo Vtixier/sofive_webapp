@@ -7,6 +7,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Sofive Soccer Center</title>
+    <meta name="viewport" content="width=660,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link rel="apple-touch-icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" />
+    <meta name="apple-mobile-web-app-title" content="Sofive">
+    <style type="text/css">
+        body {
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+        }
+    </style>
 
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
@@ -50,7 +63,9 @@
                 <div class="col-lg-2"></div>
                 <div class="col-lg-8">
                     <div class="form-group">
-                        <input type="text" placeholder="Search for a team..." :value="query" class="form-control" name="top-search" v-on:keyup.enter="searchBis">
+                        <div class="input-group"><input type="text" placeholder="Search for a team..." v-model="query" class="form-control" name="top-search" v-on:keyup.enter="search">
+                            <span class="input-group-append"> <button v-on:click="search()" type="button" class="btn btn-primary">Search
+                                </button> </span></div>
                     </div>
                 </div>
             </div>
@@ -129,7 +144,8 @@
                 teams: [],
                 colors: ["#1ab394", "#23c6c8", "#1c84c6", "#f8ac59", "#ed5565", "#d1dade"],
                 facilities: {},
-                loading: false
+                loading: false,
+                center: ""
             },
             mounted: function() {
                 const params = this.findGetParameter(),
@@ -138,6 +154,12 @@
                     this.query = query
                     this.search(encodeURIComponent(query))
                 }
+
+                const center = this.getCenterCookie()
+                if (center) {
+                    this.center = center
+                }
+
             },
             methods: {
                 findGetParameter: function() {
@@ -147,10 +169,11 @@
                     })
                     return queryDict
                 },
-                search: function(query) {
+                search: function() {
                     this.loading = true
                     this.$http.post("http://localhost:8080/team/", {
-                            name: query
+                            name: this.query,
+                            facility_id: this.center
                         })
                         .then((resp) => {
                             resp.body.map(t => {
@@ -171,8 +194,15 @@
                             console.log(err)
                         })
                 },
-                searchBis: function(e) {
-                    window.location = "search.html?query=" + encodeURIComponent(e.target.value)
+                getCenterCookie: function() {
+                    var nameEQ = "center=";
+                    var ca = document.cookie.split(';');
+                    for (var i = 0; i < ca.length; i++) {
+                        var c = ca[i];
+                        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+                    }
+                    return null;
                 },
                 gotoTeam: function(team) {
                     window.location = "team.html?id=" + team.id
