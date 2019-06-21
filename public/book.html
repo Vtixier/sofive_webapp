@@ -432,7 +432,7 @@
                     }
                 },
                 computed: {
-                    filtered_times: function() {
+                    filtered_open_times: function() {
                         const current_day = moment(this.date, "MM-DD-YYYY").day()
                         if (this.selected.center !== "2") {
                             if ((current_day === 6) || (current_day === 7)) {
@@ -447,6 +447,16 @@
                             return this.hours.slice(0, 18)
                         }
                         return this.hours.slice(2, 18) // ekp closes at midnight
+                    },
+                    filtered_times: function() {
+                        if (this.date !== moment().format("MM-DD-YYYY")) {
+                            return this.filtered_open_times
+                        }
+                        const now = moment()
+                        return this.filtered_open_times.filter(t => {
+                            const parsed = moment(t, "ha")
+                            return now.diff(parsed) < 0
+                        })
                     },
                     filtered_duration: function() {
                         if (this.selected.hour === this.filtered_times[this.filtered_times.length - 1]) {
