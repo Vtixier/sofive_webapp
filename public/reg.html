@@ -65,7 +65,7 @@
                             </div>
                             <div v-else>
                                 <button v-on:click="choose('team')" class="btn btn-primary">Register as team</button>
-                                <button v-on:click="choose('individual')" class="btn btn-primary">Register as a free agent</button>
+                                <button v-on:click="choose('individual')" class="btn btn-primary" v-if="free_agent">Register as a free agent</button>
                             </div>
                         </div>
                     </div>
@@ -361,6 +361,9 @@
                     }
                     const selected_age = parseInt(this.selected.tournament_age.replace("U", ""))
                     return this.tournaments.filter(t => (selected_age >= t.min_age && selected_age <= t.max_age))
+                },
+                free_agent: function() {
+                    return (this.selected.product.name === "Adult Leagues") || (this.selected.product.name === "Youth Leagues")
                 }
             },
             mounted: function() {
