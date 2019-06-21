@@ -18,7 +18,7 @@ Vue.component('sofive-brk-info', {
                 <div class="wpb_wrapper">
                     <p style="text-align: left;">Address: <a href="https://www.google.com/maps/place/Sofive+Brooklyn/@40.672456,-73.9005097,17z/data=!3m1!4b1!4m5!3m4!1s0x89c25df263532bbf:0x2513639a2bb1c454!8m2!3d40.672456!4d-73.898321">2015 Pitkin Ave, Brooklyn, NY 11207</a><br>
                         Email: <a href="mailto:brooklyn@sofive.com"> brooklyn@sofive.com<br></a>
-                        Open weekdays from 9:00 am to 1:00 am and weekends 7:00 am to 1:00 am</p>
+                        Open weekdays from 9:00 am to 1:00 am and weekends from 7:00 am to 1:00 am</p>
                 </div>
             </div>
             <div class="wpb_text_column wpb_content_element ">

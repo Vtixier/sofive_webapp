@@ -17,8 +17,8 @@ Vue.component('sofive-col-info', {
             <div class="wpb_text_column wpb_content_element ">
                 <div class="wpb_wrapper">
                     <p style="text-align: left;">Address: <a href="https://www.google.com/maps/place/Sofive+Columbia/@39.1777016,-76.8128332,17z/data=!3m1!4b1!4m5!3m4!1s0x89b7e15ad01ec55b:0x7b9dc05faafbd40b!8m2!3d39.1777016!4d-76.8106445">7125 Columbia Gateway Dr #105, Columbia, MD 21046</a><br>
-                        Email: <a href:"mailto:columbia@sofive.com"> columbia@sofive.com</a><br>
-                        Open weekdays from 9:00 am to 1:00 am and weekends 7:00 am to 1:00 am</p>
+                        Email: <a href="mailto:columbia@sofive.com"> columbia@sofive.com</a><br>
+                        Open weekdays from 9:00 am to 1:00 am and weekends from 7:00 am to 1:00 am</p>
                 </div>
             </div>
             <div class="wpb_text_column wpb_content_element ">

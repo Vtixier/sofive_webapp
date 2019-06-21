@@ -17,7 +17,7 @@ Vue.component('sofive-ekp-info', {
             <div class="wpb_text_column wpb_content_element ">
                 <div class="wpb_wrapper">
                     <p style="text-align: left;">Address: <a href="https://www.google.com/maps/place/Sofive+Elkins+Park/@40.069564,-75.1072147,17z/data=!3m1!4b1!4m5!3m4!1s0x89c6b6d5007423b9:0x54f10a48bb80b6be!8m2!3d40.069564!4d-75.105026">46 Church Road, Elkins Park, PA 19027</a><br>
-                        Email:<a href:"mailto:elkinspark@sofive.com" elkinspark@sofive.com<br>
+                        Email: <a href="mailto:elkinspark@sofive.com">elkinspark@sofive.com</a><br>
                         Open weekdays from 9:00 am to 12:00 am and weekends from 7:00 am to 12:00 am</p>
                 </div>
             </div>
@@ -43,7 +43,7 @@ Vue.component('sofive-ekp-info', {
                     <p>
                         <span data-type="normal" class="qode_icon_shortcode  q_font_awsome_icon fa-lg  " style=" ">
                             <i class="qode_icon_font_awesome fa fa-beer qode_icon_element" style="color: #04b2e2;"></i>
-                        </span>&nbsp; &nbsp; Bar &amp; Café (incl. beer)
+                        </span>&nbsp; &nbsp; Bar &amp; Café
                     </p>
                     <p>
                         <span data-type="normal" class="qode_icon_shortcode  q_font_awsome_icon fa-lg  " style=" ">

@@ -171,7 +171,7 @@
                 search: function() {
                     this.loading = true
                     this.$http.post("http://localhost:8080/team/", {
-                            name: this.query,
+                            name: encodeURI(this.query),
                             facility_id: this.center
                         })
                         .then((resp) => {

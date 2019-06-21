@@ -491,7 +491,7 @@
                     })
                     this.team_search_loading = true
                     this.$http.post("http://localhost:8080/team/", {
-                            name: this.team_search,
+                            name: encodeURI(this.team_search),
                             facility_id: this.selected.center
                         })
                         .then((resp) => {

@@ -92,12 +92,12 @@
                                 </span>
                                 <hr>
                                 <span class="text">
-                                    <form role="form" class="form">
+                                    <form role="form" class="form" id="loginForm">
                                         <div class="form-group row"><label class="col-sm-2 col-form-label">Name</label>
-                                            <div class="col-sm-10"><input type="text" placeholder="Enter name" class="form-control" v-model="name"></div>
+                                            <div class="col-sm-10"><input type="text" placeholder="Enter name" class="form-control" v-model="name" required=""></div>
                                         </div>
                                         <div class="form-group row"><label class="col-sm-2 col-form-label">Email</label>
-                                            <div class="col-sm-10"><input type="text" placeholder="Enter email" class="form-control" v-model="email"></div>
+                                            <div class="col-sm-10"><input type="email" placeholder="Enter email" class="form-control" v-model="email" required=""></div>
                                         </div>
                                         <div class="hr-line-dashed"></div>
                                         <div class="form-group row"><label class="col-sm-2 col-form-label">Preference<br />
@@ -108,13 +108,12 @@
                                                 <div class="i-checks"><label> <input name="a" type="radio" value="deposit"> <i></i> Pay a flat $50 deposit </label></div>
                                             </div>
                                         </div>
+                                        <button type="submit" class="ladda-button ladda-button-checkout btn btn-primary"><i class="fa fa-shopping-cart"></i> Checkout</button>
                                     </form>
                                 </span>
 
                             </div>
                         </div>
-                        <button type="button" class="ladda-button ladda-button-checkout btn btn-primary" style="margin-bottom: 10%" v-on:click="pay" data-style="zoom-in"><i class="fa fa-shopping-cart"></i> Checkout</button>
-
                         <div id="error-message"></div>
 
                     </div>
@@ -193,7 +192,6 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/1.5.1/vue-resource.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script src="js/plugins/datapicker/bootstrap-datepicker.js"></script>
-    <script type="text/javascript" src="js/he.js"></script>
 
     <script type="text/javascript" src="js/navigation.js"></script>
     <script type="text/javascript" src="js/header.js"></script>
@@ -244,7 +242,8 @@
 
                 this.getPricing()
 
-                const center = this.getCenterCookie()
+                const center = this.getCenterCookie(),
+                    self = this;
                 this.selected.center = center
 
                 $(document).ready(function() {
@@ -252,9 +251,13 @@
                         checkboxClass: 'icheckbox_square-green',
                         radioClass: 'iradio_square-green',
                     });
+                    $('#loginForm').on('submit', function(ev) {
+                        console.log(ev)
+                        var l = Ladda.bind('.ladda-button-checkout');
+                        self.pay()
+                        return false
+                    });
                 });
-
-                var l = Ladda.bind('.ladda-button-checkout');
 
             },
             methods: {
