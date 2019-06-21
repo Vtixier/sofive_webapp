@@ -116,9 +116,6 @@
                                     <a class="collapse-link">
                                         <i class="fa fa-chevron-up"></i>
                                     </a>
-                                    <a class="close-link">
-                                        <i class="fa fa-times"></i>
-                                    </a>
                                 </div>
                             </div>
                             <div class="ibox-content" style="height: 76vh; overflow: scroll;">
@@ -154,9 +151,6 @@
                                     <a class="collapse-link">
                                         <i class="fa fa-chevron-up"></i>
                                     </a>
-                                    <a class="close-link">
-                                        <i class="fa fa-times"></i>
-                                    </a>
                                 </div>
                             </div>
                             <div class="ibox-content">
@@ -168,7 +162,6 @@
                                                 <tr>
                                                     <th style="width: 1%" class="text-center">No.</th>
                                                     <th>Players</th>
-                                                    <th class="text-center">Goals</th>
                                                 </tr>
                                             </thead>
                                             <tbody v-if="home_team">
@@ -176,7 +169,6 @@
                                                     <td class="text-center">{{index+1}}</td>
                                                     <td> {{player.name}}
                                                     </td>
-                                                    <td class="text-center small">0</td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -187,7 +179,6 @@
                                                 <tr>
                                                     <th style="width: 1%" class="text-center">No.</th>
                                                     <th>Player</th>
-                                                    <th class="text-center">Goals</th>
                                                 </tr>
                                             </thead>
                                             <tbody v-if="away_team">
@@ -195,7 +186,6 @@
                                                     <td class="text-center">{{index+1}}</td>
                                                     <td> {{player.name}}
                                                     </td>
-                                                    <td class="text-center small">0</td>
                                                 </tr>
                                             </tbody>
                                         </table>
