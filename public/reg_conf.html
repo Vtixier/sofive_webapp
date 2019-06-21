@@ -180,46 +180,46 @@
                     </div>
 
                     <div class="col-md-4">
-                        <div v-if="selected.center === '1'">
+                        <div v-if="data.facility_id === 1">
                             <div class="ibox-content no-padding border-left-right">
                                 <img alt="image" class="img-fluid" src="/img/sofive/mdl.jpg">
                             </div>
                         </div>
-                        <div v-if="selected.center === '2'">
+                        <div v-if="data.facility_id === 2">
                             <div class="ibox-content no-padding border-left-right">
                                 <img alt="image" class="img-fluid" src="/img/sofive/ekp.jpg">
                             </div>
                         </div>
-                        <div v-if="selected.center === '3'">
+                        <div v-if="data.facility_id === 3">
                             <div class="ibox-content no-padding border-left-right">
                                 <img alt="image" class="img-fluid" src="/img/sofive/brk.jpg">
                             </div>
                         </div>
-                        <div v-if="selected.center === '4'">
+                        <div v-if="data.facility_id === 4">
                             <div class="ibox-content no-padding border-left-right">
                                 <img alt="image" class="img-fluid" src="/img/sofive/rok.jpg">
                             </div>
                         </div>
-                        <div v-if="selected.center === '5'">
+                        <div v-if="data.facility_id === 5">
                             <div class="ibox-content no-padding border-left-right">
                                 <img alt="image" class="img-fluid" src="/img/sofive/col.jpg">
                             </div>
                         </div>
                         <div class="ibox" style="text-align: center">
                             <div class="ibox-content text-center">
-                                <div v-if="selected.center === '1'">
+                                <div v-if="data.facility_id === 1">
                                     <sofive-mdl-info />
                                 </div>
-                                <div v-if="selected.center === '2'">
+                                <div v-if="data.facility_id === 2">
                                     <sofive-ekp-info />
                                 </div>
-                                <div v-if="selected.center === '3'">
+                                <div v-if="data.facility_id === 3">
                                     <sofive-brk-info />
                                 </div>
-                                <div v-if="selected.center === '4'">
+                                <div v-if="data.facility_id === 4">
                                     <sofive-rok-info />
                                 </div>
-                                <div v-if="selected.center === '5'">
+                                <div v-if="data.facility_id === 5">
                                     <sofive-col-info />
                                 </div>
                             </div>
@@ -248,10 +248,10 @@
 
     <script src="js/plugins/select2/select2.full.min.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="js/vue.js"></script>
 
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/1.5.1/vue-resource.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script type="text/javascript" src="js/vue-resource.js"></script>
+    <script type="text/javascript" src="js/moment.js"></script>
     <script src="js/plugins/datapicker/bootstrap-datepicker.js"></script>
     <script type="text/javascript" src="js/he.js"></script>
 
