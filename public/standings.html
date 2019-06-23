@@ -65,6 +65,86 @@
                     </div>
                     <br />
                     <div class="row">
+                        <div class="col-sm-12 col-md-3">
+                            <div class="form-group">
+                                <label class="col-form-label" for="status">
+                                    <div v-if="loading.facility">
+                                        <div>
+                                            <div class="sk-spinner sk-spinner-wave">
+                                                <div class="sk-rect1"></div>
+                                                <div class="sk-rect2"></div>
+                                                <div class="sk-rect3"></div>
+                                                <div class="sk-rect4"></div>
+                                                <div class="sk-rect5"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </label>
+                                <select class="select_center form-control" v-model="selected.facility_id">
+                                    <option value="0">Select center</option>
+                                    <option v-for="center in centers" :value="center.id">{{center.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-3">
+                            <label class="col-form-label" for="status">
+                                <div v-if="loading.product">
+                                    <div>
+                                        <div class="sk-spinner sk-spinner-wave">
+                                            <div class="sk-rect1"></div>
+                                            <div class="sk-rect2"></div>
+                                            <div class="sk-rect3"></div>
+                                            <div class="sk-rect4"></div>
+                                            <div class="sk-rect5"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </label>
+                            <select class="select_product form-control">
+                                <option></option>
+                                <option v-for="product in products" :value="JSON.stringify(product)">{{product.name}}</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3 col-sm-12" v-bind:style=" (seasons.length>1 || loading.season) ? 'display:block' : 'display:none' ">
+                            <label class="col-form-label" for="status">
+                                <div v-if="loading.season">
+                                    <div>
+                                        <div class="sk-spinner sk-spinner-wave">
+                                            <div class="sk-rect1"></div>
+                                            <div class="sk-rect2"></div>
+                                            <div class="sk-rect3"></div>
+                                            <div class="sk-rect4"></div>
+                                            <div class="sk-rect5"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </label>
+                            <select class="select_season form-control" style="width: 100%">
+                                <option></option>
+                                <option v-for="season in seasons" :value="JSON.stringify(season)">{{season.name}}</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-12 col-md-3" v-bind:style=" (leagues.length>0 || league_loading) ? 'display:block' : 'display:none' ">
+                            <label class="col-form-label" for="status">
+                                <div v-if="league_loading">
+                                    <div>
+                                        <div class="sk-spinner sk-spinner-wave">
+                                            <div class="sk-rect1"></div>
+                                            <div class="sk-rect2"></div>
+                                            <div class="sk-rect3"></div>
+                                            <div class="sk-rect4"></div>
+                                            <div class="sk-rect5"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </label>
+                            <select class="select_league form-control" style="width: 100%">
+                                <option></option>
+                                <option v-for="league in leagues" :value="league.id">{{league.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!--                     <div class="row">
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="col-form-label" for="status">
@@ -127,7 +207,7 @@
                                 <option v-for="league in leagues" :value="league.id">{{league.name}}</option>
                             </select>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
 
                 <div class="row">
@@ -271,6 +351,7 @@
             el: '#wrapper',
             data: {
                 centers: [],
+                products: [],
                 seasons: [],
                 leagues: [],
                 facility_loading: false,
@@ -284,30 +365,42 @@
                 selected: {
                     facility_id: "0",
                     season_id: null,
-                }
+                    product: {},
+                    season: "",
+                    league: {
+                        season: {}
+                    },
+                },
+                loading: {
+                    facility: false,
+                    products: false,
+                    seasons: false,
+                    age: false,
+                    league: false
+                },
             },
             mounted: function() {
                 const center = this.getCenterCookie()
                 if (center) {
                     this.selected.facility_id = center
-                    this.getSeasons(center)
                 }
                 let self = this;
-                // $(".select_center").select2({
-                //     placeholder: "Select or enter value...",
-                // });
+                $(".select_product").select2({
+                    placeholder: "Select program...",
+                });
+                $('.select_product').on('select2:select', function(e) {
+                    let doc = JSON.parse(e.target.value)
+                    self.selected.product = doc
+                    self.getSeasons()
+                });
+
                 $(".select_season").select2({
-                    placeholder: "Select or enter value...",
+                    placeholder: "Select season...",
                 });
                 $(".select_league").select2({
-                    placeholder: "Select or enter value...",
+                    placeholder: "Select league...",
                 });
-                // $('.select_center').on('select2:select', function(e) {
-                //     let facility_id = e.target.value
-                //     self.getSeasons(facility_id)
-                //     self.selected_center = self.centers.find(c => (c.id == facility_id)).name
-                //     self.selected.facility_id = facility_id
-                // });
+
                 $('.select_season').on('select2:select', function(e) {
                     let doc = JSON.parse(e.target.value),
                         facility_id = doc.facility_id,
@@ -338,11 +431,7 @@
                     }
                 }
                 this.getCenters()
-                document.querySelector(".league_click").addEventListener("click", function() {
-                    if (self.selected.facility_id) {
-                        self.getSeasons(self.selected.facility_id)
-                    }
-                })
+                this.getProducts()
             },
             methods: {
                 getCenters: function() {
@@ -359,36 +448,62 @@
                             console.log(err.body.errors)
                         })
                 },
-                getSeasons: function(facility_id) {
-                    this.season_loading = true
-                    this.seasons = []
-                    this.leagues = []
-                    const current_league = document.querySelector('.js-switch').checked
-                    let url = "http://localhost:8080/facility/" + facility_id + "/seasons"
-                    if (!current_league) {
-                        url += "?old=1"
-                    }
-                    this.$http.get(url)
+                getProducts: function() {
+                    this.products = []
+                    this.loading.product = true
+                    this.selected.season = ""
+                    this.selected.age = ""
+                    this.$http.get("http://localhost:8080/program/")
                         .then((resp) => {
-                            this.seasons = resp.body;
-                            this.season_loading = false
+                            this.products = resp.body.filter(p => (p.name !== "Youth Classes" && p.name !== "Youth Tournament"));
+                            this.loading.product = false
                         })
                         .catch((err) => {
                             console.log(err.body.errors)
                         })
                 },
-                getLeagues: function(facility_id, season_id) {
-                    this.league_loading = true
-                    this.leagues = []
-                    let url = "http://localhost:8080/facility/" + facility_id + "/" + season_id + "/leagues"
-                    this.$http.get(url)
+                getSeasons: function(facility_id) {
+                    this.seasons = []
+                    this.tournaments = []
+                    this.loading.season = true
+                    this.selected.season = ""
+                    this.selected.age = ""
+                    const body = {
+                        "facility_id": this.selected.facility_id,
+                        "program_id": this.selected.product.id,
+                        "date": moment().subtract(14, 'd').format("YYYY-MM-DD")
+                    }
+                    this.$http.post("http://localhost:8080/program/seasons", body)
                         .then((resp) => {
-                            this.leagues = resp.body;
-                            this.league_loading = false
+                            this.seasons = resp.body;
+                            this.loading.season = false
+                            console.log("Seasons", this.seasons)
+                            var p = []
+                            this.seasons.forEach(s => {
+                                p.push(this.getLeagues(s.id))
+                            })
+                            this.loading.league = true
+                            Promise.all(p)
+                                .then((leagues) => {
+                                    this.league_loading = false
+                                    this.leagues = this.flatten(leagues)
+                                })
                         })
                         .catch((err) => {
-                            console.log(err.body.errors)
+                            console.log(err)
                         })
+                },
+                getLeagues: function(season_id) {
+                    this.league_loading = true
+                    this.leagues = []
+                    let url = "http://localhost:8080/facility/" + this.selected.facility_id + "/" + season_id + "/leagues"
+                    return new Promise((yes, no) => {
+                        this.$http.get(url)
+                            .then((resp) => {
+                                return yes(resp.body);
+                            })
+                            .catch(no)
+                    })
                 },
                 getStandings: function(league_id) {
                     this.standings_loading = true
@@ -431,7 +546,13 @@
                         if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
                     }
                     return null;
-                }
+                },
+                flatten: function(arr) {
+                    const self = this;
+                    return arr.reduce(function(flat, toFlatten) {
+                        return flat.concat(Array.isArray(toFlatten) ? self.flatten(toFlatten) : toFlatten);
+                    }, []);
+                },
             }
         })
     </script>

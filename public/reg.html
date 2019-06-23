@@ -457,7 +457,7 @@
                     const body = {
                         "facility_id": this.selected.facility_id,
                         "program_id": this.selected.product.id,
-                        "date": "2019-06-04"
+                        "date": moment().format("YYYY-MM-DD")
                     }
                     this.$http.post("http://localhost:8080/program/seasons", body)
                         .then((resp) => {
