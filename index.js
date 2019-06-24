@@ -17,7 +17,7 @@ app.use(function(req, res, next) {
 	if (!req.get('Host')) {
 		return res.status(500).json(false);
 	}
-	if((!req.secure) && (req.get('X-Forwarded-Proto') !== 'https')) {
+	if(req.get('X-Forwarded-Proto') !== 'https') {
 		res.redirect('https://app.sofive.com' + req.url);
 	}
 	else

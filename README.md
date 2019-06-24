@@ -9,5 +9,5 @@ git fetch --all; git reset --hard origin/master; cd public; sed -i 's/localhost:
 #### HTTPS
 
 ```bash
-git fetch --all; git reset --hard origin/master; cd public; sed -i 's/http:\/\/localhost:8080/https:\/\/app.sofive.com:8080/g' *.html js/*.js;sed -i 's/http:\/\/localhost/https:\/\/app.sofive.com/g' *.html js/*.js; sudo pm2 reload 0
+git fetch --all; git reset --hard origin/master; cd public; sed -i 's/http:\/\/localhost/https:\/\/app.sofive.com/g' *.html js/*.js; sudo pm2 reload 0
 ```
