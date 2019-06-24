@@ -14,16 +14,10 @@ app.use(express.static('public', { maxAge: 86400000 }));
 app.use(compression());
 
 app.use(function(req, res, next) {
-	console.log("Host", req.get('Host'))
-	console.log("Proto", req.get('X-Forwarded-Proto'))
-	if (!req.get('Host')) {
-		return res.status(500).json(false);
-	}
-	if(req.get('X-Forwarded-Proto') !== 'https') {
-		res.redirect('https://app.sofive.com' + req.url);
-	}
-	else
-		next();
+	if (req.headers["x-forwarded-proto"] === "https"){
+       return next();
+    }
+    res.redirect("https://" + req.headers.host + req.url);
 });
 
 app.use('/', express.static('public'));
