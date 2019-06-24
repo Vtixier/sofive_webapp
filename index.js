@@ -14,6 +14,9 @@ app.use(express.static('public', { maxAge: 86400000 }));
 app.use(compression());
 
 app.use(function(req, res, next) {
+	if (req.get('Host').indexOf('localhost') != (-1)) {
+		return next();
+	}
 	if (req.headers["x-forwarded-proto"] === "https"){
        return next();
     }
