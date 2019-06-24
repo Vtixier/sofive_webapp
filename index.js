@@ -22,7 +22,10 @@ app.use(function(req, res, next) {
 
 app.use('/', express.static('public'));
 
-var httpServer = http.createServer(app);
+var httpServer = http.createServer(function (req, res) {
+    res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
+    res.end();
+});
 var httpsServer = https.createServer(https_credentials, app);
 
 httpServer.listen(80, () => console.log('Http server up!'));
