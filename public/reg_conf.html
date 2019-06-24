@@ -154,7 +154,7 @@
 
                                                 <div class="i-checks" style="margin-bottom: 1%"><label> <input name="a" type="radio" value="new"> <i></i> Register new team</label></div>
                                                 <div class="form-group row"><label class="col-sm-3 col-form-label">Team name</label>
-                                                    <div class="col-sm-9"><input type="text" placeholder="Enter team name" class="form-control" v-model="name" required=""></div>
+                                                    <div class="col-sm-9"><input type="text" placeholder="Enter team name" class="form-control" v-model="name"></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -461,6 +461,18 @@
                         })
                 },
                 stripeRedirect: function() {
+                    if (document.querySelector('input[name="a"]:checked') && document.querySelector('input[name="a"]:checked').value === "existing") {
+                        if (this.team_search === "") {
+                            console.log("Missing team name")
+                            return
+                        }
+                    }
+                    if (document.querySelector('input[name="a"]:checked') && document.querySelector('input[name="a"]:checked').value === "new") {
+                        if (this.name === "") {
+                            console.log("Missing team name")
+                            return
+                        }
+                    }
                     const self = this;
                     let deposit = false,
                         sku = self.product.sku
