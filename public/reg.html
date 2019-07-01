@@ -507,8 +507,14 @@
                                         age,
                                     }
                                     if (d.description.indexOf("Early Bird: ") !== (-1)) {
-                                        const i = d.description.indexOf('Early Bird: ')
-                                        d.early_bird = d.description.slice(i, i + 33)
+                                        const i = d.description.indexOf('Early Bird: '),
+                                            text = d.description.slice(i, i + 33),
+                                            final_date = text.slice(text.length - 10, text.length),
+                                            parsed_final_date = moment(final_date, "MM/DD/YYYY"),
+                                            diff = moment().diff(parsed_final_date);
+                                        if (diff < 0) {
+                                            d.early_bird = d.description.slice(i, i + 33)
+                                        }
                                     }
                                     if (this.selected.product.name.toLowerCase().indexOf('league') !== (-1)) {
                                         if (this.selected.product.name.toLowerCase().indexOf('adult') !== (-1)) {
