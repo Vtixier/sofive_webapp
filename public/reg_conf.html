@@ -29,6 +29,7 @@
     <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
     <link href="css/animate.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
+    <link href="css/plugins/toastr/toastr.min.css" rel="stylesheet">
     <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-32x32.png" sizes="32x32" />
     <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" sizes="192x192" />
     <!-- Toastr style -->
@@ -59,7 +60,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="vote-item" v-for="team in teams">
+                        <div class="vote-item" v-for="team in teams" v-if="teams.length">
                             <div class="row" v-on:click="selectTeam(team)">
                                 <div class="col-md-10">
                                     <a href="#" class="vote-title">
@@ -71,6 +72,18 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <div class="vote-item" v-if="(teams.length===0) && (!team_search_loading)">
+                            <div class="col-md-12">
+                                <p class="vote-title">
+                                    Sorry, team not found. Please select <i>Register new team</i> option.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="text-align: left">
+                        <div>
+                            <button class="btn btn-white" data-dismiss="modal">Close</button>
                         </div>
                     </div>
                 </div>
@@ -267,6 +280,7 @@
     <!-- iCheck -->
     <script src="js/plugins/iCheck/icheck.min.js"></script>
     <script src="js/plugins/sweetalert/sweetalert.min.js"></script>
+    <script src="js/plugins/toastr/toastr.min.js"></script>
 
     <script src="https://js.stripe.com/v3/"></script>
     <script src="js/plugins/typehead/bootstrap3-typeahead.min.js"></script>
@@ -463,13 +477,23 @@
                 stripeRedirect: function() {
                     if (document.querySelector('input[name="a"]:checked') && document.querySelector('input[name="a"]:checked').value === "existing") {
                         if (this.team_search === "") {
-                            console.log("Missing team name")
+                            toastr.error('Missing team name', 'Please enter a name for your team !', {
+                                progressBar: true
+                            })
+                            return
+                        }
+                        if (this.team_search.indexOf("(") === (-1) || this.team_search.indexOf(")") === (-1)) {
+                            toastr.error('Missing team name', 'Please search for your team !', {
+                                progressBar: true
+                            })
                             return
                         }
                     }
                     if (document.querySelector('input[name="a"]:checked') && document.querySelector('input[name="a"]:checked').value === "new") {
                         if (this.name === "") {
-                            console.log("Missing team name")
+                            toastr.error('Missing team name', 'Please enter a new team name !', {
+                                progressBar: true
+                            })
                             return
                         }
                     }
@@ -512,9 +536,7 @@
                     $('#more_info_modal').modal('hide')
                 },
                 search: function(ele) {
-                    console.log("Search")
                     if (ele.key === 'Enter') {
-                        console.log("Enter")
                         this.searchTeam();
                     }
                 },
