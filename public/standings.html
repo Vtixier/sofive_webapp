@@ -140,74 +140,10 @@
                             </label>
                             <select class="select_league form-control" style="width: 100%">
                                 <option></option>
-                                <option v-for="league in leagues" :value="league.id">{{league.name}}</option>
+                                <option v-for="league in filtered_leagues" :value="league.id">{{league.name}}</option>
                             </select>
                         </div>
                     </div>
-                    <!--                     <div class="row">
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label class="col-form-label" for="status">
-                                    Select Center
-                                    <div v-if="facility_loading">
-                                        <div>
-                                            <div class="sk-spinner sk-spinner-wave">
-                                                <div class="sk-rect1"></div>
-                                                <div class="sk-rect2"></div>
-                                                <div class="sk-rect3"></div>
-                                                <div class="sk-rect4"></div>
-                                                <div class="sk-rect5"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </label>
-                                <select class="select_center form-control" v-model="selected.facility_id">
-                                    <option value="0"></option>
-                                    <option v-for="center in centers" :value="center.id">{{center.name}}</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <label class="col-form-label" for="status">
-                                Select Season
-                                <div v-if="season_loading">
-                                    <div>
-                                        <div class="sk-spinner sk-spinner-wave">
-                                            <div class="sk-rect1"></div>
-                                            <div class="sk-rect2"></div>
-                                            <div class="sk-rect3"></div>
-                                            <div class="sk-rect4"></div>
-                                            <div class="sk-rect5"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </label>
-                            <select class="select_season form-control">
-                                <option></option>
-                                <option v-for="season in seasons" :value="JSON.stringify(season)">{{season.name}}</option>
-                            </select>
-                        </div>
-                        <div class="col-sm-4">
-                            <label class="col-form-label" for="status">
-                                Select League
-                                <div v-if="league_loading">
-                                    <div>
-                                        <div class="sk-spinner sk-spinner-wave">
-                                            <div class="sk-rect1"></div>
-                                            <div class="sk-rect2"></div>
-                                            <div class="sk-rect3"></div>
-                                            <div class="sk-rect4"></div>
-                                            <div class="sk-rect5"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </label>
-                            <select class="select_league form-control">
-                                <option></option>
-                                <option v-for="league in leagues" :value="league.id">{{league.name}}</option>
-                            </select>
-                        </div>
-                    </div> -->
                 </div>
 
                 <div class="row">
@@ -370,7 +306,7 @@
                 selected_league: "",
                 selected: {
                     facility_id: "0",
-                    season_id: null,
+                    season_id: 0,
                     product: {},
                     season: "",
                     league: {
@@ -384,6 +320,15 @@
                     age: false,
                     league: false
                 },
+            },
+            computed: {
+                filtered_leagues: function() {
+                    if (this.selected.season_id === 0) {
+                        return this.leagues
+                    }
+                    const season_id = this.selected.season_id.toString()
+                    return this.leagues.filter(l => (l.season_id === season_id))
+                }
             },
             mounted: function() {
                 const center = this.getCenterCookie()
@@ -411,8 +356,6 @@
                     let doc = JSON.parse(e.target.value),
                         facility_id = doc.facility_id,
                         season_id = doc.id;
-                    self.getLeagues(facility_id, season_id)
-                    self.selected_season = doc.name
                     self.selected.season_id = season_id
                 });
                 $('.select_league').on('select2:select', function(e) {
