@@ -90,11 +90,23 @@ Vue.component('sofive-left-menu', {
     this.getCenters()
     const c = this.getCookie("center")
     if (!c) {
+        const params = this.findGetParameter()
+        if (params.center) {
+            const url = window.location.href.replace("center=", "")
+            return this.setCookie(params.center, url)
+        }
         document.querySelector("#auto-open").click()
     }
     this.getCenterImage()
   },
   methods: {
+    findGetParameter: function() {
+        var queryDict = {}
+        decodeURI(location.search).substr(1).split("&").forEach(function(item) {
+            queryDict[item.split("=")[0]] = item.split("=")[1]
+        })
+        return queryDict
+    },
     getCenterImage: function() {
         const c = this.getCookie("center"),
         self = this;
@@ -135,11 +147,15 @@ Vue.component('sofive-left-menu', {
                 console.log(err.body.errors)
             })
     },
-    setCookie: function(value) {
+    setCookie: function(value, url) {
         var date = new Date();
         date.setTime(date.getTime() + (9999*24*60*60*1000));
         let expires = "; expires=" + date.toUTCString();
         document.cookie = "center=" + (value || "")  + expires + "; path=/";
+        if (url) {
+            window.location = url
+            return
+        }
         window.location.reload(false)
     },
     getCookie: function(name) {
