@@ -61,14 +61,15 @@ Vue.component('sofive-left-menu', {
                                 </div>
                             </div>
                         </label>
-                        <select class="select_season form-control" v-model="selected.center">
-                            <option value="0">Pick a location</option>
-                            <option v-for="center in centers" :value="center.id">{{center.name}}</option>
-                        </select>
-                    </div>
-
-                    <div class="modal-footer">
-                        <button type="button" v-on:click="save" class="btn btn-primary" data-dismiss="modal">Save</button>
+                        <div class="vote-item" v-for="center in centers">
+                            <div class="row" v-on:click="setCookie(center.id)">
+                                <div class="col-md-10">
+                                    <a href="#" class="vote-title">
+                                        {{center.name}}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -83,17 +84,11 @@ Vue.component('sofive-left-menu', {
         open: false,
         centers: [],
         facility_loading: false,
-        selected: {
-            center: "0",
-        }
     }
   },
   mounted: function() {
     this.getCenters()
     const c = this.getCookie("center")
-    if (!c) {
-        document.querySelector("#auto-open").click()
-    }
     this.getCenterImage()
   },
   methods: {
@@ -136,11 +131,6 @@ Vue.component('sofive-left-menu', {
             .catch((err) => {
                 console.log(err.body.errors)
             })
-    },
-    save: function() {
-        if (this.selected.center !== "0") {
-            this.setCookie(this.selected.center)
-        }
     },
     setCookie: function(value) {
         var date = new Date();
