@@ -89,6 +89,9 @@ Vue.component('sofive-left-menu', {
   mounted: function() {
     this.getCenters()
     const c = this.getCookie("center")
+    if (!c) {
+        document.querySelector("#auto-open").click()
+    }
     this.getCenterImage()
   },
   methods: {
