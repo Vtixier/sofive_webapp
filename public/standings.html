@@ -224,6 +224,8 @@
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class="row">
                     <div class="col-lg-12">
                         <div class="ibox">
                             <div class="ibox-title">
@@ -274,7 +276,9 @@
                             </div>
                         </div>
                     </div>
+                </div>
 
+                <div class="row">
                     <div class="col-lg-12">
                         <div class="ibox">
                             <div class="ibox-title">
@@ -475,7 +479,13 @@
                         "program_id": this.selected.product.id,
                         "date": moment().subtract(14, 'd').format("YYYY-MM-DD")
                     }
-                    this.$http.post("http://localhost:8080/program/seasons", body)
+                    let url = "http://localhost:8080/program/seasons"
+                    const current_league = document.querySelector('.js-switch').checked
+                    if (!current_league) {
+                        url = "http://localhost:8080/program/seasons/past"
+                        body.date = moment().format("YYYY-MM-DD")
+                    }
+                    this.$http.post(url, body)
                         .then((resp) => {
                             this.seasons = resp.body;
                             this.loading.season = false
