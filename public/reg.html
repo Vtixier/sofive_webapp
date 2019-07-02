@@ -203,6 +203,9 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-lg-12" v-if="!loading.league && selected.product.id && filtered_leagues.length==0">
+                    <p>Sorry, there are currently no {{selected.product.name}} available for registration!</p>
+                </div>
                 <div class="col-md-4" v-for="league in filtered_leagues">
                     <div class="ibox">
                         <div class="ibox-content product-box">
