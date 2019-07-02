@@ -489,7 +489,7 @@
                     return new Promise((yes, no) => {
                         this.$http.post("http://localhost:8080/program/leagues", body)
                             .then((resp) => {
-                                return yes(resp.body.map(l => {
+                                return yes(resp.body.filter(l => (l.name.toLowerCase().indexOf('camp') === (-1))).map(l => {
                                     const season = this.seasons.find(s => (parseInt(s.id) === l.season_id))
                                     let age = ""
                                     if (this.youth) {
