@@ -61,10 +61,10 @@ Vue.component('sofive-left-menu', {
                                 </div>
                             </div>
                         </label>
-                        <div class="vote-item" v-for="center in centers">
+                        <div class="vote-item text-center" v-for="center in centers">
                             <div class="row" v-on:click="setCookie(center.id)">
-                                <div class="col-md-10">
-                                    <a href="#" class="vote-title">
+                                <div class="col-md-12">
+                                    <a href="#" class="vote-title" style="margin-left: 0; color: rgb(3, 121, 62);">
                                         {{center.name}}
                                     </a>
                                 </div>
