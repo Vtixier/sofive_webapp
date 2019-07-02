@@ -128,21 +128,49 @@
 
                     </div>
 
-                    <div class="col-md-4">
-
-
-                        <div class="ibox-content no-padding border-left-right">
-                            <img alt="image" class="img-fluid" src="https://sofive.com/wp-content/uploads/2018/05/YourJourney1.jpg">
+                    <div class="col-md-4" style="margin-top: 2%">
+                        <div v-if="data.facility_id === 1">
+                            <div class="ibox-content no-padding border-left-right">
+                                <img alt="image" class="img-fluid" src="/img/sofive/mdl.jpg">
+                            </div>
+                        </div>
+                        <div v-if="data.facility_id === 2">
+                            <div class="ibox-content no-padding border-left-right">
+                                <img alt="image" class="img-fluid" src="/img/sofive/ekp.jpg">
+                            </div>
+                        </div>
+                        <div v-if="data.facility_id === 3">
+                            <div class="ibox-content no-padding border-left-right">
+                                <img alt="image" class="img-fluid" src="/img/sofive/brk.jpg">
+                            </div>
+                        </div>
+                        <div v-if="data.facility_id === 4">
+                            <div class="ibox-content no-padding border-left-right">
+                                <img alt="image" class="img-fluid" src="/img/sofive/rok.jpg">
+                            </div>
+                        </div>
+                        <div v-if="data.facility_id === 5">
+                            <div class="ibox-content no-padding border-left-right">
+                                <img alt="image" class="img-fluid" src="/img/sofive/col.jpg">
+                            </div>
                         </div>
                         <div class="ibox" style="text-align: center">
-                            <div class="ibox-title" style="padding: 15px 0px 0px 0px;">
-                                <h5>Support</h5>
-                            </div>
                             <div class="ibox-content text-center">
-                                <h3><i class="fa fa-phone"></i> +43 100 783 001</h3>
-                                <span class="medium">
-                                    Please contact with us if you have any questions.
-                                </span>
+                                <div v-if="data.facility_id === 1">
+                                    <sofive-mdl-info />
+                                </div>
+                                <div v-if="data.facility_id === 2">
+                                    <sofive-ekp-info />
+                                </div>
+                                <div v-if="data.facility_id === 3">
+                                    <sofive-brk-info />
+                                </div>
+                                <div v-if="data.facility_id === 4">
+                                    <sofive-rok-info />
+                                </div>
+                                <div v-if="data.facility_id === 5">
+                                    <sofive-col-info />
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -196,6 +224,7 @@
                     subtitle: "",
                     name: "",
                     id: 0,
+                    facility_id: 0,
                 }
             },
             mounted: function() {
