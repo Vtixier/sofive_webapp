@@ -87,14 +87,14 @@ Vue.component('sofive-left-menu', {
     }
   },
   mounted: function() {
+    const params = this.findGetParameter()
+    if (params.center) {
+        const url = window.location.href.replace("center=", "")
+        return this.setCookie(params.center, url)
+    }
     this.getCenters()
     const c = this.getCookie("center")
     if (!c) {
-        const params = this.findGetParameter()
-        if (params.center) {
-            const url = window.location.href.replace("center=", "")
-            return this.setCookie(params.center, url)
-        }
         document.querySelector("#auto-open").click()
     }
     this.getCenterImage()
