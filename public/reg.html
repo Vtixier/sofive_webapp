@@ -133,8 +133,8 @@
                                     </div>
                                 </div>
                             </label>
-                            <select class="select_product form-control">
-                                <option></option>
+                            <select class="select_product form-control" v-on:change="selectProduct">
+                                <option>Select product</option>
                                 <option v-for="product in products" :value="JSON.stringify(product)">{{product.name}}</option>
                             </select>
                         </div>
@@ -203,8 +203,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-12" v-if="!loading.league && selected.product.id && filtered_leagues.length==0">
-                    <p>Sorry, there are currently no {{selected.product.name}} available for registration!</p>
+                <div class="col-lg-12 text-center" v-if="!loading.league && selected.product.id && filtered_leagues.length==0">
+                    <h3>Sorry, there are currently no {{selected.product.name}} available for registration!</h3>
                 </div>
                 <div class="col-md-4" v-for="league in filtered_leagues">
                     <div class="ibox">
@@ -381,18 +381,6 @@
                 $(".select_season").select2({
                     placeholder: "Select season...",
                 });
-                $(".select_product").select2({
-                    placeholder: "Select program...",
-                });
-                // $('.select_center').on('select2:select', function(e) {
-                //     let doc = JSON.parse(e.target.value)
-                //     self.selected.facility_id = doc.id
-                //     self.selected.center = doc.name
-                //     self.selected.product = {}
-                //     $(".select_product").select2({
-                //         placeholder: "Select program...",
-                //     });
-                // });
                 $('.select_product').on('select2:select', function(e) {
                     let doc = JSON.parse(e.target.value)
                     self.selected.product = doc
@@ -416,6 +404,14 @@
                 this.getProducts()
             },
             methods: {
+                selectProduct: function(e) {
+                    let doc = JSON.parse(e.target.value)
+                    this.selected.product = doc
+                    if (doc.name == "Youth Tournament") {
+                        return this.getTournaments()
+                    }
+                    this.getSeasons()
+                },
                 getCenters: function() {
                     this.loading.facility = true
                     this.centers = []

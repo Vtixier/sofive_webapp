@@ -102,7 +102,7 @@
                         <div class="col-sm-3">
                             <div class="form-group">
                                 <label class="col-form-label" for="status">
-                                    Date
+                                    Date *
                                 </label>
                                 <div class="input-group date">
                                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control" :value="date">
@@ -143,6 +143,9 @@
                                 <option v-for="dur in filtered_duration" :value="dur.type">{{dur.label}}</option>
                             </select>
                         </div>
+                    </div>
+                    <div class="row">
+                        <p>* You can only book online for the next 15 days. Otherwise contact the facility with the details below.</p>
                     </div>
                     <div class="row pad-if-mob">
                         <a v-on:click="search" class="btn btn-primary btn-rounded btn-block btn-outline" href="#"></i>Book a field</a>
@@ -482,16 +485,16 @@
                     const center = this.getCenterCookie()
                     this.selected.center = center
                     this.date = moment().format("MM-DD-YYYY")
-                    endDate = moment().add(8, 'd').format("MM-DD-YYYY")
+                    endDate = moment().add(15, 'd').format("MM-DD-YYYY")
                     this.getCenters()
                     $('.input-group.date').datepicker({
                         todayBtn: "linked",
                         keyboardNavigation: false,
                         forceParse: false,
-                        calendarWeeks: true,
                         autoclose: true,
                         startDate: this.date,
-                        endDate: endDate
+                        endDate: endDate,
+                        todayHighlight: true
                     }).on('changeDate', function(e) {
                         self.date = moment(e.date).format("MM-DD-YYYY")
                     });
