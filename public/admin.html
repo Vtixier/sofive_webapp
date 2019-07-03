@@ -174,9 +174,9 @@
                                             Date
                                         </label>
                                         <div class="input-group input-daterange">
-                                            <input type="text" class="form-control" :value="date">
+                                            <input type="text" class="form-control" :value="start" id="start">
                                             <div class="input-group-addon">to</div>
-                                            <input type="text" class="form-control" :value="date">
+                                            <input type="text" class="form-control" :value="end" id="end">
                                         </div>
                                     </div>
                                 </div>
@@ -189,7 +189,7 @@
                                     </select>
                                 </div>
                                 <div class="col-sm-3" style="padding-top: 33px">
-                                    <button type="button" class="btn btn-block btn-primary">Search</button>
+                                    <button type="button" class="btn btn-block btn-primary" v-on:click="search">Search</button>
                                 </div>
                             </div>
 
@@ -223,7 +223,10 @@
                                             <td>{{registration.registration.email}}</td>
                                             <td>{{registration.registration.phone}}</td>
                                             <td>${{registration.product.price/100}}</td>
-                                            <td><input name="validated" type="checkbox" class="i-checks" :value="registration.registration.id" v-model="reg_done"></td>
+                                            <td>
+                                                <input type="checkbox" class="i-checks" checked v-if="registration.past">
+                                                <input name="validated" type="checkbox" class="i-checks" :value="registration.registration.id" v-model="reg_done" v-else>
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -277,7 +280,8 @@
         var app = new Vue({
             el: '#wrapper',
             data: {
-                date: "",
+                start: "",
+                end: "",
                 info: "",
                 registrations: [],
                 reg_done: [],
@@ -297,16 +301,21 @@
                         size: 'small'
                     }
                 );
-                this.date = moment().format("MM-DD-YYYY")
+                this.start = moment().format("MM-DD-YYYY")
+                this.end = moment().format("MM-DD-YYYY")
                 $('.input-group.input-daterange').datepicker({
                     todayBtn: "linked",
                     keyboardNavigation: false,
                     forceParse: false,
                     autoclose: true,
-                    startDate: this.date,
                     todayHighlight: true
                 }).on('changeDate', function(e) {
-                    self.date = moment(e.date).format("MM-DD-YYYY")
+                    const val = e.target.id
+                    if (val === "start") {
+                        self.start = moment(e.date).format("MM-DD-YYYY")
+                        return
+                    }
+                    self.end = moment(e.date).format("MM-DD-YYYY")
                 });
                 this.getRegistrations()
             },
@@ -321,25 +330,37 @@
                     }
                     return null;
                 },
+                search: function() {
+                    const current_events = document.querySelector('.js-switch').checked
+                    let p = null
+                    if (!current_events) {
+                        const d = {
+                            start: moment(this.start, "MM-DD-YYYY").unix(),
+                            end: moment(this.end, "MM-DD-YYYY").add(1, 'd').unix()
+                        }
+                        console.log(d, this.start, this.end)
+                        p = this.$http.post("http://localhost:8080/product/registrations/past", d)
+                    } else {
+                        p = this.$http.get("http://localhost:8080/product/registrations")
+                    }
+                    p.then((resp) => this.process(resp))
+                        .then(() => {
+                            if (!current_events) {
+                                this.registrations = this.registrations.map(r => ({
+                                    ...r,
+                                    past: true
+                                }))
+                            }
+                        })
+                        .catch((err) => {
+                            console.log(err.body.errors)
+                        })
+                },
                 getRegistrations: function() {
                     this.registrations = []
                     this.$http.get("http://localhost:8080/product/registrations")
                         .then((resp) => {
-                            this.registrations = resp.body.map(r => {
-                                let name = r.registration.team
-                                if (name.indexOf("(") == (-1) && name !== "Free Agent") {
-                                    name = name + " (NEW)"
-                                }
-                                let center = r.product.center.replace("Sofive ", "").split(",")[0],
-                                    date = moment.unix(r.registration.date).format("MM/DD/YYYY h:ma")
-                                return {
-                                    ...r,
-                                    name,
-                                    center,
-                                    date
-                                }
-                            });
-                            console.log(this.registrations)
+                            this.process(resp);
                             this.$nextTick(function() {
                                 $('.dataTables-example').DataTable({
                                     pageLength: 25,
@@ -382,6 +403,28 @@
                         .catch((err) => {
                             console.log(err.body.errors)
                         })
+                },
+                process: function(resp) {
+                    this.registrations = resp.body.map(r => {
+                        let name = r.registration.team
+                        if (name.indexOf("(") == (-1) && name !== "Free Agent") {
+                            name = name + " (NEW)"
+                        }
+                        let center = r.product.center.replace("Sofive ", "").split(",")[0],
+                            date = moment.unix(r.registration.date).format("MM/DD/YYYY h:mma")
+                        return {
+                            ...r,
+                            name,
+                            center,
+                            date
+                        }
+                    });
+                    this.$nextTick(function() {
+                        $('.i-checks').iCheck({
+                            checkboxClass: 'icheckbox_square-green',
+                            radioClass: 'iradio_square-green',
+                        });
+                    })
                 },
                 validate: function() {
                     const validated = [...document.querySelectorAll('input[name="validated"]:checked')].map(e => (e.value))
