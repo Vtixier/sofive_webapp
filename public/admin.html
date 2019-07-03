@@ -173,7 +173,7 @@
                                     </thead>
                                     <tbody>
                                         <tr v-for="registration in registrations" class="gradeX">
-                                            <td>{{registration.registration.date}}</td>
+                                            <td>{{registration.date}}</td>
                                             <td>{{registration.center}}</td>
                                             <td>{{registration.product.type}}</td>
                                             <td>{{registration.product.name}}</td>
@@ -265,11 +265,13 @@
                                 if (name.indexOf("(") == (-1) && name !== "Free Agent") {
                                     name = name + " (NEW)"
                                 }
-                                let center = r.product.center.replace("Sofive ", "").split(",")[0]
+                                let center = r.product.center.replace("Sofive ", "").split(",")[0],
+                                    date = moment.unix(r.registration.date).format("MM/DD/YYYY h:ma")
                                 return {
                                     ...r,
                                     name,
-                                    center
+                                    center,
+                                    date
                                 }
                             });
                             console.log(this.registrations)
