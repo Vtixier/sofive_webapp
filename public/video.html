@@ -220,7 +220,13 @@
 
             </div>
 
-            <div class="row text-center">
+            <div class="row text-center" v-if="no_vid">
+                <div class="col-sm-12">
+                    <p>For this center, please follow <a target="blank" href="https://sofive.com/videos/">this</a> link to watch the videos.</p>
+                </div>
+            </div>
+
+            <div class="row text-center" v-if="!no_vid">
                 <div class="col-sm-12">
                     <p>Don't find your video ? Try narrowing down your research with the filters above !</p>
                     </p>
@@ -336,6 +342,12 @@
                     loading: false,
                 },
                 computed: {
+                    no_vid: function() {
+                        if (this.selected.center === "Brooklyn" || this.selected.center === "Rockville") {
+                            return true
+                        }
+                        return false
+                    },
                     fields: function() {
                         return [...new Set(this.recordings.map((rec) => (rec.field)))].sort()
                     },
