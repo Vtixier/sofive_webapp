@@ -349,6 +349,8 @@
                     self = this;
                 this.selected.center = center
 
+                var l = Ladda.bind('.ladda-button-checkout');
+
                 $(document).ready(function() {
                     $('.i-checks').iCheck({
                         checkboxClass: 'icheckbox_square-green',
@@ -356,7 +358,6 @@
                     });
                     $('#loginForm').on('submit', function(ev) {
                         console.log(ev)
-                        var l = Ladda.bind('.ladda-button-checkout');
                         self.pay()
                         return false
                     });
@@ -420,21 +421,31 @@
                         deposit = true
                     }
                     const d = {
-                        customer_name: this.name,
-                        customer_email: this.email,
-                        customer_phone: this.phone,
-                        amount: paid,
-                        facility_id: this.data.facility_id,
-                        field_id: this.data.id,
-                        start: this.data.start,
-                        duration: parseInt(this.data.duration)
-                    }
+                            customer_name: this.name,
+                            customer_email: this.email,
+                            customer_phone: this.phone,
+                            amount: paid,
+                            facility_id: this.data.facility_id,
+                            field_id: this.data.id,
+                            start: this.data.start,
+                            duration: parseInt(this.data.duration)
+                        },
+                        self = this;
                     this.$http.post("http://localhost:8080/event/book", d)
                         .then((resp) => {
                             this.stripeRedirect(resp.body.booking_id, deposit)
                         })
                         .catch((err) => {
                             console.log(err)
+                            setTimeout(function() {
+                                self.$http.post("http://localhost:8080/event/book", d)
+                                    .then((respons) => {
+                                        self.stripeRedirect(respons.body.booking_id, deposit)
+                                    })
+                                    .catch((err) => {
+                                        console.log("ERR", err)
+                                    })
+                            }, 2000)
                         })
                 },
                 stripeRedirect: function(booking_id, deposit) {
