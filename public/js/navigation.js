@@ -19,8 +19,12 @@ Vue.component('sofive-left-menu', {
                                 <li><a class="dropdown-item" v-on:click="setCookie('2')">Sofive Elkins Park</a></li>
                                 <li><a class="dropdown-item" v-on:click="setCookie('5')">Sofive Columbia</a></li>
                             </ul>
-                            <ul>
+                            <br/>
+                            <!-- <a href="https://sofive.com" target="blank"><span class="text-muted text-xs block" style="color: white !important;">Go to <b>www.sofive.com</b></span></a> -->
                         </div>
+                    </li>
+                    <li>
+                        <a href="https://sofive.com" target="blank"><i class="fa fa-home"></i><span class="nav-label">Go to <b>sofive.com</b></span></a>
                     </li>
                     <li>
                         <a href="standings.html"><i class="fa fa-trophy"></i><span class="nav-label">Schedule & standings</span></a>
