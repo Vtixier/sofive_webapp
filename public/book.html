@@ -646,7 +646,8 @@
                             facility_id: parseInt(this.selected.center),
                             date: moment(this.date, "MM-DD-YYYY").format("YYYY-MM-DD"),
                             time: time,
-                            duration: parseInt(this.selected.duration)
+                            duration: parseInt(this.selected.duration),
+                            field_type: this.selected.field
                         }
                         this.$http.post("http://localhost:8080/event/", body)
                             .then((resp) => {
