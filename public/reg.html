@@ -428,7 +428,7 @@
                     age: false,
                     league: false
                 },
-                tournament_ages: ["U7", "U8", "U9", "U10", "U11", "U12", "U13", "U14", "U15", "U16", "U17", "U18", "U19"]
+                tournament_ages: ["U6", "U7", "U8", "U9", "U10", "U11", "U12", "U13", "U14", "U15", "U16", "U17", "U18", "U19"]
             },
             computed: {
                 youth: function() {
@@ -657,32 +657,32 @@
 
                                 let new_t = {
                                     ...t,
+                                    date: d.format("YYYY-MM-DD"),
                                     day: d.format("dddd"),
                                     price,
                                     duration
                                 }
 
-                                const age_group = t.age
-                                var indices = [];
-                                for (var o = 0; o < age_group.length; o++) {
-                                    if (age_group[o] === "U") indices.push(o);
-                                }
-
-                                if (indices.length !== 2) {
-                                    console.log(age_group, "has more than 2 age groups")
-                                    return new_t
-                                }
-
+                                const second_part = t.name.split(",")[1].trim()
                                 let min_age = 0,
                                     max_age = 0
-                                const indic_min = age_group.indexOf("-U")
-                                min_age = parseInt(age_group.slice(indices[0] + 1, indic_min))
-                                max_age = parseInt(age_group.slice(indic_min + 2, indic_min + 5))
+
+                                if (second_part.indexOf("-") > (-1)) {
+                                    const third_split = second_part.split("-")
+                                    min_age = parseInt(third_split[0].replace("U", ""))
+                                    const f_split = third_split[1].split(" ")
+                                    max_age = parseInt(f_split[0].replace("U", ""))
+                                } else {
+                                    const f_split = second_part.split(" ")
+                                    min_age = parseInt(f_split[0].replace("U", ""))
+                                    max_age = min_age
+                                }
 
                                 return {
                                     ...new_t,
                                     min_age,
-                                    max_age
+                                    max_age,
+                                    age: second_part
                                 }
                             })
                             this.$nextTick(function() {
