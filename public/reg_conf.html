@@ -636,11 +636,11 @@
                     }
                     const self = this;
                     let deposit = false,
-                        sku = "sku_FG82poapRR0RYE" // self.product.sku
-                    // if (document.querySelector('input[name="b"]:checked') && document.querySelector('input[name="b"]:checked').value === "deposit") {
-                    //     deposit = true
-                    //     sku = self.deposit.sku
-                    // }
+                        sku = self.product.sku
+                    if (document.querySelector('input[name="b"]:checked') && document.querySelector('input[name="b"]:checked').value === "deposit") {
+                        deposit = true
+                        sku = self.deposit.sku
+                    }
                     const d = this.getBody(deposit);
                     const redirect_url = 'http://localhost/reg_done.html?sel=' + btoa(JSON.stringify(d))
                     stripe.redirectToCheckout({
