@@ -209,6 +209,7 @@
                                             <th>Email</th>
                                             <th>Phone</th>
                                             <th>Paid</th>
+                                            <th>Details</th>
                                             <th>Validate</th>
                                         </tr>
                                     </thead>
@@ -223,6 +224,11 @@
                                             <td>{{registration.registration.email}}</td>
                                             <td>{{registration.registration.phone}}</td>
                                             <td>${{registration.product.price/100}}</td>
+                                            <td>
+                                                <ul v-if="registration.details">
+                                                    <li v-for="detail in registration.details">{{detail.key}} : {{detail.val}}</li>
+                                                </ul>
+                                            </td>
                                             <td>
                                                 <input type="checkbox" class="i-checks" checked v-if="registration.past">
                                                 <input name="validated" type="checkbox" class="i-checks" :value="registration.registration.id" v-model="reg_done" v-else>
@@ -412,11 +418,26 @@
                         }
                         let center = r.product.center.replace("Sofive ", "").split(",")[0],
                             date = moment.unix(r.registration.date).format("MM/DD/YYYY h:mma")
+
+                        let details = []
+                        if (r.registration.details.Valid) {
+                            const elements = JSON.parse(r.registration.details.String)
+                            for (k in elements) {
+                                if (elements[k] !== "") {
+                                    details.push({
+                                        key: k,
+                                        val: elements[k]
+                                    })
+                                }
+                            }
+                        }
+
                         return {
                             ...r,
                             name,
                             center,
-                            date
+                            date,
+                            details
                         }
                     });
                     this.$nextTick(function() {

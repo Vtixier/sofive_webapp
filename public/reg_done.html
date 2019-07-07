@@ -215,7 +215,7 @@
                             <div class="ibox-content">
                                 <div class="panel panel-default">
                                     <div class="panel-body" style="text-align: center">
-                                        <h3 style="color: #03793E"><i class="fa fa-calendar"></i> {{data.date}}</h3>
+                                        <h3 style="color: #03793E"><i class="fa fa-calendar"></i> {{data.display_date}}</h3>
                                         <h3 style="color: #03793E"><i class="fa fa-users"></i> {{data.team}}</h3>
                                         <h3 style="color: #03793E"><i class="fa fa-map-marker"></i> {{data.name}}</h3>
                                     </div>
@@ -315,11 +315,7 @@
     <script src="js/plugins/iCheck/icheck.min.js"></script>
     <script src="js/plugins/sweetalert/sweetalert.min.js"></script>
 
-    <script src="https://js.stripe.com/v3/"></script>
-
     <script type="text/javascript">
-        let stripe = Stripe(`pk_live_u3cyg4FEiEES4YUFKHeziPdY00kEYW2kt7`);
-
         var app = new Vue({
             el: '#wrapper',
             data: {
@@ -335,6 +331,7 @@
                 const params = this.findGetParameter(),
                     parsed = JSON.parse(atob(params.sel));
                 this.data = parsed
+                this.data.display_date = moment.unix(this.data.date).format("MM-DD-YYYY")
                 console.log(this.data)
                 this.finishRegistration()
             },
