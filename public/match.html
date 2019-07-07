@@ -188,7 +188,8 @@
                                 <div class="ibox-content profile-content">
                                     <h4><strong>{{match.home.name}} <span v-if="match.home.score>=0">{{match.home.score}}</span> - <span v-if="match.away.score>=0">{{match.away.score}}</span> {{match.away.name}}</strong></h4>
                                     <p />
-                                    <p><i class="fa fa-map-marker"></i> {{facility.name}}</p>
+                                    <p><i class="fa fa-map-marker"></i> {{match.field}} <i>at</i> {{facility.name}}</p>
+                                    <p><i class="fa fa-calendar"></i> {{match.start}}</p>
                                     <!-- <p><i class="fa fa-male"></i> {{referee.firstname+" "+referee.lastname}}</p> -->
                                     <!--                                     <div class="user-button">
                                         <div class="row">
@@ -391,6 +392,7 @@
                         this.$http.get(url)
                             .then((resp) => {
                                 this.match = resp.body
+                                this.match.start = moment(this.match.start, "YYYY-MM-DDTHH:mm:ss").format("YYYY-MM-DD - h:mma")
                                 this.getTeamsDetails(this.match.home.team_id, this.match.away.team_id)
                                 this.getLeagueDetails(this.match.league_id)
                                 this.getResults(this.match.league_id)
