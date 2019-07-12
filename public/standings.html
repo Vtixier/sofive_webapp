@@ -581,7 +581,7 @@
                             Object.keys(matchDailyMap).forEach(function(key) {
                                 self.matches.push({
                                     day: key,
-                                    matches: matchDailyMap[key]
+                                    matches: matchDailyMap[key].sort(self.dateSortMatchFunc)
                                 })
                             });
                             this.matches = this.matches.sort(self.dateSortFunc)
@@ -597,6 +597,18 @@
                         .catch((err) => {
                             console.log(err)
                         })
+                },
+                dateSortMatchFunc: function(a, b) {
+                    const mom_a = a.moment_date,
+                        mom_b = b.moment_date;
+                    const diff = mom_a.diff(mom_b, 'seconds')
+                    if (diff > 0) {
+                        return 1
+                    } else if (diff < 0) {
+                        return -1
+                    } else {
+                        return 0
+                    }
                 },
                 dateSortFunc: function(a, b) {
                     const mom_a = a.matches[0].moment_date,
