@@ -322,22 +322,27 @@
                                     <table class="table table-hover margin bottom">
                                         <thead>
                                             <tr>
-                                                <th class="text-center">Details</th>
-                                                <th class="text-center">Type</th>
-                                                <th class="text-center">Team</th>
-                                                <th class="text-center">Score</th>
-                                                <th class="text-center">Team</th>
-                                                <th class="text-center">Show more</th>
+                                                <th class="text-center">Day</th>
+                                                <th class="text-center">Matches</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr v-for="match in matches">
-                                                <td class="text-center">{{match.start_parsed}}</td>
-                                                <td class="text-center">{{match.match_type}}</td>
-                                                <td class="text-center">{{match.home.name}}</td>
-                                                <td class="text-center"><span v-if="match.home.score !== (-1) && match.away.score !== (-1)">{{match.home.score}} - {{match.away.score}}</span></td>
-                                                <td class="text-center">{{match.away.name}}</td>
-                                                <td style="text-align: center"><a :href="match.url"><span class="label label-primary">view more</span></a></td>
+                                                <td style="vertical-align: middle;">{{match.day}}</td>
+                                                <td>
+                                                    <table class="table margin bottom">
+                                                        <tbody>
+                                                            <tr v-for="single_match in match.matches">
+                                                                <td class="text-center">{{single_match.start_parsed}}</td>
+                                                                <td class="text-center">{{single_match.match_type}}</td>
+                                                                <td class="text-center">{{single_match.home.name}}</td>
+                                                                <td class="text-center"><span v-if="single_match.home.score !== (-1) && single_match.away.score !== (-1)">{{single_match.home.score}} - {{single_match.away.score}}</span></td>
+                                                                <td class="text-center">{{single_match.away.name}}</td>
+                                                                <td style="text-align: center"><a :href="single_match.url"><span class="label label-primary">view more</span></a></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -390,7 +395,9 @@
                 league_loading: false,
                 standings: [],
                 standings_loading: false,
-                matches: [],
+                matches: [{
+                    matches: []
+                }],
                 selected_season: "",
                 selected_league: "",
                 selected: {
@@ -555,12 +562,35 @@
                     this.$http.get(url)
                         .then((resp) => {
                             this.standings = resp.body.leaderboard
-                            this.matches = resp.body.matches.map(m => ({
-                                ...m,
-                                moment_date: moment(m.start, "YYYY-MM-DDTHH:mm:ss"),
-                                start_parsed: moment(m.start, "YYYY-MM-DDTHH:mm:ss").format("YYYY-MM-DD h:mmA").replace(" ", " at "),
-                                url: "match.html?id=" + m.id
-                            })).sort(this.dateSortFunc)
+                            const matchDailyMap = {}
+                            resp.body.matches.forEach(m => {
+                                const date_parsed = moment(m.start, "YYYY-MM-DDTHH:mm:ss"),
+                                    day = date_parsed.format("YYYY-MM-DD")
+                                if (!(day in matchDailyMap)) {
+                                    matchDailyMap[day] = []
+                                }
+                                matchDailyMap[day].push({
+                                    ...m,
+                                    moment_date: date_parsed,
+                                    start_parsed: date_parsed.format("YYYY-MM-DD h:mmA").replace(" ", " at "),
+                                    url: "match.html?id=" + m.id
+                                })
+                            })
+                            this.matches = []
+                            const self = this
+                            Object.keys(matchDailyMap).forEach(function(key) {
+                                self.matches.push({
+                                    day: key,
+                                    matches: matchDailyMap[key]
+                                })
+                            });
+                            this.matches = this.matches.sort(self.dateSortFunc)
+                            // this.matches = resp.body.matches.map(m => ({
+                            //     ...m,
+                            //     moment_date: moment(m.start, "YYYY-MM-DDTHH:mm:ss"),
+                            //     start_parsed: moment(m.start, "YYYY-MM-DDTHH:mm:ss").format("YYYY-MM-DD h:mmA").replace(" ", " at "),
+                            //     url: "match.html?id=" + m.id
+                            // })).sort(this.dateSortFunc)
                             this.standings_loading = false
                             console.log("Matches", this.matches)
                         })
@@ -569,7 +599,9 @@
                         })
                 },
                 dateSortFunc: function(a, b) {
-                    const diff = a.moment_date.diff(b.moment_date, 'seconds')
+                    const mom_a = a.matches[0].moment_date,
+                        mom_b = b.matches[0].moment_date;
+                    const diff = mom_a.diff(mom_b, 'seconds')
                     if (diff > 0) {
                         return 1
                     } else if (diff < 0) {
