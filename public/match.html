@@ -155,6 +155,16 @@
                 <sofive-header />
             </div>
 
+            <div class="modal inmodal" id="edit" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content animated bounceInRight">
+                        <div class="modal-body">
+                            <iframe class="video" allow="autoplay" :src="video_url" frameborder="0" allowfullscreen style="width: 100%"></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
 
             <div class="wrapper wrapper-content animated fadeInRight">
                 <div class="row">
@@ -242,7 +252,7 @@
                                             'float-left': (match.home.name === event.side)}" style="padding: 10px">
                                                 <h2>{{event.date}} <b>{{event.type}}</b> from <b>{{event.side}}</b></h2>
                                                 <div v-html="event.subtitle"></div>
-                                                <a v-if="scoreplay_videos.clips[i]" :href="scoreplay_videos.clips[i].url" target="blank" class="btn btn-sm btn-primary" style="float: right;">Video</a>
+                                                <a v-if="scoreplay_videos.clips[i]" v-on:click="select_vid(scoreplay_videos.clips[i].url)" target="blank" class="btn btn-sm btn-primary" style="float: right; color: white" data-toggle="modal" data-target="#edit">Video</a>
                                             </div>
                                         </div>
                                     </div>
@@ -381,7 +391,8 @@
                     scoreplay_videos: {
                         clips: [],
                         recording: {}
-                    }
+                    },
+                    video_url: ""
                 },
                 mounted: function() {
                     const params = this.findGetParameter()
@@ -397,6 +408,9 @@
                         })
                         return queryDict
                     },
+                    select_vid: function(v) {
+                        this.video_url = v
+                    },
                     getScoreplayVideos: function() {
                         let url = "https://video.scoreplay.io/match/" + this.matchID
                         this.$http.get(url)
@@ -408,6 +422,10 @@
                                 }
                                 this.scoreplay_videos = {
                                     ...v,
+                                    clips: v.clips.map(c => ({
+                                        ...c,
+                                        url: "https://www.dailymotion.com/embed/video/" + c.url.replace("https://www.dailymotion.com/video/", "") + "?autoplay=1&queue-enable=false&queue-autoplay-next=false&ui-start-screen-info=false"
+                                    })),
                                     recording: {
                                         ...v.recording,
                                         url: rec_url
