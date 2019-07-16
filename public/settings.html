@@ -150,9 +150,14 @@
                         </div>
                         <div class="ibox-content">
 
-                            <div class="custom-file">
-                                <input id="logo" type="file" class="custom-file-input">
-                                <label for="logo" class="custom-file-label">Choose file...</label>
+                            <div class="custom-products">
+                                <input id="logo" type="file" class="custom-products">
+                                <label for="logo" class="custom-file-label">Choose products file...</label>
+                            </div>
+
+                            <div class="custom-sku">
+                                <input id="logo" type="file" class="custom-sku">
+                                <label for="logo" class="custom-file-label">Choose sku file...</label>
                             </div>
 
                         </div>
@@ -200,7 +205,12 @@
                     window.location = "http://localhost/login.html?url=http://localhost/settings.html"
                 }
                 const self = this;
-                $('.custom-file-input').on('change', function() {
+                $('.custom-products').on('change', function() {
+                    let fileName = $(this).val().split('\\').pop();
+                    $(this).next('.custom-file-label').addClass("selected").html(fileName);
+                    self.uploadFile()
+                });
+                $('.custom-sku').on('change', function() {
                     let fileName = $(this).val().split('\\').pop();
                     $(this).next('.custom-file-label').addClass("selected").html(fileName);
                     self.uploadFile()
@@ -217,9 +227,9 @@
                     }
                     return null;
                 },
-                uploadFile: function() {
+                uploadProductsFile: function() {
 
-                    if (document.querySelector('.custom-file-input').files.length == 0) {
+                    if (document.querySelector('.custom-products').files.length == 0) {
                         return M.toast({
                             html: "Please select a file",
                             classes: 'red rounded'
@@ -227,9 +237,33 @@
                     }
 
                     var fd = new FormData();
-                    fd.append('products', document.querySelector('.custom-file-input').files[0]);
+                    fd.append('products', document.querySelector('.custom-products').files[0]);
 
-                    return this.$http.post("http://localhost:8080/product/file", fd, {
+                    return this.$http.post("http://localhost:8080/product/file/product", fd, {
+                            headers: {
+                                Accept: "application/json"
+                            }
+                        })
+                        .then((resp) => {
+                            console.log(resp)
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                },
+                uploadSKUFile: function() {
+
+                    if (document.querySelector('.custom-sku').files.length == 0) {
+                        return M.toast({
+                            html: "Please select a file",
+                            classes: 'red rounded'
+                        });
+                    }
+
+                    var fd = new FormData();
+                    fd.append('products', document.querySelector('.custom-sku').files[0]);
+
+                    return this.$http.post("http://localhost:8080/product/file/sku", fd, {
                             headers: {
                                 Accept: "application/json"
                             }
