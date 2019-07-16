@@ -401,8 +401,8 @@
                         let url = "https://video.scoreplay.io/match/" + this.matchID
                         this.$http.get(url)
                             .then((resp) => {
-                                const v = resp.body,
-                                    rec_url = v.recording.url
+                                const v = resp.body
+                                let rec_url = v.recording.url
                                 if (rec_url !== "") {
                                     rec_url = "https://www.dailymotion.com/embed/video/" + v.recording.url.replace("https://www.dailymotion.com/video/", "") + "?queue-enable=false&queue-autoplay-next=false&ui-start-screen-info=false"
                                 }
