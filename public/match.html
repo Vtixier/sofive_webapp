@@ -181,9 +181,14 @@
                             </div>
                             <div>
                                 <div class="ibox-content no-padding border-left-right">
-                                    <figure v-for="video in videos" style="margin: 0">
-                                        <iframe class="video" allow="autoplay" :src="video.embed" frameborder="0" allowfullscreen></iframe>
-                                    </figure>
+                                    <div v-if="scoreplay_videos.recording.url">
+                                        <iframe class="video" allow="autoplay" :src="scoreplay_videos.recording.url" frameborder="0" allowfullscreen></iframe>
+                                    </div>
+                                    <div v-else>
+                                        <figure v-for="video in videos" style="margin: 0">
+                                            <iframe class="video" allow="autoplay" :src="video.embed" frameborder="0" allowfullscreen></iframe>
+                                        </figure>
+                                    </div>
                                 </div>
                                 <div class="ibox-content profile-content">
                                     <h4><strong>{{match.home.name}} <span v-if="match.home.score>=0">{{match.home.score}}</span> - <span v-if="match.away.score>=0">{{match.away.score}}</span> {{match.away.name}}</strong></h4>
@@ -224,7 +229,7 @@
 
                                     <div id="vertical-timeline" class="vertical-container dark-timeline center-orientation">
 
-                                        <div class="vertical-timeline-block" v-for="event in events" style="margin: 25px">
+                                        <div class="vertical-timeline-block" v-for="(event, i) in events" style="margin: 25px">
                                             <div class="vertical-timeline-icon navy-bg">
                                                 <i class="fa fa-soccer-ball-o" v-if="event.type == 'goal'"></i>
                                                 <i class="fa fa-meh-o" v-if="event.type == 'foul'"></i>
@@ -235,9 +240,9 @@
                                             <div :class="{'vertical-timeline-content': true,
                                             'float-right': (match.home.name !== event.side),
                                             'float-left': (match.home.name === event.side)}" style="padding: 10px">
-                                                <!-- <a href="#" class="btn btn-sm btn-primary">Video</a> -->
                                                 <h2>{{event.date}} <b>{{event.type}}</b> from <b>{{event.side}}</b></h2>
                                                 <div v-html="event.subtitle"></div>
+                                                <a v-if="scoreplay_videos.clips[i]" :href="scoreplay_videos.clips[i].url" target="blank" class="btn btn-sm btn-primary" style="float: right;">Video</a>
                                             </div>
                                         </div>
                                     </div>
@@ -372,12 +377,17 @@
                     videos: [],
                     home_team: {},
                     away_team: {},
-                    ref_rating: 0
+                    ref_rating: 0,
+                    scoreplay_videos: {
+                        clips: [],
+                        recording: {}
+                    }
                 },
                 mounted: function() {
                     const params = this.findGetParameter()
                     this.matchID = params.id
                     this.getDashMatch()
+                    this.getScoreplayVideos()
                 },
                 methods: {
                     findGetParameter: function() {
@@ -386,6 +396,27 @@
                             queryDict[item.split("=")[0]] = item.split("=")[1]
                         })
                         return queryDict
+                    },
+                    getScoreplayVideos: function() {
+                        let url = "https://video.scoreplay.io/match/" + this.matchID
+                        this.$http.get(url)
+                            .then((resp) => {
+                                const v = resp.body,
+                                    rec_url = v.recording.url
+                                if (rec_url !== "") {
+                                    rec_url = "https://www.dailymotion.com/embed/video/" + v.recording.url.replace("https://www.dailymotion.com/video/", "") + "?queue-enable=false&queue-autoplay-next=false&ui-start-screen-info=false"
+                                }
+                                this.scoreplay_videos = {
+                                    ...v,
+                                    recording: {
+                                        ...v.recording,
+                                        url: rec_url
+                                    }
+                                }
+                            })
+                            .catch((err) => {
+                                console.log(err)
+                            })
                     },
                     getDashMatch: function() {
                         let url = "http://localhost:8080/match/" + this.matchID

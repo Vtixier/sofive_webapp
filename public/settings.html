@@ -229,7 +229,7 @@
                     var fd = new FormData();
                     fd.append('products', document.querySelector('.custom-file-input').files[0]);
 
-                    return this.$http.post("http://localhost:8080/product/file/product", fd, {
+                    return this.$http.post("http://localhost:8080/product/file/sku", fd, {
                             headers: {
                                 Accept: "application/json"
                             }
