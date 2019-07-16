@@ -208,12 +208,12 @@
                 $('.custom-products').on('change', function() {
                     let fileName = $(this).val().split('\\').pop();
                     $(this).next('.custom-file-label').addClass("selected").html(fileName);
-                    self.uploadFile()
+                    self.uploadProductsFile()
                 });
                 $('.custom-sku').on('change', function() {
                     let fileName = $(this).val().split('\\').pop();
                     $(this).next('.custom-file-label').addClass("selected").html(fileName);
-                    self.uploadFile()
+                    self.uploadSKUFile()
                 });
             },
             methods: {
