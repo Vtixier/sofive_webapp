@@ -511,7 +511,7 @@
                         }
                         const home = this.match.home.name,
                             away = this.match.away.name,
-                            match_start = moment(events[0].date, "YYYY-MM-DD HH:mm:ss");
+                            match_start = moment(this.match.start, "YYYY-MM-DD - h:mma");
                         let final_events = [],
                             home_score = 0,
                             away_score = 0;
