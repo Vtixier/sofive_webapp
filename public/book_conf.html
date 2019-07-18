@@ -453,7 +453,8 @@
                         })
                 },
                 stripeRedirect: function(booking_id, deposit) {
-                    const redirect_url = 'http://localhost:8080/event/confirm/' + booking_id + '?sel=' + this.sel
+                    const redirect_url = 'http://localhost:8080/event/confirm/' + booking_id + '?sel=' + this.sel,
+                    self = this;
                     let sku = this.product.sku
                     if (deposit) {
                         sku = this.deposit.sku
@@ -465,6 +466,7 @@
                             }],
                             successUrl: redirect_url,
                             cancelUrl: 'https://scoreplay.io/canceled',
+                            customerEmail: self.email,
                         })
                         .then(function(result) {
                             if (result.error) {
