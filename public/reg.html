@@ -600,7 +600,7 @@
                                     let d = {
                                         ...l,
                                         season,
-                                        start: moment(season.start_date, "YYYY-MM-DDTHH:mm:ss").format("MM-DD-YYYY"),
+                                        start: moment(l.start_date, "YYYY-MM-DDTHH:mm:ss").format("MM-DD-YYYY"),
                                         end: moment(season.end_date, "YYYY-MM-DDTHH:mm:ss").format("MM-DD-YYYY"),
                                         age,
                                     }
