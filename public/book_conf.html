@@ -454,7 +454,7 @@
                 },
                 stripeRedirect: function(booking_id, deposit) {
                     const redirect_url = 'http://localhost:8080/event/confirm/' + booking_id + '?sel=' + this.sel,
-                    self = this;
+                        self = this;
                     let sku = this.product.sku
                     if (deposit) {
                         sku = this.deposit.sku

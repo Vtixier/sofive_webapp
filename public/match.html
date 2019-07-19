@@ -472,7 +472,7 @@
                                 this.videos = resp.body.videos.map(v => ({
                                     ...v,
                                     embed: "https://www.dailymotion.com/embed/video/" + v.id + "?queue-enable=false&queue-autoplay-next=false&ui-start-screen-info=false"
-                                }))
+                                })).filter(v => (v.recType !== "clip"))
                             })
                             .catch((err) => {
                                 console.log(err)
