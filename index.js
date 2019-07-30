@@ -6,8 +6,8 @@ const https = require('https');
 const fs = require('fs');
 
 const https_credentials = {
-  key: fs.readFileSync('./https/sofive.com2018.key', 'utf8'),
-  cert: fs.readFileSync('./https/sofive.com2018.crt', 'utf8')
+  key: fs.readFileSync('./https/sofive.com2019.key', 'utf8'),
+  cert: fs.readFileSync('./https/sofive.com2019.crt', 'utf8')
 }
 
 app.use(express.static('public', { maxAge: 86400000 }));
