@@ -318,10 +318,10 @@
                 }).on('changeDate', function(e) {
                     const val = e.target.id
                     if (val === "start") {
-                        self.start = moment(e.date).format("MM-DD-YYYY")
+                        self.start = moment(e.date, "MM/DD/YYYY").format("MM-DD-YYYY")
                         return
                     }
-                    self.end = moment(e.date).format("MM-DD-YYYY")
+                    self.end = moment(e.date, "MM/DD/YYYY").format("MM-DD-YYYY")
                 });
                 this.getRegistrations()
             },
