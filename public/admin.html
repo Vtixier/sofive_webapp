@@ -309,6 +309,7 @@
                 );
                 this.start = moment().format("MM-DD-YYYY")
                 this.end = moment().format("MM-DD-YYYY")
+                const self = this
                 $('.input-group.input-daterange').datepicker({
                     todayBtn: "linked",
                     keyboardNavigation: false,
@@ -318,10 +319,10 @@
                 }).on('changeDate', function(e) {
                     const val = e.target.id
                     if (val === "start") {
-                        self.start = moment(e.date, "MM/DD/YYYY").format("MM-DD-YYYY")
+                        self.start = moment(e.date).format("MM-DD-YYYY")
                         return
                     }
-                    self.end = moment(e.date, "MM/DD/YYYY").format("MM-DD-YYYY")
+                    self.end = moment(e.date).format("MM-DD-YYYY")
                 });
                 this.getRegistrations()
             },
