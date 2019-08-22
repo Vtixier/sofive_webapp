@@ -430,8 +430,6 @@
                                 return c;
                             })
 
-                            console.log("Clip", v)
-
                             v['recording']['url'] = rec_url
 
                             _this.scoreplay_videos = v
@@ -483,9 +481,8 @@
                             _this4.videos = resp.body.videos.filter(function(v) {
                                 return v.recType === "rental";
                             }).map(function(v) {
-                                return Object.assign(v, {
-                                    embed: "https://www.dailymotion.com/embed/video/" + v.id + "?queue-enable=false&queue-autoplay-next=false&ui-start-screen-info=false"
-                                });
+                                v['embed'] = "https://www.dailymotion.com/embed/video/" + v.id + "?queue-enable=false&queue-autoplay-next=false&ui-start-screen-info=false"
+                                return v
                             }).filter(function(v) {
                                 return v.recType !== "clip";
                             });
