@@ -673,13 +673,12 @@
 
                             var selected = _this2.randomFromArray(resp.body.free);
 
-                            _this2.available_field = {
-                                ...selected,
+                            _this2.available_field = Object.assign(selected, {
                                 date: moment(_this2.date, "MM-DD-YYYY").format("dddd, MMMM Do YYYY"),
                                 subtitle: time + " (duration: " + _this2.selected.duration + "min)",
                                 duration: _this2.selected.duration,
                                 start: moment(_this2.date + " " + time, "MM-DD-YYYY hh:mma").format("YYYY-MM-DD hh:mma")
-                            };
+                            });
                             _this2.fields_loading = false;
                         }).catch(function(err) {
                             console.log(err);
@@ -712,13 +711,12 @@
 
                             var selected = _this3.randomFromArray(resp.body.free);
 
-                            _this3.different_time.before = {
-                                ...selected,
+                            _this3.different_time.before = Object.assign(selected, {
                                 date: today.format("dddd, MMMM Do YYYY"),
                                 subtitle: prev_hour + " (duration: " + _this3.selected.duration + "min)",
                                 duration: _this3.selected.duration,
                                 start: moment(_this3.date + " " + prev_hour, "MM-DD-YYYY hh:mma").format("YYYY-MM-DD hh:mma")
-                            };
+                            });
                             _this3.loading.today = false;
                         }).catch(function(err) {
                             _this3.loading.today = false;
@@ -744,13 +742,12 @@
 
                             var selected = _this4.randomFromArray(resp.body.free);
 
-                            _this4.different_time.after = {
-                                ...selected,
+                            _this4.different_time.after = Object.assign(selected, {
                                 date: today.format("dddd, MMMM Do YYYY"),
                                 subtitle: next_hour + " (duration: " + _this4.selected.duration + "min)",
                                 duration: _this4.selected.duration,
                                 start: moment(_this4.date + " " + next_hour, "MM-DD-YYYY hh:mma").format("YYYY-MM-DD hh:mma")
-                            };
+                            });
                             _this4.loading.today = false;
                         }).catch(function(err) {
                             _this4.loading.today = false;
@@ -780,13 +777,12 @@
 
                             var selected = _this5.randomFromArray(resp.body.free);
 
-                            _this5.different_time.other_time = {
-                                ...selected,
+                            _this5.different_time.other_time = Object.assign(selected, {
                                 date: today.format("dddd, MMMM Do YYYY"),
                                 subtitle: time + " (duration: 60min)",
                                 duration: 60,
                                 start: moment(_this5.date + " " + time, "MM-DD-YYYY hh:mma").format("YYYY-MM-DD hh:mma")
-                            };
+                            });
                             _this5.loading.today = false;
                         }).catch(function(err) {
                             _this5.loading.today = false;
@@ -812,13 +808,12 @@
 
                             var selected = _this6.randomFromArray(resp.body.free);
 
-                            _this6.different_time.day_after = {
-                                ...selected,
+                            _this6.different_time.day_after = Object.assign(selected, {
                                 date: tomorrow.format("dddd, MMMM Do YYYY"),
                                 subtitle: time + " (duration: " + _this6.selected.duration + "min)",
                                 duration: _this6.selected.duration,
                                 start: moment(_this6.date + " " + time, "MM-DD-YYYY hh:mma").add(1, "d").format("YYYY-MM-DD hh:mma")
-                            };
+                            });
                             _this6.loading.tomorrow = false;
                         }).catch(function(err) {
                             _this6.loading.tomorrow = false;
@@ -831,8 +826,7 @@
                     choose: function choose(data) {
                         var _this7 = this;
 
-                        var d = {
-                            ...data,
+                        var d = Object.assign(data, {
                             facility_id: parseInt(this.selected.center),
                             booking: {
                                 center: this.centers.find(function(c) {
@@ -841,7 +835,7 @@
                                 duration: parseInt(this.selected.duration),
                                 field_type: this.selected.field.split("_")[0]
                             }
-                        };
+                        });
                         window.location = "book_conf.html?sel=" + btoa(JSON.stringify(d));
                     },
                     getCenterCookie: function getCenterCookie() {

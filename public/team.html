@@ -426,8 +426,7 @@
                         _this2.matches = resp.body.matches.filter(function(m) {
                             return m.home.name == _this2.team.name || m.away.name == _this2.team.name;
                         }).map(function(m) {
-                            return {
-                                ...m,
+                            return Object.assign(m, {
                                 moment_date: moment(m.start, "YYYY-MM-DDTHH:mm:ss"),
                                 start_parsed: moment(m.start, "YYYY-MM-DDTHH:mm:ss").format("YYYY-MM-DD h:mmA").replace(" ", " at "),
                                 won: m.home.name == _this2.team.name ? m.home.score >= m.away.score : m.home.score <= m.away.score,
@@ -447,7 +446,7 @@
                                     league: _this2.team.league.name,
                                     standings: _this2.leaderboard
                                 }))
-                            };
+                            });
                         }).sort(_this2.dateSortFunc);
                         _this2.next_matches = _this2.matches.filter(function(m) {
                             return (m.home.score === -1 || m.away.score === -1) && moment.duration(moment().diff(m.moment_date)).get("minutes") < 0;

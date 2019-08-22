@@ -357,12 +357,11 @@
                         _this2.name = resp.body.name;
                         _this2.standings = resp.body.leaderboard;
                         _this2.matches = resp.body.matches.map(function(m) {
-                            return {
-                                ...m,
+                            return Object.assign(m, {
                                 moment_date: moment(m.start, "YYYY-MM-DDTHH:mm:ss"),
                                 start_parsed: moment(m.start, "YYYY-MM-DDTHH:mm:ss").format("YYYY-MM-DD h:mmA").replace(" ", " at "),
                                 url: "match.html?id=" + m.id
-                            };
+                            });
                         }).sort(_this2.dateSortFunc);
                         _this2.standings_loading = false;
                         console.log("Matches", _this2.matches);

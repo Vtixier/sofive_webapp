@@ -650,13 +650,12 @@
                                     }
                                 }
 
-                                var d = {
-                                    ...l,
+                                var d = Object.assign(l, {
                                     season: season,
                                     start: moment(l.start_date, "YYYY-MM-DDTHH:mm:ss").format("MM-DD-YYYY"),
                                     end: moment(season.end_date, "YYYY-MM-DDTHH:mm:ss").format("MM-DD-YYYY"),
                                     age: age
-                                };
+                                });
 
                                 if (d.description.indexOf("Early Bird: ") !== -1) {
                                     var i = d.description.indexOf('Early Bird: '),
@@ -717,13 +716,12 @@
                                 price = t.description.slice(i + 5, j),
                                 k = t.description.indexOf(" minutes each"),
                                 duration = t.description.slice(k - 2, k) + " min";
-                            var new_t = {
-                                ...t,
+                            var new_t = Object.assign(t, {
                                 date: d.format("YYYY-MM-DD"),
                                 day: d.format("dddd"),
                                 price: price,
                                 duration: duration
-                            };
+                            });
                             var second_part = t.name.split(",")[1].trim();
                             var min_age = 0,
                                 max_age = 0;
@@ -740,12 +738,11 @@
                                 max_age = min_age;
                             }
 
-                            return {
-                                ...new_t,
+                            return Object.assign(new_t, {
                                 min_age: min_age,
                                 max_age: max_age,
                                 age: second_part
-                            };
+                            });
                         });
 
                         _this6.$nextTick(function() {
@@ -814,15 +811,14 @@
                 choose: function choose(reg_type) {
                     var _this7 = this;
 
-                    var d = {
+                    var d = Object.assign(this.selected.league, {
                         facility_id: parseInt(this.selected.facility_id),
-                        ...this.selected.league,
                         reg_type: reg_type,
                         product_type: this.selected.product.name,
                         center: this.centers.find(function(c) {
                             return c.id === _this7.selected.facility_id;
                         }).name
-                    };
+                    });
                     window.location = "reg_conf.html?sel=" + btoa(JSON.stringify(d));
                 }
             }

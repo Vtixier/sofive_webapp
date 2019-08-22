@@ -389,9 +389,7 @@
                         }
 
                         return _this.getPricingDetails("Yes").then(function(dep) {
-                            _this.deposit = {
-                                ...dep
-                            };
+                            _this.deposit = Object.assign(dep);
                         }).catch(function(err) {
                             console.log(err);
                         });
@@ -402,10 +400,9 @@
                 getPricingDetails: function getPricingDetails(deposit) {
                     var _this2 = this;
 
-                    var body = {
-                        ...this.data.booking,
+                    var body = Object.assign(this.data.booking, {
                         deposit: deposit
-                    };
+                    });
                     return new Promise(function(yes, no) {
                         _this2.$http.post("http://localhost:8080/product/booking", body).then(function(resp) {
                             yes(resp.body);

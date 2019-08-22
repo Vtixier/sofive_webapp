@@ -580,11 +580,10 @@
                         "email": this.email,
                         "phone": this.phone,
                         "paid": paid,
-                        "details": JSON.stringify({
+                        "details": JSON.stringify(Object.assign(this.yl, {
                             league: this.data.name,
                             kid: this.kid,
-                            ...this.yl
-                        })
+                        }))
                     };
                 },
                 getRegistration: function getRegistration() {

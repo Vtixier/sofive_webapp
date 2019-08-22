@@ -522,8 +522,7 @@
                             var clips = 0;
                             _this5.recordings = resp.data.map(function(rec) {
                                 var moment_date = moment(rec.date, "MM-DD-YYYY h:mma");
-                                return {
-                                    ...rec,
+                                return Object.assign(rec, {
                                     embed: "https://www.dailymotion.com/embed/video/" + rec.id + "?queue-enable=false&queue-autoplay-next=false&ui-start-screen-info=false",
                                     parsed_date: moment_date,
                                     start_date: moment_date.format("h") + ":00" + moment_date.format("a"),
@@ -539,7 +538,7 @@
                                             id: match.matchID
                                         };
                                     }).sort(_this5.dateSortFunc)
-                                };
+                                });
                             }).sort(_this5.dateSortFunc);
                             _this5.loading = false;
                         }).catch(function(err) {
