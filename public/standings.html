@@ -598,8 +598,7 @@
                                 matchDailyMap[day] = [];
                             }
 
-                            matchDailyMap[day].push({
-                                ...m,
+                            matchDailyMap[day].push(Object.assign(m, {
                                 moment_date: date_parsed,
                                 start_parsed: date_parsed.format("h:mmA"),
                                 url: "match.html?id=" + m.id
@@ -613,12 +612,7 @@
                                 matches: matchDailyMap[key].sort(self.dateSortMatchFunc)
                             });
                         });
-                        _this5.matches = _this5.matches.sort(self.dateSortFunc); // this.matches = resp.body.matches.map(m => ({
-                        //     ...m,
-                        //     moment_date: moment(m.start, "YYYY-MM-DDTHH:mm:ss"),
-                        //     start_parsed: moment(m.start, "YYYY-MM-DDTHH:mm:ss").format("YYYY-MM-DD h:mmA").replace(" ", " at "),
-                        //     url: "match.html?id=" + m.id
-                        // })).sort(this.dateSortFunc)
+                        _this5.matches = _this5.matches.sort(self.dateSortFunc);
 
                         _this5.standings_loading = false;
                         console.log("Matches", _this5.matches);

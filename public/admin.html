@@ -390,8 +390,7 @@
                     }).then(function() {
                         if (!current_events) {
                             _this.registrations = _this.registrations.map(function(r) {
-                                return {
-                                    ...r,
+                                return Object.assign(r, {
                                     past: true
                                 };
                             });
@@ -465,8 +464,7 @@
                             }
                         }
 
-                        return {
-                            ...r,
+                        return Object.assign(r, {
                             name: name,
                             center: center,
                             date: date,
