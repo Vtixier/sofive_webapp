@@ -82,7 +82,7 @@ Vue.component('sofive-left-menu', {
             Large Modal
         </button>
         </div>`,
-  data() {
+  data: function() {
     return {
         img: "img/sofive/sofive.png",
         open: false,
@@ -143,11 +143,11 @@ Vue.component('sofive-left-menu', {
         this.facility_loading = true
         this.centers = []
         this.$http.get("http://localhost:8080/facility/")
-            .then((resp) => {
+            .then(function(resp) {
                 this.centers = resp.body;
-                this.facility_loading = false
+                this.facility_loading = false 
             })
-            .catch((err) => {
+            .catch(function(err) {
                 console.log(err.body.errors)
             })
     },
