@@ -283,6 +283,29 @@
     <script src="js/plugins/datapicker/bootstrap-datepicker.js"></script>
 
     <script type="text/javascript">
+        "use strict";
+
+        function _toConsumableArray(arr) {
+            return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();
+        }
+
+        function _nonIterableSpread() {
+            throw new TypeError("Invalid attempt to spread non-iterable instance");
+        }
+
+        function _iterableToArray(iter) {
+            if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);
+        }
+
+        function _arrayWithoutHoles(arr) {
+            if (Array.isArray(arr)) {
+                for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) {
+                    arr2[i] = arr[i];
+                }
+                return arr2;
+            }
+        }
+
         var app = new Vue({
             el: '#wrapper',
             data: {
@@ -295,21 +318,21 @@
                     center: "0"
                 }
             },
-            mounted: function() {
-                let isAdmin = this.getAdminCookie()
+            mounted: function mounted() {
+                var isAdmin = this.getAdminCookie();
+
                 if (!isAdmin) {
-                    window.location = "http://localhost/login.html?url=http://localhost/admin.html"
+                    window.location = "http://localhost/login.html?url=http://localhost/admin.html";
                 }
-                const switch_element = document.querySelector('.js-switch')
-                Switchery(
-                    switch_element, {
-                        color: '#1AB394',
-                        size: 'small'
-                    }
-                );
-                this.start = moment().format("MM-DD-YYYY")
-                this.end = moment().format("MM-DD-YYYY")
-                const self = this
+
+                var switch_element = document.querySelector('.js-switch');
+                Switchery(switch_element, {
+                    color: '#1AB394',
+                    size: 'small'
+                });
+                this.start = moment().format("MM-DD-YYYY");
+                this.end = moment().format("MM-DD-YYYY");
+                var self = this;
                 $('.input-group.input-daterange').datepicker({
                     todayBtn: "linked",
                     keyboardNavigation: false,
@@ -317,151 +340,161 @@
                     autoclose: true,
                     todayHighlight: true
                 }).on('changeDate', function(e) {
-                    const val = e.target.id
+                    var val = e.target.id;
+
                     if (val === "start") {
-                        self.start = moment(e.date).format("MM-DD-YYYY")
-                        return
+                        self.start = moment(e.date).format("MM-DD-YYYY");
+                        return;
                     }
-                    self.end = moment(e.date).format("MM-DD-YYYY")
+
+                    self.end = moment(e.date).format("MM-DD-YYYY");
                 });
-                this.getRegistrations()
+                this.getRegistrations();
             },
             methods: {
-                getAdminCookie: function() {
+                getAdminCookie: function getAdminCookie() {
                     var nameEQ = "admin=";
                     var ca = document.cookie.split(';');
+
                     for (var i = 0; i < ca.length; i++) {
                         var c = ca[i];
-                        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+
+                        while (c.charAt(0) == ' ') {
+                            c = c.substring(1, c.length);
+                        }
+
                         if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
                     }
+
                     return null;
                 },
-                search: function() {
-                    const current_events = document.querySelector('.js-switch').checked
-                    let p = null
+                search: function search() {
+                    var _this = this;
+
+                    var current_events = document.querySelector('.js-switch').checked;
+                    var p = null;
+
                     if (!current_events) {
-                        const d = {
+                        var d = {
                             start: moment(this.start, "MM-DD-YYYY").unix(),
                             end: moment(this.end, "MM-DD-YYYY").add(1, 'd').unix()
-                        }
-                        console.log(d, this.start, this.end)
-                        p = this.$http.post("http://localhost:8080/product/registrations/past", d)
+                        };
+                        console.log(d, this.start, this.end);
+                        p = this.$http.post("http://localhost:8080/product/registrations/past", d);
                     } else {
-                        p = this.$http.get("http://localhost:8080/product/registrations")
+                        p = this.$http.get("http://localhost:8080/product/registrations");
                     }
-                    p.then((resp) => this.process(resp))
-                        .then(() => {
-                            if (!current_events) {
-                                this.registrations = this.registrations.map(r => ({
+
+                    p.then(function(resp) {
+                        return _this.process(resp);
+                    }).then(function() {
+                        if (!current_events) {
+                            _this.registrations = _this.registrations.map(function(r) {
+                                return {
                                     ...r,
                                     past: true
-                                }))
-                            }
-                        })
-                        .catch((err) => {
-                            console.log(err.body.errors)
-                        })
-                },
-                getRegistrations: function() {
-                    this.registrations = []
-                    this.$http.get("http://localhost:8080/product/registrations")
-                        .then((resp) => {
-                            this.process(resp);
-                            this.$nextTick(function() {
-                                $('.dataTables-example').DataTable({
-                                    pageLength: 25,
-                                    responsive: true,
-                                    dom: '<"html5buttons"B>lTfgitp',
-                                    buttons: [{
-                                            extend: 'copy'
-                                        },
-                                        {
-                                            extend: 'csv'
-                                        },
-                                        {
-                                            extend: 'excel',
-                                            title: 'ExampleFile'
-                                        },
-                                        {
-                                            extend: 'pdf',
-                                            title: 'ExampleFile'
-                                        },
-
-                                        {
-                                            extend: 'print',
-                                            customize: function(win) {
-                                                $(win.document.body).addClass('white-bg');
-                                                $(win.document.body).css('font-size', '10px');
-
-                                                $(win.document.body).find('table')
-                                                    .addClass('compact')
-                                                    .css('font-size', 'inherit');
-                                            }
-                                        }
-                                    ]
-                                });
-                                $('.i-checks').iCheck({
-                                    checkboxClass: 'icheckbox_square-green',
-                                    radioClass: 'iradio_square-green',
-                                });
-                            })
-                        })
-                        .catch((err) => {
-                            console.log(err.body.errors)
-                        })
-                },
-                process: function(resp) {
-                    this.registrations = resp.body.map(r => {
-                        let name = r.registration.team
-                        if (name.indexOf("(") == (-1) && name !== "Free Agent") {
-                            name = name + " (NEW)"
+                                };
+                            });
                         }
-                        let center = r.product.center.replace("Sofive ", "").split(",")[0],
-                            date = moment.unix(r.registration.date).format("MM/DD/YYYY h:mma")
+                    }).catch(function(err) {
+                        console.log(err.body.errors);
+                    });
+                },
+                getRegistrations: function getRegistrations() {
+                    var _this2 = this;
 
-                        let details = []
+                    this.registrations = [];
+                    this.$http.get("http://localhost:8080/product/registrations").then(function(resp) {
+                        _this2.process(resp);
+
+                        _this2.$nextTick(function() {
+                            $('.dataTables-example').DataTable({
+                                pageLength: 25,
+                                responsive: true,
+                                dom: '<"html5buttons"B>lTfgitp',
+                                buttons: [{
+                                    extend: 'copy'
+                                }, {
+                                    extend: 'csv'
+                                }, {
+                                    extend: 'excel',
+                                    title: 'ExampleFile'
+                                }, {
+                                    extend: 'pdf',
+                                    title: 'ExampleFile'
+                                }, {
+                                    extend: 'print',
+                                    customize: function customize(win) {
+                                        $(win.document.body).addClass('white-bg');
+                                        $(win.document.body).css('font-size', '10px');
+                                        $(win.document.body).find('table').addClass('compact').css('font-size', 'inherit');
+                                    }
+                                }]
+                            });
+                            $('.i-checks').iCheck({
+                                checkboxClass: 'icheckbox_square-green',
+                                radioClass: 'iradio_square-green'
+                            });
+                        });
+                    }).catch(function(err) {
+                        console.log(err.body.errors);
+                    });
+                },
+                process: function process(resp) {
+                    this.registrations = resp.body.map(function(r) {
+                        var name = r.registration.team;
+
+                        if (name.indexOf("(") == -1 && name !== "Free Agent") {
+                            name = name + " (NEW)";
+                        }
+
+                        var center = r.product.center.replace("Sofive ", "").split(",")[0],
+                            date = moment.unix(r.registration.date).format("MM/DD/YYYY h:mma");
+                        var details = [];
+
                         if (r.registration.details.Valid) {
-                            const elements = JSON.parse(r.registration.details.String)
+                            var elements = JSON.parse(r.registration.details.String);
+
                             for (k in elements) {
                                 if (elements[k] !== "") {
                                     details.push({
                                         key: k,
                                         val: elements[k]
-                                    })
+                                    });
                                 }
                             }
                         }
 
                         return {
                             ...r,
-                            name,
-                            center,
-                            date,
-                            details
-                        }
+                            name: name,
+                            center: center,
+                            date: date,
+                            details: details
+                        };
                     });
                     this.$nextTick(function() {
                         $('.i-checks').iCheck({
                             checkboxClass: 'icheckbox_square-green',
-                            radioClass: 'iradio_square-green',
+                            radioClass: 'iradio_square-green'
                         });
-                    })
+                    });
                 },
-                validate: function() {
-                    const validated = [...document.querySelectorAll('input[name="validated"]:checked')].map(e => (e.value))
+                validate: function validate() {
+                    var validated = _toConsumableArray(document.querySelectorAll('input[name="validated"]:checked')).map(function(e) {
+                        return e.value;
+                    });
+
                     this.$http.post("http://localhost:8080/product/registrations/validate", {
-                            ids: validated
-                        })
-                        .then((resp) => {
-                            window.location.reload(false)
-                        })
-                        .catch((err) => {
-                            console.log(err)
-                        })
+                        ids: validated
+                    }).then(function(resp) {
+                        window.location.reload(false);
+                    }).catch(function(err) {
+                        console.log(err);
+                    });
                 }
             }
-        })
+        });
     </script>
 
 </body>

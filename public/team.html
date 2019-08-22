@@ -365,6 +365,8 @@
     <script type="text/javascript" src="js/standings.js"></script>
 
     <script type="text/javascript">
+        "use strict";
+
         var app = new Vue({
             el: '#wrapper',
             data: {
@@ -384,84 +386,93 @@
                 matches: [],
                 next_matches: []
             },
-            mounted: function() {
-                const params = this.findGetParameter(),
+            mounted: function mounted() {
+                var params = this.findGetParameter(),
                     id = params.id || "";
+
                 if (id !== "") {
-                    this.team_id = id
-                    this.getTeam()
+                    this.team_id = id;
+                    this.getTeam();
                 }
             },
             methods: {
-                findGetParameter: function() {
-                    var queryDict = {}
+                findGetParameter: function findGetParameter() {
+                    var queryDict = {};
                     decodeURI(location.search).substr(1).split("&").forEach(function(item) {
-                        queryDict[item.split("=")[0]] = item.split("=")[1]
-                    })
-                    return queryDict
+                        queryDict[item.split("=")[0]] = item.split("=")[1];
+                    });
+                    return queryDict;
                 },
-                getTeam: function() {
-                    let url = "http://localhost:8080/team/" + this.team_id
-                    this.$http.get(url)
-                        .then((resp) => {
-                            this.team = resp.body
-                            this.roster = resp.body.roster
-                            this.loading.roster = false
-                            this.getResults()
-                        })
-                        .catch((err) => {
-                            console.log(err.body.errors)
-                        })
+                getTeam: function getTeam() {
+                    var _this = this;
+
+                    var url = "http://localhost:8080/team/" + this.team_id;
+                    this.$http.get(url).then(function(resp) {
+                        _this.team = resp.body;
+                        _this.roster = resp.body.roster;
+                        _this.loading.roster = false;
+
+                        _this.getResults();
+                    }).catch(function(err) {
+                        console.log(err.body.errors);
+                    });
                 },
-                getResults: function() {
-                    let url = "http://localhost:8080/league/" + this.team.league.id + "/scores"
-                    this.$http.get(url)
-                        .then((resp) => {
-                            this.leaderboard = resp.body.leaderboard
-                            this.matches = resp.body.matches.filter(m => (m.home.name == this.team.name || m.away.name == this.team.name)).map(m => ({
+                getResults: function getResults() {
+                    var _this2 = this;
+
+                    var url = "http://localhost:8080/league/" + this.team.league.id + "/scores";
+                    this.$http.get(url).then(function(resp) {
+                        _this2.leaderboard = resp.body.leaderboard;
+                        _this2.matches = resp.body.matches.filter(function(m) {
+                            return m.home.name == _this2.team.name || m.away.name == _this2.team.name;
+                        }).map(function(m) {
+                            return {
                                 ...m,
                                 moment_date: moment(m.start, "YYYY-MM-DDTHH:mm:ss"),
                                 start_parsed: moment(m.start, "YYYY-MM-DDTHH:mm:ss").format("YYYY-MM-DD h:mmA").replace(" ", " at "),
-                                won: (m.home.name == this.team.name) ? (m.home.score >= m.away.score) : (m.home.score <= m.away.score),
+                                won: m.home.name == _this2.team.name ? m.home.score >= m.away.score : m.home.score <= m.away.score,
                                 url: "match.html?id=" + m.id + "&origin=" + btoa(JSON.stringify({
                                     home: {
                                         id: m.home.team_id,
                                         name: m.home.name,
-                                        score: m.home.score,
+                                        score: m.home.score
                                     },
                                     away: {
                                         id: m.away.team_id,
                                         name: m.away.name,
-                                        score: m.away.score,
+                                        score: m.away.score
                                     },
-                                    center: this.team.facility.name,
-                                    season: this.team.season.name,
-                                    league: this.team.league.name,
-                                    standings: this.leaderboard
+                                    center: _this2.team.facility.name,
+                                    season: _this2.team.season.name,
+                                    league: _this2.team.league.name,
+                                    standings: _this2.leaderboard
                                 }))
-                            })).sort(this.dateSortFunc)
-                            this.next_matches = this.matches.filter(m => ((m.home.score === (-1) || m.away.score === (-1)) && (moment.duration(moment().diff(m.moment_date)).get("minutes") < 0)))
-                            this.loading.results = false
-                        })
-                        .catch((err) => {
-                            console.log(err.body.errors)
-                        })
+                            };
+                        }).sort(_this2.dateSortFunc);
+                        _this2.next_matches = _this2.matches.filter(function(m) {
+                            return (m.home.score === -1 || m.away.score === -1) && moment.duration(moment().diff(m.moment_date)).get("minutes") < 0;
+                        });
+                        _this2.loading.results = false;
+                    }).catch(function(err) {
+                        console.log(err.body.errors);
+                    });
                 },
-                dateSortFunc: function(a, b) {
-                    const diff = a.moment_date.diff(b.moment_date, 'seconds')
+                dateSortFunc: function dateSortFunc(a, b) {
+                    var diff = a.moment_date.diff(b.moment_date, 'seconds');
+
                     if (diff > 0) {
-                        return -1
+                        return -1;
                     } else if (diff < 0) {
-                        return 1
+                        return 1;
                     } else {
-                        return 0
+                        return 0;
                     }
                 },
-                gotoLeague: function(league_id) {
-                    window.location = "league.html?id=" + league_id
+                gotoLeague: function gotoLeague(league_id) {
+                    window.location = "league.html?id=" + league_id;
                 }
             }
-        })
+        });
     </script>
 
 </body>

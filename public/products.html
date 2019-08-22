@@ -297,6 +297,8 @@
     <script src="js/plugins/datapicker/bootstrap-datepicker.js"></script>
 
     <script type="text/javascript">
+        "use strict";
+
         var app = new Vue({
             el: '#wrapper',
             data: {
@@ -323,109 +325,107 @@
                 },
                 selected_kid: {
                     parent: {}
-                },
-            },
-            mounted: function() {
-                let isAdmin = this.getAdminCookie()
-                if (!isAdmin) {
-                    window.location = "http://localhost/login.html?url=http://localhost/products.html"
                 }
-                this.getProducts()
+            },
+            mounted: function mounted() {
+                var isAdmin = this.getAdminCookie();
+
+                if (!isAdmin) {
+                    window.location = "http://localhost/login.html?url=http://localhost/products.html";
+                }
+
+                this.getProducts();
             },
             methods: {
-                getAdminCookie: function() {
+                getAdminCookie: function getAdminCookie() {
                     var nameEQ = "admin=";
                     var ca = document.cookie.split(';');
+
                     for (var i = 0; i < ca.length; i++) {
                         var c = ca[i];
-                        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+
+                        while (c.charAt(0) == ' ') {
+                            c = c.substring(1, c.length);
+                        }
+
                         if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
                     }
+
                     return null;
                 },
-                selectProduct: function(p) {
-                    this.selected_product = p
+                selectProduct: function selectProduct(p) {
+                    this.selected_product = p;
                 },
-                editProduct: function() {
-                    const d = {
+                editProduct: function editProduct() {
+                    var d = {
                         ...this.selected_product,
                         payment: this.selected_product.payment_type,
                         price: parseInt(this.selected_product.price) * 100
-                    }
-                    console.log(d)
-                    this.$http.post("http://localhost:8080/product/edit", d)
-                        .then((resp) => {
-                            console.log(resp)
-                            window.location = "/products.html"
-                        })
-                        .catch((err) => {
-                            console.log(err)
-                        })
+                    };
+                    console.log(d);
+                    this.$http.post("http://localhost:8080/product/edit", d).then(function(resp) {
+                        console.log(resp);
+                        window.location = "/products.html";
+                    }).catch(function(err) {
+                        console.log(err);
+                    });
                 },
-                create: function() {
-                    const d = {
+                create: function create() {
+                    var d = {
                         ...this.new_product,
                         price: parseInt(this.new_product.price) * 100
-                    }
-                    console.log(d)
-                    this.$http.post("http://localhost:8080/product/add", d)
-                        .then((resp) => {
-                            console.log(resp)
-                            window.location = "/products.html"
-                        })
-                        .catch((err) => {
-                            console.log(err)
-                        })
+                    };
+                    console.log(d);
+                    this.$http.post("http://localhost:8080/product/add", d).then(function(resp) {
+                        console.log(resp);
+                        window.location = "/products.html";
+                    }).catch(function(err) {
+                        console.log(err);
+                    });
                 },
-                getProducts: function() {
-                    this.products = []
-                    this.$http.get("http://localhost:8080/product/")
-                        .then((resp) => {
-                            this.products = resp.body.map(p => ({
+                getProducts: function getProducts() {
+                    var _this = this;
+
+                    this.products = [];
+                    this.$http.get("http://localhost:8080/product/").then(function(resp) {
+                        _this.products = resp.body.map(function(p) {
+                            return {
                                 ...p,
                                 price: p.price / 100
-                            }));
-                            this.$nextTick(function() {
-                                $('.dataTables-example').DataTable({
-                                    pageLength: 25,
-                                    responsive: true,
-                                    dom: '<"html5buttons"B>lTfgitp',
-                                    buttons: [{
-                                            extend: 'copy'
-                                        },
-                                        {
-                                            extend: 'csv'
-                                        },
-                                        {
-                                            extend: 'excel',
-                                            title: 'ExampleFile'
-                                        },
-                                        {
-                                            extend: 'pdf',
-                                            title: 'ExampleFile'
-                                        },
+                            };
+                        });
 
-                                        {
-                                            extend: 'print',
-                                            customize: function(win) {
-                                                $(win.document.body).addClass('white-bg');
-                                                $(win.document.body).css('font-size', '10px');
-
-                                                $(win.document.body).find('table')
-                                                    .addClass('compact')
-                                                    .css('font-size', 'inherit');
-                                            }
-                                        }
-                                    ]
-                                });
-                            })
-                        })
-                        .catch((err) => {
-                            console.log(err.body.errors)
-                        })
-                },
+                        _this.$nextTick(function() {
+                            $('.dataTables-example').DataTable({
+                                pageLength: 25,
+                                responsive: true,
+                                dom: '<"html5buttons"B>lTfgitp',
+                                buttons: [{
+                                    extend: 'copy'
+                                }, {
+                                    extend: 'csv'
+                                }, {
+                                    extend: 'excel',
+                                    title: 'ExampleFile'
+                                }, {
+                                    extend: 'pdf',
+                                    title: 'ExampleFile'
+                                }, {
+                                    extend: 'print',
+                                    customize: function customize(win) {
+                                        $(win.document.body).addClass('white-bg');
+                                        $(win.document.body).css('font-size', '10px');
+                                        $(win.document.body).find('table').addClass('compact').css('font-size', 'inherit');
+                                    }
+                                }]
+                            });
+                        });
+                    }).catch(function(err) {
+                        console.log(err.body.errors);
+                    });
+                }
             }
-        })
+        });
     </script>
 
 </body>

@@ -468,9 +468,9 @@
         <script type="text/javascript" src="js/info-rok.js"></script>
         <script type="text/javascript" src="js/info-ekp.js"></script>
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.18.1/babel.min.js"></script>
+        <script type="text/javascript">
+            "use strict";
 
-        <script type="text/babel">
             var app = new Vue({
                 el: '#wrapper',
                 data: {
@@ -480,40 +480,31 @@
                     fields_loading: false,
                     different_day_loading: false,
                     times: ["12:00am", "07:00am", "08:00am", "09:00am", "10:00am", "11:00am", "12:00pm", "01:00pm", "02:00pm", "03:00pm", "04:00pm", "05:00pm", "06:00pm", "07:00pm", "08:00pm", "09:00pm", "10:00pm", "11:00pm"],
-                    hours: ["7am", "8am", "9am", "10am", "11am", "12pm", "1pm", "2pm", "3pm", "4pm", "5pm", "6pm",
-                        "7pm", "8pm", "9pm", "10pm", "11pm", "12am", "1am"
-                    ],
+                    hours: ["7am", "8am", "9am", "10am", "11am", "12pm", "1pm", "2pm", "3pm", "4pm", "5pm", "6pm", "7pm", "8pm", "9pm", "10pm", "11pm", "12am", "1am"],
                     minutes: ["00", "30"],
                     field_types: [{
-                            type: "5v5_indoor",
-                            label: "5v5 Indoor"
-                        },
-                        {
-                            type: "6v6_indoor",
-                            label: "6v6 Indoor"
-                        },
-                        {
-                            type: "5v5_outdoor",
-                            label: "5v5 Outdoor"
-                        },
-                        {
-                            type: "6v6_outdoor",
-                            label: "6v6 Outdoor"
-                        },
-                    ],
+                        type: "5v5_indoor",
+                        label: "5v5 Indoor"
+                    }, {
+                        type: "6v6_indoor",
+                        label: "6v6 Indoor"
+                    }, {
+                        type: "5v5_outdoor",
+                        label: "5v5 Outdoor"
+                    }, {
+                        type: "6v6_outdoor",
+                        label: "6v6 Outdoor"
+                    }],
                     durations: [{
-                            type: 60,
-                            label: "1h"
-                        },
-                        {
-                            type: 90,
-                            label: "1h30"
-                        },
-                        {
-                            type: 120,
-                            label: "2h"
-                        },
-                    ],
+                        type: 60,
+                        label: "1h"
+                    }, {
+                        type: 90,
+                        label: "1h30"
+                    }, {
+                        type: 120,
+                        label: "2h"
+                    }],
                     selected: {
                         center: "0",
                         duration: 60,
@@ -536,58 +527,69 @@
                     }
                 },
                 computed: {
-                    filtered_open_times: function() {
-                        const current_day = moment(this.date, "MM-DD-YYYY").day()
+                    filtered_open_times: function filtered_open_times() {
+                        var current_day = moment(this.date, "MM-DD-YYYY").day();
+
                         if (this.selected.center !== "2") {
-                            if ((current_day === 6) || (current_day === 7)) {
-                                return this.hours
+                            if (current_day === 6 || current_day === 7) {
+                                return this.hours;
                             }
-                            return this.hours.slice(2, 19)
+
+                            return this.hours.slice(2, 19);
                         }
-                        if (this.selected.field.indexOf("outdoor") !== (-1)) { // specific times in ekp
-                            return this.hours.slice(3, 15) // 10am to 10pm
+
+                        if (this.selected.field.indexOf("outdoor") !== -1) {
+                            // specific times in ekp
+                            return this.hours.slice(3, 15); // 10am to 10pm
                         }
-                        if ((current_day === 6) || (current_day === 7)) {
-                            return this.hours.slice(0, 18)
+
+                        if (current_day === 6 || current_day === 7) {
+                            return this.hours.slice(0, 18);
                         }
-                        return this.hours.slice(2, 18) // ekp closes at midnight
+
+                        return this.hours.slice(2, 18); // ekp closes at midnight
                     },
-                    filtered_times: function() {
+                    filtered_times: function filtered_times() {
                         if (this.date !== moment().format("MM-DD-YYYY")) {
-                            return this.filtered_open_times
+                            return this.filtered_open_times;
                         }
-                        const now = moment()
-                        return this.filtered_open_times.filter(t => {
-                            const parsed = moment(t, "ha")
-                            return now.diff(parsed) < 0
-                        })
+
+                        var now = moment();
+                        return this.filtered_open_times.filter(function(t) {
+                            var parsed = moment(t, "ha");
+                            return now.diff(parsed) < 0;
+                        });
                     },
-                    filtered_duration: function() {
+                    filtered_duration: function filtered_duration() {
                         if (this.selected.hour === this.filtered_times[this.filtered_times.length - 1]) {
-                            return [this.durations[0]]
+                            return [this.durations[0]];
                         }
+
                         if (this.selected.hour === this.filtered_times[this.filtered_times.length - 2]) {
                             if (this.selected.minute === "00") {
-                                return this.durations
+                                return this.durations;
                             }
-                            return this.durations.slice(0, 2)
+
+                            return this.durations.slice(0, 2);
                         }
-                        return this.durations
+
+                        return this.durations;
                     },
-                    filtered_minutes: function() {
+                    filtered_minutes: function filtered_minutes() {
                         if (this.selected.hour === this.filtered_times[this.filtered_times.length - 1]) {
-                            return [this.minutes[0]]
+                            return [this.minutes[0]];
                         }
-                        return this.minutes
+
+                        return this.minutes;
                     }
                 },
-                mounted: function() {
-                    const self = this;
-                    const center = this.getCenterCookie()
-                    this.selected.center = center
-                    this.date = moment().format("MM-DD-YYYY")
-                    const endDate = moment().add(15, 'd').format("MM-DD-YYYY")
-                    this.getCenters()
+                mounted: function mounted() {
+                    var self = this;
+                    var center = this.getCenterCookie();
+                    this.selected.center = center;
+                    this.date = moment().format("MM-DD-YYYY");
+                    var endDate = moment().add(15, 'd').format("MM-DD-YYYY");
+                    this.getCenters();
                     $('.input-group.date').datepicker({
                         todayBtn: "linked",
                         keyboardNavigation: false,
@@ -597,238 +599,269 @@
                         endDate: endDate,
                         todayHighlight: true
                     }).on('changeDate', function(e) {
-                        self.date = moment(e.date).format("MM-DD-YYYY")
+                        self.date = moment(e.date).format("MM-DD-YYYY");
                     });
                 },
                 methods: {
-                    getCenters: function() {
-                        this.facility_loading = true
-                        this.centers = []
-                        this.$http.get("http://localhost:8080/facility/")
-                            .then((resp) => {
-                                this.centers = resp.body;
-                                this.facility_loading = false
-                            })
-                            .catch((err) => {
-                                console.log(err.body.errors)
-                            })
+                    getCenters: function getCenters() {
+                        var _this = this;
+
+                        this.facility_loading = true;
+                        this.centers = [];
+                        this.$http.get("http://localhost:8080/facility/").then(function(resp) {
+                            _this.centers = resp.body;
+                            _this.facility_loading = false;
+                        }).catch(function(err) {
+                            console.log(err.body.errors);
+                        });
                     },
-                    getTime: function() {
-                        let time = ""
-                        if (this.selected.hour.indexOf('am') !== (-1)) {
-                            const spl = this.selected.hour.split('am')
-                            let hour = spl[0]
+                    getTime: function getTime() {
+                        var time = "";
+
+                        if (this.selected.hour.indexOf('am') !== -1) {
+                            var spl = this.selected.hour.split('am');
+                            var hour = spl[0];
+
                             if (hour.length === 1) {
-                                hour = "0" + hour
+                                hour = "0" + hour;
                             }
-                            time = hour + ":" + this.selected.minute + "am"
+
+                            time = hour + ":" + this.selected.minute + "am";
                         } else {
-                            const spl = this.selected.hour.split('pm')
-                            let hour = spl[0]
-                            if (hour.length === 1) {
-                                hour = "0" + hour
+                            var _spl = this.selected.hour.split('pm');
+
+                            var _hour = _spl[0];
+
+                            if (_hour.length === 1) {
+                                _hour = "0" + _hour;
                             }
-                            time = hour + ":" + this.selected.minute + "pm"
+
+                            time = _hour + ":" + this.selected.minute + "pm";
                         }
-                        return time
+
+                        return time;
                     },
-                    search: function() {
-                        this.fields_loading = true
-                        this.missing = false
-                        this.available_field = null
+                    search: function search() {
+                        var _this2 = this;
+
+                        this.fields_loading = true;
+                        this.missing = false;
+                        this.available_field = null;
                         this.different_time = {
                             before: null,
                             after: null,
                             other_time: null,
                             day_after: null
-                        }
-                        let time = this.getTime()
-
-                        const body = {
+                        };
+                        var time = this.getTime();
+                        var body = {
                             facility_id: parseInt(this.selected.center),
                             date: moment(this.date, "MM-DD-YYYY").format("YYYY-MM-DD"),
                             time: time,
                             duration: parseInt(this.selected.duration),
                             field_type: this.selected.field
-                        }
-                        this.$http.post("http://localhost:8080/event/", body)
-                            .then((resp) => {
-                                if (resp.body.free.length == 0) {
-                                    this.missing = true
-                                    this.available_field = null
-                                    this.checkOtherTime()
-                                    return
-                                }
-                                const selected = this.randomFromArray(resp.body.free)
-                                this.available_field = {
-                                    ...selected,
-                                    date: moment(this.date, "MM-DD-YYYY").format("dddd, MMMM Do YYYY"),
-                                    subtitle: time + " (duration: " + this.selected.duration + "min)",
-                                    duration: this.selected.duration,
-                                    start: moment(this.date + " " + time, "MM-DD-YYYY hh:mma").format("YYYY-MM-DD hh:mma")
-                                }
-                                this.fields_loading = false
-                            })
-                            .catch((err) => {
-                                console.log(err)
-                            })
+                        };
+                        this.$http.post("http://localhost:8080/event/", body).then(function(resp) {
+                            if (resp.body.free.length == 0) {
+                                _this2.missing = true;
+                                _this2.available_field = null;
+
+                                _this2.checkOtherTime();
+
+                                return;
+                            }
+
+                            var selected = _this2.randomFromArray(resp.body.free);
+
+                            _this2.available_field = {
+                                ...selected,
+                                date: moment(_this2.date, "MM-DD-YYYY").format("dddd, MMMM Do YYYY"),
+                                subtitle: time + " (duration: " + _this2.selected.duration + "min)",
+                                duration: _this2.selected.duration,
+                                start: moment(_this2.date + " " + time, "MM-DD-YYYY hh:mma").format("YYYY-MM-DD hh:mma")
+                            };
+                            _this2.fields_loading = false;
+                        }).catch(function(err) {
+                            console.log(err);
+                        });
                     },
-                    checkOtherTime: function() {
-                        this.fields_loading = false
-                        this.loading.today = true
-                        this.loading.tomorrow = true
-                        Promise.all([this.checkBefore(), this.checkAfter(), this.checkLessTime(), this.checkTomorrow()])
-                            .catch(err => console.error(err))
+                    checkOtherTime: function checkOtherTime() {
+                        this.fields_loading = false;
+                        this.loading.today = true;
+                        this.loading.tomorrow = true;
+                        Promise.all([this.checkBefore(), this.checkAfter(), this.checkLessTime(), this.checkTomorrow()]).catch(function(err) {
+                            return console.error(err);
+                        });
                     },
-                    checkBefore: function() {
-                        let time = this.getTime()
-                        const prev_hour = moment(time, "hh:mma").subtract(1, "h").format("hh:mma"),
-                            today = moment(this.date, "MM-DD-YYYY")
-                        const body = {
+                    checkBefore: function checkBefore() {
+                        var _this3 = this;
+
+                        var time = this.getTime();
+                        var prev_hour = moment(time, "hh:mma").subtract(1, "h").format("hh:mma"),
+                            today = moment(this.date, "MM-DD-YYYY");
+                        var body = {
                             facility_id: parseInt(this.selected.center),
                             date: today.format("YYYY-MM-DD"),
                             time: prev_hour,
                             duration: parseInt(this.selected.duration)
-                        }
-                        this.$http.post("http://localhost:8080/event/", body)
-                            .then((resp) => {
-                                if (resp.body.free.length == 0) {
-                                    return
-                                }
-                                const selected = this.randomFromArray(resp.body.free)
-                                this.different_time.before = {
-                                    ...selected,
-                                    date: today.format("dddd, MMMM Do YYYY"),
-                                    subtitle: prev_hour + " (duration: " + this.selected.duration + "min)",
-                                    duration: this.selected.duration,
-                                    start: moment(this.date + " " + prev_hour, "MM-DD-YYYY hh:mma").format("YYYY-MM-DD hh:mma")
-                                }
-                                this.loading.today = false
-                            })
-                            .catch((err) => {
-                                this.loading.today = false
-                                console.log(err)
-                            })
+                        };
+                        this.$http.post("http://localhost:8080/event/", body).then(function(resp) {
+                            if (resp.body.free.length == 0) {
+                                return;
+                            }
+
+                            var selected = _this3.randomFromArray(resp.body.free);
+
+                            _this3.different_time.before = {
+                                ...selected,
+                                date: today.format("dddd, MMMM Do YYYY"),
+                                subtitle: prev_hour + " (duration: " + _this3.selected.duration + "min)",
+                                duration: _this3.selected.duration,
+                                start: moment(_this3.date + " " + prev_hour, "MM-DD-YYYY hh:mma").format("YYYY-MM-DD hh:mma")
+                            };
+                            _this3.loading.today = false;
+                        }).catch(function(err) {
+                            _this3.loading.today = false;
+                            console.log(err);
+                        });
                     },
-                    checkAfter: function() {
-                        let time = this.getTime()
-                        const next_hour = moment(time, "hh:mma").add(1, "h").format("hh:mma"),
-                            today = moment(this.date, "MM-DD-YYYY")
-                        const body = {
+                    checkAfter: function checkAfter() {
+                        var _this4 = this;
+
+                        var time = this.getTime();
+                        var next_hour = moment(time, "hh:mma").add(1, "h").format("hh:mma"),
+                            today = moment(this.date, "MM-DD-YYYY");
+                        var body = {
                             facility_id: parseInt(this.selected.center),
                             date: today.format("YYYY-MM-DD"),
                             time: next_hour,
                             duration: parseInt(this.selected.duration)
-                        }
-                        this.$http.post("http://localhost:8080/event/", body)
-                            .then((resp) => {
-                                if (resp.body.free.length == 0) {
-                                    return
-                                }
-                                const selected = this.randomFromArray(resp.body.free)
-                                this.different_time.after = {
-                                    ...selected,
-                                    date: today.format("dddd, MMMM Do YYYY"),
-                                    subtitle: next_hour + " (duration: " + this.selected.duration + "min)",
-                                    duration: this.selected.duration,
-                                    start: moment(this.date + " " + next_hour, "MM-DD-YYYY hh:mma").format("YYYY-MM-DD hh:mma")
-                                }
-                                this.loading.today = false
-                            })
-                            .catch((err) => {
-                                this.loading.today = false
-                                console.log(err)
-                            })
+                        };
+                        this.$http.post("http://localhost:8080/event/", body).then(function(resp) {
+                            if (resp.body.free.length == 0) {
+                                return;
+                            }
+
+                            var selected = _this4.randomFromArray(resp.body.free);
+
+                            _this4.different_time.after = {
+                                ...selected,
+                                date: today.format("dddd, MMMM Do YYYY"),
+                                subtitle: next_hour + " (duration: " + _this4.selected.duration + "min)",
+                                duration: _this4.selected.duration,
+                                start: moment(_this4.date + " " + next_hour, "MM-DD-YYYY hh:mma").format("YYYY-MM-DD hh:mma")
+                            };
+                            _this4.loading.today = false;
+                        }).catch(function(err) {
+                            _this4.loading.today = false;
+                            console.log(err);
+                        });
                     },
-                    checkLessTime: function() {
-                        const today = moment(this.date, "MM-DD-YYYY")
+                    checkLessTime: function checkLessTime() {
+                        var _this5 = this;
+
+                        var today = moment(this.date, "MM-DD-YYYY");
+
                         if (parseInt(this.selected.duration) == 60) {
-                            return
+                            return;
                         }
-                        let time = this.getTime()
-                        const body = {
+
+                        var time = this.getTime();
+                        var body = {
                             facility_id: parseInt(this.selected.center),
                             date: today.format("YYYY-MM-DD"),
                             time: time,
                             duration: 60
-                        }
-                        this.$http.post("http://localhost:8080/event/", body)
-                            .then((resp) => {
-                                if (resp.body.free.length == 0) {
-                                    return
-                                }
-                                const selected = this.randomFromArray(resp.body.free)
-                                this.different_time.other_time = {
-                                    ...selected,
-                                    date: today.format("dddd, MMMM Do YYYY"),
-                                    subtitle: time + " (duration: 60min)",
-                                    duration: 60,
-                                    start: moment(this.date + " " + time, "MM-DD-YYYY hh:mma").format("YYYY-MM-DD hh:mma")
-                                }
-                                this.loading.today = false
-                            })
-                            .catch((err) => {
-                                this.loading.today = false
-                                console.log(err)
-                            })
+                        };
+                        this.$http.post("http://localhost:8080/event/", body).then(function(resp) {
+                            if (resp.body.free.length == 0) {
+                                return;
+                            }
+
+                            var selected = _this5.randomFromArray(resp.body.free);
+
+                            _this5.different_time.other_time = {
+                                ...selected,
+                                date: today.format("dddd, MMMM Do YYYY"),
+                                subtitle: time + " (duration: 60min)",
+                                duration: 60,
+                                start: moment(_this5.date + " " + time, "MM-DD-YYYY hh:mma").format("YYYY-MM-DD hh:mma")
+                            };
+                            _this5.loading.today = false;
+                        }).catch(function(err) {
+                            _this5.loading.today = false;
+                            console.log(err);
+                        });
                     },
-                    checkTomorrow: function() {
-                        const tomorrow = moment(this.date, "MM-DD-YYYY").add(1, "d")
-                        this.next_day = tomorrow.format("dddd, MMMM Do YYYY")
-                        let time = this.getTime()
-                        const body = {
+                    checkTomorrow: function checkTomorrow() {
+                        var _this6 = this;
+
+                        var tomorrow = moment(this.date, "MM-DD-YYYY").add(1, "d");
+                        this.next_day = tomorrow.format("dddd, MMMM Do YYYY");
+                        var time = this.getTime();
+                        var body = {
                             facility_id: parseInt(this.selected.center),
                             date: tomorrow.format("YYYY-MM-DD"),
                             time: time,
                             duration: 60
-                        }
-                        this.$http.post("http://localhost:8080/event/", body)
-                            .then((resp) => {
-                                if (resp.body.free.length == 0) {
-                                    return
-                                }
-                                const selected = this.randomFromArray(resp.body.free)
-                                this.different_time.day_after = {
-                                    ...selected,
-                                    date: tomorrow.format("dddd, MMMM Do YYYY"),
-                                    subtitle: time + " (duration: " + this.selected.duration + "min)",
-                                    duration: this.selected.duration,
-                                    start: moment(this.date + " " + time, "MM-DD-YYYY hh:mma").add(1, "d").format("YYYY-MM-DD hh:mma")
-                                }
-                                this.loading.tomorrow = false
-                            })
-                            .catch((err) => {
-                                this.loading.tomorrow = false
-                                console.log(err)
-                            })
+                        };
+                        this.$http.post("http://localhost:8080/event/", body).then(function(resp) {
+                            if (resp.body.free.length == 0) {
+                                return;
+                            }
+
+                            var selected = _this6.randomFromArray(resp.body.free);
+
+                            _this6.different_time.day_after = {
+                                ...selected,
+                                date: tomorrow.format("dddd, MMMM Do YYYY"),
+                                subtitle: time + " (duration: " + _this6.selected.duration + "min)",
+                                duration: _this6.selected.duration,
+                                start: moment(_this6.date + " " + time, "MM-DD-YYYY hh:mma").add(1, "d").format("YYYY-MM-DD hh:mma")
+                            };
+                            _this6.loading.tomorrow = false;
+                        }).catch(function(err) {
+                            _this6.loading.tomorrow = false;
+                            console.log(err);
+                        });
                     },
-                    randomFromArray: function(items) {
+                    randomFromArray: function randomFromArray(items) {
                         return items[Math.floor(Math.random() * items.length)];
                     },
-                    choose: function(data) {
-                        const d = {
+                    choose: function choose(data) {
+                        var _this7 = this;
+
+                        var d = {
                             ...data,
                             facility_id: parseInt(this.selected.center),
                             booking: {
-                                center: this.centers.find(c => (c.id === this.selected.center)).name,
+                                center: this.centers.find(function(c) {
+                                    return c.id === _this7.selected.center;
+                                }).name,
                                 duration: parseInt(this.selected.duration),
-                                field_type: this.selected.field.split("_")[0],
+                                field_type: this.selected.field.split("_")[0]
                             }
-                        }
-                        window.location = "book_conf.html?sel=" + btoa(JSON.stringify(d))
+                        };
+                        window.location = "book_conf.html?sel=" + btoa(JSON.stringify(d));
                     },
-                    getCenterCookie: function() {
+                    getCenterCookie: function getCenterCookie() {
                         var nameEQ = "center=";
                         var ca = document.cookie.split(';');
+
                         for (var i = 0; i < ca.length; i++) {
                             var c = ca[i];
-                            while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+
+                            while (c.charAt(0) == ' ') {
+                                c = c.substring(1, c.length);
+                            }
+
                             if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
                         }
+
                         return null;
                     }
                 }
-            })
+            });
         </script>
 
 </body>

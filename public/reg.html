@@ -164,7 +164,7 @@
                             </div>
                             <div v-else>
                                 <button v-on:click="choose('team')" class="btn btn-primary">Register as team</button>
- <!--                                <button v-on:click="choose('individual')" class="btn btn-primary" v-if="free_agent">Register as a free agent</button> -->
+                                <!--                                <button v-on:click="choose('individual')" class="btn btn-primary" v-if="free_agent">Register as a free agent</button> -->
                             </div>
                         </div>
                     </div>
@@ -403,6 +403,29 @@
     <script src="js/plugins/dataTables/dataTables.bootstrap4.min.js"></script>
 
     <script type="text/javascript">
+        "use strict";
+
+        function _toConsumableArray(arr) {
+            return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();
+        }
+
+        function _nonIterableSpread() {
+            throw new TypeError("Invalid attempt to spread non-iterable instance");
+        }
+
+        function _iterableToArray(iter) {
+            if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);
+        }
+
+        function _arrayWithoutHoles(arr) {
+            if (Array.isArray(arr)) {
+                for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) {
+                    arr2[i] = arr[i];
+                }
+                return arr2;
+            }
+        }
+
         var app = new Vue({
             el: '#wrapper',
             data: {
@@ -431,332 +454,379 @@
                 tournament_ages: ["U6", "U7", "U8", "U9", "U10", "U11", "U12", "U13", "U14", "U15", "U16", "U17", "U18", "U19"]
             },
             computed: {
-                youth: function() {
+                youth: function youth() {
                     if (this.selected.product.name === "Youth Tournament") {
-                        return false
+                        return false;
                     }
+
                     if (!this.selected.product.name) {
-                        return false
+                        return false;
                     }
-                    return (this.selected.product.name.toLowerCase().indexOf('youth') !== (-1))
+
+                    return this.selected.product.name.toLowerCase().indexOf('youth') !== -1;
                 },
-                ages: function() {
-                    const ages = this.leagues.map((l) => (l.age))
-                    return [...new Set(ages)].sort()
+                ages: function ages() {
+                    var ages = this.leagues.map(function(l) {
+                        return l.age;
+                    });
+                    return _toConsumableArray(new Set(ages)).sort();
                 },
-                filtered_leagues: function() {
-                    let filtered = this.leagues
+                filtered_leagues: function filtered_leagues() {
+                    var _this = this;
+
+                    var filtered = this.leagues;
+
                     if (this.selected.season !== "") {
-                        filtered = this.leagues.filter(l => (l.season.id === this.selected.season))
+                        filtered = this.leagues.filter(function(l) {
+                            return l.season.id === _this.selected.season;
+                        });
                     }
+
                     if (!this.youth) {
-                        return filtered
+                        return filtered;
                     }
+
                     if (this.selected.age === "") {
-                        return filtered
+                        return filtered;
                     }
-                    return filtered.filter(l => (l.age === this.selected.age))
+
+                    return filtered.filter(function(l) {
+                        return l.age === _this.selected.age;
+                    });
                 },
-                filtered_tournaments: function() {
+                filtered_tournaments: function filtered_tournaments() {
                     if (this.selected.tournament_age === "") {
-                        return this.tournaments
+                        return this.tournaments;
                     }
-                    const selected_age = parseInt(this.selected.tournament_age.replace("U", ""))
-                    return this.tournaments.filter(t => (selected_age >= t.min_age && selected_age <= t.max_age))
+
+                    var selected_age = parseInt(this.selected.tournament_age.replace("U", ""));
+                    return this.tournaments.filter(function(t) {
+                        return selected_age >= t.min_age && selected_age <= t.max_age;
+                    });
                 },
-                free_agent: function() {
-                    return (this.selected.product.name === "Adult Leagues") || (this.selected.product.name === "Youth Leagues")
+                free_agent: function free_agent() {
+                    return this.selected.product.name === "Adult Leagues" || this.selected.product.name === "Youth Leagues";
                 }
             },
-            mounted: function() {
-                const center = this.getCenterCookie()
+            mounted: function mounted() {
+                var center = this.getCenterCookie();
+
                 if (center) {
-                    this.selected.facility_id = center
+                    this.selected.facility_id = center;
                 }
-                let self = this;
-                // $(".select_center").select2({
+
+                var self = this; // $(".select_center").select2({
                 //     placeholder: "Select center...",
                 // });
+
                 $(".select_season").select2({
-                    placeholder: "Select season...",
+                    placeholder: "Select season..."
                 });
                 $('.select_product').on('select2:select', function(e) {
-                    let doc = JSON.parse(e.target.value)
-                    self.selected.product = doc
+                    var doc = JSON.parse(e.target.value);
+                    self.selected.product = doc;
+
                     if (doc.name == "Youth Tournament") {
-                        return self.getTournaments()
+                        return self.getTournaments();
                     }
-                    self.getSeasons()
+
+                    self.getSeasons();
                 });
                 $('.select_season').on('select2:select', function(e) {
-                    let doc = JSON.parse(e.target.value)
-                    self.selected.season = doc.id
-                    // self.getEvents(doc.id)
+                    var doc = JSON.parse(e.target.value);
+                    self.selected.season = doc.id; // self.getEvents(doc.id)
                 });
                 $('.select_age').on('select2:select', function(e) {
-                    self.selected.age = e.target.value
+                    self.selected.age = e.target.value;
                 });
                 $('.select_tournament_age').on('select2:select', function(e) {
-                    self.selected.tournament_age = e.target.value
+                    self.selected.tournament_age = e.target.value;
                 });
-                this.getCenters()
-                this.getProducts()
+                this.getCenters();
+                this.getProducts();
             },
             methods: {
-                selectProduct: function(e) {
-                    let doc = JSON.parse(e.target.value)
-                    this.selected.product = doc
+                selectProduct: function selectProduct(e) {
+                    var doc = JSON.parse(e.target.value);
+                    this.selected.product = doc;
+
                     if (doc.name == "Youth Tournament") {
-                        return this.getTournaments()
+                        return this.getTournaments();
                     }
-                    this.getSeasons()
+
+                    this.getSeasons();
                 },
-                getCenters: function() {
-                    this.loading.facility = true
-                    this.centers = []
-                    this.products = []
-                    this.selected.product = {}
-                    this.selected.season = ""
-                    this.selected.age = ""
-                    return this.$http.get("http://localhost:8080/facility/")
-                        .then((resp) => {
-                            this.centers = resp.body;
-                            this.loading.facility = false
-                        })
-                        .catch((err) => {
-                            console.log(err.body.errors)
-                        })
+                getCenters: function getCenters() {
+                    var _this2 = this;
+
+                    this.loading.facility = true;
+                    this.centers = [];
+                    this.products = [];
+                    this.selected.product = {};
+                    this.selected.season = "";
+                    this.selected.age = "";
+                    return this.$http.get("http://localhost:8080/facility/").then(function(resp) {
+                        _this2.centers = resp.body;
+                        _this2.loading.facility = false;
+                    }).catch(function(err) {
+                        console.log(err.body.errors);
+                    });
                 },
-                getProducts: function() {
-                    this.products = []
-                    this.loading.product = true
-                    this.selected.season = ""
-                    this.selected.age = ""
-                    this.$http.get("http://localhost:8080/program/")
-                        .then((resp) => {
-                            this.products = resp.body;
-                            this.loading.product = false
-                            this.$nextTick(function() {
-                                $(".select_age").select2({
-                                    placeholder: "Select age group...",
-                                });
-                            })
-                        })
-                        .catch((err) => {
-                            console.log(err.body.errors)
-                        })
+                getProducts: function getProducts() {
+                    var _this3 = this;
+
+                    this.products = [];
+                    this.loading.product = true;
+                    this.selected.season = "";
+                    this.selected.age = "";
+                    this.$http.get("http://localhost:8080/program/").then(function(resp) {
+                        _this3.products = resp.body;
+                        _this3.loading.product = false;
+
+                        _this3.$nextTick(function() {
+                            $(".select_age").select2({
+                                placeholder: "Select age group..."
+                            });
+                        });
+                    }).catch(function(err) {
+                        console.log(err.body.errors);
+                    });
                 },
-                getSeasons: function(facility_id) {
-                    this.seasons = []
-                    this.tournaments = []
-                    this.loading.season = true
-                    this.selected.season = ""
-                    this.selected.age = ""
-                    const body = {
+                getSeasons: function getSeasons(facility_id) {
+                    var _this4 = this;
+
+                    this.seasons = [];
+                    this.tournaments = [];
+                    this.loading.season = true;
+                    this.selected.season = "";
+                    this.selected.age = "";
+                    var body = {
                         "facility_id": this.selected.facility_id,
                         "program_id": this.selected.product.id,
                         "date": moment().format("YYYY-MM-DD")
-                    }
-                    this.$http.post("http://localhost:8080/program/seasons/current", body)
-                        .then((resp) => {
-                            this.seasons = resp.body;
-                            this.loading.season = false
-                            console.log("Seasons", this.seasons)
-                            var p = []
-                            this.seasons.forEach(s => {
-                                p.push(this.getEvents(s.id))
-                            })
-                            this.loading.league = true
-                            Promise.all(p)
-                                .then((leagues) => {
-                                    this.loading.league = false
-                                    this.leagues = this.flatten(leagues)
-                                    console.log("Leagues", leagues)
-                                })
-                        })
-                        .catch((err) => {
-                            console.log(err.body.errors)
-                        })
+                    };
+                    this.$http.post("http://localhost:8080/program/seasons/current", body).then(function(resp) {
+                        _this4.seasons = resp.body;
+                        _this4.loading.season = false;
+                        console.log("Seasons", _this4.seasons);
+                        var p = [];
+
+                        _this4.seasons.forEach(function(s) {
+                            p.push(_this4.getEvents(s.id));
+                        });
+
+                        _this4.loading.league = true;
+                        Promise.all(p).then(function(leagues) {
+                            _this4.loading.league = false;
+                            _this4.leagues = _this4.flatten(leagues);
+                            console.log("Leagues", leagues);
+                        });
+                    }).catch(function(err) {
+                        console.log(err.body.errors);
+                    });
                 },
-                getEvents: function(season_id) {
-                    console.log("Season", season_id)
-                    this.leagues = []
-                    const body = {
-                        "season_id": season_id,
-                    }
-                    return new Promise((yes, no) => {
-                        this.$http.post("http://localhost:8080/program/leagues", body)
-                            .then((resp) => {
-                                return yes(resp.body.map(l => {
-                                    const season = this.seasons.find(s => (parseInt(s.id) === l.season_id))
-                                    let age = ""
-                                    if (this.youth) {
-                                        if (l.sex === "m") {
-                                            age = "Boys " + l.age.name
-                                        } else {
-                                            age = "Girls " + l.age.name
-                                        }
-                                    }
-                                    let d = {
-                                        ...l,
-                                        season,
-                                        start: moment(l.start_date, "YYYY-MM-DDTHH:mm:ss").format("MM-DD-YYYY"),
-                                        end: moment(season.end_date, "YYYY-MM-DDTHH:mm:ss").format("MM-DD-YYYY"),
-                                        age,
-                                    }
-                                    if (d.description.indexOf("Early Bird: ") !== (-1)) {
-                                        const i = d.description.indexOf('Early Bird: '),
-                                            text = d.description.slice(i, i + 33),
-                                            final_date = text.slice(text.length - 10, text.length),
-                                            parsed_final_date = moment(final_date, "MM/DD/YYYY"),
-                                            diff = moment().diff(parsed_final_date);
-                                        if (diff < 0) {
-                                            d.early_bird = d.description.slice(i, i + 33)
-                                        }
-                                    }
-                                    if (this.selected.product.name.toLowerCase().indexOf('league') !== (-1)) {
-                                        if (this.selected.product.name.toLowerCase().indexOf('adult') !== (-1)) {
-                                            d.agent = 100
-                                        } else {
-                                            d.agent = 160
-                                        }
-                                    }
-                                    if (this.selected.product.name.toLowerCase().indexOf('class') !== (-1)) {
-                                        d.class = true
-                                        if (l.name.toLowerCase().indexOf('3 and 4 years old') !== (-1)) {
-                                            age = '3 and 4 years old'
-                                        }
-                                        if (l.name.toLowerCase().indexOf('5 and 6 years old') !== (-1)) {
-                                            age = '5 and 6 years old'
-                                        }
-                                        if (l.name.toLowerCase().indexOf('7 and 9 years old') !== (-1)) {
-                                            age = '7 and 9 years old'
-                                        }
-                                        d.age = age
-                                    }
-                                    return d
-                                }));
-                            })
-                            .catch(no)
-                    })
-                },
-                getTournaments: function() {
-                    this.leagues = []
-                    const body = {
-                        "facility_id": parseInt(this.selected.facility_id),
-                    }
-                    this.$http.post("http://localhost:8080/program/tournaments", body)
-                        .then((resp) => {
-                            this.tournaments = resp.body.map(t => {
-                                const d = moment(t.date, "MMM D, YYYY"), //June 8, 2019
-                                    i = t.description.indexOf("Fee: $"),
-                                    j = t.description.indexOf(" per team"),
-                                    price = t.description.slice(i + 5, j),
-                                    k = t.description.indexOf(" minutes each"),
-                                    duration = t.description.slice(k - 2, k) + " min";
+                getEvents: function getEvents(season_id) {
+                    var _this5 = this;
 
-                                let new_t = {
-                                    ...t,
-                                    date: d.format("YYYY-MM-DD"),
-                                    day: d.format("dddd"),
-                                    price,
-                                    duration
-                                }
-
-                                const second_part = t.name.split(",")[1].trim()
-                                let min_age = 0,
-                                    max_age = 0
-
-                                if (second_part.indexOf("-") > (-1)) {
-                                    const third_split = second_part.split("-")
-                                    min_age = parseInt(third_split[0].replace("U", ""))
-                                    const f_split = third_split[1].split(" ")
-                                    max_age = parseInt(f_split[0].replace("U", ""))
-                                } else {
-                                    const f_split = second_part.split(" ")
-                                    min_age = parseInt(f_split[0].replace("U", ""))
-                                    max_age = min_age
-                                }
-
-                                return {
-                                    ...new_t,
-                                    min_age,
-                                    max_age,
-                                    age: second_part
-                                }
-                            })
-                            this.$nextTick(function() {
-                                $('.dataTables-example').DataTable({
-                                    pageLength: 25,
-                                    responsive: true,
-                                    buttons: [{
-                                        customize: function(win) {
-                                            $(win.document.body).addClass('white-bg');
-                                            $(win.document.body).css('font-size', '10px');
-
-                                            $(win.document.body).find('table')
-                                                .addClass('compact')
-                                                .css('font-size', 'inherit');
-                                        }
-                                    }]
+                    console.log("Season", season_id);
+                    this.leagues = [];
+                    var body = {
+                        "season_id": season_id
+                    };
+                    return new Promise(function(yes, no) {
+                        _this5.$http.post("http://localhost:8080/program/leagues", body).then(function(resp) {
+                            return yes(resp.body.map(function(l) {
+                                var season = _this5.seasons.find(function(s) {
+                                    return parseInt(s.id) === l.season_id;
                                 });
-                                $(".select_tournament_age").select2({
-                                    placeholder: "Select age group...",
-                                });
-                            })
-                        })
-                        .catch((err) => {
-                            console.log(err)
-                        })
+
+                                var age = "";
+
+                                if (_this5.youth) {
+                                    if (l.sex === "m") {
+                                        age = "Boys " + l.age.name;
+                                    } else {
+                                        age = "Girls " + l.age.name;
+                                    }
+                                }
+
+                                var d = {
+                                    ...l,
+                                    season: season,
+                                    start: moment(l.start_date, "YYYY-MM-DDTHH:mm:ss").format("MM-DD-YYYY"),
+                                    end: moment(season.end_date, "YYYY-MM-DDTHH:mm:ss").format("MM-DD-YYYY"),
+                                    age: age
+                                };
+
+                                if (d.description.indexOf("Early Bird: ") !== -1) {
+                                    var i = d.description.indexOf('Early Bird: '),
+                                        text = d.description.slice(i, i + 33),
+                                        final_date = text.slice(text.length - 10, text.length),
+                                        parsed_final_date = moment(final_date, "MM/DD/YYYY"),
+                                        diff = moment().diff(parsed_final_date);
+
+                                    if (diff < 0) {
+                                        d.early_bird = d.description.slice(i, i + 33);
+                                    }
+                                }
+
+                                if (_this5.selected.product.name.toLowerCase().indexOf('league') !== -1) {
+                                    if (_this5.selected.product.name.toLowerCase().indexOf('adult') !== -1) {
+                                        d.agent = 100;
+                                    } else {
+                                        d.agent = 160;
+                                    }
+                                }
+
+                                if (_this5.selected.product.name.toLowerCase().indexOf('class') !== -1) {
+                                    d.class = true;
+
+                                    if (l.name.toLowerCase().indexOf('3 and 4 years old') !== -1) {
+                                        age = '3 and 4 years old';
+                                    }
+
+                                    if (l.name.toLowerCase().indexOf('5 and 6 years old') !== -1) {
+                                        age = '5 and 6 years old';
+                                    }
+
+                                    if (l.name.toLowerCase().indexOf('7 and 9 years old') !== -1) {
+                                        age = '7 and 9 years old';
+                                    }
+
+                                    d.age = age;
+                                }
+
+                                return d;
+                            }));
+                        }).catch(no);
+                    });
                 },
-                gotoGotsoccer: function(link) {
+                getTournaments: function getTournaments() {
+                    var _this6 = this;
+
+                    this.leagues = [];
+                    var body = {
+                        "facility_id": parseInt(this.selected.facility_id)
+                    };
+                    this.$http.post("http://localhost:8080/program/tournaments", body).then(function(resp) {
+                        _this6.tournaments = resp.body.map(function(t) {
+                            var d = moment(t.date, "MMM D, YYYY"),
+                                //June 8, 2019
+                                i = t.description.indexOf("Fee: $"),
+                                j = t.description.indexOf(" per team"),
+                                price = t.description.slice(i + 5, j),
+                                k = t.description.indexOf(" minutes each"),
+                                duration = t.description.slice(k - 2, k) + " min";
+                            var new_t = {
+                                ...t,
+                                date: d.format("YYYY-MM-DD"),
+                                day: d.format("dddd"),
+                                price: price,
+                                duration: duration
+                            };
+                            var second_part = t.name.split(",")[1].trim();
+                            var min_age = 0,
+                                max_age = 0;
+
+                            if (second_part.indexOf("-") > -1) {
+                                var third_split = second_part.split("-");
+                                min_age = parseInt(third_split[0].replace("U", ""));
+                                var f_split = third_split[1].split(" ");
+                                max_age = parseInt(f_split[0].replace("U", ""));
+                            } else {
+                                var _f_split = second_part.split(" ");
+
+                                min_age = parseInt(_f_split[0].replace("U", ""));
+                                max_age = min_age;
+                            }
+
+                            return {
+                                ...new_t,
+                                min_age: min_age,
+                                max_age: max_age,
+                                age: second_part
+                            };
+                        });
+
+                        _this6.$nextTick(function() {
+                            $('.dataTables-example').DataTable({
+                                pageLength: 25,
+                                responsive: true,
+                                buttons: [{
+                                    customize: function customize(win) {
+                                        $(win.document.body).addClass('white-bg');
+                                        $(win.document.body).css('font-size', '10px');
+                                        $(win.document.body).find('table').addClass('compact').css('font-size', 'inherit');
+                                    }
+                                }]
+                            });
+                            $(".select_tournament_age").select2({
+                                placeholder: "Select age group..."
+                            });
+                        });
+                    }).catch(function(err) {
+                        console.log(err);
+                    });
+                },
+                gotoGotsoccer: function gotoGotsoccer(link) {
                     var win = window.open(link, '_blank');
                     win.focus();
                 },
-                dateSortFunc: function(a, b) {
-                    const diff = a.moment_date.diff(b.moment_date, 'seconds')
+                dateSortFunc: function dateSortFunc(a, b) {
+                    var diff = a.moment_date.diff(b.moment_date, 'seconds');
+
                     if (diff > 0) {
-                        return 1
+                        return 1;
                     } else if (diff < 0) {
-                        return -1
+                        return -1;
                     } else {
-                        return 0
+                        return 0;
                     }
                 },
-                getCenterCookie: function() {
+                getCenterCookie: function getCenterCookie() {
                     var nameEQ = "center=";
                     var ca = document.cookie.split(';');
+
                     for (var i = 0; i < ca.length; i++) {
                         var c = ca[i];
-                        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+
+                        while (c.charAt(0) == ' ') {
+                            c = c.substring(1, c.length);
+                        }
+
                         if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
                     }
+
                     return null;
                 },
-                selectLeague: function(league) {
-                    this.selected.league = league
+                selectLeague: function selectLeague(league) {
+                    this.selected.league = league;
                     $('#more_info_modal').modal({
                         keyboard: false
-                    })
+                    });
                 },
-                flatten: function(arr) {
-                    const self = this;
+                flatten: function flatten(arr) {
+                    var self = this;
                     return arr.reduce(function(flat, toFlatten) {
                         return flat.concat(Array.isArray(toFlatten) ? self.flatten(toFlatten) : toFlatten);
                     }, []);
                 },
-                choose: function(reg_type) {
-                    const d = {
+                choose: function choose(reg_type) {
+                    var _this7 = this;
+
+                    var d = {
                         facility_id: parseInt(this.selected.facility_id),
                         ...this.selected.league,
-                        reg_type,
+                        reg_type: reg_type,
                         product_type: this.selected.product.name,
-                        center: this.centers.find(c => (c.id === this.selected.facility_id)).name
-                    }
-                    window.location = "reg_conf.html?sel=" + btoa(JSON.stringify(d))
-                },
+                        center: this.centers.find(function(c) {
+                            return c.id === _this7.selected.facility_id;
+                        }).name
+                    };
+                    window.location = "reg_conf.html?sel=" + btoa(JSON.stringify(d));
+                }
             }
-        })
+        });
     </script>
 
 </body>

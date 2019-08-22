@@ -397,6 +397,8 @@
     <script type="text/javascript" src="js/footer.js"></script>
 
     <script type="text/javascript">
+        "use strict";
+
         var app = new Vue({
             el: '#wrapper',
             data: {
@@ -421,7 +423,7 @@
                     season: "",
                     league: {
                         season: {}
-                    },
+                    }
                 },
                 loading: {
                     facility: false,
@@ -429,234 +431,254 @@
                     seasons: false,
                     age: false,
                     league: false
-                },
+                }
             },
             computed: {
-                filtered_leagues: function() {
+                filtered_leagues: function filtered_leagues() {
                     if (this.selected.season_id === 0) {
-                        return this.leagues
+                        return this.leagues;
                     }
-                    const season_id = this.selected.season_id.toString()
-                    return this.leagues.filter(l => (l.season_id === season_id))
+
+                    var season_id = this.selected.season_id.toString();
+                    return this.leagues.filter(function(l) {
+                        return l.season_id === season_id;
+                    });
                 }
             },
-            mounted: function() {
-                const center = this.getCenterCookie()
+            mounted: function mounted() {
+                var center = this.getCenterCookie();
+
                 if (center) {
-                    this.selected.facility_id = center
+                    this.selected.facility_id = center;
                 }
-                let self = this;
+
+                var self = this;
                 $(".select_product").select2({
-                    placeholder: "Select program...",
+                    placeholder: "Select program..."
                 });
                 $('.select_product').on('select2:select', function(e) {
-                    let doc = JSON.parse(e.target.value)
-                    self.selected.product = doc
-                    self.getSeasons()
+                    var doc = JSON.parse(e.target.value);
+                    self.selected.product = doc;
+                    self.getSeasons();
                 });
-
                 $(".select_season").select2({
-                    placeholder: "Select season...",
+                    placeholder: "Select season..."
                 });
                 $(".select_league").select2({
-                    placeholder: "Select league...",
+                    placeholder: "Select league..."
                 });
-
                 $('.select_season').on('select2:select', function(e) {
-                    let doc = JSON.parse(e.target.value),
+                    var doc = JSON.parse(e.target.value),
                         facility_id = doc.facility_id,
                         season_id = doc.id;
-                    self.selected.season_id = season_id
+                    self.selected.season_id = season_id;
                 });
                 $('.select_league').on('select2:select', function(e) {
-                    let league_id = e.target.value
-                    self.getStandings(league_id)
-                    self.selected_league = self.leagues.find(l => (l.id == league_id)).name
+                    var league_id = e.target.value;
+                    self.getStandings(league_id);
+                    self.selected_league = self.leagues.find(function(l) {
+                        return l.id == league_id;
+                    }).name;
                 });
-                const switch_element = document.querySelector('.js-switch')
-                Switchery(
-                    switch_element, {
-                        color: '#1AB394',
-                        size: 'small'
-                    }
-                );
+                var switch_element = document.querySelector('.js-switch');
+                Switchery(switch_element, {
+                    color: '#1AB394',
+                    size: 'small'
+                });
+
                 document.getElementById('top-search').onkeypress = function(e) {
                     var event = e || window.event;
                     var charCode = event.which || event.keyCode;
 
                     if (charCode == '13') {
-                        window.location = "search.html?query=" + e.target.value
+                        window.location = "search.html?query=" + e.target.value;
                         return false;
                     }
-                }
-                this.getCenters()
-                this.getProducts()
+                };
+
+                this.getCenters();
+                this.getProducts();
             },
             methods: {
-                getCenters: function() {
-                    this.facility_loading = true
-                    this.centers = []
-                    this.seasons = []
-                    this.leagues = []
-                    this.$http.get("http://localhost:8080/facility/")
-                        .then((resp) => {
-                            this.centers = resp.body;
-                            this.facility_loading = false
-                        })
-                        .catch((err) => {
-                            console.log(err.body.errors)
-                        })
+                getCenters: function getCenters() {
+                    var _this = this;
+
+                    this.facility_loading = true;
+                    this.centers = [];
+                    this.seasons = [];
+                    this.leagues = [];
+                    this.$http.get("http://localhost:8080/facility/").then(function(resp) {
+                        _this.centers = resp.body;
+                        _this.facility_loading = false;
+                    }).catch(function(err) {
+                        console.log(err.body.errors);
+                    });
                 },
-                getProducts: function() {
-                    this.products = []
-                    this.loading.product = true
-                    this.selected.season = ""
-                    this.selected.age = ""
-                    this.$http.get("http://localhost:8080/program/")
-                        .then((resp) => {
-                            this.products = resp.body.filter(p => (p.name !== "Youth Classes" && p.name !== "Youth Tournament"));
-                            this.loading.product = false
-                        })
-                        .catch((err) => {
-                            console.log(err.body.errors)
-                        })
+                getProducts: function getProducts() {
+                    var _this2 = this;
+
+                    this.products = [];
+                    this.loading.product = true;
+                    this.selected.season = "";
+                    this.selected.age = "";
+                    this.$http.get("http://localhost:8080/program/").then(function(resp) {
+                        _this2.products = resp.body.filter(function(p) {
+                            return p.name !== "Youth Classes" && p.name !== "Youth Tournament";
+                        });
+                        _this2.loading.product = false;
+                    }).catch(function(err) {
+                        console.log(err.body.errors);
+                    });
                 },
-                getSeasons: function(facility_id) {
-                    this.seasons = []
-                    this.tournaments = []
-                    this.loading.season = true
-                    this.selected.season = ""
-                    this.selected.age = ""
-                    const body = {
+                getSeasons: function getSeasons(facility_id) {
+                    var _this3 = this;
+
+                    this.seasons = [];
+                    this.tournaments = [];
+                    this.loading.season = true;
+                    this.selected.season = "";
+                    this.selected.age = "";
+                    var body = {
                         "facility_id": this.selected.facility_id,
                         "program_id": this.selected.product.id,
                         "date": moment().subtract(14, 'd').format("YYYY-MM-DD")
-                    }
-                    let url = "http://localhost:8080/program/seasons"
-                    const current_league = document.querySelector('.js-switch').checked
+                    };
+                    var url = "http://localhost:8080/program/seasons";
+                    var current_league = document.querySelector('.js-switch').checked;
+
                     if (!current_league) {
-                        url = "http://localhost:8080/program/seasons/past"
-                        body.date = moment().format("YYYY-MM-DD")
+                        url = "http://localhost:8080/program/seasons/past";
+                        body.date = moment().format("YYYY-MM-DD");
                     }
-                    this.$http.post(url, body)
-                        .then((resp) => {
-                            this.seasons = resp.body;
-                            this.loading.season = false
-                            console.log("Seasons", this.seasons)
-                            var p = []
-                            this.seasons.forEach(s => {
-                                p.push(this.getLeagues(s.id))
-                            })
-                            this.loading.league = true
-                            Promise.all(p)
-                                .then((leagues) => {
-                                    this.league_loading = false
-                                    this.leagues = this.flatten(leagues)
-                                })
-                        })
-                        .catch((err) => {
-                            console.log(err)
-                        })
+
+                    this.$http.post(url, body).then(function(resp) {
+                        _this3.seasons = resp.body;
+                        _this3.loading.season = false;
+                        console.log("Seasons", _this3.seasons);
+                        var p = [];
+
+                        _this3.seasons.forEach(function(s) {
+                            p.push(_this3.getLeagues(s.id));
+                        });
+
+                        _this3.loading.league = true;
+                        Promise.all(p).then(function(leagues) {
+                            _this3.league_loading = false;
+                            _this3.leagues = _this3.flatten(leagues);
+                        });
+                    }).catch(function(err) {
+                        console.log(err);
+                    });
                 },
-                getLeagues: function(season_id) {
-                    this.league_loading = true
-                    this.leagues = []
-                    let url = "http://localhost:8080/facility/" + this.selected.facility_id + "/" + season_id + "/leagues"
-                    return new Promise((yes, no) => {
-                        this.$http.get(url)
-                            .then((resp) => {
-                                return yes(resp.body);
-                            })
-                            .catch(no)
-                    })
+                getLeagues: function getLeagues(season_id) {
+                    var _this4 = this;
+
+                    this.league_loading = true;
+                    this.leagues = [];
+                    var url = "http://localhost:8080/facility/" + this.selected.facility_id + "/" + season_id + "/leagues";
+                    return new Promise(function(yes, no) {
+                        _this4.$http.get(url).then(function(resp) {
+                            return yes(resp.body);
+                        }).catch(no);
+                    });
                 },
-                getStandings: function(league_id) {
-                    this.standings_loading = true
-                    let url = "http://localhost:8080/league/" + league_id + "/scores"
-                    this.$http.get(url)
-                        .then((resp) => {
-                            this.standings = resp.body.leaderboard
-                            const matchDailyMap = {}
-                            resp.body.matches.forEach(m => {
-                                const date_parsed = moment(m.start, "YYYY-MM-DDTHH:mm:ss"),
-                                    day = date_parsed.format("MM/DD")
-                                if (!(day in matchDailyMap)) {
-                                    matchDailyMap[day] = []
-                                }
-                                matchDailyMap[day].push({
-                                    ...m,
-                                    moment_date: date_parsed,
-                                    start_parsed: date_parsed.format("h:mmA"),
-                                    url: "match.html?id=" + m.id
-                                })
-                            })
-                            this.matches = []
-                            const self = this
-                            Object.keys(matchDailyMap).forEach(function(key) {
-                                self.matches.push({
-                                    day: key,
-                                    matches: matchDailyMap[key].sort(self.dateSortMatchFunc)
-                                })
+                getStandings: function getStandings(league_id) {
+                    var _this5 = this;
+
+                    this.standings_loading = true;
+                    var url = "http://localhost:8080/league/" + league_id + "/scores";
+                    this.$http.get(url).then(function(resp) {
+                        _this5.standings = resp.body.leaderboard;
+                        var matchDailyMap = {};
+                        resp.body.matches.forEach(function(m) {
+                            var date_parsed = moment(m.start, "YYYY-MM-DDTHH:mm:ss"),
+                                day = date_parsed.format("MM/DD");
+
+                            if (!(day in matchDailyMap)) {
+                                matchDailyMap[day] = [];
+                            }
+
+                            matchDailyMap[day].push({
+                                ...m,
+                                moment_date: date_parsed,
+                                start_parsed: date_parsed.format("h:mmA"),
+                                url: "match.html?id=" + m.id
                             });
-                            this.matches = this.matches.sort(self.dateSortFunc)
-                            // this.matches = resp.body.matches.map(m => ({
-                            //     ...m,
-                            //     moment_date: moment(m.start, "YYYY-MM-DDTHH:mm:ss"),
-                            //     start_parsed: moment(m.start, "YYYY-MM-DDTHH:mm:ss").format("YYYY-MM-DD h:mmA").replace(" ", " at "),
-                            //     url: "match.html?id=" + m.id
-                            // })).sort(this.dateSortFunc)
-                            this.standings_loading = false
-                            console.log("Matches", this.matches)
-                        })
-                        .catch((err) => {
-                            console.log(err)
-                        })
+                        });
+                        _this5.matches = [];
+                        var self = _this5;
+                        Object.keys(matchDailyMap).forEach(function(key) {
+                            self.matches.push({
+                                day: key,
+                                matches: matchDailyMap[key].sort(self.dateSortMatchFunc)
+                            });
+                        });
+                        _this5.matches = _this5.matches.sort(self.dateSortFunc); // this.matches = resp.body.matches.map(m => ({
+                        //     ...m,
+                        //     moment_date: moment(m.start, "YYYY-MM-DDTHH:mm:ss"),
+                        //     start_parsed: moment(m.start, "YYYY-MM-DDTHH:mm:ss").format("YYYY-MM-DD h:mmA").replace(" ", " at "),
+                        //     url: "match.html?id=" + m.id
+                        // })).sort(this.dateSortFunc)
+
+                        _this5.standings_loading = false;
+                        console.log("Matches", _this5.matches);
+                    }).catch(function(err) {
+                        console.log(err);
+                    });
                 },
-                dateSortMatchFunc: function(a, b) {
-                    const mom_a = a.moment_date,
+                dateSortMatchFunc: function dateSortMatchFunc(a, b) {
+                    var mom_a = a.moment_date,
                         mom_b = b.moment_date;
-                    const diff = mom_a.diff(mom_b, 'seconds')
+                    var diff = mom_a.diff(mom_b, 'seconds');
+
                     if (diff > 0) {
-                        return 1
+                        return 1;
                     } else if (diff < 0) {
-                        return -1
+                        return -1;
                     } else {
-                        return 0
+                        return 0;
                     }
                 },
-                dateSortFunc: function(a, b) {
-                    const mom_a = a.matches[0].moment_date,
+                dateSortFunc: function dateSortFunc(a, b) {
+                    var mom_a = a.matches[0].moment_date,
                         mom_b = b.matches[0].moment_date;
-                    const diff = mom_a.diff(mom_b, 'seconds')
+                    var diff = mom_a.diff(mom_b, 'seconds');
+
                     if (diff > 0) {
-                        return 1
+                        return 1;
                     } else if (diff < 0) {
-                        return -1
+                        return -1;
                     } else {
-                        return 0
+                        return 0;
                     }
                 },
-                gotoTeam: function(id) {
-                    window.location = "team.html?id=" + id
+                gotoTeam: function gotoTeam(id) {
+                    window.location = "team.html?id=" + id;
                 },
-                getCenterCookie: function() {
+                getCenterCookie: function getCenterCookie() {
                     var nameEQ = "center=";
                     var ca = document.cookie.split(';');
+
                     for (var i = 0; i < ca.length; i++) {
                         var c = ca[i];
-                        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+
+                        while (c.charAt(0) == ' ') {
+                            c = c.substring(1, c.length);
+                        }
+
                         if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
                     }
+
                     return null;
                 },
-                flatten: function(arr) {
-                    const self = this;
+                flatten: function flatten(arr) {
+                    var self = this;
                     return arr.reduce(function(flat, toFlatten) {
                         return flat.concat(Array.isArray(toFlatten) ? self.flatten(toFlatten) : toFlatten);
                     }, []);
-                },
+                }
             }
-        })
+        });
     </script>
 
 </body>

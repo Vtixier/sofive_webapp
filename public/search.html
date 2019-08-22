@@ -235,6 +235,8 @@
     <script type="text/javascript" src="js/footer.js"></script>
 
     <script type="text/javascript">
+        "use strict";
+
         var app = new Vue({
             el: '#wrapper',
             data: {
@@ -245,68 +247,75 @@
                 loading: false,
                 center: ""
             },
-            mounted: function() {
-                const params = this.findGetParameter(),
+            mounted: function mounted() {
+                var params = this.findGetParameter(),
                     query = params.query || "";
+
                 if (query !== "") {
-                    this.query = query
-                    this.search(encodeURIComponent(query))
+                    this.query = query;
+                    this.search(encodeURIComponent(query));
                 }
 
-                const center = this.getCenterCookie()
+                var center = this.getCenterCookie();
+
                 if (center) {
-                    this.center = center
+                    this.center = center;
                 }
-
             },
             methods: {
-                findGetParameter: function() {
-                    var queryDict = {}
+                findGetParameter: function findGetParameter() {
+                    var queryDict = {};
                     decodeURI(location.search).substr(1).split("&").forEach(function(item) {
-                        queryDict[item.split("=")[0]] = item.split("=")[1]
-                    })
-                    return queryDict
+                        queryDict[item.split("=")[0]] = item.split("=")[1];
+                    });
+                    return queryDict;
                 },
-                search: function() {
-                    this.loading = true
+                search: function search() {
+                    var _this = this;
+
+                    this.loading = true;
                     this.$http.post("http://localhost:8080/team/", {
-                            name: encodeURI(this.query),
-                            facility_id: this.center
-                        })
-                        .then((resp) => {
-                            resp.body.map(t => {
-                                if (!(t.facility.name in this.facilities)) {
-                                    this.facilities[t.facility.name] = ""
-                                }
-                            })
-                            Object.keys(this.facilities).forEach((key, i) => {
-                                this.facilities[key] = "background-color: " + this.colors[i % (this.colors.length)]
-                            })
-                            this.teams = resp.body
-                            setTimeout(function() {
-                                $(".letterpic").letterpic();
-                            }, 1000)
-                            this.loading = false
-                        })
-                        .catch((err) => {
-                            console.log(err)
-                        })
+                        name: encodeURI(this.query),
+                        facility_id: this.center
+                    }).then(function(resp) {
+                        resp.body.map(function(t) {
+                            if (!(t.facility.name in _this.facilities)) {
+                                _this.facilities[t.facility.name] = "";
+                            }
+                        });
+                        Object.keys(_this.facilities).forEach(function(key, i) {
+                            _this.facilities[key] = "background-color: " + _this.colors[i % _this.colors.length];
+                        });
+                        _this.teams = resp.body;
+                        setTimeout(function() {
+                            $(".letterpic").letterpic();
+                        }, 1000);
+                        _this.loading = false;
+                    }).catch(function(err) {
+                        console.log(err);
+                    });
                 },
-                getCenterCookie: function() {
+                getCenterCookie: function getCenterCookie() {
                     var nameEQ = "center=";
                     var ca = document.cookie.split(';');
+
                     for (var i = 0; i < ca.length; i++) {
                         var c = ca[i];
-                        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+
+                        while (c.charAt(0) == ' ') {
+                            c = c.substring(1, c.length);
+                        }
+
                         if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
                     }
+
                     return null;
                 },
-                gotoTeam: function(team) {
-                    window.location = "team.html?id=" + team.id
+                gotoTeam: function gotoTeam(team) {
+                    window.location = "team.html?id=" + team.id;
                 }
             }
-        })
+        });
     </script>
 
 </body>

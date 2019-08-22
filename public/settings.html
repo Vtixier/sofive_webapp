@@ -189,36 +189,45 @@
     <script type="text/javascript" src="js/footer.js"></script>
 
     <script type="text/javascript">
+        "use strict";
+
         var app = new Vue({
             el: '#wrapper',
             data: {
                 info: ""
             },
-            mounted: function() {
-                let isAdmin = this.getAdminCookie()
+            mounted: function mounted() {
+                var isAdmin = this.getAdminCookie();
+
                 if (!isAdmin) {
-                    window.location = "http://localhost/login.html?url=http://localhost/settings.html"
+                    window.location = "http://localhost/login.html?url=http://localhost/settings.html";
                 }
-                const self = this;
+
+                var self = this;
                 $('.custom-file-input').on('change', function() {
-                    let fileName = $(this).val().split('\\').pop();
+                    var fileName = $(this).val().split('\\').pop();
                     $(this).next('.custom-file-label').addClass("selected").html(fileName);
-                    self.uploadFile()
+                    self.uploadFile();
                 });
             },
             methods: {
-                getAdminCookie: function() {
+                getAdminCookie: function getAdminCookie() {
                     var nameEQ = "admin=";
                     var ca = document.cookie.split(';');
+
                     for (var i = 0; i < ca.length; i++) {
                         var c = ca[i];
-                        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+
+                        while (c.charAt(0) == ' ') {
+                            c = c.substring(1, c.length);
+                        }
+
                         if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
                     }
+
                     return null;
                 },
-                uploadFile: function() {
-
+                uploadFile: function uploadFile() {
                     if (document.querySelector('.custom-file-input').files.length == 0) {
                         return M.toast({
                             html: "Please select a file",
@@ -228,21 +237,18 @@
 
                     var fd = new FormData();
                     fd.append('products', document.querySelector('.custom-file-input').files[0]);
-
                     return this.$http.post("http://localhost:8080/product/file/sku", fd, {
-                            headers: {
-                                Accept: "application/json"
-                            }
-                        })
-                        .then((resp) => {
-                            console.log(resp)
-                        })
-                        .catch((err) => {
-                            console.log(err)
-                        })
+                        headers: {
+                            Accept: "application/json"
+                        }
+                    }).then(function(resp) {
+                        console.log(resp);
+                    }).catch(function(err) {
+                        console.log(err);
+                    });
                 }
             }
-        })
+        });
     </script>
 
 </body>

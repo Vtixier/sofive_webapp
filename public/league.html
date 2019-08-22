@@ -305,6 +305,8 @@
     <script type="text/javascript" src="js/footer.js"></script>
 
     <script type="text/javascript">
+        "use strict";
+
         var app = new Vue({
             el: '#wrapper',
             data: {
@@ -314,72 +316,76 @@
                 matches: [],
                 facility: {},
                 season: {},
-                league: {},
+                league: {}
             },
-            mounted: function() {
-                const params = this.findGetParameter(),
+            mounted: function mounted() {
+                var params = this.findGetParameter(),
                     id = params.id || "";
+
                 if (id !== "") {
-                    this.getStandings(id)
-                    this.getLeagueDetails(id)
+                    this.getStandings(id);
+                    this.getLeagueDetails(id);
                 }
             },
             methods: {
-                findGetParameter: function() {
-                    var queryDict = {}
+                findGetParameter: function findGetParameter() {
+                    var queryDict = {};
                     decodeURI(location.search).substr(1).split("&").forEach(function(item) {
-                        queryDict[item.split("=")[0]] = item.split("=")[1]
-                    })
-                    return queryDict
+                        queryDict[item.split("=")[0]] = item.split("=")[1];
+                    });
+                    return queryDict;
                 },
-                getLeagueDetails: function(league_id) {
-                    let url = "http://localhost:8080/league/" + league_id
-                    this.$http.get(url)
-                        .then((resp) => {
-                            this.facility = resp.body.facility
-                            this.season = resp.body.season
-                            this.league = resp.body.league
-                        })
-                        .catch((err) => {
-                            console.log(err)
-                        })
+                getLeagueDetails: function getLeagueDetails(league_id) {
+                    var _this = this;
+
+                    var url = "http://localhost:8080/league/" + league_id;
+                    this.$http.get(url).then(function(resp) {
+                        _this.facility = resp.body.facility;
+                        _this.season = resp.body.season;
+                        _this.league = resp.body.league;
+                    }).catch(function(err) {
+                        console.log(err);
+                    });
                 },
-                getStandings: function(league_id) {
-                    this.standings_loading = true
-                    let url = "http://localhost:8080/league/" + league_id + "/scores"
-                    this.$http.get(url)
-                        .then((resp) => {
-                            console.log(resp)
-                            this.name = resp.body.name
-                            this.standings = resp.body.leaderboard
-                            this.matches = resp.body.matches.map(m => ({
+                getStandings: function getStandings(league_id) {
+                    var _this2 = this;
+
+                    this.standings_loading = true;
+                    var url = "http://localhost:8080/league/" + league_id + "/scores";
+                    this.$http.get(url).then(function(resp) {
+                        console.log(resp);
+                        _this2.name = resp.body.name;
+                        _this2.standings = resp.body.leaderboard;
+                        _this2.matches = resp.body.matches.map(function(m) {
+                            return {
                                 ...m,
                                 moment_date: moment(m.start, "YYYY-MM-DDTHH:mm:ss"),
                                 start_parsed: moment(m.start, "YYYY-MM-DDTHH:mm:ss").format("YYYY-MM-DD h:mmA").replace(" ", " at "),
                                 url: "match.html?id=" + m.id
-                            })).sort(this.dateSortFunc)
-                            this.standings_loading = false
-                            console.log("Matches", this.matches)
-                        })
-                        .catch((err) => {
-                            console.log(err)
-                        })
+                            };
+                        }).sort(_this2.dateSortFunc);
+                        _this2.standings_loading = false;
+                        console.log("Matches", _this2.matches);
+                    }).catch(function(err) {
+                        console.log(err);
+                    });
                 },
-                dateSortFunc: function(a, b) {
-                    const diff = a.moment_date.diff(b.moment_date, 'seconds')
+                dateSortFunc: function dateSortFunc(a, b) {
+                    var diff = a.moment_date.diff(b.moment_date, 'seconds');
+
                     if (diff > 0) {
-                        return 1
+                        return 1;
                     } else if (diff < 0) {
-                        return -1
+                        return -1;
                     } else {
-                        return 0
+                        return 0;
                     }
                 },
-                gotoTeam: function(id) {
-                    window.location = "team.html?id=" + id
+                gotoTeam: function gotoTeam(id) {
+                    window.location = "team.html?id=" + id;
                 }
             }
-        })
+        });
     </script>
 
 </body>

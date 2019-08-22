@@ -412,6 +412,8 @@
             120: 200
         }
 
+        "use strict";
+
         var app = new Vue({
             el: '#wrapper',
             data: {
@@ -431,68 +433,71 @@
                 },
                 team: false,
                 selected: {
-                    center: "1",
+                    center: "1"
                 },
                 product: {},
                 deposit: {},
                 teams: [],
                 team_search: "",
                 team_search_loading: false,
-                deposit_ok: true,
+                deposit_ok: true
             },
             computed: {
-                is_kid: function() {
-                    return this.data.season.name && this.data.season.name.indexOf('Youth Classes') > (-1)
+                is_kid: function is_kid() {
+                    return this.data.season.name && this.data.season.name.indexOf('Youth Classes') > -1;
                 },
-                is_youth_league: function() {
-                    return this.data.season.name && this.data.season.name.indexOf('Youth League') > (-1)
+                is_youth_league: function is_youth_league() {
+                    return this.data.season.name && this.data.season.name.indexOf('Youth League') > -1;
                 }
             },
-            mounted: function() {
-                const params = this.findGetParameter(),
+            mounted: function mounted() {
+                var params = this.findGetParameter(),
                     parsed = JSON.parse(atob(params.sel));
-                this.data = parsed
+                this.data = parsed;
+
                 if (parsed.reg_type === "team") {
-                    this.team = true
+                    this.team = true;
                 }
 
-                console.log("Parsed", parsed)
-
-                const center = this.getCenterCookie(),
+                console.log("Parsed", parsed);
+                var center = this.getCenterCookie(),
                     self = this;
+
                 if (center) {
-                    this.selected.center = center
+                    this.selected.center = center;
                 }
 
-                this.getRegistration()
-                this.getDeposit()
-
+                this.getRegistration();
+                this.getDeposit();
                 $(document).ready(function() {
                     $('.i-checks').iCheck({
                         checkboxClass: 'icheckbox_square-green',
-                        radioClass: 'iradio_square-green',
+                        radioClass: 'iradio_square-green'
                     });
                     $('#loginForm').on('submit', function(ev) {
-                        self.stripeRedirect()
-                        return false
+                        self.stripeRedirect();
+                        return false;
                     });
                 });
-
             },
             methods: {
-                findGetParameter: function() {
-                    var queryDict = {}
+                findGetParameter: function findGetParameter() {
+                    var queryDict = {};
                     decodeURI(location.search).substr(1).split("&").forEach(function(item) {
-                        queryDict[item.split("=")[0]] = item.split("=")[1]
-                    })
-                    return queryDict
+                        queryDict[item.split("=")[0]] = item.split("=")[1];
+                    });
+                    return queryDict;
                 },
-                pay: function() {
-                    let paid = this.price
+                pay: function pay() {
+                    var _this = this;
+
+                    var paid = this.price;
+
                     if (document.querySelector('input[name="a"]:checked').value === "half") {
-                        paid = this.price / 2
+                        paid = this.price / 2;
                     }
-                    const d = {
+
+                    var d = {
                         customer_name: this.name,
                         customer_email: this.email,
                         amount: paid,
@@ -500,53 +505,65 @@
                         field_id: this.data.id,
                         start: this.data.start,
                         duration: parseInt(this.data.duration)
-                    }
-                    console.log(d)
-                    this.$http.post("http://localhost:8080/event/book", d)
-                        .then((resp) => {
-                            console.log(resp)
-                            this.stripeRedirect()
-                        })
-                        .catch((err) => {
-                            console.log(err)
-                        })
+                    };
+                    console.log(d);
+                    this.$http.post("http://localhost:8080/event/book", d).then(function(resp) {
+                        console.log(resp);
+
+                        _this.stripeRedirect();
+                    }).catch(function(err) {
+                        console.log(err);
+                    });
                 },
-                getBody: function(deposit_bool) {
-                    let payment = "Team Fee"
-                    let paid = this.data.price
-                    let deposit = "No"
+                getBody: function getBody(deposit_bool) {
+                    var payment = "Team Fee";
+                    var paid = this.data.price;
+                    var deposit = "No";
+
                     if (this.data.reg_type !== "team") {
-                        payment = "Individual"
-                        paid = 100
+                        payment = "Individual";
+                        paid = 100;
                     }
+
                     if (deposit_bool) {
-                        paid = 195
-                        deposit = "Yes"
+                        paid = 195;
+                        deposit = "Yes";
                     }
-                    let season = "Summer"
-                    if (this.data.season.name.indexOf("Fall") !== (-1)) {
-                        season = "Fall"
+
+                    var season = "Summer";
+
+                    if (this.data.season.name.indexOf("Fall") !== -1) {
+                        season = "Fall";
                     }
-                    if (this.data.season.name.indexOf("Spring") !== (-1)) {
-                        season = "Spring"
+
+                    if (this.data.season.name.indexOf("Spring") !== -1) {
+                        season = "Spring";
                     }
-                    if (this.data.season.name.indexOf("Winter 1") !== (-1)) {
-                        season = "Winter 1"
+
+                    if (this.data.season.name.indexOf("Winter 1") !== -1) {
+                        season = "Winter 1";
                     }
-                    if (this.data.season.name.indexOf("Winter 2") !== (-1)) {
-                        season = "Winter 2"
+
+                    if (this.data.season.name.indexOf("Winter 2") !== -1) {
+                        season = "Winter 2";
                     }
-                    let early_bird = "No"
+
+                    var early_bird = "No";
+
                     if (this.data.early_bird) {
-                        early_bird = "Yes"
+                        early_bird = "Yes";
                     }
-                    let team = this.name
+
+                    var team = this.name;
+
                     if (document.querySelector('input[name="a"]:checked') && document.querySelector('input[name="a"]:checked').value === "existing") {
-                        team = this.team_search
+                        team = this.team_search;
                     }
+
                     if (!this.team) {
-                        team = "Free Agent"
+                        team = "Free Agent";
                     }
+
                     return {
                         "dash_id": this.data.dash_id,
                         "product_type": this.data.product_type,
@@ -568,139 +585,155 @@
                             kid: this.kid,
                             ...this.yl
                         })
-                    }
+                    };
                 },
-                getRegistration: function() {
-                    const d = this.getBody(false)
-                    this.$http.post("http://localhost:8080/product/registration/get", d)
-                        .then((resp) => {
-                            console.log(resp)
-                            this.product = resp.body.product
-                            let p = this.product.price
-                            this.product.full_price = p
-                            if (d.center === "Sofive Rockville, MD") {
-                                this.product.price = Math.round(p / 1.1 * 100) / 100
-                                this.product["tax"] = "10%"
-                            }
-                            if (d.center === "Sofive Columbia, MD") {
-                                this.product.price = Math.round(p / 1.05 * 100) / 100
-                                this.product["tax"] = "5%"
-                            }
-                            console.log("Got price", p)
-                        })
-                        .catch((err) => {
-                            console.log(err)
-                        })
+                getRegistration: function getRegistration() {
+                    var _this2 = this;
+
+                    var d = this.getBody(false);
+                    this.$http.post("http://localhost:8080/product/registration/get", d).then(function(resp) {
+                        console.log(resp);
+                        _this2.product = resp.body.product;
+                        var p = _this2.product.price;
+                        _this2.product.full_price = p;
+
+                        if (d.center === "Sofive Rockville, MD") {
+                            _this2.product.price = Math.round(p / 1.1 * 100) / 100;
+                            _this2.product["tax"] = "10%";
+                        }
+
+                        if (d.center === "Sofive Columbia, MD") {
+                            _this2.product.price = Math.round(p / 1.05 * 100) / 100;
+                            _this2.product["tax"] = "5%";
+                        }
+
+                        console.log("Got price", p);
+                    }).catch(function(err) {
+                        console.log(err);
+                    });
                 },
-                getDeposit: function() {
-                    const d = this.getBody(true),
+                getDeposit: function getDeposit() {
+                    var _this3 = this;
+
+                    var d = this.getBody(true),
                         self = this;
-                    this.$http.post("http://localhost:8080/product/registration/get", d)
-                        .then((resp) => {
-                            console.log(resp)
-                            this.deposit = resp.body.product
-                            let p = this.deposit.price
-                            this.deposit.full_price = p
-                            if (d.center === "Sofive Rockville, MD") {
-                                this.deposit.price = Math.round(p / 1.1 * 100) / 100
-                                this.deposit["tax"] = "10%"
-                            }
-                            if (d.center === "Sofive Columbia, MD") {
-                                this.deposit.price = Math.round(p / 1.05 * 100) / 100
-                                this.deposit["tax"] = "5%"
-                            }
-                            console.log("Got price", p)
-                        })
-                        .catch((err) => {
-                            console.log(err)
-                            self.deposit_ok = false
-                        })
+                    this.$http.post("http://localhost:8080/product/registration/get", d).then(function(resp) {
+                        console.log(resp);
+                        _this3.deposit = resp.body.product;
+                        var p = _this3.deposit.price;
+                        _this3.deposit.full_price = p;
+
+                        if (d.center === "Sofive Rockville, MD") {
+                            _this3.deposit.price = Math.round(p / 1.1 * 100) / 100;
+                            _this3.deposit["tax"] = "10%";
+                        }
+
+                        if (d.center === "Sofive Columbia, MD") {
+                            _this3.deposit.price = Math.round(p / 1.05 * 100) / 100;
+                            _this3.deposit["tax"] = "5%";
+                        }
+
+                        console.log("Got price", p);
+                    }).catch(function(err) {
+                        console.log(err);
+                        self.deposit_ok = false;
+                    });
                 },
-                stripeRedirect: function() {
+                stripeRedirect: function stripeRedirect() {
                     if (document.querySelector('input[name="a"]:checked') && document.querySelector('input[name="a"]:checked').value === "existing") {
                         if (this.team_search === "") {
                             toastr.error('Missing team name', 'Please enter a name for your team !', {
                                 progressBar: true
-                            })
-                            return
+                            });
+                            return;
                         }
-                        if (this.team_search.indexOf("(") === (-1) || this.team_search.indexOf(")") === (-1)) {
+
+                        if (this.team_search.indexOf("(") === -1 || this.team_search.indexOf(")") === -1) {
                             toastr.error('Missing team name', 'Please search for your team !', {
                                 progressBar: true
-                            })
-                            return
+                            });
+                            return;
                         }
                     }
+
                     if (document.querySelector('input[name="a"]:checked') && document.querySelector('input[name="a"]:checked').value === "new") {
                         if (this.name === "") {
                             toastr.error('Missing team name', 'Please enter a new team name !', {
                                 progressBar: true
-                            })
-                            return
+                            });
+                            return;
                         }
                     }
-                    const self = this;
-                    let deposit = false,
-                        sku = self.product.sku
+
+                    var self = this;
+                    var deposit = false,
+                        sku = self.product.sku;
+
                     if (document.querySelector('input[name="b"]:checked') && document.querySelector('input[name="b"]:checked').value === "deposit") {
-                        deposit = true
-                        sku = self.deposit.sku
+                        deposit = true;
+                        sku = self.deposit.sku;
                     }
-                    const d = this.getBody(deposit);
-                    const redirect_url = 'http://localhost/reg_done.html?sel=' + btoa(JSON.stringify(d))
+
+                    var d = this.getBody(deposit);
+                    var redirect_url = 'http://localhost/reg_done.html?sel=' + btoa(JSON.stringify(d));
                     stripe.redirectToCheckout({
-                            items: [{
-                                sku: sku,
-                                quantity: 1
-                            }],
-                            successUrl: redirect_url,
-                            cancelUrl: 'https://scoreplay.io/canceled',
-                        })
-                        .then(function(result) {
-                            if (result.error) {
-                                var displayError = document.getElementById('error-message');
-                                displayError.textContent = result.error.message;
-                            }
-                        });
+                        items: [{
+                            sku: sku,
+                            quantity: 1
+                        }],
+                        successUrl: redirect_url,
+                        cancelUrl: 'https://scoreplay.io/canceled'
+                    }).then(function(result) {
+                        if (result.error) {
+                            var displayError = document.getElementById('error-message');
+                            displayError.textContent = result.error.message;
+                        }
+                    });
                 },
-                getCenterCookie: function() {
+                getCenterCookie: function getCenterCookie() {
                     var nameEQ = "center=";
                     var ca = document.cookie.split(';');
+
                     for (var i = 0; i < ca.length; i++) {
                         var c = ca[i];
-                        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+
+                        while (c.charAt(0) == ' ') {
+                            c = c.substring(1, c.length);
+                        }
+
                         if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
                     }
+
                     return null;
                 },
-                selectTeam: function(team) {
-                    this.team_search = team.name + " (" + team.id + ")"
-                    $('#more_info_modal').modal('hide')
+                selectTeam: function selectTeam(team) {
+                    this.team_search = team.name + " (" + team.id + ")";
+                    $('#more_info_modal').modal('hide');
                 },
-                search: function(ele) {
+                search: function search(ele) {
                     if (ele.key === 'Enter') {
                         this.searchTeam();
                     }
                 },
-                searchTeam: function() {
+                searchTeam: function searchTeam() {
+                    var _this4 = this;
+
                     $('#more_info_modal').modal({
                         keyboard: false
-                    })
-                    this.team_search_loading = true
+                    });
+                    this.team_search_loading = true;
                     this.$http.post("http://localhost:8080/team/", {
-                            name: encodeURI(this.team_search),
-                            facility_id: this.selected.center
-                        })
-                        .then((resp) => {
-                            this.teams = resp.body
-                            this.team_search_loading = false
-                        })
-                        .catch((err) => {
-                            console.log(err)
-                        })
-                },
+                        name: encodeURI(this.team_search),
+                        facility_id: this.selected.center
+                    }).then(function(resp) {
+                        _this4.teams = resp.body;
+                        _this4.team_search_loading = false;
+                    }).catch(function(err) {
+                        console.log(err);
+                    });
+                }
             }
-        })
+        });
     </script>
 
 </body>

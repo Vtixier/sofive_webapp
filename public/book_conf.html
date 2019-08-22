@@ -318,6 +318,8 @@
     <script type="text/javascript">
         let stripe = Stripe(`pk_live_u3cyg4FEiEES4YUFKHeziPdY00kEYW2kt7`);
 
+        "use strict";
+
         var app = new Vue({
             el: '#wrapper',
             data: {
@@ -326,10 +328,10 @@
                     subtitle: "",
                     name: "",
                     id: 0,
-                    facility_id: 0,
+                    facility_id: 0
                 },
                 selected: {
-                    center: "0",
+                    center: "0"
                 },
                 name: "",
                 email: "",
@@ -338,90 +340,90 @@
                 deposit: {},
                 sel: ""
             },
-            mounted: function() {
-                const params = this.findGetParameter(),
+            mounted: function mounted() {
+                var params = this.findGetParameter(),
                     parsed = JSON.parse(atob(params.sel));
-                this.data = parsed
-                this.sel = params.sel
-
-                this.getPricing()
-
-                const center = this.getCenterCookie(),
+                this.data = parsed;
+                this.sel = params.sel;
+                this.getPricing();
+                var center = this.getCenterCookie(),
                     self = this;
-                this.selected.center = center
-
+                this.selected.center = center;
                 var l = Ladda.bind('.ladda-button-checkout');
-
                 $(document).ready(function() {
                     $('.i-checks').iCheck({
                         checkboxClass: 'icheckbox_square-green',
-                        radioClass: 'iradio_square-green',
+                        radioClass: 'iradio_square-green'
                     });
                     $('#loginForm').on('submit', function(ev) {
-                        console.log(ev)
-                        self.pay()
-                        return false
+                        console.log(ev);
+                        self.pay();
+                        return false;
                     });
                 });
-
             },
             methods: {
-                findGetParameter: function() {
-                    var queryDict = {}
+                findGetParameter: function findGetParameter() {
+                    var queryDict = {};
                     decodeURI(location.search).substr(1).split("&").forEach(function(item) {
-                        queryDict[item.split("=")[0]] = item.split("=")[1]
-                    })
-                    return queryDict
+                        queryDict[item.split("=")[0]] = item.split("=")[1];
+                    });
+                    return queryDict;
                 },
-                getPricing: function() {
-                    this.getPricingDetails("No")
-                        .then((d) => {
-                            this.product = d
-                            let p = this.product.price
-                            this.product.full_price = p
-                            if (d.center === "Sofive Rockville, MD") {
-                                this.product.price = Math.round(p / 1.1 * 100) / 100
-                                this.product["tax"] = "10%"
-                            }
-                            if (d.center === "Sofive Columbia, MD") {
-                                this.product.price = Math.round(p / 1.05 * 100) / 100
-                                this.product["tax"] = "5%"
-                            }
-                            return this.getPricingDetails("Yes")
-                                .then((dep) => {
-                                    this.deposit = {
-                                        ...dep
-                                    }
-                                })
-                                .catch((err) => {
-                                    console.log(err)
-                                })
-                        })
-                        .catch((err) => {
-                            console.error(err)
-                        })
+                getPricing: function getPricing() {
+                    var _this = this;
+
+                    this.getPricingDetails("No").then(function(d) {
+                        _this.product = d;
+                        var p = _this.product.price;
+                        _this.product.full_price = p;
+
+                        if (d.center === "Sofive Rockville, MD") {
+                            _this.product.price = Math.round(p / 1.1 * 100) / 100;
+                            _this.product["tax"] = "10%";
+                        }
+
+                        if (d.center === "Sofive Columbia, MD") {
+                            _this.product.price = Math.round(p / 1.05 * 100) / 100;
+                            _this.product["tax"] = "5%";
+                        }
+
+                        return _this.getPricingDetails("Yes").then(function(dep) {
+                            _this.deposit = {
+                                ...dep
+                            };
+                        }).catch(function(err) {
+                            console.log(err);
+                        });
+                    }).catch(function(err) {
+                        console.error(err);
+                    });
                 },
-                getPricingDetails: function(deposit) {
-                    const body = {
+                getPricingDetails: function getPricingDetails(deposit) {
+                    var _this2 = this;
+
+                    var body = {
                         ...this.data.booking,
-                        deposit
-                    }
-                    return new Promise((yes, no) => {
-                        this.$http.post("http://localhost:8080/product/booking", body)
-                            .then((resp) => {
-                                yes(resp.body)
-                            })
-                            .catch(no)
-                    })
+                        deposit: deposit
+                    };
+                    return new Promise(function(yes, no) {
+                        _this2.$http.post("http://localhost:8080/product/booking", body).then(function(resp) {
+                            yes(resp.body);
+                        }).catch(no);
+                    });
                 },
-                pay: function() {
-                    let paid = this.product.full_price
-                    let deposit = false
+                pay: function pay() {
+                    var _this3 = this;
+
+                    var paid = this.product.full_price;
+                    var deposit = false;
+
                     if (document.querySelector('input[name="a"]:checked').value === "deposit") {
-                        paid = 5000
-                        deposit = true
+                        paid = 5000;
+                        deposit = true;
                     }
-                    const d = {
+
+                    var d = {
                             customer_name: this.name,
                             customer_email: this.email,
                             customer_phone: this.phone,
@@ -432,61 +434,64 @@
                             duration: parseInt(this.data.duration)
                         },
                         self = this;
-                    this.$http.post("http://localhost:8080/event/book", d)
-                        .then((resp) => {
-                            this.stripeRedirect(resp.body.booking_id, deposit)
-                        })
-                        .catch((err) => {
-                            console.log(err)
-                            setTimeout(function() {
-                                self.$http.post("http://localhost:8080/event/book", d)
-                                    .then((respons) => {
-                                        self.stripeRedirect(respons.body.booking_id, deposit)
-                                    })
-                                    .catch((err) => {
-                                        console.log("ERR", err)
-                                        toastr.error('Booking error', 'Please call the center for your booking.', {
-                                            progressBar: true
-                                        })
-                                    })
-                            }, 2000)
-                        })
+                    this.$http.post("http://localhost:8080/event/book", d).then(function(resp) {
+                        _this3.stripeRedirect(resp.body.booking_id, deposit);
+                    }).catch(function(err) {
+                        console.log(err);
+                        setTimeout(function() {
+                            self.$http.post("http://localhost:8080/event/book", d).then(function(respons) {
+                                self.stripeRedirect(respons.body.booking_id, deposit);
+                            }).catch(function(err) {
+                                console.log("ERR", err);
+                                toastr.error('Booking error', 'Please call the center for your booking.', {
+                                    progressBar: true
+                                });
+                            });
+                        }, 2000);
+                    });
                 },
-                stripeRedirect: function(booking_id, deposit) {
-                    const redirect_url = 'http://localhost:8080/event/confirm/' + booking_id + '?sel=' + this.sel,
+                stripeRedirect: function stripeRedirect(booking_id, deposit) {
+                    var redirect_url = 'http://localhost:8080/event/confirm/' + booking_id + '?sel=' + this.sel,
                         self = this;
-                    let sku = this.product.sku
+                    var sku = this.product.sku;
+
                     if (deposit) {
-                        sku = this.deposit.sku
+                        sku = this.deposit.sku;
                     }
+
                     stripe.redirectToCheckout({
-                            items: [{
-                                sku: sku,
-                                quantity: 1
-                            }],
-                            successUrl: redirect_url,
-                            cancelUrl: 'https://scoreplay.io/canceled',
-                            customerEmail: self.email,
-                        })
-                        .then(function(result) {
-                            if (result.error) {
-                                var displayError = document.getElementById('error-message');
-                                displayError.textContent = result.error.message;
-                            }
-                        });
+                        items: [{
+                            sku: sku,
+                            quantity: 1
+                        }],
+                        successUrl: redirect_url,
+                        cancelUrl: 'https://scoreplay.io/canceled',
+                        customerEmail: self.email
+                    }).then(function(result) {
+                        if (result.error) {
+                            var displayError = document.getElementById('error-message');
+                            displayError.textContent = result.error.message;
+                        }
+                    });
                 },
-                getCenterCookie: function() {
+                getCenterCookie: function getCenterCookie() {
                     var nameEQ = "center=";
                     var ca = document.cookie.split(';');
+
                     for (var i = 0; i < ca.length; i++) {
                         var c = ca[i];
-                        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+
+                        while (c.charAt(0) == ' ') {
+                            c = c.substring(1, c.length);
+                        }
+
                         if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
                     }
+
                     return null;
                 }
             }
-        })
+        });
     </script>
 
 </body>
