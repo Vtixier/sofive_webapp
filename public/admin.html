@@ -392,7 +392,7 @@
                             _this.registrations = _this.registrations.map(function(r) {
                                 return Object.assign(r, {
                                     past: true
-                                };
+                                });
                             });
                         }
                     }).catch(function(err) {
@@ -469,7 +469,7 @@
                             center: center,
                             date: date,
                             details: details
-                        };
+                        });
                     });
                     this.$nextTick(function() {
                         $('.i-checks').iCheck({

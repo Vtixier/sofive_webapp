@@ -429,12 +429,12 @@
                                 clips: v.clips.map(function(c) {
                                     return Object.assign(c, {
                                         url: "https://www.dailymotion.com/embed/video/" + c.url.replace("https://www.dailymotion.com/video/", "") + "?autoplay=1&queue-enable=false&queue-autoplay-next=false&ui-start-screen-info=false"
-                                    };
+                                    });
                                 }),
                                 recording: Object.assign(v.recording, {
                                     url: rec_url
-                                }
-                            };
+                                })
+                            });
                         }).catch(function(err) {
                             console.log(err);
                         });
@@ -485,7 +485,7 @@
                             }).map(function(v) {
                                 return Object.assign(v, {
                                     embed: "https://www.dailymotion.com/embed/video/" + v.id + "?queue-enable=false&queue-autoplay-next=false&ui-start-screen-info=false"
-                                };
+                                });
                             }).filter(function(v) {
                                 return v.recType !== "clip";
                             });
