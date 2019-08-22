@@ -390,9 +390,8 @@
                     }).then(function() {
                         if (!current_events) {
                             _this.registrations = _this.registrations.map(function(r) {
-                                return Object.assign(r, {
-                                    past: true
-                                });
+                                r['past'] = true
+                                return r
                             });
                         }
                     }).catch(function(err) {
@@ -464,12 +463,12 @@
                             }
                         }
 
-                        return Object.assign(r, {
-                            name: name,
-                            center: center,
-                            date: date,
-                            details: details
-                        });
+                        r['name'] = name
+                        r['center'] = center
+                        r['date'] = date
+                        r['details'] = details
+
+                        return r
                     });
                     this.$nextTick(function() {
                         $('.i-checks').iCheck({

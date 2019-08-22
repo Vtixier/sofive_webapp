@@ -357,12 +357,9 @@
                             this.selected_product = p;
                         },
                         editProduct: function editProduct() {
-                            var d = Object.assign(this.selected.product, {
-                                payment: this.selected_product.payment_type,
-                                price: parseInt(this.selected_product.price) * 100
-                            });
-                            console.log(d);
-                            this.$http.post("http://localhost:8080/product/edit", d).then(function(resp) {
+                            this.selected.product['payment'] = this.selected_product.payment_type
+                            this.selected.product['price'] = parseInt(this.selected_product.price) * 100
+                            this.$http.post("http://localhost:8080/product/edit", this.selected.product).then(function(resp) {
                                 console.log(resp);
                                 window.location = "/products.html";
                             }).catch(function(err) {
@@ -370,9 +367,8 @@
                             });
                         },
                         create: function create() {
-                            var d = Object.assign(this.new_product, {
-                                        price: parseInt(this.new_product.price) * 100
-                                    }); console.log(d); this.$http.post("http://localhost:8080/product/add", d).then(function(resp) {
+                            this.new_product['price'] = parseInt(this.new_product.price) * 100
+                            this.$http.post("http://localhost:8080/product/add", this.new_product).then(function(resp) {
                                         console.log(resp);
                                         window.location = "/products.html";
                                     }).catch(function(err) {
@@ -385,9 +381,8 @@
                                     this.products = [];
                                     this.$http.get("http://localhost:8080/product/").then(function(resp) {
                                         _this.products = resp.body.map(function(p) {
-                                            return Object.assign(p, {
-                                                price: p.price / 100
-                                            });
+                                            p['price'] = p.price / 100
+                                            return p
                                         });
 
                                         _this.$nextTick(function() {
