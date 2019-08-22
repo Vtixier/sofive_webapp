@@ -426,16 +426,13 @@
                             }
 
                             v['clips'] = v.clips.map(function(c) {
-                                return Object.assign(c, {
-                                    url: "https://www.dailymotion.com/embed/video/" + c.url.replace("https://www.dailymotion.com/video/", "") + "?autoplay=1&queue-enable=false&queue-autoplay-next=false&ui-start-screen-info=false"
-                                });
+                                c['url'] = "https://www.dailymotion.com/embed/video/" + c.url.replace("https://www.dailymotion.com/video/", "") + "?autoplay=1&queue-enable=false&queue-autoplay-next=false&ui-start-screen-info=false"
+                                return c;
                             })
 
                             console.log("Clip", v)
 
-                            v['recording'] = Object.assign(v.recording, {
-                                url: rec_url
-                            })
+                            v['recording']['url'] = rec_url
 
                             _this.scoreplay_videos = v
                         }).catch(function(err) {
