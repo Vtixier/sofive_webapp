@@ -436,7 +436,7 @@
                                 })
                             });
                         }).catch(function(err) {
-                            console.log(err);
+                            console.log("getScoreplayVideos", err);
                         });
                     },
                     getDashMatch: function getDashMatch() {
@@ -455,7 +455,7 @@
 
                             _this2.getMatchDetails();
                         }).catch(function(err) {
-                            console.log(err);
+                            console.log("getDashMatch", err);
                         });
                     },
                     getLeagueDetails: function getLeagueDetails(league_id) {
