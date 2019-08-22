@@ -372,7 +372,7 @@
                         create: function create() {
                             var d = Object.assign(this.new_product, {
                                         price: parseInt(this.new_product.price) * 100
-                                    }; console.log(d); this.$http.post("http://localhost:8080/product/add", d).then(function(resp) {
+                                    }); console.log(d); this.$http.post("http://localhost:8080/product/add", d).then(function(resp) {
                                         console.log(resp);
                                         window.location = "/products.html";
                                     }).catch(function(err) {
