@@ -469,7 +469,7 @@
                             .then((resp) => {
                                 this.referee = resp.body.ref
                                 this.setupEvents(resp.body.events)
-                                this.videos = resp.body.videos.map(v => ({
+                                this.videos = resp.body.videos.filter(v => (v.recType === "rental")).map(v => ({
                                     ...v,
                                     embed: "https://www.dailymotion.com/embed/video/" + v.id + "?queue-enable=false&queue-autoplay-next=false&ui-start-screen-info=false"
                                 })).filter(v => (v.recType !== "clip"))
