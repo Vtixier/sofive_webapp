@@ -468,7 +468,9 @@
         <script type="text/javascript" src="js/info-rok.js"></script>
         <script type="text/javascript" src="js/info-ekp.js"></script>
 
-        <script type="text/javascript">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.18.1/babel.min.js"></script>
+
+        <script type="text/babel">
             var app = new Vue({
                 el: '#wrapper',
                 data: {
@@ -584,7 +586,7 @@
                     const center = this.getCenterCookie()
                     this.selected.center = center
                     this.date = moment().format("MM-DD-YYYY")
-                    endDate = moment().add(15, 'd').format("MM-DD-YYYY")
+                    const endDate = moment().add(15, 'd').format("MM-DD-YYYY")
                     this.getCenters()
                     $('.input-group.date').datepicker({
                         todayBtn: "linked",
