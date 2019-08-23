@@ -151,9 +151,9 @@
                         <div class="mediums m-t-xs">
                             Starts on : {{selected.league.start}}<br />
                             <span v-if="selected.league.start !== selected.league.end">Ends on : {{selected.league.end}}</span>
-                            <br /><br />
+<!--                             <br /><br />
                             <div v-if="selected.league.class">${{selected.league.price}} per class</div>
-                            <div v-else>${{selected.league.price}} Teams <span v-if="selected.league.agent">/ ${{selected.league.agent}} Free Agents</span></div>
+                            <div v-else>${{selected.league.price}} Teams <span v-if="selected.league.agent">/ ${{selected.league.agent}} Free Agents</span></div> -->
                             <br>
                         </div>
                     </div>
@@ -505,7 +505,7 @@
                     });
                 },
                 free_agent: function free_agent() {
-                    return this.selected.product.name === "Adult Leagues" || this.selected.product.name === "Youth Leagues";
+                    return (this.selected.product.name === "Adult Leagues" || this.selected.product.name === "Youth Leagues") && (this.selected.league && this.selected.league.name && this.selected.league.name.toLowerCase().indexOf("corporate") == (-1));
                 }
             },
             mounted: function mounted() {
@@ -548,6 +548,7 @@
             methods: {
                 selectProduct: function selectProduct(e) {
                     var doc = JSON.parse(e.target.value);
+                    console.log("Selected doc", doc)
                     this.selected.product = doc;
 
                     if (doc.name == "Youth Tournament") {
