@@ -155,6 +155,8 @@
                                 <label for="logo" class="custom-file-label">Choose file...</label>
                             </div>
 
+                            Contains product ID ? <input name="a" checked type="checkbox" />
+
                         </div>
                     </div>
                 </div>
@@ -237,7 +239,13 @@
 
                     var fd = new FormData();
                     fd.append('products', document.querySelector('.custom-file-input').files[0]);
-                    return this.$http.post("http://localhost:8080/product/file/sku", fd, {
+
+                    let url = "http://localhost:8080/product/file/product"
+                    if (document.querySelector('input[name="a"]:checked')) {
+                        url = "http://localhost:8080/product/file/sku"
+                    }
+
+                    return this.$http.post(url, fd, {
                         headers: {
                             Accept: "application/json"
                         }
