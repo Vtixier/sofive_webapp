@@ -153,8 +153,8 @@
                             <span v-if="selected.league.start !== selected.league.end">Ends on : {{selected.league.end}}</span>
                             <br /><br />
                             <!-- <div v-if="selected.league.class">${{selected.league.price}} per class</div> -->
-                            <div v-if="product.price">{{product.price}}$ for teams</div><br/>
-                            <div v-if="free_agent.price">{{free_agent.price}}$ for Free Agents</div>
+                            <div v-if="product.price">{{product.price/100}}$ for teams</div><br/>
+                            <div v-if="free_agent.price">{{free_agent.price/100}}$ for Free Agents</div>
                             <br>
                         </div>
                     </div>
