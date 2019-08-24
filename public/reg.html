@@ -253,7 +253,7 @@
                             </label>
                             <select class="select_season form-control" style="width: 100%">
                                 <option></option>
-                                <option v-for="season in seasons" :value="JSON.stringify(season)">{{season.name}}</option>
+                                <option v-for="season in seasons" :value="JSON.stringify(season)">{{season.name.split("-")[1].trim().split("(")[0]}}</option>
                             </select>
                         </div>
                         <div class="col-md-3 col-sm-12" v-bind:style=" youth ? 'display:block' : 'display:none' ">
@@ -620,7 +620,7 @@
                         Promise.all(p).then(function(leagues) {
                             _this4.loading.league = false;
                             _this4.leagues = _this4.flatten(leagues).sort(function(a, b) {
-                                var diff = moment(a.end, "MM-DD-YYYY").diff(moment(b.end, "MM-DD-YYYY"), 'seconds');
+                                var diff = moment(a.start, "MM-DD-YYYY").diff(moment(b.start, "MM-DD-YYYY"), 'seconds');
                                 if (diff > 0) {
                                     return 1;
                                 } else if (diff < 0) {
