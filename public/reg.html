@@ -254,7 +254,7 @@
                             </label>
                             <select class="select_season form-control" style="width: 100%">
                                 <option></option>
-                                <option v-for="season in seasons" :value="JSON.stringify(season)">{{season.name.split("-")[1].trim().split("(")[0]}}</option>
+                                <option v-for="season in seasons" :value="JSON.stringify(season)">{{season.display_name}}</option>
                             </select>
                         </div>
                         <div class="col-md-3 col-sm-12" v-bind:style=" youth ? 'display:block' : 'display:none' ">
@@ -610,7 +610,18 @@
                         "date": moment().format("YYYY-MM-DD")
                     };
                     this.$http.post("http://localhost:8080/program/seasons/current", body).then(function(resp) {
-                        _this4.seasons = resp.body;
+                        _this4.seasons = resp.body.map(function(s){
+                            let display_name = name
+                            if (s.name.indexOf("-") !== (-1)) {
+                                if (s.name.indexOf("-") !== (-1)) {
+                                    display_name = s.name.split("-")[1].trim().split("(")[0]
+                                } else {
+                                    display_name = s.name.split("-")[1].trim()
+                                }
+                            }
+                            s.display_name = display_name
+                            return s
+                        });
                         _this4.loading.season = false;
                         console.log("Seasons", _this4.seasons);
                         var p = [];
