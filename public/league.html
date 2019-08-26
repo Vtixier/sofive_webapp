@@ -258,14 +258,15 @@
                                                 <th class="text-center">Team</th>
                                                 <th class="text-center">Score</th>
                                                 <th class="text-center">Team</th>
-                                                <th class="text-center"></th>
+                                                <th class="text-center">Match page</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr v-for="(match, i) in matches">
-                                                <td class="text-center">
-                                                    <span v-if="(i == 0) || ((i>0) && (match.start_parsed !== matches[i-1].start_parsed))"><b>{{match.start_parsed}}</b></span>
+                                                <td class="text-center" v-if="(i == 0) || ((i>0) && (match.start_parsed !== matches[i-1].start_parsed))">
+                                                    <b>{{match.start_parsed}}</b>
                                                 </td>
+                                                <td class="text-center" style="border-top: none" v-else></td>
                                                 <td class="text-center">{{match.hour_parsed}}</td>
                                                 <td class="text-center">{{match.match_type}}</td>
                                                 <td class="text-center">{{match.home.name}}</td>
