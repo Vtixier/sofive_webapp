@@ -451,7 +451,7 @@
                         var details = [];
 
                         if (r.registration.details.Valid) {
-                            var elements = JSON.parse(r.registration.details.String);
+                            var elements = JSON.parse(r.registration.details);
 
                             for (k in elements) {
                                 if (elements[k] !== "") {

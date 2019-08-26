@@ -4,11 +4,10 @@
 <head>
 
     <meta charset="utf-8">
-    <meta property="og:url"           content="https://app.sofive.com" />
-    <meta property="og:type"          content="website" />
-    <meta property="og:title"         content="Scoreplay title test" />
-    <meta property="og:description"   content="Scoreplay description" />
-    <meta property="og:image"         content="https://app.sofive.com/img/fb.png" />
+    <meta property="og:type" content="Scoreplay" />
+    <meta property="og:title" content="Scoreplay title test" />
+    <meta property="og:description" content="Scoreplay description" />
+    <meta property="og:image" content="https://app.sofive.com/img/fb.png" />
 
     <title>Sofive Soccer Center</title>
     <script type="text/javascript">
@@ -166,6 +165,19 @@
                         <div class="modal-body">
                             <iframe class="video" allow="autoplay" :src="video_url" frameborder="0" allowfullscreen style="width: 100%"></iframe>
                         </div>
+                        <div class="row" style="margin-bottom: 5%">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-4">
+                                <button type="button" class="btn btn-primary btn-sm btn-block" style="background-color: #4267b2; border-color: #4267b2" v-on:click="gotoFb"><i class="fa fa-facebook-square"></i> Share on Facebook</button>
+                            </div>
+                            <div class="col-md-2"></div>
+                            <div class="col-md-4">
+                                <select class="select_center form-control" v-model="selected_scorer">
+                                    <option value="0">Select scorer</option>
+                                    <option v-for="player in video_roster" :value="player.id">{{player.name}}</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -214,7 +226,7 @@
                                     <div class="user-button">
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <div class="fb-share-button" :data-href="website_url" data-layout="button" data-size="large"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fapp.sofive.com%2Fmatch.html%3Fid%3D50334&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a></div>
+                                                <!-- <div class="fb-share-button" data-href="https://www.dailymotion.com/video/x7g35qd" data-layout="button" data-size="large"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.dailymotion.com%2Fvideo%2Fx7g35qd&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a></div> -->
                                             </div>
                                             <!--                                           <div class="col-md-6">
                                                 <button type="button" class="btn btn-default btn-sm btn-block"><i class="fa fa-pencil"></i> Referee assessment</button>
@@ -255,9 +267,11 @@
                                             <div :class="{'vertical-timeline-content': true,
                                             'float-right': (match.home.name !== event.side),
                                             'float-left': (match.home.name === event.side)}" style="padding: 10px">
-                                                <h2>{{event.date}} <b>{{event.type}}</b> from <b>{{event.side}}</b></h2>
+                                                <h2>{{event.date}} <b>{{event.type}}</b> from <b>
+                                                        <span v-if="(scoreplay_videos.clips[i] && scoreplay_videos.clips[i].player_id)">{{(all_rosters.find(p => (p.id.toString() === scoreplay_videos.clips[i].player_id)) || {'name':''}).name}} <small><br />({{event.side}})</small></span><span v-else>{{event.side}}</span>
+                                                    </b></h2>
                                                 <div v-html="event.subtitle"></div>
-                                                <a v-if="scoreplay_videos.clips[i]" v-on:click="select_vid(scoreplay_videos.clips[i].url)" target="blank" class="btn btn-sm btn-primary" style="float: right; color: white" data-toggle="modal" data-target="#edit">Video</a>
+                                                <a v-if="scoreplay_videos.clips[i]" v-on:click="select_vid(scoreplay_videos.clips[i], match.home.name === event.side)" target="blank" class="btn btn-sm btn-primary" style="float: right; color: white" data-toggle="modal" data-target="#edit">Video</a>
                                             </div>
                                         </div>
                                     </div>
@@ -355,7 +369,7 @@
         </div>
 
         <div id="fb-root"></div>
-        <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v4.0&appId=402678167007969&autoLogAppEvents=1"></script>
+        <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v4.0&appId=402678167007969"></script>
 
         <!-- Mainly scripts -->
         <script src="js/jquery-3.1.1.min.js"></script>
@@ -403,16 +417,41 @@
                         recording: {}
                     },
                     video_url: "",
-                    website_url: ""
+                    video_id: 0,
+                    video_share_url: "",
+                    video_roster: [],
+                    selected_scorer: "0"
                 },
                 mounted: function mounted() {
                     var params = this.findGetParameter();
                     this.matchID = params.id;
-                    this.website_url = "https://app.sofive.com/match.html?id="+params.id
-                    this.getDashMatch();
-                    this.getScoreplayVideos();
+                    this.getDashMatch()
+                        .then(function() {
+                            this.getScoreplayVideos();
+                        })
+                },
+                watch: {
+                    selected_scorer: function(new_val, old_val) {
+                        console.log("Scorer change", old_val, new_val, this.video_id)
+                        this.$http.post("https://video.scoreplay.io/clip/scorer", {
+                            id: this.video_id,
+                            player_id: new_val.toString()
+                        })
+                    }
+                },
+                computed: {
+                    all_rosters: function() {
+                        return (this.home_team.roster || []).concat((this.away_team.roster || []))
+                    }
                 },
                 methods: {
+                    getFb: function getFB(video_id) {
+                        this.video_share_url = 'https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.dailymotion.com%2Fvideo%2F' + video_id + '&amp;src=sdkpreparse'
+                    },
+                    gotoFb: function gotoFb() {
+                        var win = window.open(this.video_share_url, '_blank');
+                        win.focus();
+                    },
                     findGetParameter: function findGetParameter() {
                         var queryDict = {};
                         decodeURI(location.search).substr(1).split("&").forEach(function(item) {
@@ -420,8 +459,23 @@
                         });
                         return queryDict;
                     },
-                    select_vid: function select_vid(v) {
-                        this.video_url = v;
+                    select_vid: function select_vid(v, is_home) {
+                        console.log("Sel", v, is_home)
+                        this.video_url = v.url;
+                        this.video_id = v.id;
+                        let i = v.url.indexOf('video/') + 6,
+                            j = v.url.indexOf('?autoplay')
+                        this.getFb(v.url.slice(i, j))
+                        if (is_home) {
+                            this.video_roster = this.home_team.roster
+                        } else {
+                            this.video_roster = this.away_team.roster
+                        }
+                        if (v.player_id) {
+                            this.selected_scorer = v.player_id.toString()
+                        } else {
+                            this.selected_scorer = "0"
+                        }
                     },
                     getScoreplayVideos: function getScoreplayVideos() {
                         var _this = this;
@@ -443,6 +497,7 @@
                             v['recording']['url'] = rec_url
 
                             _this.scoreplay_videos = v
+
                         }).catch(function(err) {
                             console.log("getScoreplayVideos", err);
                         });
@@ -451,7 +506,7 @@
                         var _this2 = this;
 
                         var url = "http://localhost:8080/match/" + this.matchID;
-                        this.$http.get(url).then(function(resp) {
+                        return this.$http.get(url).then(function(resp) {
                             _this2.match = resp.body;
                             _this2.match.start = moment(_this2.match.start, "YYYY-MM-DDTHH:mm:ss").format("YYYY-MM-DD - h:mma");
 
