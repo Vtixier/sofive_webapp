@@ -296,7 +296,7 @@
 
                                             <div class="col-sm-10">
                                                 <div class="i-checks"><label> <input name="b" checked type="radio" value="full"> <i></i>Pay full price</label></div>
-                                                <div class="i-checks" v-if="(data.product_type !== 'Adult Tournaments') && deposit_ok"><label> <input name="b" type="radio" value="deposit"> <i></i> Pay a deposit (${{deposit.full_price}}) </label></div>
+                                                <div class="i-checks" v-if="(data.product_type !== 'Adult Tournaments') && deposit_ok"><label> <input name="b" type="radio" value="deposit"> <i></i> Pay a deposit (${{deposit.full_price/100}}) </label></div>
                                             </div>
                                         </div>
                                         <button type="submit" class="btn btn-primary"><i class="fa fa-shopping-cart"></i> Checkout</button>
