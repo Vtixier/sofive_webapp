@@ -258,20 +258,20 @@
                                                 <th class="text-center">Team</th>
                                                 <th class="text-center">Score</th>
                                                 <th class="text-center">Team</th>
-                                                <th class="text-center">Show more</th>
+                                                <th class="text-center"></th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr v-for="(match, i) in matches">
                                                 <td class="text-center">
-                                                    <span v-if="(i !== 0) && (match.start_parsed !== matches[i-1].start_parsed)">{{match.start_parsed}}</span>
+                                                    <span v-if="(i == 0) && (match.start_parsed !== matches[i-1].start_parsed)"><b>{{match.start_parsed}}</b></span>
                                                 </td>
                                                 <td class="text-center">{{match.hour_parsed}}</td>
                                                 <td class="text-center">{{match.match_type}}</td>
                                                 <td class="text-center">{{match.home.name}}</td>
                                                 <td class="text-center"><span v-if="match.home.score !== (-1) && match.away.score !== (-1)">{{match.home.score}} - {{match.away.score}}</span></td>
                                                 <td class="text-center">{{match.away.name}}</td>
-                                                <td style="text-align: center"><a :href="match.url"><span class="label label-primary">view more</span></a></td>
+                                                <td style="text-align: center"><a :href="match.url"><span class="label label-primary">view videos</span></a></td>
                                             </tr>
                                         </tbody>
                                     </table>
