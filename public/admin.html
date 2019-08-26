@@ -435,7 +435,7 @@
                             });
                         });
                     }).catch(function(err) {
-                        console.log(err.body.errors);
+                        console.log(err);
                     });
                 },
                 process: function process(resp) {
@@ -449,6 +449,8 @@
                         var center = r.product.center.replace("Sofive ", "").split(",")[0],
                             date = moment.unix(r.registration.date).format("MM/DD/YYYY h:mma");
                         var details = [];
+
+                        console.log("Details", r.registration.details)
 
                         if (r.registration.details) {
                             var elements = JSON.parse(r.registration.details);
