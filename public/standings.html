@@ -690,7 +690,7 @@
                             }
                         });
                         _this5.matches = _this5.matches.sort(self.dateSortFunc);
-                        _this5.playoffs = playoffs
+                        _this5.playoffs = playoffs.sort(self.dateSortMatchFunc)
 
                         _this5.standings_loading = false;
                         console.log("Matches", _this5.matches);
