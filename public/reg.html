@@ -153,7 +153,7 @@
                             <span v-if="selected.league.start !== selected.league.end">Ends on : {{selected.league.end}}</span>
                             <br /><br />
                             <!-- <div v-if="selected.league.class">${{selected.league.price}} per class</div> -->
-                            <div v-if="product.price">{{product.price/100}}$ for teams</div><br/>
+                            <div v-if="product.price">{{product.price/100}}$ for teams</div><br />
                             <div v-if="free_agent.price">{{free_agent.price/100}}$ for Free Agents</div>
                             <br>
                         </div>
@@ -318,7 +318,7 @@
                                 <div class="mediums m-t-xs">
                                     Starts on : {{league.start}}<br />
                                     <span v-if="league.start !== league.end">Ends on : {{league.end}}</span>
-<!--                                     <br>
+                                    <!--                                     <br>
                                     <div v-if="league.class">${{league.price}} per class</div>
                                     <div v-else>${{league.price}} Teams <span v-if="league.agent">/ ${{league.agent}} Free Agents</span></div> -->
                                     <br>
@@ -610,7 +610,7 @@
                         "date": moment().format("YYYY-MM-DD")
                     };
                     this.$http.post("http://localhost:8080/program/seasons/current", body).then(function(resp) {
-                        _this4.seasons = resp.body.map(function(s){
+                        _this4.seasons = resp.body.map(function(s) {
                             let display_name = s.name
                             if (s.name.indexOf("-") !== (-1)) {
                                 if (s.name.indexOf("-") !== (-1)) {
@@ -863,7 +863,7 @@
                 },
                 getTeamPrice: function(league) {
                     const d = this.getBody(league, true),
-                    _this2 = this;
+                        _this2 = this;
                     this.$http.post("http://localhost:8080/product/registration/get", d).then(function(resp) {
                         console.log(resp);
                         _this2.product = resp.body.product;
@@ -887,7 +887,7 @@
                 },
                 getFreeAgentPrice: function(league) {
                     const d = this.getBody(league, false),
-                    _this2 = this;
+                        _this2 = this;
                     this.$http.post("http://localhost:8080/product/registration/get", d).then(function(resp) {
                         console.log(resp);
                         _this2.free_agent = resp.body.product;
