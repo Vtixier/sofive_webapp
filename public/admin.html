@@ -450,7 +450,7 @@
                             date = moment.unix(r.registration.date).format("MM/DD/YYYY h:mma");
                         var details = [];
 
-                        if (r.registration.details.Valid) {
+                        if (r.registration.details) {
                             var elements = JSON.parse(r.registration.details);
 
                             for (k in elements) {
