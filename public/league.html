@@ -301,6 +301,7 @@
                                     <thead>
                                         <tr>
                                             <th class="text-center">Day</th>
+                                            <th class="text-center">Hour</th>
                                             <th class="text-center">Type</th>
                                             <th class="text-center">Home</th>
                                             <th class="text-center">Score</th>
@@ -308,8 +309,12 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr v-for="single_match in playoffs">
-                                            <td class="text-center">{{single_match.start_parsed}}</td>
+                                        <tr v-for="(single_match, i) in playoffs">
+                                            <td class="text-center" v-if="(i == 0) || ((i>0) && (single_match.start_parsed !== playoffs[i-1].start_parsed))">
+                                                <b>{{single_match.start_parsed}}</b>
+                                            </td>
+                                            <td class="text-center" style="border-top: none" v-else></td>
+                                            <td class="text-center">{{single_match.hour_parsed}}</td>
                                             <td class="text-center">{{single_match.name}}</td>
                                             <td class="text-center">{{single_match.home.name}}</td>
                                             <td class="text-center"><span v-if="single_match.home.score !== (-1) && single_match.away.score !== (-1)">{{single_match.home.score}} - {{single_match.away.score}}</span></td>
@@ -421,7 +426,8 @@
                                 }
                                 playoffs.push(Object.assign(m, {
                                     moment_date: moment_date,
-                                    start_parsed: moment_date.format("YYYY-MM-DD h:mmA").replace(" ", " at "),
+                                    start_parsed: moment_date.format("YYYY-MM-DD"),
+                                    hour_parsed: moment_date.format("h:mmA"),
                                     url: "match.html?id=" + m.id,
                                     name: name.replace(/:/g, ""),
 

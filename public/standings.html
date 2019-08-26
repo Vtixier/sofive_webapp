@@ -345,8 +345,12 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr v-for="single_match in playoffs">
-                                            <td class="text-center">{{single_match.start_parsed}}</td>
+                                        <tr v-for="(single_match, i) in playoffs">
+                                            <td class="text-center" v-if="(i == 0) || ((i>0) && (single_match.start_parsed !== playoffs[i-1].start_parsed))">
+                                                <b>{{single_match.start_parsed}}</b>
+                                            </td>
+                                            <td class="text-center" style="border-top: none" v-else></td>
+                                            <td class="text-center">{{single_match.hour_parsed}}</td>
                                             <td class="text-center">{{single_match.name}}</td>
                                             <td class="text-center">{{single_match.home.name}}</td>
                                             <td class="text-center"><span v-if="single_match.home.score !== (-1) && single_match.away.score !== (-1)">{{single_match.home.score}} - {{single_match.away.score}}</span></td>
@@ -378,27 +382,27 @@
                                     <table class="table table-hover margin bottom table-responsive no-inline-if-mob">
                                         <thead>
                                             <tr>
-                                                <th class="text-center">Day</th>
-                                                <th class="text-center">Matches</th>
+                                                <th class="text-center">Date</th>
+                                                <th class="text-center">Hour</th>
+                                                <th class="text-center">Type</th>
+                                                <th class="text-center">Team</th>
+                                                <th class="text-center">Score</th>
+                                                <th class="text-center">Team</th>
+                                                <th class="text-center">Match page</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr v-for="match in matches">
-                                                <td style="vertical-align: middle;">{{match.day}}</td>
-                                                <td>
-                                                    <table class="table margin bottom">
-                                                        <tbody>
-                                                            <tr v-for="single_match in match.matches">
-                                                                <td class="text-center">{{single_match.start_parsed}}</td>
-                                                                <!-- <td class="text-center">{{single_match.match_type}}</td> -->
-                                                                <td class="text-center">{{single_match.home.name}}</td>
-                                                                <td class="text-center"><span v-if="single_match.home.score !== (-1) && single_match.away.score !== (-1)">{{single_match.home.score}} - {{single_match.away.score}}</span></td>
-                                                                <td class="text-center">{{single_match.away.name}}</td>
-                                                                <td style="text-align: center"><a :href="single_match.url"><span class="label label-primary">view more</span></a></td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
+                                            <tr v-for="(match, i) in matches">
+                                                <td class="text-center" v-if="(i == 0) || ((i>0) && (match.start_parsed !== matches[i-1].start_parsed))">
+                                                    <b>{{match.start_parsed}}</b>
                                                 </td>
+                                                <td class="text-center" style="border-top: none" v-else></td>
+                                                <td class="text-center">{{match.hour_parsed}}</td>
+                                                <td class="text-center">{{match.match_type}}</td>
+                                                <td class="text-center">{{match.home.name}}</td>
+                                                <td class="text-center"><span v-if="match.home.score !== (-1) && match.away.score !== (-1)">{{match.home.score}} - {{match.away.score}}</span></td>
+                                                <td class="text-center">{{match.away.name}}</td>
+                                                <td style="text-align: center"><a :href="match.url"><span class="label label-primary">view videos</span></a></td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -453,9 +457,7 @@
                 league_loading: false,
                 standings: [],
                 standings_loading: false,
-                matches: [{
-                    matches: []
-                }],
+                matches: [],
                 playoffs: [],
                 selected_season: "",
                 selected_league: "",
@@ -643,12 +645,10 @@
                     var url = "http://localhost:8080/league/" + league_id + "/scores";
                     this.$http.get(url).then(function(resp) {
                         _this5.standings = resp.body.leaderboard;
-                        var matchDailyMap = {},
-                            playoffs = []
+                        let playoffs = [],
+                            match = []
                         resp.body.matches.forEach(function(m) {
-                            var date_parsed = moment(m.start, "YYYY-MM-DDTHH:mm:ss"),
-                                day = date_parsed.format("MM/DD");
-
+                            const moment_date = moment(m.start, "YYYY-MM-DDTHH:mm:ss")
                             if (m.match_type !== 'regular') {
                                 let name = m.description
                                 if (name === "") {
@@ -662,37 +662,23 @@
                                     }
                                 }
                                 playoffs.push(Object.assign(m, {
-                                    moment_date: date_parsed,
-                                    start_parsed: date_parsed.format("h:mmA"),
+                                    moment_date: moment_date,
+                                    start_parsed: moment_date.format("YYYY-MM-DD h:mmA").replace(" ", " at "),
                                     url: "match.html?id=" + m.id,
                                     name: name.replace(/:/g, ""),
 
                                 }))
                             } else {
-                                if (!(day in matchDailyMap)) {
-                                    matchDailyMap[day] = [];
-                                }
-
-                                matchDailyMap[day].push(Object.assign(m, {
-                                    moment_date: date_parsed,
-                                    start_parsed: date_parsed.format("h:mmA"),
-                                    url: "match.html?id=" + m.id
-                                }));
+                                match.push(Object.assign(m, {
+                                    moment_date: moment_date,
+                                    start_parsed: moment_date.format("YYYY-MM-DD"),
+                                    hour_parsed: moment_date.format("h:mmA"),
+                                    url: "match.html?id=" + m.id,
+                                }))
                             }
-                        });
-                        _this5.matches = [];
-                        var self = _this5;
-                        Object.keys(matchDailyMap).forEach(function(key) {
-                            const d = {
-                                day: key,
-                                matches: matchDailyMap[key].sort(self.dateSortMatchFunc)
-                            }
-                            if (d.matches.length) {
-                                self.matches.push(d);
-                            }
-                        });
-                        _this5.matches = _this5.matches.sort(self.dateSortFunc);
-                        _this5.playoffs = playoffs.sort(self.dateSortMatchFunc)
+                        })
+                        _this5.matches = match.sort(_this5.dateSortMatchFunc);
+                        _this5.playoffs = playoffs.sort(_this5.dateSortMatchFunc);
 
                         _this5.standings_loading = false;
                         console.log("Matches", _this5.matches);
