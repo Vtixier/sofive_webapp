@@ -252,7 +252,8 @@
                                     <table class="table table-hover margin bottom table-responsive no-inline-if-mob">
                                         <thead>
                                             <tr>
-                                                <th class="text-center">Details</th>
+                                                <th class="text-center">Date</th>
+                                                <th class="text-center">Hour</th>
                                                 <th class="text-center">Type</th>
                                                 <th class="text-center">Team</th>
                                                 <th class="text-center">Score</th>
@@ -263,6 +264,7 @@
                                         <tbody>
                                             <tr v-for="match in matches">
                                                 <td class="text-center">{{match.start_parsed}}</td>
+                                                <td class="text-center">{{match.hour_parsed}}</td>
                                                 <td class="text-center">{{match.match_type}}</td>
                                                 <td class="text-center">{{match.home.name}}</td>
                                                 <td class="text-center"><span v-if="match.home.score !== (-1) && match.away.score !== (-1)">{{match.home.score}} - {{match.away.score}}</span></td>
@@ -424,7 +426,8 @@
                             } else {
                                 match.push(Object.assign(m, {
                                     moment_date: moment_date,
-                                    start_parsed: moment_date.format("YYYY-MM-DD h:mmA").replace(" ", " at "),
+                                    start_parsed: moment_date.format("YYYY-MM-DD"),
+                                    hour_parsed: moment_date.format("h:mmA"),
                                     url: "match.html?id=" + m.id,
                                 }))
                             }
