@@ -262,8 +262,10 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr v-for="match in matches">
-                                                <td class="text-center">{{match.start_parsed}}</td>
+                                            <tr v-for="(match, i) in matches">
+                                                <td class="text-center">
+                                                    <span v-if="(i !== 0) && (match.start_parsed !== matches[i-1].start_parsed)">{{match.start_parsed}}</span>
+                                                </td>
                                                 <td class="text-center">{{match.hour_parsed}}</td>
                                                 <td class="text-center">{{match.match_type}}</td>
                                                 <td class="text-center">{{match.home.name}}</td>
