@@ -450,19 +450,17 @@
                             date = moment.unix(r.registration.date).format("MM/DD/YYYY h:mma");
                         var details = [];
 
-                        console.log("Details", r.registration.details)
-
                         if (r.registration.details) {
                             var elements = JSON.parse(r.registration.details);
 
-                            for (k in elements) {
+                            Object.keys(elements).forEach(function(k){
                                 if (elements[k] !== "") {
                                     details.push({
                                         key: k,
                                         val: elements[k]
                                     });
                                 }
-                            }
+                            })
                         }
 
                         r['name'] = name
