@@ -338,6 +338,7 @@
                                     <thead>
                                         <tr>
                                             <th class="text-center">Day</th>
+                                            <th class="text-center">Hour</th>
                                             <th class="text-center">Type</th>
                                             <th class="text-center">Home</th>
                                             <th class="text-center">Score</th>
@@ -663,7 +664,8 @@
                                 }
                                 playoffs.push(Object.assign(m, {
                                     moment_date: moment_date,
-                                    start_parsed: moment_date.format("YYYY-MM-DD h:mmA").replace(" ", " at "),
+                                    start_parsed: moment_date.format("YYYY-MM-DD"),
+                                    hour_parsed: moment_date.format("h:mmA"),
                                     url: "match.html?id=" + m.id,
                                     name: name.replace(/:/g, ""),
 
