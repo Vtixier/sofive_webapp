@@ -4,6 +4,10 @@
 <head>
 
     <meta charset="utf-8">
+    <meta property="og:type"          content="Scoreplay" />
+    <meta property="og:title"         content="Scoreplay title test" />
+    <meta property="og:description"   content="Scoreplay description" />
+    <meta property="og:image"         content="https://app.sofive.com/img/fb.png" />
 
     <title>Sofive Soccer Center</title>
     <script type="text/javascript">
@@ -206,16 +210,16 @@
                                     <p><i class="fa fa-map-marker"></i> {{match.field}} <i>at</i> {{facility.name}}</p>
                                     <p><i class="fa fa-calendar"></i> {{match.start}}</p>
                                     <!-- <p><i class="fa fa-male"></i> {{referee.firstname+" "+referee.lastname}}</p> -->
-                                    <!--                                     <div class="user-button">
+                                    <div class="user-button">
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <button type="button" class="btn btn-primary btn-sm btn-block" style="background-color: #4267b2; border-color: #4267b2"><i class="fa fa-facebook-square"></i> Share on Facebook</button>
+                                                <div class="fb-share-button" :data-href="website_url" data-layout="button" data-size="large"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fapp.sofive.com%2Fmatch.html%3Fid%3D50334&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a></div>
                                             </div>
-                                            <div class="col-md-6">
+                                            <!--                                           <div class="col-md-6">
                                                 <button type="button" class="btn btn-default btn-sm btn-block"><i class="fa fa-pencil"></i> Referee assessment</button>
-                                            </div>
+                                            </div> -->
                                         </div>
-                                    </div> -->
+                                    </div>
                                 </div>
                                 <br />
                                 <sofive-standings :standings="leaderboard" :team="match.home.name" :opponent="match.away.name" />
@@ -349,6 +353,9 @@
             </div>
         </div>
 
+        <div id="fb-root"></div>
+        <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v4.0&appId=402678167007969&autoLogAppEvents=1"></script>
+
         <!-- Mainly scripts -->
         <script src="js/jquery-3.1.1.min.js"></script>
         <script src="js/popper.min.js"></script>
@@ -394,11 +401,13 @@
                         clips: [],
                         recording: {}
                     },
-                    video_url: ""
+                    video_url: "",
+                    website_url: ""
                 },
                 mounted: function mounted() {
                     var params = this.findGetParameter();
                     this.matchID = params.id;
+                    this.website_url = "https://app.sofive.com/match.html?id="+params.id
                     this.getDashMatch();
                     this.getScoreplayVideos();
                 },
