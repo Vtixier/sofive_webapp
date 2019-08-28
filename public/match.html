@@ -505,6 +505,10 @@
                     getDashMatch: function getDashMatch() {
                         var _this2 = this;
 
+                        if (this.matchID.indexOf("manual") !== (-1)) {
+                            return _this2.getManualMatchDetails();
+                        }
+
                         var url = "http://localhost:8080/match/" + this.matchID;
                         return this.$http.get(url).then(function(resp) {
                             _this2.match = resp.body;
@@ -517,6 +521,7 @@
                             _this2.getResults(_this2.match.league_id);
 
                             _this2.getMatchDetails();
+
                         }).catch(function(err) {
                             console.log("getDashMatch", err);
                         });
@@ -554,6 +559,45 @@
                         }).catch(function(err) {
                             console.log(err);
                         });
+                    },
+                    getManualMatchDetails: function getManualMatchDetails() {
+                        var self = this;
+
+                        return this.$http.post("https://app.scoreplay.io/match/details", {
+                                match_id: this.matchID
+                            })
+                            .then(function(resp) {
+
+                                let home_team = "",
+                                    away_team = "",
+                                    home_score = 0,
+                                    away_score = 0
+                                home_team = resp.body.home.name
+                                away_team = resp.body.away.name
+                                resp.body.events.forEach(function(ev) {
+                                    if (ev.type == "goal") {
+                                        if (ev.details.side == "away") {
+                                            away_score += ev.details.delta
+                                        } else {
+                                            home_score += ev.details.delta
+                                        }
+                                    }
+                                })
+                                self.match.home = {
+                                    name: home_team,
+                                    score: home_score
+                                }
+                                self.match.away = {
+                                    name: away_team,
+                                    score: away_score
+                                }
+                                self.match.start = moment(resp.body.createdAt).format("YYYY-MM-DD - h:mma");
+                                self.setupEvents(resp.body.events);
+
+
+                            }).catch(function(err) {
+                                console.log(err);
+                            });
                     },
                     getTeamsDetails: function getTeamsDetails(home_id, away_id) {
                         Promise.all([this.getTeamDetails(home_id, true), this.getTeamDetails(away_id, false)]);

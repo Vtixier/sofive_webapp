@@ -443,7 +443,8 @@
                         }
                     },
                     gotoMatch: function gotoMatch(match_id) {
-                        window.location = "match.html?id=" + match_id;
+                        var win = window.open("match.html?id=" + match_id, '_blank');
+                        win.focus();
                     },
                     getCenterCookie: function getCenterCookie() {
                         var nameEQ = "center=";
