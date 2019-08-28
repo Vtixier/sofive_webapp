@@ -448,10 +448,21 @@
                         _this2.matches = match.sort(_this2.dateSortFunc);
                         _this2.playoffs = playoffs.sort(_this2.dateSortFunc);
                         _this2.standings_loading = false;
-                        console.log("Matches", _this2.matches);
+
+                        _this2.getPlayerClips(match.map(function(m) {
+                            return m.id
+                        }))
                     }).catch(function(err) {
                         console.log(err);
                     });
+                },
+                getPlayerClips: function getPlayerClips(match_ids) {
+                    this.$http.post("https://video.scoreplay.io/clip/league", {
+                            match_ids
+                        })
+                        .then(function(resp) {
+                            console.log("Got resp", resp.body)
+                        })
                 },
                 dateSortFunc: function dateSortFunc(a, b) {
                     var diff = a.moment_date.diff(b.moment_date, 'seconds');

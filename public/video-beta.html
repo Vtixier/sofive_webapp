@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+
+    <title>Sofive Soccer Center</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale = 1, minimum-scale = 1, maximum-scale = 1, user-scalable = no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link rel="apple-touch-icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" />
+    <meta name="apple-mobile-web-app-title" content="Sofive">
+    <style type="text/css">
+        body {
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+        }
+    </style>
+
+    <link href="css/plugins/select2/select2.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.css" rel="stylesheet">
+
+    <link href="css/plugins/datapicker/datepicker3.css" rel="stylesheet">
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="css/animate.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-32x32.png" sizes="32x32" />
+    <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" sizes="192x192" />
+</head>
+
+<body class="fixed-sidebar">
+
+    <div id="wrapper">
+
+        <div>
+            <sofive-left-menu />
+        </div>
+
+        <div id="page-wrapper" class="gray-bg">
+
+            <div>
+                <sofive-header />
+            </div>
+
+            <div class="wrapper wrapper-content animated fadeInRight" style="padding-bottom: 15px">
+
+                <div class="ibox-content m-b-sm border-bottom">
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <label class="col-form-label" for="status">
+                                Select Center
+                                <div v-if="facility_loading">
+                                    <div>
+                                        <div class="sk-spinner sk-spinner-wave">
+                                            <div class="sk-rect1"></div>
+                                            <div class="sk-rect2"></div>
+                                            <div class="sk-rect3"></div>
+                                            <div class="sk-rect4"></div>
+                                            <div class="sk-rect5"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </label>
+                            <select class="select_season form-control" v-model="selected.center" v-on:change="getRecordings">
+                                <option v-for="center in centers" :value="center">{{center}}</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <label class="col-form-label" for="status">
+                                    Date
+                                </label>
+                                <div class="input-group date">
+                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control" :value="date">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <label class="col-form-label" for="status">
+                                Start time
+                            </label>
+                            <select class="select_season form-control" v-model="selected.time">
+                                <option value="0">Any time</option>
+                                <option v-for="time in times" :value="time">{{time}}</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-3">
+                            <label class="col-form-label" for="status">
+                                Field
+                            </label>
+                            <select class="select_league form-control" v-model="selected.field">
+                                <option value="0">All fields</option>
+                                <option v-for="field in fields" :value="field">{{field}}</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-2" style="display: flex; align-items: center;">
+                            <a v-on:click="getRecordings" class="btn btn-primary btn-rounded btn-block btn-outline" href="#" style="margin-top: 8%"></i>Search</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row text-center" v-if="no_vid">
+                <div class="col-sm-12">
+                    <p>For this center, please follow <a target="blank" href="https://sofive.com/videos/">this</a> link to watch the videos.</p>
+                </div>
+            </div>
+
+            <div class="row text-center" v-if="!no_vid">
+                <div class="col-sm-12">
+                    <p>Don't find your video ? Try narrowing down your research with the filters above !</p>
+                    </p>
+                </div>
+
+                <div class="col-lg-12" v-if="loading">
+                    <div>
+                        <div>
+                            <div class="sk-spinner sk-spinner-wave">
+                                <div class="sk-rect1"></div>
+                                <div class="sk-rect2"></div>
+                                <div class="sk-rect3"></div>
+                                <div class="sk-rect4"></div>
+                                <div class="sk-rect5"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row wrapper" style="width: 100%">
+                    <div class="col-lg-3" v-for="rec in filtered_recordings.slice(0, 20)">
+                        <div class="ibox">
+                            <div>
+                                <div class="ibox-content no-padding border-left-right">
+                                    <iframe v-on:load="onMyFrameLoad" frameborder="0" :src="rec.embed" allowfullscreen style="width: 100%"></iframe>
+                                </div>
+                                <div class="ibox-content profile-content">
+                                    <p><i class="fa fa-calendar"></i> {{rec.full_date}}</p>
+                                    <p><i class="fa fa-thumb-tack"></i> {{rec.field}}</p>
+                                    <p><i class="fa fa-map-marker"></i> {{rec.center}}</p>
+                                    <div v-if="rec.matches.length>0">
+                                        <h4>League matches</h4>
+                                        <table class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Date</th>
+                                                    <th>Home</th>
+                                                    <th>Away</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-for="(match, index) in rec.matches" v-on:click="gotoMatch(match.id)">
+                                                    <td>{{match.time}}</td>
+                                                    <td class="text-navy">{{match.home}}</td>
+                                                    <td>{{match.away}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><br /><br />
+
+            </div>
+
+            <div>
+                <sofive-footer />
+            </div>
+
+        </div>
+
+        <!-- Mainly scripts -->
+        <script src="js/jquery-3.1.1.min.js"></script>
+        <script src="js/popper.min.js"></script>
+        <script src="js/bootstrap.js"></script>
+        <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
+        <script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.js"></script>
+
+        <!-- Custom and plugin javascript -->
+        <script src="js/inspinia.js"></script>
+
+        <script src="js/plugins/select2/select2.full.min.js"></script>
+
+        <script src="js/vue.js"></script>
+
+        <script type="text/javascript" src="js/vue-resource.js"></script>
+        <script type="text/javascript" src="js/moment.js"></script>
+        <script src="js/plugins/datapicker/bootstrap-datepicker.js"></script>
+        <script type="text/javascript" src="js/he.js"></script>
+
+        <script type="text/javascript" src="js/navigation.js"></script>
+        <script type="text/javascript" src="js/header.js"></script>
+        <script type="text/javascript" src="js/footer.js"></script>
+
+        <script type="text/javascript">
+            const facilityMap = {
+                "1": "Meadowlands",
+                "2": "ElkinsPark",
+                "3": "Brooklyn",
+                "4": "Rockville",
+                "5": "Columbia",
+            }
+
+            "use strict";
+
+            function _toConsumableArray(arr) {
+                return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();
+            }
+
+            function _nonIterableSpread() {
+                throw new TypeError("Invalid attempt to spread non-iterable instance");
+            }
+
+            function _iterableToArray(iter) {
+                if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);
+            }
+
+            function _arrayWithoutHoles(arr) {
+                if (Array.isArray(arr)) {
+                    for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) {
+                        arr2[i] = arr[i];
+                    }
+                    return arr2;
+                }
+            }
+
+            var app = new Vue({
+                el: '#wrapper',
+                data: {
+                    date: "",
+                    centers: ["Meadowlands", "Brooklyn", "Rockville", "ElkinsPark", "Columbia"],
+                    facility_loading: false,
+                    recordings: [],
+                    times: ["7 am", "8 am", "9 am", "10 am", "11 am", "12 pm", "1 pm", "2 pm", "3 pm", "4 pm", "5 pm", "6 pm", "7 pm", "8 pm", "9 pm", "10 pm", "11 pm", "12 am"],
+                    fields: ["01 - Parc des princes", "02 - Santiago Bernabeu", "03 - San Siro", "04 - Old Trafford", "05 - Anfield", "06 - Maracana", "07 - Camp Nou", "08 - Monumental", "09 - Stamford Bridge", "10 - Bombonera"],
+                    selected: {
+                        time: "5 pm",
+                        center: "Meadowlands",
+                        field: "0",
+                    },
+                    loaded: 0,
+                    loading: false
+                },
+                computed: {
+                    no_vid: function no_vid() {
+                        if (this.selected.center === "Brooklyn" || this.selected.center === "Rockville") {
+                            return true;
+                        }
+
+                        return false;
+                    },
+                    filtered_recordings: function filtered_recordings() {
+                        var recs = this.recordings,
+                            self = this;
+                        if (this.selected.field !== "0") {
+                            recs = recs.filter(function(rec) {
+                                return rec.field === self.selected.field;
+                            });
+                        }
+                        return recs;
+                    }
+                },
+                mounted: function mounted() {
+                    var center = this.getCenterCookie();
+
+                    if (center) {
+                        this.selected.center = facilityMap[center];
+                    }
+
+                    var self = this;
+                    this.date = moment().subtract(1, "d").format("MM-DD-YYYY");
+
+                    $('.input-group.date').datepicker({
+                        todayBtn: "linked",
+                        keyboardNavigation: false,
+                        forceParse: false,
+                        calendarWeeks: true,
+                        autoclose: true
+                    }).on('changeDate', function(e) {
+                        self.date = moment(e.date).format("MM-DD-YYYY");
+                    });
+                    $('.input-group.date').on('changeDate', function(e) {
+                        self.date = moment(e.date).format("MM-DD-YYYY");
+                    });
+                },
+                methods: {
+                    getRecordings: function getRecordings() {
+
+                        const next_time = moment(this.date + " " + this.selected.time, "MM-DD-YYYY h a").add(1, "h"),
+                            first_date = moment(this.date, "MM-DD-YYYY").format("YYYY-MM-DD"),
+                            first_hour = moment(this.selected.time, "h a").format("HH"),
+                            second_date = next_time.format("YYYY-MM-DD"),
+                            second_hour = next_time.format("HH"),
+                            self = this;
+
+                        let d = {}
+
+                        if (first_hour == "00") {
+                            let next_day = moment(this.date, "MM-DD-YYYY").add(1, "d").format("YYYY-MM-DD")
+                            d = {
+                                center: this.selected.center,
+                                first_date: next_day,
+                                first_hour,
+                                second_date: next_day,
+                                second_hour: first_hour
+                            }
+                        } else {
+                            d = {
+                                center: this.selected.center,
+                                first_date,
+                                first_hour,
+                                second_date,
+                                second_hour
+                            }
+                        }
+
+                        console.log(d)
+
+                        this.loading = true;
+                        this.$http.post('https://video.scoreplay.io/rental/get', d).then(function(resp) {
+                            self.recordings = resp.data.map(function(rec) {
+                                const videoID = rec.url.slice(rec.url.indexOf("/video") + 7, rec.url.length),
+                                    moment_hour = moment(rec.hour, "HH"),
+                                    moment_date = moment(rec.date, "YYYY-MM-DD"),
+                                    simple_hour = moment_hour.format("h")
+                                return Object.assign(rec, {
+                                    embed: "https://www.dailymotion.com/embed/video/" + videoID + "?queue-enable=false&queue-autoplay-next=false&ui-start-screen-info=false",
+                                    full_date: moment_date.format("MM-DD-YYYY") + " " + simple_hour + ":00" + moment_hour.format("a"),
+                                    moment_date: moment(rec.date + " " + rec.hour, "YYYY-MM-DD HH")
+                                });
+                            }).sort(self.dateSortFunc);
+                            self.loading = false;
+                        }).catch(function(err) {
+                            self.loading = false;
+                            console.log(err);
+                        });
+                    },
+                    resetLoaded: function resetLoaded() {
+                        this.loaded = 0;
+                        this.getRecordings();
+                    },
+                    onMyFrameLoad: function onMyFrameLoad() {
+                        this.loaded += 1;
+
+                        if (this.loaded >= Math.min(this.filtered_recordings.length, 20)) {
+                            console.log("ALL loaded");
+                            this.loading = false;
+                        }
+                    },
+                    dateSortFunc: function dateSortFunc(a, b) {
+                        var diff = b.moment_date.diff(a.moment_date, 'seconds');
+
+                        if (diff > 0) {
+                            return -1;
+                        } else if (diff < 0) {
+                            return 1;
+                        } else {
+                            let subdiff = b.field < a.field
+                            if (subdiff) {
+                                return 1
+                            }
+                            return -1
+                        }
+                    },
+                    gotoMatch: function gotoMatch(match_id) {
+                        window.location = "match.html?id=" + match_id;
+                    },
+                    getCenterCookie: function getCenterCookie() {
+                        var nameEQ = "center=";
+                        var ca = document.cookie.split(';');
+
+                        for (var i = 0; i < ca.length; i++) {
+                            var c = ca[i];
+
+                            while (c.charAt(0) == ' ') {
+                                c = c.substring(1, c.length);
+                            }
+
+                            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+                        }
+
+                        return null;
+                    }
+                }
+            });
+        </script>
+
+</body>
+
+</html>
