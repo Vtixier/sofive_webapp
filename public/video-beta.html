@@ -149,16 +149,16 @@
                                         <table class="table table-striped">
                                             <thead>
                                                 <tr>
-                                                    <th>Date</th>
                                                     <th>Home</th>
+                                                    <th>Date</th>
                                                     <th>Away</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr v-for="(match, index) in rec.matches" v-on:click="gotoMatch(match.id)">
-                                                    <td>{{match.time}}</td>
-                                                    <td class="text-navy">{{match.home}}</td>
-                                                    <td>{{match.away}}</td>
+                                                <tr v-for="match in rec.matches" v-on:click="gotoMatch(match.match.match_id)" style="cursor: pointer;">
+                                                    <td>{{match.home_team}}</td>
+                                                    <td class="text-navy">{{match.home_score+'-'+match.away_score}}</td>
+                                                    <td>{{match.away_team}}</td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -248,7 +248,8 @@
                         field: "0",
                     },
                     loaded: 0,
-                    loading: false
+                    loading: false,
+                    video_id_map: {}
                 },
                 computed: {
                     no_vid: function no_vid() {
@@ -323,11 +324,16 @@
                             }
                         }
 
-                        console.log(d)
+                        let match_ids = []
 
                         this.loading = true;
                         this.$http.post('https://video.scoreplay.io/rental/get', d).then(function(resp) {
                             self.recordings = resp.data.map(function(rec) {
+
+                                match_ids = match_ids.concat(rec.matches.map(function(m) {
+                                    return m.match.match_id
+                                }))
+
                                 const videoID = rec.url.slice(rec.url.indexOf("/video") + 7, rec.url.length),
                                     moment_hour = moment(rec.hour, "HH"),
                                     moment_date = moment(rec.date, "YYYY-MM-DD"),
@@ -335,14 +341,79 @@
                                 return Object.assign(rec, {
                                     embed: "https://www.dailymotion.com/embed/video/" + videoID + "?queue-enable=false&queue-autoplay-next=false&ui-start-screen-info=false",
                                     full_date: moment_date.format("MM-DD-YYYY") + " " + simple_hour + ":00" + moment_hour.format("a"),
-                                    moment_date: moment(rec.date + " " + rec.hour, "YYYY-MM-DD HH")
+                                    moment_date: moment(rec.date + " " + rec.hour, "YYYY-MM-DD HH"),
+                                    matches: rec.matches.map(function(matc) {
+                                        return Object.assign(matc, {
+                                            home_team: "",
+                                            home_score: 0,
+                                            away_team: "",
+                                            away_score: 0
+                                        })
+                                    })
                                 });
                             }).sort(self.dateSortFunc);
                             self.loading = false;
+                            console.log("Match ids", match_ids)
+                            self.getMatchDetails(match_ids)
                         }).catch(function(err) {
                             self.loading = false;
                             console.log(err);
                         });
+                    },
+                    getMatchDetails: function getMatchDetails(match_ids) {
+                        const self = this
+                        return Promise.all(match_ids.map(function(match_id) {
+                                return self.getSingleMatchDetails(match_id)
+                            }))
+                            .then(function(all_match_id) {
+                                all_match_id.forEach(function(m) {
+                                    self.video_id_map[m.match_id] = m
+                                })
+                            })
+                            .then(function() {
+                                self.recordings = self.recordings.map(function(rec) {
+                                    rec.matches = rec.matches.map(function(m) {
+                                        return Object.assign(m, self.video_id_map[m.match.match_id])
+                                    })
+                                    return rec
+                                })
+                            })
+                    },
+                    getSingleMatchDetails: function getMatchDetails(match_id) {
+                        return this.$http.post("https://app.scoreplay.io/match/details", {
+                                match_id
+                            })
+                            .then(function(resp) {
+                                let body = resp.body
+                                body['match_id'] = match_id
+                                let home_team = "",
+                                    away_team = "",
+                                    home_score = 0,
+                                    away_score = 0
+                                if (match_id.indexOf("manual") !== (-1)) {
+                                    home_team = body.home.name
+                                    away_team = body.away.name
+                                } else {
+                                    home_team = body.details.home.name
+                                    away_team = body.details.away.name
+                                }
+                                body.events.forEach(function(ev) {
+                                    if (ev.type == "goal") {
+                                        if (ev.details.side == "away") {
+                                            away_score += ev.details.delta
+                                        } else {
+                                            home_score += ev.details.delta
+                                        }
+                                    }
+                                })
+                                return {
+                                    home_team,
+                                    away_team,
+                                    home_score,
+                                    away_score,
+                                    match_id
+                                }
+                            })
                     },
                     resetLoaded: function resetLoaded() {
                         this.loaded = 0;
