@@ -394,8 +394,8 @@
                                     home_team = body.home.name
                                     away_team = body.away.name
                                 } else {
-                                    home_team = body.details.home.name
-                                    away_team = body.details.away.name
+                                    home_team = body.details.home.teamName
+                                    away_team = body.details.away.teamName
                                 }
                                 body.events.forEach(function(ev) {
                                     if (ev.type == "goal") {
