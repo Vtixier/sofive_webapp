@@ -235,6 +235,12 @@
                                         <h3 style="color: #03793E"><i class="fa fa-map-marker"></i> {{data.season.name}}</h3>
                                     </div>
                                 </div>
+                                <div v-if="!open">
+                                    <h2 class="font-bold">
+                                        Sorry, event is now full.
+                                    </h2>
+                                </div>
+                                <div v-else>
                                 <span>
                                     Total
                                 </span>
@@ -302,6 +308,8 @@
                                         <button type="submit" class="btn btn-primary"><i class="fa fa-shopping-cart"></i> Checkout</button>
                                     </form>
                                 </span>
+
+                                </div>
 
                             </div>
                         </div>
@@ -440,7 +448,8 @@
                 teams: [],
                 team_search: "",
                 team_search_loading: false,
-                deposit_ok: true
+                deposit_ok: true,
+                open: true
             },
             computed: {
                 is_kid: function is_kid() {
@@ -454,6 +463,8 @@
                 var params = this.findGetParameter(),
                     parsed = JSON.parse(atob(params.sel));
                 this.data = parsed;
+
+                this.checkOpen()
 
                 if (parsed.reg_type === "team") {
                     this.team = true;
@@ -487,6 +498,16 @@
                         queryDict[item.split("=")[0]] = item.split("=")[1];
                     });
                     return queryDict;
+                },
+                checkOpen: function checkOpen() {
+                    const self = this;
+                    this.$http.post("http://localhost:8080/program/open", {
+                        season_id: self.data.season_id.toString()
+                    }).then(function(resp) {
+                        self.open = resp.body
+                    }).catch(function(err) {
+                        console.log(err);
+                    });
                 },
                 pay: function pay() {
                     var _this = this;
