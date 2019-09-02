@@ -695,7 +695,7 @@
                     }
 
                     var d = this.getBody(deposit);
-                    var redirect_url = 'http://localhost/reg_done.html?sel=' + btoa(JSON.stringify(d));
+                    var redirect_url = 'http://localhost/reg_confirmation.html?sel=' + btoa(JSON.stringify(d));
                     stripe.redirectToCheckout({
                         items: [{
                             sku: sku,

@@ -179,10 +179,10 @@
                         <div class="widget style1 navy-bg">
                             <div class="row">
                                 <div class="col-1 text-center">
-                                    <i class="fa fa-check-square fa-5x"></i>
+                                    <i class="fa fa-spinner fa-5x"></i>
                                 </div>
                                 <div class="col-3 text-left">
-                                    <h1 class="font-bold">You're all set!</h1>
+                                    <h1 class="font-bold">Loading...</h1>
                                 </div>
                             </div>
                         </div>
@@ -191,91 +191,15 @@
                         <div class="widget style1 navy-bg">
                             <div class="row">
                                 <div class="col-3 text-center">
-                                    <i class="fa fa-check-square fa-5x"></i>
+                                    <i class="fa fa-spinner fa-5x"></i>
                                 </div>
                                 <div class="col-9 text-right">
-                                    <h1 class="font-bold">You're all set!</h1>
+                                    <h1 class="font-bold">Loading...</h1>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-
-
-            <div class="wrapper wrapper-content animated fadeInRight" style="padding-bottom: 5px">
-
-                <div class="row">
-
-                    <div class="col-md-8">
-                        <div class="ibox">
-                            <div class="ibox-title">
-                                <h5>Registration confirmation</h5>
-                            </div>
-                            <div class="ibox-content">
-                                <div class="panel panel-default">
-                                    <div class="panel-body" style="text-align: center">
-                                        <h3 style="color: #03793E"><i class="fa fa-calendar"></i> {{data.display_date}}</h3>
-                                        <h3 style="color: #03793E"><i class="fa fa-users"></i> {{data.team}}</h3>
-                                        <h3 style="color: #03793E"><i class="fa fa-map-marker"></i> {{data.name}}</h3>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div id="error-message"></div>
-
-                    </div>
-
-                    <div class="col-md-4" style="margin-top: 2%">
-                        <div v-if="data.facility_id === 1">
-                            <div class="ibox-content no-padding border-left-right">
-                                <img alt="image" class="img-fluid" src="/img/sofive/mdl.jpg">
-                            </div>
-                        </div>
-                        <div v-if="data.facility_id === 2">
-                            <div class="ibox-content no-padding border-left-right">
-                                <img alt="image" class="img-fluid" src="/img/sofive/ekp.jpg">
-                            </div>
-                        </div>
-                        <div v-if="data.facility_id === 3">
-                            <div class="ibox-content no-padding border-left-right">
-                                <img alt="image" class="img-fluid" src="/img/sofive/brk.jpg">
-                            </div>
-                        </div>
-                        <div v-if="data.facility_id === 4">
-                            <div class="ibox-content no-padding border-left-right">
-                                <img alt="image" class="img-fluid" src="/img/sofive/rok.jpg">
-                            </div>
-                        </div>
-                        <div v-if="data.facility_id === 5">
-                            <div class="ibox-content no-padding border-left-right">
-                                <img alt="image" class="img-fluid" src="/img/sofive/col.jpg">
-                            </div>
-                        </div>
-                        <div class="ibox" style="text-align: center">
-                            <div class="ibox-content text-center">
-                                <div v-if="data.facility_id === 1">
-                                    <sofive-mdl-info />
-                                </div>
-                                <div v-if="data.facility_id === 2">
-                                    <sofive-ekp-info />
-                                </div>
-                                <div v-if="data.facility_id === 3">
-                                    <sofive-brk-info />
-                                </div>
-                                <div v-if="data.facility_id === 4">
-                                    <sofive-rok-info />
-                                </div>
-                                <div v-if="data.facility_id === 5">
-                                    <sofive-col-info />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
             </div>
 
             <sofive-footer />
@@ -332,6 +256,8 @@
                     parsed = JSON.parse(atob(params.sel));
                 this.data = parsed
                 this.data.display_date = moment.unix(this.data.date).format("MM-DD-YYYY")
+                console.log(this.data)
+                this.finishRegistration(params.sel)
             },
             methods: {
                 findGetParameter: function() {
@@ -340,6 +266,16 @@
                         queryDict[item.split("=")[0]] = item.split("=")[1]
                     })
                     return queryDict
+                },
+                finishRegistration: function(sel) {
+                    const d = this.data
+                    this.$http.post("http://localhost:8080/product/registration", d)
+                        .then(function(){
+                            window.location = "http://localhost/reg_done.html?sel="+sel
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
                 },
             }
         })
