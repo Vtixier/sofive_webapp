@@ -264,7 +264,7 @@
                 },
                 finishRegistration: function() {
                     const params = this.findGetParameter()
-                    this.$http.post("http://localhost:8080/product/registration/confirm", parseInt(params.id))
+                    this.$http.post("http://localhost:8080/product/registration/confirm", {id: parseInt(params.id)})
                         .then(function(resp){
                             const details = resp.body;
                             console.log("Details", details)
