@@ -331,6 +331,7 @@
                 const params = this.findGetParameter(),
                     parsed = JSON.parse(atob(params.sel));
                 this.data = parsed
+                console.log("Parsed", parsed)
                 this.data.display_date = moment.unix(this.data.date).format("MM-DD-YYYY")
             },
             methods: {
