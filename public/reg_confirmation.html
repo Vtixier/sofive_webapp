@@ -252,12 +252,7 @@
                 }
             },
             mounted: function() {
-                const params = this.findGetParameter(),
-                    parsed = JSON.parse(atob(params.sel));
-                this.data = parsed
-                this.data.display_date = moment.unix(this.data.date).format("MM-DD-YYYY")
-                console.log(this.data)
-                this.finishRegistration(params.sel)
+                this.finishRegistration()
             },
             methods: {
                 findGetParameter: function() {
@@ -267,11 +262,13 @@
                     })
                     return queryDict
                 },
-                finishRegistration: function(sel) {
-                    const d = this.data
-                    this.$http.post("http://localhost:8080/product/registration", d)
-                        .then(function(){
-                            window.location = "http://localhost/reg_done.html?sel="+sel
+                finishRegistration: function() {
+                    const params = this.findGetParameter()
+                    this.$http.post("http://localhost:8080/product/registration/confirm", parseInt(params.id))
+                        .then(function(resp){
+                            const details = resp.body;
+                            console.log("Details", details)
+                            window.location = "http://localhost/reg_done.html?sel="+btoa(JSON.stringify(details))
                         })
                         .catch((err) => {
                             console.log(err)

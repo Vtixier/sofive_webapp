@@ -695,20 +695,32 @@
                     }
 
                     var d = this.getBody(deposit);
-                    var redirect_url = 'http://localhost/reg_confirmation.html?sel=' + btoa(JSON.stringify(d));
-                    stripe.redirectToCheckout({
-                        items: [{
-                            sku: sku,
-                            quantity: 1
-                        }],
-                        successUrl: redirect_url,
-                        cancelUrl: 'https://scoreplay.io/canceled'
-                    }).then(function(result) {
-                        if (result.error) {
-                            var displayError = document.getElementById('error-message');
-                            displayError.textContent = result.error.message;
-                        }
+
+                    // Pre add the registration
+                    this.$http.post("http://localhost:8080/product/registration", d).then(function(resp) {
+                        console.log("Pre add", resp);
+                        const id = resp.body;
+
+                        var redirect_url = 'http://localhost/reg_confirmation.html?id=' + id.toString();
+                        stripe.redirectToCheckout({
+                            items: [{
+                                sku: sku,
+                                quantity: 1
+                            }],
+                            successUrl: redirect_url,
+                            cancelUrl: 'https://scoreplay.io/canceled'
+                        }).then(function(result) {
+                            if (result.error) {
+                                var displayError = document.getElementById('error-message');
+                                displayError.textContent = result.error.message;
+                            }
+                        });
+
+
+                    }).catch(function(err) {
+                        console.log(err);
                     });
+
                 },
                 getCenterCookie: function getCenterCookie() {
                     var nameEQ = "center=";
