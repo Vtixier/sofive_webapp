@@ -216,8 +216,8 @@
                                 <div class="panel panel-default">
                                     <div class="panel-body" style="text-align: center">
                                         <h3 style="color: #03793E"><i class="fa fa-calendar"></i> {{data.display_date}}</h3>
-                                        <h3 style="color: #03793E"><i class="fa fa-users"></i> {{data.team}}</h3>
-                                        <h3 style="color: #03793E"><i class="fa fa-map-marker"></i> {{data.name}}</h3>
+                                        <h3 style="color: #03793E"><i class="fa fa-users"></i> {{data.registration.team}}</h3>
+                                        <h3 style="color: #03793E"><i class="fa fa-map-marker"></i> {{data.registration.name}}</h3>
                                     </div>
                                 </div>
                             </div>
@@ -331,8 +331,7 @@
                 const params = this.findGetParameter(),
                     parsed = JSON.parse(atob(params.sel));
                 this.data = parsed
-                console.log("Parsed", parsed)
-                this.data.display_date = moment.unix(this.data.date).format("MM-DD-YYYY")
+                this.data.display_date = moment.unix(this.data.registration.date).format("MM-DD-YYYY")
             },
             methods: {
                 findGetParameter: function() {
