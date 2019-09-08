@@ -341,7 +341,7 @@
                         return this.registrations
                     }
                     return this.registrations.filter(function(c) {
-                        return (c.center !== self.selected.center)
+                        return (c.center === self.selected.center)
                     })
                 }
             },
