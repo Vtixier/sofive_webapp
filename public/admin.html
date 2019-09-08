@@ -336,11 +336,12 @@
             },
             computed: {
                 filtered_registrations: function filtered_registrations() {
+                    const self = this;
                     if (this.selected.center === "0") {
                         return this.registrations
                     }
                     return this.registrations.filter(function(c) {
-                        return (c.center !== this.selected.center)
+                        return (c.center !== self.selected.center)
                     })
                 }
             },
