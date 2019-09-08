@@ -186,6 +186,7 @@
                                     </label>
                                     <select class="select_season form-control" v-model="selected.center">
                                         <option value="0">All</option>
+                                        <option v-for="center in centers" :value="center">{{center}}</option>
                                     </select>
                                 </div>
                                 <div class="col-sm-3" style="padding-top: 33px">
@@ -230,7 +231,7 @@
                                                 </ul>
                                             </td>
                                             <td>
-                                                <input type="checkbox" class="i-checks" checked v-if="registration.past">
+                                                <input type="checkbox" class="i-checks" checked v-if="registration.checked">
                                                 <input name="validated" type="checkbox" class="i-checks" :value="registration.registration.id" v-model="reg_done" v-else>
                                             </td>
                                         </tr>
@@ -316,6 +317,17 @@
                 reg_done: [],
                 selected: {
                     center: "0"
+                },
+                centers: ["Meadowlands", "Elkins Park", "Brooklyn", "Rockville", "Columbia"]
+            },
+            computed: {
+                filtered_centers: function filtered_centers() {
+                    if (this.selected.center === "0") {
+                        return this.registrations
+                    }
+                    return this.registrations.filter(function(c) {
+                        return (c.center !== this.selected.center)
+                    })
                 }
             },
             mounted: function mounted() {
@@ -372,7 +384,8 @@
                     var _this = this;
 
                     var current_events = document.querySelector('.js-switch').checked;
-                    var p = null;
+                    var p = null,
+                        past = false;
 
                     if (!current_events) {
                         var d = {
@@ -381,12 +394,13 @@
                         };
                         console.log(d, this.start, this.end);
                         p = this.$http.post("http://localhost:8080/product/registrations/past", d);
+                        past = true
                     } else {
                         p = this.$http.get("http://localhost:8080/product/registrations");
                     }
 
                     p.then(function(resp) {
-                        return _this.process(resp);
+                        return _this.process(resp, past);
                     }).then(function() {
                         if (!current_events) {
                             _this.registrations = _this.registrations.map(function(r) {
@@ -403,7 +417,7 @@
 
                     this.registrations = [];
                     this.$http.get("http://localhost:8080/product/registrations").then(function(resp) {
-                        _this2.process(resp);
+                        _this2.process(resp, false);
 
                         _this2.$nextTick(function() {
                             $('.dataTables-example').DataTable({
@@ -438,7 +452,7 @@
                         console.log(err);
                     });
                 },
-                process: function process(resp) {
+                process: function process(resp, past) {
                     this.registrations = resp.body.map(function(r) {
                         var name = r.registration.team;
 
@@ -467,6 +481,12 @@
                         r['center'] = center
                         r['date'] = date
                         r['details'] = details
+
+                        if (past) {
+                            r['checked'] = true
+                        } else {
+                            r['checked'] = false
+                        }
 
                         return r
                     });

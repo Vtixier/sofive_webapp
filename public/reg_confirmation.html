@@ -264,11 +264,13 @@
                 },
                 finishRegistration: function() {
                     const params = this.findGetParameter()
-                    this.$http.post("http://localhost:8080/product/registration/confirm", {id: parseInt(params.id)})
-                        .then(function(resp){
+                    this.$http.post("http://localhost:8080/product/registration/confirm", {
+                            id: parseInt(params.id)
+                        })
+                        .then(function(resp) {
                             const details = resp.body;
                             console.log("Details", details)
-                            window.location = "http://localhost/reg_done.html?sel="+btoa(JSON.stringify(details))
+                            window.location = "http://localhost/reg_done.html?sel=" + btoa(JSON.stringify(details))
                         })
                         .catch((err) => {
                             console.log(err)
