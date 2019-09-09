@@ -191,8 +191,7 @@
                                 <div v-else>
                                     <fb:login-button data-auto-logout-link="true" scope="email" onlogin="checkLoginState();">
                                     </fb:login-button>
-                                    <div id="status">
-                                    </div>
+                                    <div>{fb_msg}</div>
                                 </div>
                             </div>
                         </div>
@@ -237,7 +236,8 @@
             el: '#wrapper',
             data: {
                 info: "",
-                logged_in: false
+                logged_in: false,
+                fb_msg: ""
             },
             mounted: function() {
                 const params = this.findGetParameter(),
@@ -287,8 +287,7 @@
                     if (response.status === 'connected') {
                         this.testAPI();
                     } else {
-                        document.getElementById('status').innerHTML = 'Please log ' +
-                            'into this webpage.';
+                        this.fb_msg = 'Please log in with Facebook';
                     }
                 },
                 checkLoginState: function() {
@@ -299,11 +298,10 @@
                 },
                 testAPI: function() {
                     this.logged_in = true
-                    console.log('Welcome!  Fetching your information.... ');
+                    const self = this;
                     FB.api('/me?fields=id,name,email', function(response) {
                         console.log('Successful login', response);
-                        document.getElementById('status').innerHTML =
-                            'Thanks for logging in, ' + response.name + '!';
+                        self.fb_msg = 'Thanks for logging in, ' + response.name + '!'
                     });
                 }
             }
