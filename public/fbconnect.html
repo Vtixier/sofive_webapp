@@ -150,7 +150,7 @@
 
             <div class="wrapper wrapper-content animated fadeInRight" style="padding-bottom: 5px">
 
-                <fb:login-button data-auto-logout-link="true" scope="public_profile,email" onlogin="checkLoginState();">
+                <fb:login-button data-auto-logout-link="true" scope="email" onlogin="checkLoginState();">
                 </fb:login-button>
 
                 <div id="status">
@@ -210,7 +210,7 @@
 
         function testAPI() {
             console.log('Welcome!  Fetching your information.... ');
-            FB.api('/me', function(response) {
+            FB.api('/me?fields=id,name,email', function(response) {
                 console.log('Successful login', response);
                 document.getElementById('status').innerHTML =
                     'Thanks for logging in, ' + response.name + '!';
