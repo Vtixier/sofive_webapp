@@ -125,6 +125,7 @@
     <link href="css/style.css" rel="stylesheet">
     <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-32x32.png" sizes="32x32" />
     <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" sizes="192x192" />
+    <link href="css/plugins/iCheck/custom.css" rel="stylesheet">
 </head>
 
 <body class="fixed-sidebar">
@@ -150,13 +151,53 @@
 
             <div class="wrapper wrapper-content animated fadeInRight" style="padding-bottom: 5px">
 
-                <fb:login-button data-auto-logout-link="true" scope="email" onlogin="checkLoginState();">
-                </fb:login-button>
-
-                <div id="status">
-                </div>
-
                 <br><br><br>
+
+                <div class="ibox ">
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-sm-6 text-center b-r">
+                                <h4>Our chatbot</h4>
+                                <p>Sign in with facebook to receive all the latest updates of your team right in your messenger inbox !</p>
+                                <p class="text-center">
+                                    <img src="/img/chatbot.png" style="height: 40vh">
+                                </p>
+                            </div>
+                            <div class="col-sm-6 text-center" style="padding-left: 50px">
+                                <div v-if="logged_in">
+                                    <h4>Notification settings</h4>
+                                    <form role="form">
+                                        <div class="text-center">
+                                            <br />
+                                            <div class="row">
+                                                <label><input type="checkbox" checked class="i-checks"> Receive match results </label>
+                                            </div><br />
+                                            <div class="row">
+                                                <label><input type="checkbox" checked class="i-checks"> Receive match highlights video </label>
+                                            </div><br />
+                                            <div class="row">
+                                                <label><input type="checkbox" checked class="i-checks"> Receive league standings </label>
+                                            </div><br />
+                                            <div class="row">
+                                                <label><input type="checkbox" checked class="i-checks"> Receive special offers </label>
+                                            </div><br />
+                                            <div class="row">
+                                                <button class="btn btn-sm btn-primary text-center" type="submit"><strong>Save</strong>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div v-else>
+                                    <fb:login-button data-auto-logout-link="true" scope="email" onlogin="checkLoginState();">
+                                    </fb:login-button>
+                                    <div id="status">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="fb-send-to-messenger" messenger_app_id="402678167007969" page_id="254076015141321" data-ref="test_1234" color="white" cta_text="SUBSCRIBE_IN_MESSENGER" size="large">
 
@@ -176,6 +217,7 @@
     <script src="js/bootstrap.js"></script>
     <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
     <script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="js/plugins/iCheck/icheck.min.js"></script>
 
     <!-- Custom and plugin javascript -->
     <script src="js/inspinia.js"></script>
@@ -220,7 +262,8 @@
         var app = new Vue({
             el: '#wrapper',
             data: {
-                info: ""
+                info: "",
+                logged_in: false
             },
             mounted: function() {
                 const params = this.findGetParameter(),
@@ -228,6 +271,12 @@
                 if (origin !== "") {
                     this.info = JSON.parse(atob(origin))
                 }
+                $(document).ready(function() {
+                    $('.i-checks').iCheck({
+                        checkboxClass: 'icheckbox_square-green',
+                        radioClass: 'iradio_square-green',
+                    });
+                });
                 window.fbAsyncInit = function() {
                     FB.init({
                         appId: '402678167007969',
