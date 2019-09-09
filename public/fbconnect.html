@@ -232,32 +232,6 @@
     <script type="text/javascript" src="js/footer.js"></script>
 
     <script type="text/javascript">
-        function statusChangeCallback(response) {
-            console.log('statusChangeCallback');
-            console.log(response);
-            if (response.status === 'connected') {
-                testAPI();
-            } else {
-                document.getElementById('status').innerHTML = 'Please log ' +
-                    'into this webpage.';
-            }
-        }
-
-
-        function checkLoginState() {
-            FB.getLoginStatus(function(response) {
-                statusChangeCallback(response);
-            });
-        }
-
-        function testAPI() {
-            console.log('Welcome!  Fetching your information.... ');
-            FB.api('/me?fields=id,name,email', function(response) {
-                console.log('Successful login', response);
-                document.getElementById('status').innerHTML =
-                    'Thanks for logging in, ' + response.name + '!';
-            });
-        }
 
         var app = new Vue({
             el: '#wrapper',
@@ -277,6 +251,7 @@
                         radioClass: 'iradio_square-green',
                     });
                 });
+                const self = this;
                 window.fbAsyncInit = function() {
                     FB.init({
                         appId: '402678167007969',
@@ -284,9 +259,8 @@
                         xfbml: true,
                         version: 'v4.0'
                     });
-                    FB.Event.subscribe('send_to_messenger', console.log);
                     FB.getLoginStatus(function(response) { // Called after the JS SDK has been initialized.
-                        statusChangeCallback(response); // Returns the login status.
+                        self.statusChangeCallback(response); // Returns the login status.
                     });
                 };
                 (function(d, s, id) { // Load the SDK asynchronously
@@ -307,6 +281,31 @@
                     })
                     return queryDict
                 },
+                statusChangeCallback: function(response) {
+                    console.log('statusChangeCallback');
+                    console.log(response);
+                    if (response.status === 'connected') {
+                        this.testAPI();
+                    } else {
+                        document.getElementById('status').innerHTML = 'Please log ' +
+                            'into this webpage.';
+                    }
+                },
+                checkLoginState: function() {
+                    const self = this;
+                    FB.getLoginStatus(function(response) {
+                        self.statusChangeCallback(response);
+                    });
+                },
+                testAPI: function() {
+                    this.logged_in = true
+                    console.log('Welcome!  Fetching your information.... ');
+                    FB.api('/me?fields=id,name,email', function(response) {
+                        console.log('Successful login', response);
+                        document.getElementById('status').innerHTML =
+                            'Thanks for logging in, ' + response.name + '!';
+                    });
+                }
             }
         })
     </script>
