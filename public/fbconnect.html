@@ -190,20 +190,20 @@
     <script type="text/javascript" src="js/footer.js"></script>
 
     <script type="text/javascript">
-        function statusChangeCallback(response) { // Called with the results from FB.getLoginStatus().
+        function statusChangeCallback(response) {
             console.log('statusChangeCallback');
-            console.log(response); // The current login status of the person.
-            if (response.status === 'connected') { // Logged into your webpage and Facebook.
+            console.log(response);
+            if (response.status === 'connected') {
                 testAPI();
-            } else { // Not logged into your webpage or we are unable to tell.
+            } else {
                 document.getElementById('status').innerHTML = 'Please log ' +
                     'into this webpage.';
             }
         }
 
 
-        function checkLoginState() { // Called when a person is finished with the Login Button.
-            FB.getLoginStatus(function(response) { // See the onlogin handler
+        function checkLoginState() {
+            FB.getLoginStatus(function(response) {
                 statusChangeCallback(response);
             });
         }
@@ -211,7 +211,7 @@
         function testAPI() {
             console.log('Welcome!  Fetching your information.... ');
             FB.api('/me', function(response) {
-                console.log('Successful login for: ' + response.name);
+                console.log('Successful login for: ' + response);
                 document.getElementById('status').innerHTML =
                     'Thanks for logging in, ' + response.name + '!';
             });
