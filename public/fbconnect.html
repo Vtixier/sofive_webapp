@@ -303,6 +303,7 @@
                     const self = this
                     this.$http.get("https://app.scoreplay.io/fb/user?email=" + self.email)
                         .then(function(resp) {
+                            console.log("Scoreplay check", resp)
                             if (resp.body) {
                                 self.messenger_connected = true
                             } else {
