@@ -324,8 +324,8 @@
                     FB.api('/me?fields=id,name,email', function(response) {
                         console.log('Successful login', response);
                         self.fb_msg = 'Thanks for logging in, ' + response.name + '!'
-                        self.ref = name + ";" + email
-                        self.email = email
+                        self.ref = response.name + ";" + response.email
+                        self.email = response.email
                         self.checkScoreplayUser()
                     });
                 },
