@@ -164,7 +164,7 @@
                                 </p>
                             </div>
                             <div class="col-sm-6 text-center" style="padding-left: 50px">
-                                <div v-if="logged_in">
+                                <div v-if="logged_in && messenger_connected">
                                     <h4>Notification settings</h4>
                                     <form role="form">
                                         <div class="text-center">
@@ -191,17 +191,18 @@
                                         </div>
                                     </form>
                                 </div>
-                                <div v-else>
+                                <div v-if="!logged_in">
                                     <fb:login-button data-auto-logout-link="true" scope="email" onlogin="checkLoginState();">
                                     </fb:login-button>
                                     <div>{fb_msg}</div>
                                 </div>
+                                <div v-if="logged_in && (!messenger_connected)">
+                                    <div class="fb-send-to-messenger" messenger_app_id="402678167007969" page_id="254076015141321" :data-ref="ref" color="white" cta_text="SUBSCRIBE_IN_MESSENGER" size="large">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="fb-send-to-messenger" messenger_app_id="402678167007969" page_id="254076015141321" data-ref="test_1234" color="white" cta_text="SUBSCRIBE_IN_MESSENGER" size="large">
 
                 </div>
             </div>
@@ -234,13 +235,15 @@
     <script type="text/javascript" src="js/footer.js"></script>
 
     <script type="text/javascript">
-
         var app = new Vue({
             el: '#wrapper',
             data: {
                 info: "",
                 logged_in: false,
-                fb_msg: ""
+                messenger_connected: false,
+                fb_msg: "",
+                ref: "",
+                email: ""
             },
             mounted: function() {
                 const params = this.findGetParameter(),
@@ -255,6 +258,9 @@
                         autoLogAppEvents: true,
                         xfbml: true,
                         version: 'v4.0'
+                    });
+                    FB.Event.subscribe('send_to_messenger', function(e) {
+                        console.log(e)
                     });
                     FB.getLoginStatus(function(response) { // Called after the JS SDK has been initialized.
                         self.statusChangeCallback(response); // Returns the login status.
@@ -282,7 +288,7 @@
                     console.log('statusChangeCallback');
                     console.log(response);
                     if (response.status === 'connected') {
-                        this.testAPI();
+                        this.connectUser();
                     } else {
                         this.fb_msg = 'Please log in with Facebook';
                     }
@@ -293,7 +299,20 @@
                         self.statusChangeCallback(response);
                     });
                 },
-                testAPI: function() {
+                checkScoreplayUser: function() {
+                    const self = this
+                    this.$http.get("https://app.scoreplay.io/fb/user?email=" + self.email)
+                        .then(function(resp) {
+                            if (resp.body) {
+                                self.messenger_connected = true
+                            } else {
+                                self.messenger_connected = false
+                            }
+                        }).catch(function(err) {
+                            console.log(err);
+                        });
+                },
+                connectUser: function() {
                     this.logged_in = true
                     this.$nextTick(function() {
                         $('.i-checks').iCheck({
@@ -305,6 +324,9 @@
                     FB.api('/me?fields=id,name,email', function(response) {
                         console.log('Successful login', response);
                         self.fb_msg = 'Thanks for logging in, ' + response.name + '!'
+                        self.ref = name + ";" + email
+                        self.email = email
+                        self.checkScoreplayUser()
                     });
                 },
                 logout: function() {
