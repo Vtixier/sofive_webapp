@@ -307,6 +307,12 @@
                         .then(function(resp) {
                             if (resp.body && (resp.bodyText !== "null")) {
                                 self.messenger_connected = true
+                                self.$nextTick(function() {
+                                    $('.i-checks').iCheck({
+                                        checkboxClass: 'icheckbox_square-green',
+                                        radioClass: 'iradio_square-green'
+                                    });
+                                });
                             } else {
                                 self.messenger_connected = false
                             }
@@ -316,12 +322,6 @@
                 },
                 connectUser: function() {
                     this.logged_in = true
-                    this.$nextTick(function() {
-                        $('.i-checks').iCheck({
-                            checkboxClass: 'icheckbox_square-green',
-                            radioClass: 'iradio_square-green'
-                        });
-                    });
                     const self = this;
                     FB.api('/me?fields=id,name,email', function(response) {
                         console.log('Successful login', response);
