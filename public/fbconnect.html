@@ -260,7 +260,9 @@
                         version: 'v4.0'
                     });
                     FB.Event.subscribe('send_to_messenger', function(e) {
-                        console.log(e)
+                        if (e.event === "opt_in") {
+                            self.checkScoreplayUser()
+                        }
                     });
                     FB.getLoginStatus(function(response) { // Called after the JS SDK has been initialized.
                         self.statusChangeCallback(response); // Returns the login status.
@@ -324,7 +326,7 @@
                     FB.api('/me?fields=id,name,email', function(response) {
                         console.log('Successful login', response);
                         self.fb_msg = 'Thanks for logging in, ' + response.name + '!'
-                        self.ref = response.email
+                        self.ref = response.name
                         console.log(self.ref)
                         self.email = response.email
                         self.checkScoreplayUser()
