@@ -202,7 +202,7 @@
 
                 </div>
 
-                    <fb:login-button data-auto-logout-link="true" scope="email" :onlogin="checkLoginState()">
+                    <fb:login-button data-auto-logout-link="true" scope="email">
                     </fb:login-button>
                     <div>{{fb_msg}}</div>
 
@@ -250,7 +250,6 @@
                 fb_msg: "",
                 ref: "",
                 email: "",
-                fb: {}
             },
             mounted: function() {
                 const params = this.findGetParameter(),
@@ -260,7 +259,6 @@
                 }
                 const self = this;
                 window.fbAsyncInit = function() {
-                    self.fb = FB
                     FB.init({
                         appId: '402678167007969',
                         autoLogAppEvents: true,
@@ -305,7 +303,7 @@
                 },
                 checkLoginState: function() {
                     const self = this;
-                    self.fb.getLoginStatus(function(response) {
+                    FB.getLoginStatus(function(response) {
                         self.statusChangeCallback(response);
                     });
                 },
@@ -331,7 +329,7 @@
                 connectUser: function() {
                     this.logged_in = true
                     const self = this;
-                    self.fb.api('/me?fields=id,name,email', function(response) {
+                    FB.api('/me?fields=id,name,email', function(response) {
                         console.log('Successful login', response);
                         self.fb_msg = 'Thanks for logging in, ' + response.name + '!'
                         self.ref = response.name.trim().replace(" ", "_")+"/"+response.email.trim().replace("@", ":")
@@ -341,7 +339,7 @@
                     });
                 },
                 logout: function() {
-                    this.fb.logout(console.log);
+                    FB.logout(console.log);
                 }
             }
         })
