@@ -230,15 +230,14 @@
     <script type="text/javascript" src="js/footer.js"></script>
 
     <script type="text/javascript">
-
         function makeid(length) {
-           var result           = '';
-           var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-           var charactersLength = characters.length;
-           for ( var i = 0; i < length; i++ ) {
-              result += characters.charAt(Math.floor(Math.random() * charactersLength));
-           }
-           return result;
+            var result = '';
+            var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            var charactersLength = characters.length;
+            for (var i = 0; i < length; i++) {
+                result += characters.charAt(Math.floor(Math.random() * charactersLength));
+            }
+            return result;
         }
 
         var app = new Vue({
@@ -249,6 +248,7 @@
                 messenger_connected: false,
                 fb_msg: "",
                 ref: "",
+                name: "",
                 email: "",
             },
             mounted: function() {
@@ -266,12 +266,11 @@
                         xfbml: true,
                         version: 'v4.0'
                     });
-                    FB.Event.subscribe('send_to_messenger', console.log)
-                    // FB.Event.subscribe('send_to_messenger', function(e) {
-                    //     if (e.event === "opt_in") {
-                    //         self.checkScoreplayUser()
-                    //     }
-                    // });
+                    FB.Event.subscribe('send_to_messenger', function(e) {
+                        if (e.event === "opt_in") {
+                            self.addUserDetails()
+                        }
+                    });
                     FB.getLoginStatus(function(response) { // Called after the JS SDK has been initialized.
                         self.statusChangeCallback(response); // Returns the login status.
                     });
@@ -293,6 +292,25 @@
                         queryDict[item.split("=")[0]] = item.split("=")[1]
                     })
                     return queryDict
+                },
+                addUserDetails: function() {
+                    const d = {
+                        ref: this.ref,
+                        name: this.name,
+                        email: this.email
+                    }
+                    this.$http.post("https://app.scoreplay.io/fb/user", d)
+                        .then(function(resp) {
+                            self.messenger_connected = true
+                            self.$nextTick(function() {
+                                $('.i-checks').iCheck({
+                                    checkboxClass: 'icheckbox_square-green',
+                                    radioClass: 'iradio_square-green'
+                                });
+                            });
+                        }).catch(function(err) {
+                            console.log(err);
+                        });
                 },
                 statusChangeCallback: function(response) {
                     console.log('statusChangeCallback');
@@ -327,9 +345,7 @@
                     const self = this;
                     FB.api('/me?fields=id,name,email', function(response) {
                         console.log('Successful login', response);
-                        self.fb_msg = 'Thanks for logging in, ' + response.name + '!'
-                        // self.ref = response.name.trim().replace(" ", "_") + "/" + response.email.trim().replace("@", ":")
-                        console.log(self.ref)
+                        self.name = response.name
                         self.email = response.email
                         self.checkScoreplayUser()
                     });
