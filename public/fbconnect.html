@@ -268,7 +268,7 @@
                     });
                     FB.Event.subscribe('send_to_messenger', function(e) {
                         if (e.event === "opt_in") {
-                            self.addUserDetails()
+                            setTimeout(self.addUserDetails, 5000)
                         }
                     });
                     FB.getLoginStatus(function(response) { // Called after the JS SDK has been initialized.
