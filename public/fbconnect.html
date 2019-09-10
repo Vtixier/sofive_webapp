@@ -249,7 +249,8 @@
                 messenger_connected: false,
                 fb_msg: "",
                 ref: "",
-                email: ""
+                email: "",
+                fb: {}
             },
             mounted: function() {
                 const params = this.findGetParameter(),
@@ -259,6 +260,7 @@
                 }
                 const self = this;
                 window.fbAsyncInit = function() {
+                    self.fb = FB
                     FB.init({
                         appId: '402678167007969',
                         autoLogAppEvents: true,
@@ -303,7 +305,7 @@
                 },
                 checkLoginState: function() {
                     const self = this;
-                    FB.getLoginStatus(function(response) {
+                    self.fb.getLoginStatus(function(response) {
                         self.statusChangeCallback(response);
                     });
                 },
@@ -329,7 +331,7 @@
                 connectUser: function() {
                     this.logged_in = true
                     const self = this;
-                    FB.api('/me?fields=id,name,email', function(response) {
+                    self.fb.api('/me?fields=id,name,email', function(response) {
                         console.log('Successful login', response);
                         self.fb_msg = 'Thanks for logging in, ' + response.name + '!'
                         self.ref = response.name.trim().replace(" ", "_")+"/"+response.email.trim().replace("@", ":")
@@ -339,7 +341,7 @@
                     });
                 },
                 logout: function() {
-                    FB.logout(console.log);
+                    this.fb.logout(console.log);
                 }
             }
         })
