@@ -273,6 +273,9 @@
                             setTimeout(self.addUserDetails, 5000)
                         }
                     });
+                    FB.Event.subscribe('auth.login', function(e) {
+                        console.log(e)
+                    });
                     FB.getLoginStatus(function(response) { // Called after the JS SDK has been initialized.
                         self.statusChangeCallback(response); // Returns the login status.
                     });
