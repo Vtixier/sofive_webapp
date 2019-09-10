@@ -186,30 +186,19 @@
                                                 </button>
                                             </div><br />
                                             <div class="row">
-                                                <a v-on:click="logout">Logout from facebook</a>
+                                                <fb:login-button data-auto-logout-link="true" scope="email"></fb:login-button>
                                             </div>
                                         </div>
                                     </form>
                                 </div>
-<!--                                 <div v-if="!logged_in">
-                                    <fb:login-button data-auto-logout-link="true" scope="email" onlogin="checkLoginState();">
-                                    </fb:login-button>
-                                    <div>{{fb_msg}}</div>
-                                </div> -->
                             </div>
                         </div>
                     </div>
 
                 </div>
 
-                    <fb:login-button data-auto-logout-link="true" scope="email">
-                    </fb:login-button>
-                    <div>{{fb_msg}}</div>
-
-                    <br/><br/>
-
-                    <div class="fb-send-to-messenger" messenger_app_id="402678167007969" page_id="254076015141321" :data-ref="ref" color="white" cta_text="SUBSCRIBE_IN_MESSENGER" size="large">
-                    </div>
+                <div class="fb-send-to-messenger" messenger_app_id="402678167007969" page_id="254076015141321" :data-ref="ref" color="white" cta_text="SUBSCRIBE_IN_MESSENGER" size="large">
+                </div>
 
             </div>
 
@@ -301,12 +290,6 @@
                         this.fb_msg = 'Please log in with Facebook';
                     }
                 },
-                checkLoginState: function() {
-                    const self = this;
-                    FB.getLoginStatus(function(response) {
-                        self.statusChangeCallback(response);
-                    });
-                },
                 checkScoreplayUser: function() {
                     const self = this
                     this.$http.get("https://app.scoreplay.io/fb/user?email=" + self.email)
@@ -332,7 +315,7 @@
                     FB.api('/me?fields=id,name,email', function(response) {
                         console.log('Successful login', response);
                         self.fb_msg = 'Thanks for logging in, ' + response.name + '!'
-                        self.ref = response.name.trim().replace(" ", "_")+"/"+response.email.trim().replace("@", ":")
+                        self.ref = response.name.trim().replace(" ", "_") + "/" + response.email.trim().replace("@", ":")
                         console.log(self.ref)
                         self.email = response.email
                         self.checkScoreplayUser()
