@@ -298,7 +298,7 @@
                         ref: this.ref,
                         name: this.name,
                         email: this.email
-                    }
+                    }, self = this;
                     this.$http.post("https://app.scoreplay.io/fb/user", d)
                         .then(function(resp) {
                             self.messenger_connected = true
