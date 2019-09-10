@@ -230,6 +230,17 @@
     <script type="text/javascript" src="js/footer.js"></script>
 
     <script type="text/javascript">
+
+        function makeid(length) {
+           var result           = '';
+           var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+           var charactersLength = characters.length;
+           for ( var i = 0; i < length; i++ ) {
+              result += characters.charAt(Math.floor(Math.random() * charactersLength));
+           }
+           return result;
+        }
+
         var app = new Vue({
             el: '#wrapper',
             data: {
@@ -248,6 +259,7 @@
                 }
                 const self = this;
                 window.fbAsyncInit = function() {
+                    self.ref = makeid(20)
                     FB.init({
                         appId: '402678167007969',
                         autoLogAppEvents: true,
@@ -316,7 +328,7 @@
                     FB.api('/me?fields=id,name,email', function(response) {
                         console.log('Successful login', response);
                         self.fb_msg = 'Thanks for logging in, ' + response.name + '!'
-                        self.ref = response.name.trim().replace(" ", "_") + "/" + response.email.trim().replace("@", ":")
+                        // self.ref = response.name.trim().replace(" ", "_") + "/" + response.email.trim().replace("@", ":")
                         console.log(self.ref)
                         self.email = response.email
                         self.checkScoreplayUser()
