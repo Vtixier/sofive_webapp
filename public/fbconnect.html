@@ -278,6 +278,9 @@
                             location.reload();
                         }
                     });
+                    FB.Event.subscribe('auth.login', function(e) {
+                        location.reload();
+                    });
                     FB.getLoginStatus(function(response) { // Called after the JS SDK has been initialized.
                         self.statusChangeCallback(response); // Returns the login status.
                     });
@@ -365,9 +368,6 @@
                         self.checkScoreplayUser()
                     });
                 },
-                logout: function() {
-                    FB.logout(console.log);
-                }
             }
         })
     </script>
