@@ -496,7 +496,7 @@
                     const self = this;
                     this.teams = [];
                     this.loading.team = true;
-                    this.$http.get("http://localhost:8080/team/league/" + this.selected.leagueID.toString())
+                    this.$http.get("http://localhost:8080/team/league/" + this.selected.league.id.toString())
                         .then(function(resp) {
                             self.teams = resp.body
                             self.loading.team = false;
