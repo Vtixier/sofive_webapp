@@ -180,7 +180,7 @@
                                             <div class="col-sm-12 text-center">
                                                 Current team: <b v-if="team_details">{{team_details.split(" - ")[1]}} ({{team_details.split(" - ")[0]}})</b>
                                             </div>
-                                        </div><br/>
+                                        </div><br />
                                         <div class="row" style="margin: 0">
                                             <div class="col-sm-12 text-center">
                                                 <p><span v-if="team_details">Change</span><span v-else>Choose</span> team settings :</p>
@@ -253,14 +253,16 @@
                                     </div>
                                 </div><br />
                                 <div class="row">
-                                    <div class="col s12 text-center" v-if="loading.messenger">
-                                        <div>
-                                            <div class="sk-spinner sk-spinner-wave">
-                                                <div class="sk-rect1"></div>
-                                                <div class="sk-rect2"></div>
-                                                <div class="sk-rect3"></div>
-                                                <div class="sk-rect4"></div>
-                                                <div class="sk-rect5"></div>
+                                    <div class="col s12 text-center">
+                                        <div v-if="loading.messenger">
+                                            <div>
+                                                <div class="sk-spinner sk-spinner-wave">
+                                                    <div class="sk-rect1"></div>
+                                                    <div class="sk-rect2"></div>
+                                                    <div class="sk-rect3"></div>
+                                                    <div class="sk-rect4"></div>
+                                                    <div class="sk-rect5"></div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
