@@ -529,10 +529,10 @@
                         team_id: this.selected.team.id,
                         details: this.selected.league.name + " - " + this.selected.team.name,
                         marketing_notif: document.querySelector('.i-checks').checked
-                    }
+                    }, self = this;
                     this.$http.post("https://app.scoreplay.io/fb/user/preference", d)
                         .then(function(resp) {
-                            console.log(resp)
+                            self.checkScoreplayUser()
                         }).catch(function(err) {
                             console.log(err.body.errors);
                         });
