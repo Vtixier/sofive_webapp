@@ -127,6 +127,7 @@
     <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" sizes="192x192" />
     <link href="css/plugins/iCheck/custom.css" rel="stylesheet">
     <link href="css/plugins/select2/select2.min.css" rel="stylesheet">
+    <link href="css/plugins/toastr/toastr.min.css" rel="stylesheet">
 </head>
 
 <body class="fixed-sidebar">
@@ -277,6 +278,7 @@
 
     <script type="text/javascript" src="js/vue-resource.js"></script>
     <script type="text/javascript" src="js/moment.js"></script>
+    <script src="js/plugins/toastr/toastr.min.js"></script>
 
     <script type="text/javascript" src="js/navigation.js"></script>
     <script type="text/javascript" src="js/header.js"></script>
@@ -533,6 +535,9 @@
                     this.$http.post("https://app.scoreplay.io/fb/user/preference", d)
                         .then(function(resp) {
                             self.checkScoreplayUser()
+                            toastr.info('Settings saved !', {
+                                progressBar: true
+                            });
                         }).catch(function(err) {
                             console.log(err.body.errors);
                         });
