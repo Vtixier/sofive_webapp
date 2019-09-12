@@ -171,7 +171,11 @@
                                     <div class="text-center">
                                         <br />
                                         <div class="row">
-                                            <h4>Your current team: <b>{{team_details}}</b></h4>
+                                            <h4>Your current settings: <b>{{team_details}}</b></h4>
+                                            <ul>
+                                                <li>League : <b>{{team_details.split(" - ")[0]}}</b></li>
+                                                <li>Team : <b>{{team_details.split(" - ")[1]}}</b></li>
+                                            </ul>
                                         </div><br />
                                         <div class="row">
                                             <p>Change team settings :</p>
