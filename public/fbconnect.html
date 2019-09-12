@@ -165,69 +165,73 @@
                                 </p>
                             </div>
                             <div class="col-sm-6 text-center" style="padding-left: 50px">
-                                <div class="notification_settings" style="display: none"> <!--v-if="logged_in && messenger_connected"-->
+                                <div class="notification_settings" style="display: none">
+                                    <!--v-if="logged_in && messenger_connected"-->
                                     <h4>Notification settings</h4>
-                                        <div class="text-center">
-                                            <br />
-                                            <div class="row">
-                                                <div v-if="loading.product">
-                                                    <div>
-                                                        <div class="sk-spinner sk-spinner-wave">
-                                                            <div class="sk-rect1"></div>
-                                                            <div class="sk-rect2"></div>
-                                                            <div class="sk-rect3"></div>
-                                                            <div class="sk-rect4"></div>
-                                                            <div class="sk-rect5"></div>
-                                                        </div>
+                                    <div class="text-center">
+                                        <br />
+                                        <div class="row">
+                                            <div v-if="loading.product">
+                                                <div>
+                                                    <div class="sk-spinner sk-spinner-wave">
+                                                        <div class="sk-rect1"></div>
+                                                        <div class="sk-rect2"></div>
+                                                        <div class="sk-rect3"></div>
+                                                        <div class="sk-rect4"></div>
+                                                        <div class="sk-rect5"></div>
                                                     </div>
                                                 </div>
-                                                <select class="select_product form-control" style="width: 100%">
-                                                    <option></option>
-                                                    <option v-for="product in products" :value="JSON.stringify(product)">{{product.name}}</option>
-                                                </select>
-                                            </div><br />
-                                            <div class="row">
-                                                <div v-if="loading.league">
-                                                    <div>
-                                                        <div class="sk-spinner sk-spinner-wave">
-                                                            <div class="sk-rect1"></div>
-                                                            <div class="sk-rect2"></div>
-                                                            <div class="sk-rect3"></div>
-                                                            <div class="sk-rect4"></div>
-                                                            <div class="sk-rect5"></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <select class="select_league form-control" style="width: 100%">
-                                                    <option></option>
-                                                    <option v-for="league in leagues" :value="JSON.stringify(league)">{{league.name}}</option>
-                                                </select>
-                                            </div><br />
-                                            <div class="row">
-                                                <div v-if="loading.team">
-                                                    <div>
-                                                        <div class="sk-spinner sk-spinner-wave">
-                                                            <div class="sk-rect1"></div>
-                                                            <div class="sk-rect2"></div>
-                                                            <div class="sk-rect3"></div>
-                                                            <div class="sk-rect4"></div>
-                                                            <div class="sk-rect5"></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <select class="select_team form-control" style="width: 100%">
-                                                    <option></option>
-                                                    <option v-for="team in teams" :value="JSON.stringify(team)">{{team.name}}</option>
-                                                </select>
-                                            </div><br />
-                                            <div class="row">
-                                                <label><input type="checkbox" checked class="i-checks"> Receive special offers </label>
-                                            </div><br />
-                                            <div class="row">
-                                                <button class="btn btn-sm btn-primary text-center" v-on:click="save"><strong>Save</strong>
-                                                </button>
                                             </div>
+                                            <select class="select_product form-control" style="width: 100%">
+                                                <option></option>
+                                                <option v-for="product in products" :value="JSON.stringify(product)">{{product.name}}</option>
+                                            </select>
+                                        </div><br />
+                                        <div class="row">
+                                            <div v-if="loading.league">
+                                                <div>
+                                                    <div class="sk-spinner sk-spinner-wave">
+                                                        <div class="sk-rect1"></div>
+                                                        <div class="sk-rect2"></div>
+                                                        <div class="sk-rect3"></div>
+                                                        <div class="sk-rect4"></div>
+                                                        <div class="sk-rect5"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <select class="select_league form-control" style="width: 100%">
+                                                <option></option>
+                                                <option v-for="league in leagues" :value="JSON.stringify(league)">{{league.name}}</option>
+                                            </select>
+                                        </div><br />
+                                        <div class="row">
+                                            <div v-if="loading.team">
+                                                <div>
+                                                    <div class="sk-spinner sk-spinner-wave">
+                                                        <div class="sk-rect1"></div>
+                                                        <div class="sk-rect2"></div>
+                                                        <div class="sk-rect3"></div>
+                                                        <div class="sk-rect4"></div>
+                                                        <div class="sk-rect5"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <select class="select_team form-control" style="width: 100%">
+                                                <option></option>
+                                                <option v-for="team in teams" :value="JSON.stringify(team)">{{team.name}}</option>
+                                            </select>
+                                        </div><br />
+                                        <div class="row">
+                                            Selected team: {{team_details}}
+                                        </div><br />
+                                        <div class="row">
+                                            <label><input type="checkbox" checked class="i-checks"> Receive special offers </label>
+                                        </div><br />
+                                        <div class="row">
+                                            <button class="btn btn-sm btn-primary text-center" v-on:click="save"><strong>Save</strong>
+                                            </button>
                                         </div>
+                                    </div>
                                 </div><br />
                                 <div class="row">
                                     <fb:login-button data-auto-logout-link="true" scope="email"></fb:login-button>
@@ -307,6 +311,7 @@
                     league: 0,
                     team: 0
                 },
+                team_details: ""
             },
             mounted: function() {
                 const params = this.findGetParameter(),
@@ -421,6 +426,7 @@
                         .then(function(resp) {
                             if (resp.body && (resp.bodyText !== "null")) {
                                 self.messenger_connected = true
+                                self.team_details = resp.body.details
                                 self.$nextTick(function() {
                                     $('.i-checks').iCheck({
                                         checkboxClass: 'icheckbox_square-green',
@@ -512,12 +518,18 @@
                 },
                 save: function save() {
                     const d = {
+                        email: this.email,
                         league_id: this.selected.league.id,
                         team_id: this.selected.team.id,
-                        details: this.selected.league.name+" - "+this.selected.team.name,
+                        details: this.selected.league.name + " - " + this.selected.team.name,
                         marketing_notif: document.querySelector('.i-checks').checked
                     }
-                    console.log(d)
+                    this.$http.post("https://app.scoreplay.io/fb/user/preference", d)
+                        .then(function(resp) {
+                            console.log(resp)
+                        }).catch(function(err) {
+                            console.log(err.body.errors);
+                        });
                 }
             }
         })
