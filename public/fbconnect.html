@@ -166,15 +166,16 @@
                             </div>
                             <div class="col-sm-6 text-center" style="padding-left: 50px">
                                 <div class="notification_settings" style="display: none">
-                                    <!--v-if="logged_in && messenger_connected"-->
                                     <h3>Notification settings</h3>
                                     <div class="text-center">
                                         <br />
                                         <div class="row">
-                                            <p>Your current settings:</p>
+                                            Your current settings:
+                                        </div>
+                                        <div class="row">
                                             <ul>
-                                                <li>League : <b>{{team_details.split(" - ")[0]}}</b></li>
-                                                <li>Team : <b>{{team_details.split(" - ")[1]}}</b></li>
+                                                <li>League : {{team_details.split(" - ")[0]}}</li>
+                                                <li>Team : {{team_details.split(" - ")[1]}}</li>
                                             </ul>
                                         </div><br />
                                         <div class="row">
