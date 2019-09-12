@@ -167,7 +167,7 @@
                                 <div v-if="!messenger_connected">
                                     <h1>Our chatbot</h1>
                                     <hr>
-                                    <h3 style="font-weight: normal;">Sign in with facebook to receive match results, video highlights and league standings right in your messenger inbox !</h3>
+                                    <h3 style="font-weight: normal; padding-left: 5%; padding-right: 5%">Sign in with facebook to receive match results, video highlights and league standings right in your messenger inbox !</h3>
                                 </div>
                                 <div v-if="messenger_connected">
                                     <h1>Chatbot settings</h1>
@@ -253,6 +253,17 @@
                                     </div>
                                 </div><br />
                                 <div class="row">
+                                    <div v-if="loading.messenger">
+                                        <div>
+                                            <div class="sk-spinner sk-spinner-wave">
+                                                <div class="sk-rect1"></div>
+                                                <div class="sk-rect2"></div>
+                                                <div class="sk-rect3"></div>
+                                                <div class="sk-rect4"></div>
+                                                <div class="sk-rect5"></div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="col s12 text-center" style="padding-left: 18%">
                                         <div class="fb-send-to-messenger" messenger_app_id="402678167007969" page_id="254076015141321" :data-ref="ref" color="white" cta_text="SUBSCRIBE_IN_MESSENGER" size="large">
                                         </div>
@@ -327,7 +338,8 @@
                 loading: {
                     products: false,
                     league: false,
-                    team: false
+                    team: false,
+                    messenger: false
                 },
                 selected: {
                     facility_id: "1",
@@ -357,6 +369,7 @@
                     });
                     FB.Event.subscribe('send_to_messenger', function(e) {
                         if (e.event === "opt_in") {
+                            self.loading.messenger = true
                             setTimeout(self.addUserDetails, 5000)
                         }
                     });
@@ -424,6 +437,7 @@
                     this.$http.post("https://app.scoreplay.io/fb/user", d)
                         .then(function(resp) {
                             self.messenger_connected = true
+                            self.loading.messenger = false
                             self.$nextTick(function() {
                                 $('.i-checks').iCheck({
                                     checkboxClass: 'icheckbox_square-green',
