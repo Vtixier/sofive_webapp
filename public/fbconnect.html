@@ -182,7 +182,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <select class="select_product form-control">
+                                                <select class="select_product form-control" style="width: 100%">
                                                     <option></option>
                                                     <option v-for="product in products" :value="JSON.stringify(product)">{{product.name}}</option>
                                                 </select>
@@ -430,6 +430,7 @@
                                         radioClass: 'iradio_square-green'
                                     });
                                     document.querySelector('.fb-send-to-messenger').style.display = "none"
+                                    document.querySelector('.notification_settings').style.display = "block"
                                 });
                             } else {
                                 self.messenger_connected = false
