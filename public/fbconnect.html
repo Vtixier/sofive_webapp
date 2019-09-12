@@ -225,7 +225,7 @@
                                                 <label><input type="checkbox" checked class="i-checks"> Receive special offers </label>
                                             </div><br />
                                             <div class="row">
-                                                <button class="btn btn-sm btn-primary text-center" type="submit"><strong>Save</strong>
+                                                <button class="btn btn-sm btn-primary text-center" v-on:click="save"><strong>Save</strong>
                                                 </button>
                                             </div>
                                         </div>
@@ -512,6 +512,14 @@
                     return arr.reduce(function(flat, toFlatten) {
                         return flat.concat(Array.isArray(toFlatten) ? self.flatten(toFlatten) : toFlatten);
                     }, []);
+                },
+                save: function save() {
+                    const d = {
+                        league_id: this.selected.leagueID,
+                        team_id: this.selected.teamID,
+                        marketing_notif: document.querySelector('.i-checks').checked
+                    }
+                    console.log(d)
                 }
             }
         })
