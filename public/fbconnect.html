@@ -159,13 +159,13 @@
                     <div class="ibox-content">
                         <div class="row">
                             <div class="col-sm-6 text-center b-r">
-                                <h3>Our chatbot</h3>
-                                <p>Sign in with facebook to receive all the latest updates of your team right in your messenger inbox !</p>
                                 <p class="text-center">
-                                    <img src="/img/chatboten.png" style="height: 40vh">
+                                    <img src="/img/chatboten.png" style="height: 50vh">
                                 </p>
                             </div>
                             <div class="col-sm-6 text-center" style="padding-left: 50px">
+                                <h3>Our chatbot</h3>
+                                <p>Sign in with facebook to receive all the latest updates of your team right in your messenger inbox !</p>
                                 <div class="notification_settings" style="display: none">
                                     <h3>Notification settings</h3>
                                     <div class="text-center">
@@ -173,16 +173,10 @@
                                         <div class="row">
                                             Your current settings:
                                         </div>
-                                        <div class="row text-left" v-if="team_details">
+                                        <div class="row text-left">
                                             <ul>
-                                                <li>League : <b>{{team_details.split(" - ")[0]}}</b></li>
-                                                <li>Team : <b>{{team_details.split(" - ")[1]}}</b></li>
-                                            </ul>
-                                        </div><br />
-                                        <div class="row text-left" v-else>
-                                            <ul>
-                                                <li>League : <b>None</b></li>
-                                                <li>Team : <b>None</b></li>
+                                                <li>League : <b v-if="team_details">{{team_details.split(" - ")[0]}}</b><b v-else>None</b></li>
+                                                <li>Team : <b v-if="team_details">{{team_details.split(" - ")[1]}}</b><b v-else>None</b></li>
                                             </ul>
                                         </div><br />
                                         <div class="row">
@@ -247,10 +241,14 @@
                                     </div>
                                 </div><br />
                                 <div class="row">
-                                    <fb:login-button data-auto-logout-link="true" scope="email"></fb:login-button>
+                                    <div class="col s12 text-center">
+                                        <div class="fb-send-to-messenger" messenger_app_id="402678167007969" page_id="254076015141321" :data-ref="ref" color="white" cta_text="SUBSCRIBE_IN_MESSENGER" size="large">
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="row">
-                                    <div class="fb-send-to-messenger" messenger_app_id="402678167007969" page_id="254076015141321" :data-ref="ref" color="white" cta_text="SUBSCRIBE_IN_MESSENGER" size="large">
+                                <div class="row text-center">
+                                    <div class="col s12 text-center">
+                                        <fb:login-button data-size="large" data-auto-logout-link="true" scope="email"></fb:login-button>
                                     </div>
                                 </div>
                             </div>
