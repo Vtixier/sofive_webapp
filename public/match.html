@@ -634,6 +634,12 @@
                         var home = this.match.home.name,
                             away = this.match.away.name,
                             match_start = moment(this.match.start, "YYYY-MM-DD - h:mma");
+                        let actual_start = events.find(function(e){
+                            return e.type === "start"
+                        })
+                        if (actual_start) {
+                            match_start = moment(actual_start.date, "YYYY-MM-DD HH:mm:ss")
+                        }
                         var final_events = [],
                             home_score = 0,
                             away_score = 0;
