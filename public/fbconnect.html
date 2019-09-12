@@ -354,11 +354,12 @@
                 team_details: ""
             },
             mounted: function() {
-                const params = this.findGetParameter(),
-                    origin = params.origin || "";
-                if (origin !== "") {
-                    this.info = JSON.parse(atob(origin))
+
+                var center = this.getCenterCookie();
+                if (center) {
+                    this.selected.facility_id = center
                 }
+
                 const self = this;
 
                 this.getProducts();
@@ -576,7 +577,23 @@
                         }).catch(function(err) {
                             console.log(err.body.errors);
                         });
-                }
+                },
+                getCenterCookie: function getCenterCookie() {
+                    var nameEQ = "center=";
+                    var ca = document.cookie.split(';');
+
+                    for (var i = 0; i < ca.length; i++) {
+                        var c = ca[i];
+
+                        while (c.charAt(0) == ' ') {
+                            c = c.substring(1, c.length);
+                        }
+
+                        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+                    }
+
+                    return null;
+                },
             }
         })
     </script>
