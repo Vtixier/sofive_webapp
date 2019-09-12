@@ -200,7 +200,7 @@
                                                 </div>
                                                 <select class="select_league form-control" style="width: 100%">
                                                     <option></option>
-                                                    <option v-for="league in leagues" :value="league.id">{{league.name}}</option>
+                                                    <option v-for="league in leagues" :value="JSON.stringify(league)">{{league.name}}</option>
                                                 </select>
                                             </div><br />
                                             <div class="row">
@@ -217,7 +217,7 @@
                                                 </div>
                                                 <select class="select_team form-control" style="width: 100%">
                                                     <option></option>
-                                                    <option v-for="team in teams" :value="team.id">{{team.name}}</option>
+                                                    <option v-for="team in teams" :value="JSON.stringify(team)">{{team.name}}</option>
                                                 </select>
                                             </div><br />
                                             <div class="row">
@@ -304,11 +304,8 @@
                 selected: {
                     facility_id: "1",
                     product: {},
-                    league: {
-                        season: {}
-                    },
-                    leagueID: 0,
-                    teamID: 0
+                    league: 0,
+                    team: 0
                 },
             },
             mounted: function() {
@@ -370,11 +367,13 @@
                     self.getSeasons();
                 });
                 $('.select_league').on('select2:select', function(e) {
-                    self.selected.leagueID = e.target.value;
+                    var doc = JSON.parse(e.target.value);
+                    self.selected.league = doc;
                     self.getTeams();
                 });
                 $('.select_team').on('select2:select', function(e) {
-                    self.selected.teamID = e.target.value;
+                    var doc = JSON.parse(e.target.value);
+                    self.selected.team = doc;
                 });
 
             },
@@ -513,8 +512,9 @@
                 },
                 save: function save() {
                     const d = {
-                        league_id: this.selected.leagueID,
-                        team_id: this.selected.teamID,
+                        league_id: this.selected.league.id,
+                        team_id: this.selected.team.id,
+                        details: this.selected.league.name+" - "+this.selected.team.name
                         marketing_notif: document.querySelector('.i-checks').checked
                     }
                     console.log(d)
