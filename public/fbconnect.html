@@ -170,13 +170,13 @@
                                     <h3 style="font-weight: normal;">Sign in with facebook to receive match results, video highlights and league standings right in your messenger inbox !</h3>
                                 </div>
                                 <div v-if="messenger_connected">
-                                    <h1>Settings</h1>
+                                    <h1>Chatbot settings</h1>
                                     <hr>
                                 </div>
                                 <div class="notification_settings" style="display: none">
                                     <div class="text-center">
                                         <br />
-                                        <div class="row" style="margin: 0">
+                                        <div class="row" style="margin: 0" v-if="team_details">
                                             <div class="col-sm-12 text-center">
                                                 Your current settings:
                                             </div>
