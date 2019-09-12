@@ -167,7 +167,6 @@
                                 <h3>Our chatbot</h3>
                                 <p>Sign in with facebook to receive all the latest updates of your team right in your messenger inbox !</p>
                                 <div class="notification_settings" style="display: none">
-                                    <h3>Notification settings</h3>
                                     <div class="text-center">
                                         <br />
                                         <div class="row">
@@ -246,7 +245,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row text-center">
+                                <div class="row text-center" v-if="!logged_in">
                                     <div class="col s12 text-center">
                                         <fb:login-button data-size="large" data-auto-logout-link="true" scope="email"></fb:login-button>
                                     </div>
