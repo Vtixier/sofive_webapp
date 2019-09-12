@@ -661,17 +661,6 @@
                                         subtitle: home + " <b>" + home_score + " - " + away_score + "</b> " + away
                                     });
                                 }
-                            } else {
-                                var tp = ev.type;
-
-                                if (tp !== "fouls") {
-                                    final_events.push({
-                                        side: ev.details.side === "home" ? home : away,
-                                        type: tp,
-                                        date: moment.duration(moment(ev.date, "YYYY-MM-DD HH:mm:ss").diff(match_start)).get("minutes") + "\"",
-                                        subtitle: home + " <b>" + home_score + " - " + away_score + "</b> " + away
-                                    });
-                                }
                             }
                         });
                         this.events = final_events;
