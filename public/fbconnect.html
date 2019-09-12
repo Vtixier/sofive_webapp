@@ -165,7 +165,7 @@
                                 </p>
                             </div>
                             <div class="col-sm-6 text-center" style="padding-left: 50px">
-                                <div v-if="logged_in && messenger_connected">
+                                <div class="notification_settings" style="display: none"> <!--v-if="logged_in && messenger_connected"-->
                                     <h4>Notification settings</h4>
                                     <form role="form">
                                         <div class="text-center">
@@ -356,6 +356,29 @@
                     js.src = "https://connect.facebook.net/en_US/sdk.js";
                     fjs.parentNode.insertBefore(js, fjs);
                 }(document, 'script', 'facebook-jssdk'));
+
+                $(".select_product").select2({
+                    placeholder: "Select program..."
+                });
+                $(".select_league").select2({
+                    placeholder: "Select league..."
+                });
+                $(".select_team").select2({
+                    placeholder: "Select team..."
+                });
+                $('.select_product').on('select2:select', function(e) {
+                    var doc = JSON.parse(e.target.value);
+                    self.selected.product = doc;
+                    self.getSeasons();
+                });
+                $('.select_league').on('select2:select', function(e) {
+                    self.selected.leagueID = e.target.value;
+                    self.getTeams();
+                });
+                $('.select_team').on('select2:select', function(e) {
+                    self.selected.teamID = e.target.value;
+                });
+
             },
             methods: {
                 findGetParameter: function() {
@@ -380,28 +403,8 @@
                                     checkboxClass: 'icheckbox_square-green',
                                     radioClass: 'iradio_square-green'
                                 });
-                                $(".select_product").select2({
-                                    placeholder: "Select program..."
-                                });
-                                $(".select_league").select2({
-                                    placeholder: "Select league..."
-                                });
-                                $(".select_team").select2({
-                                    placeholder: "Select team..."
-                                });
-                                $('.select_product').on('select2:select', function(e) {
-                                    var doc = JSON.parse(e.target.value);
-                                    self.selected.product = doc;
-                                    self.getSeasons();
-                                });
-                                $('.select_league').on('select2:select', function(e) {
-                                    self.selected.leagueID = e.target.value;
-                                    self.getTeams();
-                                });
-                                $('.select_team').on('select2:select', function(e) {
-                                    self.selected.teamID = e.target.value;
-                                });
                                 document.querySelector('.fb-send-to-messenger').style.display = "none"
+                                document.querySelector('.notification_settings').style.display = "block"
                             });
                         }).catch(function(err) {
                             console.log(err);
