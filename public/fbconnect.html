@@ -178,15 +178,7 @@
                                         <br />
                                         <div class="row" style="margin: 0" v-if="team_details">
                                             <div class="col-sm-12 text-center">
-                                                Your current settings:
-                                            </div>
-                                        </div>
-                                        <div class="row" v-if="team_details">
-                                            <div class="col-sm-12 text-center">
-                                                <ul style="list-style: none">
-                                                    <li>League : <b v-if="team_details">{{team_details.split(" - ")[0]}}</b><b v-else>None</b></li>
-                                                    <li>Team : <b v-if="team_details">{{team_details.split(" - ")[1]}}</b><b v-else>None</b></li>
-                                                </ul>
+                                                Current team: <b v-if="team_details">{{team_details.split(" - ")[1]}} ({{team_details.split(" - ")[0]}})</b>
                                             </div>
                                         </div>
                                         <div class="row" style="margin: 0">
