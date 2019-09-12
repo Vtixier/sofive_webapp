@@ -173,10 +173,16 @@
                                         <div class="row">
                                             Your current settings:
                                         </div>
-                                        <div class="row text-left">
+                                        <div class="row text-left" v-if="team_details">
                                             <ul>
                                                 <li>League : <b>{{team_details.split(" - ")[0]}}</b></li>
                                                 <li>Team : <b>{{team_details.split(" - ")[1]}}</b></li>
+                                            </ul>
+                                        </div><br />
+                                        <div class="row text-left" v-else>
+                                            <ul>
+                                                <li>League : <b>None</b></li>
+                                                <li>Team : <b>None</b></li>
                                             </ul>
                                         </div><br />
                                         <div class="row">
