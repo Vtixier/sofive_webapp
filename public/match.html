@@ -489,10 +489,21 @@
                                 rec_url = "https://www.dailymotion.com/embed/video/" + v.recording.url.replace("https://www.dailymotion.com/video/", "") + "?queue-enable=false&queue-autoplay-next=false&ui-start-screen-info=false";
                             }
 
-                            v['clips'] = v.clips.map(function(c) {
-                                c['url'] = "https://www.dailymotion.com/embed/video/" + c.url.replace("https://www.dailymotion.com/video/", "") + "?autoplay=1&queue-enable=false&queue-autoplay-next=false&ui-start-screen-info=false"
-                                return c;
-                            })
+                            let clips = []
+                            if (v.clips.length > 0) {
+                                clips = v.clips.map(function(c) {
+                                    c['url'] = "https://www.dailymotion.com/embed/video/" + c.url.replace("https://www.dailymotion.com/video/", "") + "?autoplay=1&queue-enable=false&queue-autoplay-next=false&ui-start-screen-info=false"
+                                    return c;
+                                })
+                            } else {
+                                const event_num = _this.match.home.score+_this.match.away.score
+                                for (let i=0; i<event_num; i++) {
+                                    const url = "https://www.dailymotion.com/embed/video/" + v.recording.url.replace("https://www.dailymotion.com/video/", "") + "?autoplay=1&queue-enable=false&queue-autoplay-next=false&ui-start-screen-info=false&start="+parseInt(i*20+4).toString()
+                                    clips.push({url}) // +4 to handle intro
+                                }
+                            }
+
+                            v['clips'] = clips
 
                             v['recording']['url'] = rec_url
 
