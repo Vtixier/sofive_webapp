@@ -366,11 +366,12 @@
                             if (p.id === self.selected_product.id) {
                                 return {
                                     ...self.selected_product,
-                                    price: self.selected_product/100
+                                    price: self.selected_product.price / 100
                                 }
                             }
                             return p
                         })
+                        $('#edit').modal('hide');
                     }).catch(function(err) {
                         console.log(err);
                     });
