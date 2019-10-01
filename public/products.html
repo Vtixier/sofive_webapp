@@ -364,7 +364,10 @@
                     this.$http.post("http://localhost:8080/product/edit", this.selected_product).then(function(resp) {
                         self.products = self.products.map(function(p){
                             if (p.id === self.selected_product.id) {
-                                return self.selected_product
+                                return {
+                                    ...self.selected_product,
+                                    price: self.selected_product/100
+                                }
                             }
                             return p
                         })
