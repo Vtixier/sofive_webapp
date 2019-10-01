@@ -355,9 +355,9 @@
                 },
                 selectProduct: function selectProduct(p) {
                     this.selected_product = p;
+                    console.log(this.selected_product)
                 },
                 editProduct: function editProduct() {
-                    console.log(this.selected_product)
                     this.selected_product['payment'] = this.selected_product.payment_type
                     this.selected_product['price'] = parseFloat(this.selected_product.price) * 100
                     this.$http.post("http://localhost:8080/product/edit", this.selected_product).then(function(resp) {
