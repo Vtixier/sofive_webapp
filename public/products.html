@@ -358,11 +358,16 @@
                     console.log(this.selected_product)
                 },
                 editProduct: function editProduct() {
-                    this.selected_product['payment'] = this.selected_product.payment_type
+                    const self = this
+                    this.selected_product['payment'] = this.selected_product.payment
                     this.selected_product['price'] = parseFloat(this.selected_product.price) * 100
                     this.$http.post("http://localhost:8080/product/edit", this.selected_product).then(function(resp) {
-                        console.log(resp);
-                        window.location = "/products.html";
+                        self.products = self.products.map(function(p){
+                            if (p.id === self.selected_product.id) {
+                                return self.selected_product.price
+                            }
+                            return p
+                        })
                     }).catch(function(err) {
                         console.log(err);
                     });
