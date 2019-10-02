@@ -212,9 +212,16 @@
                                         <iframe class="video" allow="autoplay" :src="scoreplay_videos.recording.url" frameborder="0" allowfullscreen></iframe>
                                     </div>
                                     <div v-else>
-                                        <figure v-for="video in videos" style="margin: 0">
-                                            <iframe class="video" allow="autoplay" :src="video.embed" frameborder="0" allowfullscreen></iframe>
-                                        </figure>
+                                        <div v-if="videos.length">
+                                            <figure v-for="video in videos" style="margin: 0">
+                                                <iframe class="video" allow="autoplay" :src="video.embed" frameborder="0" allowfullscreen></iframe>
+                                            </figure>
+                                        </div>
+                                        <div v-else>
+                                            <figure style="margin: 0">
+                                                <iframe class="video" allow="autoplay" :src="hourly_url" frameborder="0" allowfullscreen></iframe>
+                                            </figure>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="ibox-content profile-content">
@@ -415,6 +422,7 @@
                     leaderboard: [],
                     matchID: "",
                     referee: "",
+                    field: "",
                     events: [],
                     videos: [],
                     home_team: {},
@@ -444,7 +452,6 @@
                     this.getDashMatch()
                         .then(function() {
                             this.getScoreplayVideos();
-                            this.getHourlyVideos();
                         })
                 },
                 watch: {
@@ -514,10 +521,12 @@
                                         return c;
                                     })
                                 } else {
-                                    const event_num = _this.match.home.score+_this.match.away.score
-                                    for (let i=0; i<event_num; i++) {
-                                        const url = "https://www.dailymotion.com/embed/video/" + v.recording.url.replace("https://www.dailymotion.com/video/", "") + "?autoplay=1&queue-enable=false&queue-autoplay-next=false&ui-start-screen-info=false&start="+parseInt(i*20+4).toString()
-                                        clips.push({url}) // +4 to handle intro
+                                    const event_num = _this.match.home.score + _this.match.away.score
+                                    for (let i = 0; i < event_num; i++) {
+                                        const url = "https://www.dailymotion.com/embed/video/" + v.recording.url.replace("https://www.dailymotion.com/video/", "") + "?autoplay=1&queue-enable=false&queue-autoplay-next=false&ui-start-screen-info=false&start=" + parseInt(i * 20 + 4).toString()
+                                        clips.push({
+                                            url
+                                        }) // +4 to handle intro
                                     }
                                 }
                             }
@@ -534,22 +543,28 @@
                     },
                     getHourlyVideos: function getScoreplayVideos() {
                         const parsed_date = moment(this.match.start, "YYYY-MM-DD - h:mma"),
-                        match_date = parsed_date.format("YYYY-MM-DD"),
-                        match_time = parsed_date.format("HH");
+                            match_date = parsed_date.format("YYYY-MM-DD"),
+                            match_time = parsed_date.format("HH");
 
                         const d = {
-                            center: this.center_str,
-                            first_date: match_date,
-                            first_hour: match_time,
-                            second_date: match_date,
-                            second_hour: match_time
-                        }
+                                center: this.center_str,
+                                first_date: match_date,
+                                first_hour: match_time,
+                                second_date: match_date,
+                                second_hour: match_time
+                            },
+                            self = this;
 
                         this.$http.post('https://video.scoreplay.io/rental/get', d)
-                        .then(resp => {
-                            console.log(resp)
-                        })
-                        .catch(console.error)
+                            .then(resp => {
+                                let hourly_url = ""
+                                const vid = resp.body.find(h => (h.field === self.field))
+                                if (vid) {
+                                    hourly_url = vid.url
+                                }
+                                self.rental_vid = hourly_url
+                            })
+                            .catch(console.error)
                     },
                     getDashMatch: function getDashMatch() {
                         var _this2 = this;
@@ -569,7 +584,10 @@
 
                             _this2.getResults(_this2.match.league_id);
 
-                            _this2.getMatchDetails();
+                            _this2.getMatchDetails()
+                                .then(() => {
+                                    _this2.getHourlyVideos()
+                                })
 
                         }).catch(function(err) {
                             console.log("getDashMatch", err);
@@ -594,6 +612,7 @@
 
                         this.$http.get(url).then(function(resp) {
                             _this4.referee = resp.body.ref;
+                            _this4.field = resp.body.details.fieldName
 
                             _this4.setupEvents(resp.body.events);
 
@@ -683,7 +702,7 @@
                         var home = this.match.home.name,
                             away = this.match.away.name,
                             match_start = moment(this.match.start, "YYYY-MM-DD - h:mma");
-                        let actual_start = events.find(function(e){
+                        let actual_start = events.find(function(e) {
                             return e.type === "start"
                         })
                         if (actual_start) {

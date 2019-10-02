@@ -362,7 +362,7 @@
                     this.selected_product['payment'] = this.selected_product.payment
                     this.selected_product['price'] = parseFloat(this.selected_product.price) * 100
                     this.$http.post("http://localhost:8080/product/edit", this.selected_product).then(function(resp) {
-                        self.products = self.products.map(function(p){
+                        self.products = self.products.map(function(p) {
                             if (p.id === self.selected_product.id) {
                                 return {
                                     ...self.selected_product,
