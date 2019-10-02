@@ -508,7 +508,7 @@
                     });
                 },
                 free_agent: function free_agent() {
-                    return (this.selected.product.name === "Adult Leagues" || this.selected.product.name === "Youth Leagues") && (this.selected.league && this.selected.league.name && this.selected.league.name.toLowerCase().indexOf("corporate") == (-1));
+                    return (this.selected.product.name === "Adult Leagues") && (this.selected.league && this.selected.league.name && this.selected.league.name.toLowerCase().indexOf("corporate") == (-1));
                 }
             },
             mounted: function mounted() {
