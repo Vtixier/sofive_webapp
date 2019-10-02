@@ -560,7 +560,8 @@
                                 let hourly_url = ""
                                 const vid = resp.body.find(h => (h.field.toLowerCase() === self.field.toLowerCase()))
                                 if (vid) {
-                                    hourly_url = vid.url
+                                    const videoID = vid.url.slice(vid.url.indexOf("/video") + 7, vid.url.length)
+                                    hourly_url = "https://www.dailymotion.com/embed/video/" + videoID + "?queue-enable=false&queue-autoplay-next=false&ui-start-screen-info=false"
                                 }
                                 self.rental_vid = hourly_url
                             })
