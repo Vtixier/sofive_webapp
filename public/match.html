@@ -218,8 +218,8 @@
                                             </figure>
                                         </div>
                                         <div v-else>
-                                            <figure style="margin: 0">
-                                                <iframe class="video" allow="autoplay" :src="hourly_url" frameborder="0" allowfullscreen></iframe>
+                                            <figure style="margin: 0" v-if="rental_vid">
+                                                <iframe class="video" allow="autoplay" :src="rental_vid" frameborder="0" allowfullscreen></iframe>
                                             </figure>
                                         </div>
                                     </div>
