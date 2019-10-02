@@ -557,14 +557,11 @@
 
                         this.$http.post('https://video.scoreplay.io/rental/get', d)
                             .then(resp => {
-                                console.log(resp.body)
-                                console.log(self.field)
                                 let hourly_url = ""
-                                const vid = resp.body.find(h => (h.field === self.field))
+                                const vid = resp.body.find(h => (h.field.toLowerCase() === self.field.toLowerCase()))
                                 if (vid) {
                                     hourly_url = vid.url
                                 }
-                                console.log(vid, hourly_url)
                                 self.rental_vid = hourly_url
                             })
                             .catch(console.error)
