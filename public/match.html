@@ -610,7 +610,7 @@
 
                         var url = "https://app.scoreplay.io/match?id=" + this.matchID; //29845" // TODO: replace with this.matchID
 
-                        this.$http.get(url).then(function(resp) {
+                        return this.$http.get(url).then(function(resp) {
                             _this4.referee = resp.body.ref;
                             _this4.field = resp.body.details.fieldName
 
