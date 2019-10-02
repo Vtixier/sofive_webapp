@@ -392,6 +392,14 @@
         <script type="text/javascript" src="js/standings.js"></script>
 
         <script type="text/javascript">
+            const facilityMap = {
+                "1": "Meadowlands",
+                "2": "ElkinsPark",
+                "3": "Brooklyn",
+                "4": "Rockville",
+                "5": "Columbia",
+            }
+
             "use strict";
 
             var app = new Vue({
@@ -420,14 +428,23 @@
                     video_id: 0,
                     video_share_url: "",
                     video_roster: [],
-                    selected_scorer: "0"
+                    selected_scorer: "0",
+                    center_str = "",
+                    rental_vid: null
                 },
                 mounted: function mounted() {
+
+                    var center = this.getCenterCookie();
+                    if (center) {
+                        this.center_str = facilityMap[center];
+                    }
+
                     var params = this.findGetParameter();
                     this.matchID = params.id;
                     this.getDashMatch()
                         .then(function() {
                             this.getScoreplayVideos();
+                            this.getHourlyVideos();
                         })
                 },
                 watch: {
@@ -490,16 +507,18 @@
                             }
 
                             let clips = []
-                            if (v.clips.length > 0) {
-                                clips = v.clips.map(function(c) {
-                                    c['url'] = "https://www.dailymotion.com/embed/video/" + c.url.replace("https://www.dailymotion.com/video/", "") + "?autoplay=1&queue-enable=false&queue-autoplay-next=false&ui-start-screen-info=false"
-                                    return c;
-                                })
-                            } else {
-                                const event_num = _this.match.home.score+_this.match.away.score
-                                for (let i=0; i<event_num; i++) {
-                                    const url = "https://www.dailymotion.com/embed/video/" + v.recording.url.replace("https://www.dailymotion.com/video/", "") + "?autoplay=1&queue-enable=false&queue-autoplay-next=false&ui-start-screen-info=false&start="+parseInt(i*20+4).toString()
-                                    clips.push({url}) // +4 to handle intro
+                            if (v.clips) {
+                                if (v.clips.length > 0) {
+                                    clips = v.clips.map(function(c) {
+                                        c['url'] = "https://www.dailymotion.com/embed/video/" + c.url.replace("https://www.dailymotion.com/video/", "") + "?autoplay=1&queue-enable=false&queue-autoplay-next=false&ui-start-screen-info=false"
+                                        return c;
+                                    })
+                                } else {
+                                    const event_num = _this.match.home.score+_this.match.away.score
+                                    for (let i=0; i<event_num; i++) {
+                                        const url = "https://www.dailymotion.com/embed/video/" + v.recording.url.replace("https://www.dailymotion.com/video/", "") + "?autoplay=1&queue-enable=false&queue-autoplay-next=false&ui-start-screen-info=false&start="+parseInt(i*20+4).toString()
+                                        clips.push({url}) // +4 to handle intro
+                                    }
                                 }
                             }
 
@@ -512,6 +531,25 @@
                         }).catch(function(err) {
                             console.log("getScoreplayVideos", err);
                         });
+                    },
+                    getHourlyVideos: function getScoreplayVideos() {
+                        const parsed_date = moment(this.match.start, "YYYY-MM-DD - h:mma"),
+                        match_date = parsed_date.format("YYYY-MM-DD"),
+                        match_time = parsed_date.format("HH");
+
+                        const d = {
+                            center: this.center_str,
+                            first_date: match_date,
+                            first_hour: match_time,
+                            second_date: match_date,
+                            second_hour: match_time
+                        }
+
+                        this.$http.post('https://video.scoreplay.io/rental/get', d)
+                        .then(resp => {
+                            console.log(resp)
+                        })
+                        .catch(console.error)
                     },
                     getDashMatch: function getDashMatch() {
                         var _this2 = this;
@@ -687,6 +725,22 @@
                     },
                     gotoLeague: function gotoLeague(league_id) {
                         window.location = "league.html?id=" + league_id;
+                    },
+                    getCenterCookie: function getCenterCookie() {
+                        var nameEQ = "center=";
+                        var ca = document.cookie.split(';');
+
+                        for (var i = 0; i < ca.length; i++) {
+                            var c = ca[i];
+
+                            while (c.charAt(0) == ' ') {
+                                c = c.substring(1, c.length);
+                            }
+
+                            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+                        }
+
+                        return null;
                     }
                 }
             });
