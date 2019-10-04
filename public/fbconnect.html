@@ -110,7 +110,7 @@
                             </div>
                             <div class="col-sm-6 text-center">
                                 <div>
-                                    <h1>Setup</h1>
+                                    <h1>Setup <div v-if="messenger_connected">(3/3)</div><div v-else>({{i.toString()}}/3)</div></h1>
                                     <hr>
                                     <h3 style="font-weight: normal; padding-left: 5%; padding-right: 5%" v-if="messenger_connected">Now choose the team you with to receive notifications for.</h3>
                                     <h3 style="font-weight: normal; padding-left: 5%; padding-right: 5%" v-else>{{instructions}}</h3>
@@ -293,7 +293,8 @@
                     team: 0
                 },
                 team_details: "",
-                instructions: "Please click the 'Sign In' buttom below to connect your facebook account."
+                instructions: "Please click the 'Log In' buttom below to connect your facebook account.",
+                i: 1
             },
             mounted: function() {
 
@@ -405,6 +406,7 @@
                         document.querySelector('.fb-send-to-messenger').style.display = "block"
                         this.connectUser();
                         this.instructions = "Now click on 'Subscribe in messenger' below to connect the Chabot."
+                        this.i = 2
                     }
                 },
                 checkScoreplayUser: function() {
