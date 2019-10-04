@@ -305,6 +305,8 @@
 
                 this.getProducts();
 
+                document.querySelector('.fb-send-to-messenger').style.display = "none"
+
                 window.fbAsyncInit = function() {
                     self.ref = makeid(20)
                     FB.init({
@@ -316,7 +318,6 @@
                     FB.Event.subscribe('send_to_messenger', function(e) {
                         if (e.event === "opt_in") {
                             self.loading.messenger = true
-                            self.instructions = "Now choose the team you with to receive notifications for."
                             setTimeout(self.addUserDetails, 5000)
                         }
                     });
@@ -383,6 +384,7 @@
                         self = this;
                     this.$http.post("https://app.scoreplay.io/fb/user", d)
                         .then(function(resp) {
+                            self.instructions = "Now choose the team you with to receive notifications for."
                             self.messenger_connected = true
                             self.loading.messenger = false
                             self.$nextTick(function() {
@@ -400,6 +402,7 @@
                 statusChangeCallback: function(response) {
                     console.log(response);
                     if (response.status === 'connected') {
+                        document.querySelector('.fb-send-to-messenger').style.display = "block"
                         this.connectUser();
                         this.instructions = "Now click on 'Subscribe in messenger' below to connect the Chabot."
                     }
