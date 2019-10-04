@@ -286,7 +286,6 @@
                         version: 'v4.0'
                     });
                     FB.Event.subscribe('send_to_messenger', function(e) {
-                        console.log(e)
                         if (e.event === "opt_in") {
                             self.instructions = "All good! Now check that you received your first messenger message !"
                             self.show_check = true
