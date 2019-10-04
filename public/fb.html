@@ -101,9 +101,14 @@
                                     <hr>
                                     <h3 style="font-weight: normal; padding-left: 5%; padding-right: 5%">{{instructions}}</h3>
                                 </div>
-                                <div class="messenger_plugin" style="display: none; padding-top: 50px; padding-left: 18%">
-                                    <div class="fb-send-to-messenger" messenger_app_id="402678167007969" page_id="254076015141321" data-ref="test_ref" color="white" cta_text="SUBSCRIBE_IN_MESSENGER" size="large">
+                                <div class="messenger_plugin" style="display: none; padding-top: 50px;">
+                                    <div style="padding-left: 18%">
+                                        <div class="fb-send-to-messenger" messenger_app_id="402678167007969" page_id="254076015141321" data-ref="test_ref" color="white" cta_text="SUBSCRIBE_IN_MESSENGER" size="large">
+                                        </div>
                                     </div>
+                                    <p class="text-center" v-if="show_check">
+                                        <img src="https://www.stickpng.com/assets/images/5aa78e207603fc558cffbf19.png" style="height: 20vh">
+                                    </p>
                                 </div>
                                 <div class="notification_settings">
                                     <div class="text-center">
@@ -250,7 +255,8 @@
                     team: 0
                 },
                 i: 1,
-                instructions: "Start by selecting the team you wish to follow."
+                instructions: "Start by selecting the team you wish to follow.",
+                show_check: false
             },
             mounted: function() {
 
@@ -274,6 +280,7 @@
                         console.log(e)
                         if (e.event === "opt_in") {
                             self.instructions = "All good! Now check that you received your first messenger message !"
+                            self.show_check = true
                             document.querySelector('.messenger_plugin').style.display = "none"
                         }
                     });
