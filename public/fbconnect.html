@@ -95,19 +95,6 @@
                 <div class="ibox ">
                     <div class="ibox-content">
                         <div class="row">
-                            <div class="col-sm-6 text-center b-r">
-                                <div>
-                                    <h1>Our chatbot</h1>
-                                    <hr>
-                                    <h3 style="font-weight: normal; padding-left: 5%; padding-right: 5%">Sign in with facebook to receive match results, video highlights and league standings right in your messenger inbox !</h3>
-                                </div>
-                                <p class="text-center hide-if-mob">
-                                    <img src="/img/fbpage.png" style="height: 50vh">
-                                </p>
-                                <p class="text-center hide-if-not-mob">
-                                    <img src="/img/chatbot_mobile.png" style="height: 50vh">
-                                </p>
-                            </div>
                             <div class="col-sm-6 text-center">
                                 <div>
                                     <h1>Setup <span v-if="messenger_connected">(3/3)</span><span v-else>({{i.toString()}}/3)</span></h1>
@@ -220,6 +207,19 @@
                                         <fb:login-button data-size="large" data-auto-logout-link="true" scope="email"></fb:login-button>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="col-sm-6 text-center b-r">
+                                <div>
+                                    <h1>Our chatbot</h1>
+                                    <hr>
+                                    <h3 style="font-weight: normal; padding-left: 5%; padding-right: 5%">Sign in with facebook to receive match results, video highlights and league standings right in your messenger inbox !</h3>
+                                </div>
+                                <p class="text-center hide-if-mob">
+                                    <img src="/img/fbpage.png" style="height: 50vh">
+                                </p>
+                                <p class="text-center hide-if-not-mob">
+                                    <img src="/img/chatbot_mobile.png" style="height: 50vh">
+                                </p>
                             </div>
                         </div>
                     </div>
