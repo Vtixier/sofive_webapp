@@ -106,10 +106,10 @@
                                         <div class="fb-send-to-messenger" messenger_app_id="402678167007969" page_id="254076015141321" data-ref="test_ref" color="white" cta_text="SUBSCRIBE_IN_MESSENGER" size="large">
                                         </div>
                                     </div>
-                                    <p class="text-center" v-if="show_check">
-                                        <img src="https://www.stickpng.com/assets/images/5aa78e207603fc558cffbf19.png" style="height: 20vh">
-                                    </p>
                                 </div>
+                                <p class="text-center" v-if="show_check">
+                                    <img src="https://www.stickpng.com/assets/images/5aa78e207603fc558cffbf19.png" style="height: 20vh">
+                                </p>
                                 <div class="notification_settings">
                                     <div class="text-center">
                                         <br />
@@ -290,6 +290,7 @@
                         if (e.event === "opt_in") {
                             self.instructions = "All good! Now check that you received your first messenger message !"
                             self.show_check = true
+                            self.setFbCookie()
                             document.querySelector('.messenger_plugin').style.display = "none"
                         }
                     });
