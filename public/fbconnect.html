@@ -415,6 +415,7 @@
                         .then(function(resp) {
                             if (resp.body && (resp.bodyText !== "null")) {
                                 self.messenger_connected = true
+                                self.loading.messenger = false
                                 self.team_details = resp.body.details
                                 self.$nextTick(function() {
                                     $('.i-checks').iCheck({
