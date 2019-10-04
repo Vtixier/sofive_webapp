@@ -260,9 +260,18 @@
             },
             mounted: function() {
 
-                var center = this.getCenterCookie();
+                var center = this.getCookie("center");
                 if (center) {
                     this.selected.facility_id = center
+                }
+
+                var fb_cookie = this.getCookie("fb")
+                if (fb_cookie) {
+                    this.i = 2
+                    this.show_check = true
+                    this.instructions = "You've already configured the chatbot, you're all good"
+                    document.querySelector('.messenger_plugin').style.display = "none"
+                    document.querySelector('.notification_settings').style.display = "none"
                 }
 
                 const self = this;
@@ -428,22 +437,22 @@
                             console.log(err.body.errors);
                         });
                 },
-                getCenterCookie: function getCenterCookie() {
-                    var nameEQ = "center=";
-                    var ca = document.cookie.split(';');
-
-                    for (var i = 0; i < ca.length; i++) {
-                        var c = ca[i];
-
-                        while (c.charAt(0) == ' ') {
-                            c = c.substring(1, c.length);
-                        }
-
-                        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
-                    }
-
-                    return null;
+                setFbCookie: function() {
+                    var date = new Date();
+                    date.setTime(date.getTime() + (9999*24*60*60*1000));
+                    let expires = "; expires=" + date.toUTCString();
+                    document.cookie = "fb=1"+ expires + "; path=/";
                 },
+                getCookie: function(name) {
+                    var nameEQ = name + "=";
+                    var ca = document.cookie.split(';');
+                    for(var i=0;i < ca.length;i++) {
+                        var c = ca[i];
+                        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+                        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+                    }
+                    return null;
+                }
             }
         })
     </script>
