@@ -112,7 +112,8 @@
                                 <div>
                                     <h1>Setup</h1>
                                     <hr>
-                                    <h3 style="font-weight: normal; padding-left: 5%; padding-right: 5%">{{instructions}}</h3>
+                                    <h3 style="font-weight: normal; padding-left: 5%; padding-right: 5%" v-if="messenger_connected">Now choose the team you with to receive notifications for.</h3>
+                                    <h3 style="font-weight: normal; padding-left: 5%; padding-right: 5%" v-else>{{instructions}}</h3>
                                 </div>
                                 <div class="notification_settings" style="display: none">
                                     <div class="text-center">
@@ -292,7 +293,7 @@
                     team: 0
                 },
                 team_details: "",
-                instructions: "Now choose the team you with to receive notifications for."
+                instructions: "Please click the 'Sign In' buttom below to connect your facebook account."
             },
             mounted: function() {
 
@@ -384,7 +385,6 @@
                         self = this;
                     this.$http.post("https://app.scoreplay.io/fb/user", d)
                         .then(function(resp) {
-                            self.instructions = "Now choose the team you with to receive notifications for."
                             self.messenger_connected = true
                             self.loading.messenger = false
                             self.$nextTick(function() {
@@ -405,8 +405,6 @@
                         document.querySelector('.fb-send-to-messenger').style.display = "block"
                         this.connectUser();
                         this.instructions = "Now click on 'Subscribe in messenger' below to connect the Chabot."
-                    } else {
-                        this.instructions = "Please click the 'Sign In' buttom below to connect your facebook account."
                     }
                 },
                 checkScoreplayUser: function() {
