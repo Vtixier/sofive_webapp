@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+
+    <title>Sofive Soccer Center</title>
+
+    <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=976102449200043&ev=PageView&noscript=1" /></noscript>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-56051013-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-56051013-1');
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale = 1, minimum-scale = 1, maximum-scale = 1, user-scalable = no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link rel="apple-touch-icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" />
+    <meta name="apple-mobile-web-app-title" content="Sofive">
+    <style type="text/css">
+        body {
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+        }
+    </style>
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="css/animate.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-32x32.png" sizes="32x32" />
+    <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" sizes="192x192" />
+    <link href="css/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="css/plugins/select2/select2.min.css" rel="stylesheet">
+    <link href="css/plugins/toastr/toastr.min.css" rel="stylesheet">
+
+    <style type="text/css">
+        @media only screen and (max-width: 768px) {
+            .hide-if-mob {
+                display: none;
+            }
+
+            .hide-if-not-mob {
+                display: block
+            }
+        }
+
+        @media only screen and (min-width: 768px) {
+            .hide-if-mob {
+                display: block;
+            }
+
+            .hide-if-not-mob {
+                display: none
+            }
+        }
+    </style>
+
+</head>
+
+<body class="fixed-sidebar">
+
+    <div id="wrapper">
+
+        <div>
+            <sofive-left-menu />
+        </div>
+
+        <div id="page-wrapper" class="gray-bg">
+
+            <div>
+                <sofive-header />
+            </div>
+
+
+            <div class="row wrapper border-bottom white-bg page-heading">
+                <div class="col-sm-4">
+                    <h2>Chatbot settings</h2>
+                </div>
+            </div>
+
+            <div class="wrapper wrapper-content animated fadeInRight" style="padding-bottom: 5px">
+
+                <br><br><br>
+
+                <div class="ibox ">
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-sm-6 text-center">
+                                <div>
+                                    <h1>Setup ({{i}}/2)</h1>
+                                    <hr>
+                                    <h3 style="font-weight: normal; padding-left: 5%; padding-right: 5%">{{instructions}}</h3>
+                                </div>
+                                <div class="messenger_plugin" style="display: none; padding-top: 50px; padding-left: 18%">
+                                    <div class="fb-send-to-messenger" messenger_app_id="402678167007969" page_id="254076015141321" data-ref="test_ref" color="white" cta_text="SUBSCRIBE_IN_MESSENGER" size="large">
+                                    </div>
+                                </div>
+                                <div class="notification_settings">
+                                    <div class="text-center">
+                                        <br />
+                                        <div class="row" style="margin: 0">
+                                            <div class="col-sm-12 text-center">
+                                                <p>Choose team settings :</p>
+                                                <div v-if="loading.product">
+                                                    <div>
+                                                        <div class="sk-spinner sk-spinner-wave">
+                                                            <div class="sk-rect1"></div>
+                                                            <div class="sk-rect2"></div>
+                                                            <div class="sk-rect3"></div>
+                                                            <div class="sk-rect4"></div>
+                                                            <div class="sk-rect5"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <select class="select_product form-control" style="width: 60%">
+                                                    <option></option>
+                                                    <option v-for="product in products" :value="JSON.stringify(product)">{{product.name}}</option>
+                                                </select>
+                                            </div>
+                                        </div><br />
+                                        <div class="row" style="margin: 0">
+                                            <div class="col-sm-12 text-center">
+                                                <div v-if="loading.league">
+                                                    <div>
+                                                        <div class="sk-spinner sk-spinner-wave">
+                                                            <div class="sk-rect1"></div>
+                                                            <div class="sk-rect2"></div>
+                                                            <div class="sk-rect3"></div>
+                                                            <div class="sk-rect4"></div>
+                                                            <div class="sk-rect5"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <select class="select_league form-control" style="width: 60%">
+                                                    <option></option>
+                                                    <option v-for="league in leagues" :value="JSON.stringify(league)">{{league.name}}</option>
+                                                </select>
+                                            </div>
+                                        </div><br />
+                                        <div class="row" style="margin: 0">
+                                            <div class="col-sm-12 text-center">
+                                                <div v-if="loading.team">
+                                                    <div>
+                                                        <div class="sk-spinner sk-spinner-wave">
+                                                            <div class="sk-rect1"></div>
+                                                            <div class="sk-rect2"></div>
+                                                            <div class="sk-rect3"></div>
+                                                            <div class="sk-rect4"></div>
+                                                            <div class="sk-rect5"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <select class="select_team form-control" style="width: 60%">
+                                                    <option></option>
+                                                    <option v-for="team in teams" :value="JSON.stringify(team)">{{team.name}}</option>
+                                                </select>
+                                            </div>
+                                        </div><br />
+                                        <div class="row" style="margin: 0">
+                                            <div class="col-sm-12 text-center">
+                                                <label><input type="checkbox" checked class="i-checks"> Receive special offers </label>
+                                            </div>
+                                        </div><br />
+                                        <div class="row">
+                                            <div class="col s12 text-center">
+                                                <button class="btn btn-large btn-primary text-center" v-on:click="next"><strong>Next</strong>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div><br />
+                            </div>
+                            <div class="col-sm-6 text-center b-r">
+                                <div>
+                                    <h1>Our chatbot</h1>
+                                    <hr>
+                                    <h3 style="font-weight: normal; padding-left: 5%; padding-right: 5%">Sign in with facebook to receive match results, video highlights and league standings right in your messenger inbox !</h3>
+                                </div>
+                                <p class="text-center hide-if-mob">
+                                    <img src="/img/fbpage.png" style="height: 50vh">
+                                </p>
+                                <p class="text-center hide-if-not-mob">
+                                    <img src="/img/chatbot_mobile.png" style="height: 50vh">
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div>
+                <sofive-footer />
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Mainly scripts -->
+    <script src="js/jquery-3.1.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="js/plugins/iCheck/icheck.min.js"></script>
+    <script src="js/plugins/select2/select2.full.min.js"></script>
+
+    <!-- Custom and plugin javascript -->
+    <script src="js/inspinia.js"></script>
+
+    <script src="js/vue.js"></script>
+
+    <script type="text/javascript" src="js/vue-resource.js"></script>
+    <script type="text/javascript" src="js/moment.js"></script>
+    <script src="js/plugins/toastr/toastr.min.js"></script>
+
+    <script type="text/javascript" src="js/navigation.js"></script>
+    <script type="text/javascript" src="js/header.js"></script>
+    <script type="text/javascript" src="js/footer.js"></script>
+
+    <script type="text/javascript">
+
+        var app = new Vue({
+            el: '#wrapper',
+            data: {
+                products: [],
+                leagues: [],
+                teams: [],
+                loading: {
+                    products: false,
+                    league: false,
+                    team: false,
+                    messenger: false
+                },
+                selected: {
+                    facility_id: "1",
+                    product: {},
+                    league: 0,
+                    team: 0
+                },
+                i: 1,
+                instructions: "Start by selecting the team you wish to follow."
+            },
+            mounted: function() {
+
+                var center = this.getCenterCookie();
+                if (center) {
+                    this.selected.facility_id = center
+                }
+
+                const self = this;
+
+                this.getProducts();
+
+                window.fbAsyncInit = function() {
+                    FB.init({
+                        appId: '402678167007969',
+                        autoLogAppEvents: true,
+                        xfbml: true,
+                        version: 'v4.0'
+                    });
+                    FB.Event.subscribe('send_to_messenger', function(e) {
+                        console.log(e)
+                        if (e.event === "opt_in") {
+                            self.instructions = "All good! Now check that you received your first messenger message !"
+                            document.querySelector('.messenger_plugin').style.display = "none"
+                        }
+                    });
+                };
+
+                (function(d, s, id) { // Load the SDK asynchronously
+                    var js, fjs = d.getElementsByTagName(s)[0];
+                    if (d.getElementById(id)) return;
+                    js = d.createElement(s);
+                    js.id = id;
+                    js.src = "https://connect.facebook.net/en_US/sdk.js";
+                    fjs.parentNode.insertBefore(js, fjs);
+                }(document, 'script', 'facebook-jssdk'));
+
+                $(".select_product").select2({
+                    placeholder: "Select program..."
+                });
+                $(".select_league").select2({
+                    placeholder: "Select league..."
+                });
+                $(".select_team").select2({
+                    placeholder: "Select team..."
+                });
+                $('.select_product').on('select2:select', function(e) {
+                    var doc = JSON.parse(e.target.value);
+                    self.selected.product = doc;
+                    self.getSeasons();
+                });
+                $('.select_league').on('select2:select', function(e) {
+                    var doc = JSON.parse(e.target.value);
+                    self.selected.league = doc;
+                    self.getTeams();
+                });
+                $('.select_team').on('select2:select', function(e) {
+                    var doc = JSON.parse(e.target.value);
+                    self.selected.team = doc;
+                });
+
+                $('.i-checks').iCheck({
+                    checkboxClass: 'icheckbox_square-green',
+                    radioClass: 'iradio_square-green'
+                });
+
+            },
+            methods: {
+                getProducts: function getProducts() {
+                    const self = this;
+                    this.products = [];
+                    this.loading.product = true;
+                    this.$http.get("http://localhost:8080/program/").then(function(resp) {
+                        self.products = resp.body.filter(function(p) {
+                            return p.name !== "Youth Classes" && p.name !== "Youth Tournament";
+                        });
+                        self.loading.product = false;
+                    }).catch(function(err) {
+                        console.log(err.body.errors);
+                    });
+                },
+                getSeasons: function getSeasons(facility_id) {
+                    const self = this;
+                    var body = {
+                        "facility_id": this.selected.facility_id,
+                        "program_id": this.selected.product.id,
+                        "date": moment().subtract(14, 'd').format("YYYY-MM-DD")
+                    };
+                    var url = "http://localhost:8080/program/seasons";
+                    this.$http.post(url, body).then(function(resp) {
+                        var p = [];
+                        resp.body.forEach(function(s) {
+                            p.push(self.getLeagues(s.id));
+                        });
+                        self.loading.league = true;
+                        Promise.all(p).then(function(leagues) {
+                            self.loading.league = false;
+                            self.leagues = self.flatten(leagues);
+                        });
+                    }).catch(function(err) {
+                        console.log(err);
+                    });
+                },
+                getLeagues: function getLeagues(season_id) {
+                    const self = this;
+                    this.loading.league = true;
+                    this.leagues = [];
+                    var url = "http://localhost:8080/facility/" + this.selected.facility_id + "/" + season_id + "/leagues";
+                    return new Promise(function(yes, no) {
+                        self.$http.get(url).then(function(resp) {
+                            return yes(resp.body);
+                        }).catch(no);
+                    });
+                },
+                getTeams: function getProducts() {
+                    const self = this;
+                    this.teams = [];
+                    this.loading.team = true;
+                    this.$http.get("http://localhost:8080/team/league/" + this.selected.league.id.toString())
+                        .then(function(resp) {
+                            self.teams = resp.body
+                            self.loading.team = false;
+                        }).catch(function(err) {
+                            console.log(err.body.errors);
+                        });
+                },
+                flatten: function flatten(arr) {
+                    var self = this;
+                    return arr.reduce(function(flat, toFlatten) {
+                        return flat.concat(Array.isArray(toFlatten) ? self.flatten(toFlatten) : toFlatten);
+                    }, []);
+                },
+                next: function next() {
+                    const center_id = this.selected.facility_id,
+                    program = this.selected.product.name,
+                    league_id = this.selected.league.id,
+                    team_id = this.selected.team.id,
+                    details = this.selected.league.name + " - " + this.selected.team.name,
+                    marketing_notif = document.querySelector('.i-checks').checked ? "1" : "0";
+
+                    const ref = center_id+"_"+program+"_"+league_id+"_"+team_id+"_"+marketing_notif
+
+                    this.i = 2
+                    this.instructions = "Now connect to the chatbot to receive videos, results and standings in real time !"
+
+                    document.querySelector(".fb-send-to-messenger").setAttribute("data-ref", ref.replace(/ /g, '+'))
+
+                    FB.XFBML.parse()
+
+                    document.querySelector('.messenger_plugin').style.display = "block"
+                    document.querySelector('.notification_settings').style.display = "none"
+                },
+                save: function save() {
+                    const d = {
+                            league_id: this.selected.league.id,
+                            team_id: this.selected.team.id,
+                            details: this.selected.league.name + " - " + this.selected.team.name,
+                            marketing_notif: document.querySelector('.i-checks').checked
+                        },
+                        self = this;
+                    this.$http.post("https://app.scoreplay.io/fb/user/preference", d)
+                        .then(function(resp) {
+                            self.checkScoreplayUser()
+                            toastr.info('Settings saved !', {
+                                progressBar: true
+                            });
+                        }).catch(function(err) {
+                            console.log(err.body.errors);
+                        });
+                },
+                getCenterCookie: function getCenterCookie() {
+                    var nameEQ = "center=";
+                    var ca = document.cookie.split(';');
+
+                    for (var i = 0; i < ca.length; i++) {
+                        var c = ca[i];
+
+                        while (c.charAt(0) == ' ') {
+                            c = c.substring(1, c.length);
+                        }
+
+                        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+                    }
+
+                    return null;
+                },
+            }
+        })
+    </script>
+
+</body>
+
+</html>
