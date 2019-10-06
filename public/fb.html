@@ -135,6 +135,25 @@
                                         </div><br />
                                         <div class="row" style="margin: 0">
                                             <div class="col-sm-12 text-center">
+                                                <div v-if="loading.season">
+                                                    <div>
+                                                        <div class="sk-spinner sk-spinner-wave">
+                                                            <div class="sk-rect1"></div>
+                                                            <div class="sk-rect2"></div>
+                                                            <div class="sk-rect3"></div>
+                                                            <div class="sk-rect4"></div>
+                                                            <div class="sk-rect5"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <select class="select_season form-control" style="width: 60%">
+                                                    <option></option>
+                                                    <option v-for="season in seasons" :value="JSON.stringify(season)">{{season.display_name}}</option>
+                                                </select>
+                                            </div>
+                                        </div><br />
+                                        <div class="row" style="margin: 0">
+                                            <div class="col-sm-12 text-center">
                                                 <div v-if="loading.league">
                                                     <div>
                                                         <div class="sk-spinner sk-spinner-wave">
@@ -235,15 +254,16 @@
     <script type="text/javascript" src="js/footer.js"></script>
 
     <script type="text/javascript">
-
         var app = new Vue({
             el: '#wrapper',
             data: {
                 products: [],
+                seasons: [],
                 leagues: [],
                 teams: [],
                 loading: {
                     products: false,
+                    season: false,
                     league: false,
                     team: false,
                     messenger: false
@@ -252,6 +272,7 @@
                     facility_id: "1",
                     product: {},
                     league: 0,
+                    season_id: 0,
                     team: 0
                 },
                 i: 1,
@@ -307,6 +328,9 @@
                 $(".select_product").select2({
                     placeholder: "Select program..."
                 });
+                $(".select_season").select2({
+                    placeholder: "Select season..."
+                });
                 $(".select_league").select2({
                     placeholder: "Select league..."
                 });
@@ -317,6 +341,12 @@
                     var doc = JSON.parse(e.target.value);
                     self.selected.product = doc;
                     self.getSeasons();
+                });
+                $('.select_season').on('select2:select', function(e) {
+                    var doc = JSON.parse(e.target.value),
+                        facility_id = doc.facility_id,
+                        season_id = doc.id;
+                    self.selected.season_id = season_id;
                 });
                 $('.select_league').on('select2:select', function(e) {
                     var doc = JSON.parse(e.target.value);
@@ -334,6 +364,18 @@
                 });
 
             },
+            computed: {
+                filtered_leagues: function filtered_leagues() {
+                    if (this.selected.season_id === 0) {
+                        return this.leagues;
+                    }
+
+                    var season_id = this.selected.season_id.toString();
+                    return this.leagues.filter(function(l) {
+                        return l.season_id === season_id;
+                    });
+                }
+            },
             methods: {
                 getProducts: function getProducts() {
                     const self = this;
@@ -350,6 +392,7 @@
                 },
                 getSeasons: function getSeasons(facility_id) {
                     const self = this;
+                    this.loading.season = true;
                     var body = {
                         "facility_id": this.selected.facility_id,
                         "program_id": this.selected.product.id,
@@ -357,6 +400,19 @@
                     };
                     var url = "http://localhost:8080/program/seasons";
                     this.$http.post(url, body).then(function(resp) {
+                        self.seasons = resp.body.map(function(s) {
+                            let display_name = s.name
+                            if (s.name.indexOf("-") !== (-1)) {
+                                if (s.name.indexOf("-") !== (-1)) {
+                                    display_name = s.name.split("-")[1].trim().split("(")[0]
+                                } else {
+                                    display_name = s.name.split("-")[1].trim()
+                                }
+                            }
+                            s.display_name = display_name
+                            return s
+                        });
+                        self.loading.season = false;
                         var p = [];
                         resp.body.forEach(function(s) {
                             p.push(self.getLeagues(s.id));
@@ -401,13 +457,13 @@
                 },
                 next: function next() {
                     const center_id = this.selected.facility_id,
-                    program = this.selected.product.name,
-                    league_id = this.selected.league.id,
-                    team_id = this.selected.team.id,
-                    details = this.selected.league.name + " - " + this.selected.team.name,
-                    marketing_notif = document.querySelector('.i-checks').checked ? "1" : "0";
+                        program = this.selected.product.name,
+                        league_id = this.selected.league.id,
+                        team_id = this.selected.team.id,
+                        details = this.selected.league.name + " - " + this.selected.team.name,
+                        marketing_notif = document.querySelector('.i-checks').checked ? "1" : "0";
 
-                    const ref = center_id+"_"+program+"_"+league_id+"_"+team_id+"_"+marketing_notif
+                    const ref = center_id + "_" + program + "_" + league_id + "_" + team_id + "_" + marketing_notif
 
                     this.i = 2
                     this.instructions = "Now connect to the chatbot to receive videos, results and standings in real time !"
@@ -439,17 +495,17 @@
                 },
                 setFbCookie: function() {
                     var date = new Date();
-                    date.setTime(date.getTime() + (9999*24*60*60*1000));
+                    date.setTime(date.getTime() + (9999 * 24 * 60 * 60 * 1000));
                     let expires = "; expires=" + date.toUTCString();
-                    document.cookie = "fb=1"+ expires + "; path=/";
+                    document.cookie = "fb=1" + expires + "; path=/";
                 },
                 getCookie: function(name) {
                     var nameEQ = name + "=";
                     var ca = document.cookie.split(';');
-                    for(var i=0;i < ca.length;i++) {
+                    for (var i = 0; i < ca.length; i++) {
                         var c = ca[i];
-                        while (c.charAt(0)==' ') c = c.substring(1,c.length);
-                        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+                        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
                     }
                     return null;
                 }
