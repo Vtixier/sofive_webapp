@@ -173,12 +173,12 @@
                                     <tr v-for="(player, index) in home_team.roster">
                                         <td class="text-center">{{player.name}}</td>
                                         <td>
-                                            <div  v-if="player.tracker_id">
+                                            <div v-if="player.tracker_id">
                                                 <input type="text" name="" v-model="player.tracker_id" disabled style="border: 0">
                                             </div>
                                             <div v-else>
                                                 <input type="text" name="" v-model="player.tracker_id">
-                                            </div> 
+                                            </div>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -196,12 +196,12 @@
                                     <tr v-for="(player, index) in away_team.roster">
                                         <td class="text-center">{{player.name}}</td>
                                         <td>
-                                            <div  v-if="player.tracker_id">
+                                            <div v-if="player.tracker_id">
                                                 <input type="text" name="" v-model="player.tracker_id" disabled style="border: 0">
                                             </div>
                                             <div v-else>
                                                 <input type="text" name="" v-model="player.tracker_id">
-                                            </div> 
+                                            </div>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -313,12 +313,12 @@
                 getTeamsDetails: function(home_id, away_id) {
                     const self = this;
                     Promise.all([this.getTeamDetails(home_id, true), this.getTeamDetails(away_id, false)])
-                    .then(() => {
-                        return self.getTrackers()
-                    })
-                    .then(() => {
-                        console.log(this.tracker_ids)
-                    })
+                        .then(() => {
+                            return self.getTrackers()
+                        })
+                        .then(() => {
+                            console.log(this.tracker_ids)
+                        })
                 },
                 getTeamDetails: function(id, home) {
                     const self = this,
@@ -339,7 +339,7 @@
                 getTrackers: function() {
                     console.log("Getting trackers")
                     const self = this;
-                    return this.$http.get("http://localhost:8080/tracker/get/"+this.matchID).then(resp => {
+                    return this.$http.get("http://localhost:8080/tracker/get/" + this.matchID).then(resp => {
                         resp.body.forEach(p => {
                             self.home_team.roster = self.home_team.roster.map(player => {
                                 if (player.id.toString() === p.player_id.toString()) {
@@ -365,9 +365,9 @@
                 save: function() {
                     console.log(this.matchID, this.home_team.roster, this.away_team.roster)
                     let tracks = []
-                    for (let i=0; i<this.home_team.roster.length; i++) {
+                    for (let i = 0; i < this.home_team.roster.length; i++) {
                         const tracker_id = this.home_team.roster[i].tracker_id,
-                        player_id = this.home_team.roster[i].id
+                            player_id = this.home_team.roster[i].id
                         if (tracker_id && tracker_id.trim() !== "") {
                             tracks.push({
                                 match_id: this.matchID,
@@ -376,9 +376,9 @@
                             })
                         }
                     }
-                    for (let i=0; i<this.away_team.roster.length; i++) {
+                    for (let i = 0; i < this.away_team.roster.length; i++) {
                         const tracker_id = this.away_team.roster[i].tracker_id,
-                        player_id = this.away_team.roster[i].id
+                            player_id = this.away_team.roster[i].id
                         if (tracker_id && tracker_id.trim() !== "") {
                             tracks.push({
                                 match_id: this.matchID,

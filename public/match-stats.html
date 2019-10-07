@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta property="og:type" content="Scoreplay" />
+    <meta property="og:title" content="Scoreplay title test" />
+    <meta property="og:description" content="Scoreplay description" />
+    <meta property="og:image" content="https://app.sofive.com/img/fb.png" />
+
+    <title>Sofive Soccer Center</title>
+    <script type="text/javascript">
+        (function(c, a) {
+            if (!a.__SV) {
+                var b = window;
+                try {
+                    var d, m, j, k = b.location,
+                        f = k.hash;
+                    d = function(a, b) {
+                        return (m = a.match(RegExp(b + "=([^&]*)"))) ? m[1] : null
+                    };
+                    f && d(f, "state") && (j = JSON.parse(decodeURIComponent(d(f, "state"))), "mpeditor" === j.action && (b.sessionStorage.setItem("_mpcehash", f), history.replaceState(j.desiredHash || "", c.title, k.pathname + k.search)))
+                } catch (n) {}
+                var l, h;
+                window.mixpanel = a;
+                a._i = [];
+                a.init = function(b, d, g) {
+                    function c(b, i) {
+                        var a = i.split(".");
+                        2 == a.length && (b = b[a[0]], i = a[1]);
+                        b[i] = function() {
+                            b.push([i].concat(Array.prototype.slice.call(arguments,
+                                0)))
+                        }
+                    }
+                    var e = a;
+                    "undefined" !== typeof g ? e = a[g] = [] : g = "mixpanel";
+                    e.people = e.people || [];
+                    e.toString = function(b) {
+                        var a = "mixpanel";
+                        "mixpanel" !== g && (a += "." + g);
+                        b || (a += " (stub)");
+                        return a
+                    };
+                    e.people.toString = function() {
+                        return e.toString(1) + ".people (stub)"
+                    };
+                    l = "disable time_event track track_pageview track_links track_forms track_with_groups add_group set_group remove_group register register_once alias unregister identify name_tag set_config reset opt_in_tracking opt_out_tracking has_opted_in_tracking has_opted_out_tracking clear_opt_in_out_tracking people.set people.set_once people.unset people.increment people.append people.union people.track_charge people.clear_charges people.delete_user people.remove".split(" ");
+                    for (h = 0; h < l.length; h++) c(e, l[h]);
+                    var f = "set set_once union unset remove delete".split(" ");
+                    e.get_group = function() {
+                        function a(c) {
+                            b[c] = function() {
+                                call2_args = arguments;
+                                call2 = [c].concat(Array.prototype.slice.call(call2_args, 0));
+                                e.push([d, call2])
+                            }
+                        }
+                        for (var b = {}, d = ["get_group"].concat(Array.prototype.slice.call(arguments, 0)), c = 0; c < f.length; c++) a(f[c]);
+                        return b
+                    };
+                    a._i.push([b, d, g])
+                };
+                a.__SV = 1.2;
+                b = c.createElement("script");
+                b.type = "text/javascript";
+                b.async = !0;
+                b.src = "undefined" !== typeof MIXPANEL_CUSTOM_LIB_URL ?
+                    MIXPANEL_CUSTOM_LIB_URL : "file:" === c.location.protocol && "//cdn4.mxpnl.com/libs/mixpanel-2-latest.min.js".match(/^\/\//) ? "https://cdn4.mxpnl.com/libs/mixpanel-2-latest.min.js" : "//cdn4.mxpnl.com/libs/mixpanel-2-latest.min.js";
+                d = c.getElementsByTagName("script")[0];
+                d.parentNode.insertBefore(b, d)
+            }
+        })(document, window.mixpanel || []);
+        mixpanel.init("226e138fe032af7e887dfb169abd8ba3");
+    </script>
+
+    <script>
+        ! function(f, b, e, v, n, t, s) {
+            if (f.fbq) return;
+            n = f.fbq = function() {
+                n.callMethod ?
+                    n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+            };
+            if (!f._fbq) f._fbq = n;
+            n.push = n;
+            n.loaded = !0;
+            n.version = '2.0';
+            n.queue = [];
+            t = b.createElement(e);
+            t.async = !0;
+            t.src = v;
+            s = b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t, s)
+        }(window, document, 'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '976102449200043');
+        fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=976102449200043&ev=PageView&noscript=1" /></noscript>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-56051013-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-56051013-1');
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale = 1, minimum-scale = 1, maximum-scale = 1, user-scalable = no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link rel="apple-touch-icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" />
+    <meta name="apple-mobile-web-app-title" content="Sofive">
+    <style type="text/css">
+        body {
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+        }
+    </style>
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="css/plugins/chartist/chartist.min.css" rel="stylesheet">
+    <link href="css/animate.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-32x32.png" sizes="32x32" />
+    <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" sizes="192x192" />
+
+    <style type="text/css">
+        .float-left {
+            float: left;
+            color: #295182
+        }
+
+        .float-right {
+            float: right;
+            color: #75acda
+        }
+
+        .home-color {
+            stroke: rgb(41, 81, 130);
+        }
+
+        .away-color {
+            stroke: rgb(117, 172, 218);
+        }
+    </style>
+
+</head>
+
+<body class="fixed-sidebar">
+
+    <div id="wrapper">
+
+        <div>
+            <sofive-left-menu />
+        </div>
+
+        <div id="page-wrapper" class="gray-bg">
+
+
+            <div>
+                <sofive-header />
+            </div>
+
+            <div class="modal inmodal" id="edit" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content animated bounceInRight">
+                        <div class="modal-body">
+                            <iframe class="video" allow="autoplay" :src="video_url" frameborder="0" allowfullscreen style="width: 100%"></iframe>
+                        </div>
+                        <div class="row" style="margin-bottom: 5%">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-4">
+                                <button type="button" class="btn btn-primary btn-sm btn-block" style="background-color: #4267b2; border-color: #4267b2" v-on:click="gotoFb"><i class="fa fa-facebook-square"></i> Share on Facebook</button>
+                            </div>
+                            <div class="col-md-2"></div>
+                            <div class="col-md-4">
+                                <select class="select_center form-control" v-model="selected_scorer">
+                                    <option value="0">Select scorer</option>
+                                    <option v-for="player in video_roster" :value="player.id">{{player.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="wrapper wrapper-content animated fadeInRight">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="ibox ">
+                            <div class="ibox-content text-center p-md" style="background-color: rgba(232, 232, 232, 0.43); border: 1px solid #e6eaec;">
+                                <div class="row">
+                                    <div class="col-sm">
+                                        <a style="font-size: 50px" class="text-center"><strong> <span style="color: #295182" v-on:click="gotoTeam(match.home.team_id)"> {{match.home.name}}</span> <span style="color: #4c4949" v-if="match.home.score>=0"> {{match.home.score}}</span> - <span style="color: #4c4949" v-if="match.away.score>=0">{{match.away.score}}</span> </span> <span style="color: #75acda" v-on:click="gotoTeam(match.away.team_id)"> {{match.away.name}} </strong></a>
+                                        <h3 style="margin: 8px; cursor: pointer;" v-on:click="gotoLeague(league.id)"><b>{{league.name}}</b></h3>
+                                        <h3>{{season.name}}</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row animated fadeInRight">
+                    <div class="col-lg-4">
+
+                        <div class="ibox">
+                            <div class="ibox-title">
+                                <h5>Live</h5>
+                                <div class="ibox-tools">
+                                    <a class="collapse-link">
+                                        <i class="fa fa-chevron-up"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="ibox-content" style="height: 65vh; padding: 0; overflow: scroll;">
+                                <h2 v-if="events.length === 0">No events recorded for this match</h2>
+                                <div class="scroll_content" v-if="events.length">
+
+                                    <div id="vertical-timeline" class="vertical-container dark-timeline center-orientation" style="margin-top: 0; margin-bottom: 0">
+
+                                        <div class="vertical-timeline-block" v-for="(event, i) in events" style="margin: 15px">
+                                            <div :class="{'vertical-timeline-content': true,
+                                            'float-right': (match.home.name !== event.side),
+                                            'float-left': (match.home.name === event.side)}" style="padding: 10px; width: 80%">
+                                                <h4>{{event.date}}.
+                                                    <b><i class="fa fa-soccer-ball-o" style="color: #03793E !important"></i>
+                                                        <span v-if="(scoreplay_videos.clips[i] && scoreplay_videos.clips[i].player_id)">{{(all_rosters.find(p => (p.id.toString() === scoreplay_videos.clips[i].player_id)) || {'name':''}).name}}
+                                                            <small><br />({{event.side}})</small>
+                                                        </span>
+                                                        <span v-else>{{event.side}}</span>
+                                                    </b> ({{event.subtitle}})</h4>
+                                                <a v-if="scoreplay_videos.clips[i]" v-on:click="select_vid(scoreplay_videos.clips[i], match.home.name === event.side)" target="blank" class="btn btn-sm btn-primary" style="float: right; color: white" data-toggle="modal" data-target="#edit">Video</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ibox">
+                            <div class="ibox-title">
+                                <h5>Rosters</h5>
+                                <div class="ibox-tools">
+                                    <a class="collapse-link">
+                                        <i class="fa fa-chevron-up"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="ibox-content">
+
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <table class="table table-hover margin bottom">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width: 1%" class="text-center">No.</th>
+                                                    <th>Players</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody v-if="home_team">
+                                                <tr v-for="(player, index) in home_team.roster">
+                                                    <td class="text-center">{{index+1}}</td>
+                                                    <td> {{player.name}}
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <table class="table table-hover margin bottom">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width: 1%" class="text-center">No.</th>
+                                                    <th>Player</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody v-if="away_team">
+                                                <tr v-for="(player, index) in away_team.roster">
+                                                    <td class="text-center">{{index+1}}</td>
+                                                    <td> {{player.name}}
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-8">
+
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="ibox">
+                                    <div class="ibox-title">
+                                        <h5>Match recap</h5>
+                                    </div>
+                                    <div class="ibox-content no-padding border-left-right">
+                                        <div class="row">
+                                            <div class="col-sm-12 col-md-7" style="text-align: center">
+                                                <div v-if="scoreplay_videos.recording.url">
+                                                    <iframe class="video" allow="autoplay" :src="scoreplay_videos.recording.url" frameborder="0" allowfullscreen></iframe>
+                                                </div>
+                                                <div v-else>
+                                                    <div v-if="videos.length">
+                                                        <figure v-for="video in videos" style="margin: 0">
+                                                            <iframe class="video" allow="autoplay" :src="video.embed" frameborder="0" allowfullscreen></iframe>
+                                                        </figure>
+                                                    </div>
+                                                    <div v-else>
+                                                        <figure style="margin: 0" v-if="rental_vid">
+                                                            <iframe class="video" allow="autoplay" :src="rental_vid" frameborder="0" allowfullscreen></iframe>
+                                                        </figure>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12 col-md-5" style="padding-top: 8%">
+                                                <div>
+                                                    <h4><strong>{{match.home.name}} <span v-if="match.home.score>=0">{{match.home.score}}</span> - <span v-if="match.away.score>=0">{{match.away.score}}</span> {{match.away.name}}</strong></h4>
+                                                    <p />
+                                                    <p><i class="fa fa-map-marker"></i> {{match.field}} <i>at</i> {{facility.name}}</p>
+                                                    <p><i class="fa fa-calendar"></i> {{match.start}}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-12 col-md-4">
+                                <div class="ibox ">
+                                    <div class="ibox-title">
+                                        <h5>Passes</h5>
+                                    </div>
+                                    <div class="ibox-content">
+                                        <div class="row" style="height: 100px">
+                                            <div id="ct-passes"></div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6" style="text-align: center;">316</div>
+                                            <div class="col-sm-6" style="text-align: center;">467</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-4">
+                                <div class="ibox ">
+                                    <div class="ibox-title">
+                                        <h5>Shots</h5>
+                                    </div>
+                                    <div class="ibox-content">
+                                        <div class="row" style="height: 100px">
+                                            <div id="ct-shots"></div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6" style="text-align: center;">13</div>
+                                            <div class="col-sm-6" style="text-align: center;">29</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-4">
+                                <div class="ibox ">
+                                    <div class="ibox-title">
+                                        <h5>Goals</h5>
+                                    </div>
+                                    <div class="ibox-content">
+                                        <div class="row" style="height: 100px">
+                                            <div id="ct-goals"></div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6" style="text-align: center;">8</div>
+                                            <div class="col-sm-6" style="text-align: center;">13</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="ibox ">
+                                    <div class="ibox-title">
+                                        <h5>Player scores</h5>
+                                    </div>
+                                    <div class="ibox-content">
+                                        <div>
+                                            <canvas id="radarChart"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <sofive-footer />
+            </div>
+
+        </div>
+
+        <div class="modal inmodal" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content animated bounceInRight">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <i class="fa fa-address-card-o modal-icon"></i>
+                        <h4 class="modal-title">Rate your match referee</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Rating:
+                                <!-- <b style="font-size: 15px">{{ref_rating}}/10</b> --></label><br />
+                            <button class="btn btn-warning btn-circle" type="button" v-for="i in ref_rating" style="margin-right: 5px">
+                                <i class="fa fa-star"></i>
+                            </button>
+                            <button class="btn btn-warning btn-circle btn-outline" type="button" v-for="i in (10-ref_rating)" style="margin-right: 5px">
+                                <i class="fa fa-star"></i>
+                            </button>
+                            <br /><br />
+                            <label>Comment (optional)</label>
+                            <input placeholder="Enter your comment..." class="form-control">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="fb-root"></div>
+        <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v4.0&appId=402678167007969"></script>
+
+        <!-- Mainly scripts -->
+        <script src="js/jquery-3.1.1.min.js"></script>
+        <script src="js/popper.min.js"></script>
+        <script src="js/bootstrap.js"></script>
+        <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
+        <script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+        <script src="js/plugins/chartJs/Chart.min.js"></script>
+        <script src="js/plugins/chartist/chartist.min.js"></script>
+
+        <!-- Custom and plugin javascript -->
+        <script src="js/inspinia.js"></script>
+
+        <script src="js/vue.js"></script>
+
+        <script type="text/javascript" src="js/vue-resource.js"></script>
+        <script type="text/javascript" src="js/moment.js"></script>
+
+        <script type="text/javascript" src="js/navigation.js"></script>
+        <script type="text/javascript" src="js/header.js"></script>
+        <script type="text/javascript" src="js/footer.js"></script>
+        <script type="text/javascript" src="js/standings.js"></script>
+
+        <script type="text/javascript">
+            const facilityMap = {
+                "1": "Meadowlands",
+                "2": "ElkinsPark",
+                "3": "Brooklyn",
+                "4": "Rockville",
+                "5": "Columbia",
+            }
+
+            "use strict";
+
+            var app = new Vue({
+                el: '#wrapper',
+                data: {
+                    match: {
+                        home: {},
+                        away: {}
+                    },
+                    facility: {},
+                    season: {},
+                    league: {},
+                    leaderboard: [],
+                    matchID: "",
+                    referee: "",
+                    field: "",
+                    events: [],
+                    videos: [],
+                    home_team: {},
+                    away_team: {},
+                    ref_rating: 0,
+                    scoreplay_videos: {
+                        clips: [],
+                        recording: {}
+                    },
+                    video_url: "",
+                    video_id: 0,
+                    video_share_url: "",
+                    video_roster: [],
+                    selected_scorer: "0",
+                    center_str: "",
+                    rental_vid: null
+                },
+                mounted: function mounted() {
+
+                    var center = this.getCenterCookie();
+                    if (center) {
+                        this.center_str = facilityMap[center];
+                    }
+
+                    var params = this.findGetParameter();
+                    this.matchID = params.id;
+                    this.buildAndRunChart()
+                    this.getDashMatch()
+                        .then(function() {
+                            this.getScoreplayVideos();
+                        })
+                },
+                watch: {
+                    selected_scorer: function(new_val, old_val) {
+                        console.log("Scorer change", old_val, new_val, this.video_id)
+                        this.$http.post("https://video.scoreplay.io/clip/scorer", {
+                            id: this.video_id,
+                            player_id: new_val.toString()
+                        })
+                    }
+                },
+                computed: {
+                    all_rosters: function() {
+                        return (this.home_team.roster || []).concat((this.away_team.roster || []))
+                    }
+                },
+                methods: {
+                    getFb: function getFB(video_id) {
+                        this.video_share_url = 'https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.dailymotion.com%2Fvideo%2F' + video_id + '&amp;src=sdkpreparse'
+                    },
+                    gotoFb: function gotoFb() {
+                        var win = window.open(this.video_share_url, '_blank');
+                        win.focus();
+                    },
+                    findGetParameter: function findGetParameter() {
+                        var queryDict = {};
+                        decodeURI(location.search).substr(1).split("&").forEach(function(item) {
+                            queryDict[item.split("=")[0]] = item.split("=")[1];
+                        });
+                        return queryDict;
+                    },
+                    select_vid: function select_vid(v, is_home) {
+                        console.log("Sel", v, is_home)
+                        this.video_url = v.url;
+                        this.video_id = v.id;
+                        let i = v.url.indexOf('video/') + 6,
+                            j = v.url.indexOf('?autoplay')
+                        this.getFb(v.url.slice(i, j))
+                        if (is_home) {
+                            this.video_roster = this.home_team.roster
+                        } else {
+                            this.video_roster = this.away_team.roster
+                        }
+                        if (v.player_id) {
+                            this.selected_scorer = v.player_id.toString()
+                        } else {
+                            this.selected_scorer = "0"
+                        }
+                    },
+                    getScoreplayVideos: function getScoreplayVideos() {
+                        var _this = this;
+
+                        var url = "https://video.scoreplay.io/match/" + this.matchID;
+                        this.$http.get(url).then(function(resp) {
+                            var v = resp.body;
+                            var rec_url = v.recording.url;
+
+                            if (rec_url !== "") {
+                                rec_url = "https://www.dailymotion.com/embed/video/" + v.recording.url.replace("https://www.dailymotion.com/video/", "") + "?queue-enable=false&queue-autoplay-next=false&ui-start-screen-info=false";
+                            }
+
+                            let clips = []
+                            if (v.clips) {
+                                if (v.clips.length > 0) {
+                                    clips = v.clips.map(function(c) {
+                                        c['url'] = "https://www.dailymotion.com/embed/video/" + c.url.replace("https://www.dailymotion.com/video/", "") + "?autoplay=1&queue-enable=false&queue-autoplay-next=false&ui-start-screen-info=false"
+                                        return c;
+                                    })
+                                } else {
+                                    const event_num = _this.match.home.score + _this.match.away.score
+                                    for (let i = 0; i < event_num; i++) {
+                                        const url = "https://www.dailymotion.com/embed/video/" + v.recording.url.replace("https://www.dailymotion.com/video/", "") + "?autoplay=1&queue-enable=false&queue-autoplay-next=false&ui-start-screen-info=false&start=" + parseInt(i * 20 + 4).toString()
+                                        clips.push({
+                                            url
+                                        }) // +4 to handle intro
+                                    }
+                                }
+                            }
+
+                            v['clips'] = clips
+
+                            v['recording']['url'] = rec_url
+
+                            _this.scoreplay_videos = v
+
+                        }).catch(function(err) {
+                            console.log("getScoreplayVideos", err);
+                        });
+                    },
+                    getHourlyVideos: function getScoreplayVideos() {
+                        const parsed_date = moment(this.match.start, "YYYY-MM-DD - h:mma"),
+                            match_date = parsed_date.format("YYYY-MM-DD"),
+                            match_time = parsed_date.format("HH");
+
+                        const d = {
+                                center: this.center_str,
+                                first_date: match_date,
+                                first_hour: match_time,
+                                second_date: match_date,
+                                second_hour: match_time
+                            },
+                            self = this;
+
+                        this.$http.post('https://video.scoreplay.io/rental/get', d)
+                            .then(resp => {
+                                let hourly_url = ""
+                                const vid = resp.body.find(h => (h.field.toLowerCase() === self.field.toLowerCase()))
+                                if (vid) {
+                                    const videoID = vid.url.slice(vid.url.indexOf("/video") + 7, vid.url.length)
+                                    hourly_url = "https://www.dailymotion.com/embed/video/" + videoID + "?queue-enable=false&queue-autoplay-next=false&ui-start-screen-info=false"
+                                }
+                                self.rental_vid = hourly_url
+                            })
+                            .catch(console.error)
+                    },
+                    getDashMatch: function getDashMatch() {
+                        var _this2 = this;
+
+                        if (this.matchID.indexOf("manual") !== (-1)) {
+                            return _this2.getManualMatchDetails();
+                        }
+
+                        var url = "http://localhost:8080/match/" + this.matchID;
+                        return this.$http.get(url).then(function(resp) {
+                            _this2.match = resp.body;
+                            _this2.match.start = moment(_this2.match.start, "YYYY-MM-DDTHH:mm:ss").format("YYYY-MM-DD - h:mma");
+
+                            _this2.getTeamsDetails(_this2.match.home.team_id, _this2.match.away.team_id);
+
+                            _this2.getLeagueDetails(_this2.match.league_id);
+
+                            _this2.getResults(_this2.match.league_id);
+
+                            _this2.getMatchDetails()
+                                .then(() => {
+                                    _this2.getHourlyVideos()
+                                })
+
+                        }).catch(function(err) {
+                            console.log("getDashMatch", err);
+                        });
+                    },
+                    getLeagueDetails: function getLeagueDetails(league_id) {
+                        var _this3 = this;
+
+                        var url = "http://localhost:8080/league/" + league_id;
+                        this.$http.get(url).then(function(resp) {
+                            _this3.facility = resp.body.facility;
+                            _this3.season = resp.body.season;
+                            _this3.league = resp.body.league;
+                        }).catch(function(err) {
+                            console.log(err);
+                        });
+                    },
+                    getMatchDetails: function getMatchDetails() {
+                        var _this4 = this;
+
+                        var url = "https://app.scoreplay.io/match?id=" + this.matchID; //29845" // TODO: replace with this.matchID
+
+                        return this.$http.get(url).then(function(resp) {
+                            _this4.referee = resp.body.ref;
+                            _this4.field = resp.body.details.fieldName
+
+                            _this4.setupEvents(resp.body.events);
+
+                            _this4.videos = resp.body.videos.filter(function(v) {
+                                return v.recType === "rental";
+                            }).map(function(v) {
+                                v['embed'] = "https://www.dailymotion.com/embed/video/" + v.id + "?queue-enable=false&queue-autoplay-next=false&ui-start-screen-info=false"
+                                return v
+                            }).filter(function(v) {
+                                return v.recType !== "clip";
+                            });
+                        }).catch(function(err) {
+                            console.log(err);
+                        });
+                    },
+                    getManualMatchDetails: function getManualMatchDetails() {
+                        var self = this;
+
+                        return this.$http.post("https://app.scoreplay.io/match/details", {
+                                match_id: this.matchID
+                            })
+                            .then(function(resp) {
+
+                                let home_team = "",
+                                    away_team = "",
+                                    home_score = 0,
+                                    away_score = 0
+                                home_team = resp.body.home.name
+                                away_team = resp.body.away.name
+                                resp.body.events.forEach(function(ev) {
+                                    if (ev.type == "goal") {
+                                        if (ev.details.side == "away") {
+                                            away_score += ev.details.delta
+                                        } else {
+                                            home_score += ev.details.delta
+                                        }
+                                    }
+                                })
+                                self.match.home = {
+                                    name: home_team,
+                                    score: home_score
+                                }
+                                self.match.away = {
+                                    name: away_team,
+                                    score: away_score
+                                }
+                                self.match.start = moment(resp.body.createdAt).format("YYYY-MM-DD - h:mma");
+                                self.setupEvents(resp.body.events);
+
+
+                            }).catch(function(err) {
+                                console.log(err);
+                            });
+                    },
+                    getTeamsDetails: function getTeamsDetails(home_id, away_id) {
+                        Promise.all([this.getTeamDetails(home_id, true), this.getTeamDetails(away_id, false)]);
+                    },
+                    getTeamDetails: function getTeamDetails(id, home) {
+                        var _this5 = this;
+
+                        var url = "http://localhost:8080/team/" + id;
+                        this.$http.get(url).then(function(resp) {
+                            if (home) {
+                                _this5.home_team = resp.body;
+                            } else {
+                                _this5.away_team = resp.body;
+                            }
+                        }).catch(function(err) {
+                            console.log(err);
+                        });
+                    },
+                    getResults: function getResults(league_id) {
+                        var _this6 = this;
+
+                        var url = "http://localhost:8080/league/" + league_id + "/scores";
+                        this.$http.get(url).then(function(resp) {
+                            _this6.leaderboard = resp.body.leaderboard;
+                        }).catch(function(err) {
+                            console.log(err.body.errors);
+                        });
+                    },
+                    setupEvents: function setupEvents(events) {
+                        if (events.length === 0) {
+                            return;
+                        }
+
+                        var home = this.match.home.name,
+                            away = this.match.away.name,
+                            match_start = moment(this.match.start, "YYYY-MM-DD - h:mma");
+                        let actual_start = events.find(function(e) {
+                            return e.type === "start"
+                        })
+                        if (actual_start) {
+                            match_start = moment(actual_start.date, "YYYY-MM-DD HH:mm:ss")
+                        }
+                        var final_events = [],
+                            home_score = 0,
+                            away_score = 0;
+                        events.forEach(function(ev) {
+                            if (ev.type === "goal") {
+                                if (ev.details.delta === -1) {
+                                    var previous = final_events.pop();
+
+                                    if (previous.side === home) {
+                                        home_score -= 1;
+                                    } else {
+                                        away_score -= 1;
+                                    }
+                                } else {
+                                    if (ev.details.side === "home") {
+                                        home_score += 1;
+                                    } else {
+                                        away_score += 1;
+                                    }
+
+                                    final_events.push({
+                                        side: ev.details.side === "home" ? home : away,
+                                        type: "goal",
+                                        date: moment.duration(moment(ev.date, "YYYY-MM-DD HH:mm:ss").diff(match_start)).get("minutes") + "\"",
+                                        subtitle: home_score + " - " + away_score
+                                    });
+                                }
+                            }
+                        });
+                        this.events = final_events;
+                    },
+                    gotoTeam: function gotoTeam(id) {
+                        window.location = "team.html?id=" + id;
+                    },
+                    gotoLeague: function gotoLeague(league_id) {
+                        window.location = "league.html?id=" + league_id;
+                    },
+                    getCenterCookie: function getCenterCookie() {
+                        var nameEQ = "center=";
+                        var ca = document.cookie.split(';');
+
+                        for (var i = 0; i < ca.length; i++) {
+                            var c = ca[i];
+
+                            while (c.charAt(0) == ' ') {
+                                c = c.substring(1, c.length);
+                            }
+
+                            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+                        }
+
+                        return null;
+                    },
+                    buildAndRunChart: function() {
+                        var radarData = {
+                            labels: ["Stamina", "Dribbling", "Defending", "Passing", "Shooting", "Speed"],
+                            datasets: [{
+                                label: "Peter",
+                                backgroundColor: "rgba(26,179,148,0.2)",
+                                borderColor: "rgba(26,179,148,1)",
+                                data: [28, 48, 40, 19, 96, 27]
+                            }]
+                        };
+                        var radarOptions = {
+                            responsive: true
+                        };
+                        var ctx5 = document.getElementById("radarChart").getContext("2d");
+                        new Chart(ctx5, {
+                            type: 'radar',
+                            data: radarData,
+                            options: radarOptions
+                        });
+
+                        new Chartist.Pie('#ct-passes', {
+                            series: [{
+                                value: 40,
+                                className: "home-color"
+                            }, {
+                                value: 60,
+                                className: "away-color"
+                            }],
+                        }, {
+                            donut: true,
+                            donutWidth: 30,
+                            startAngle: 270,
+                            total: 200,
+                            showLabel: false
+                        });
+                        new Chartist.Pie('#ct-shots', {
+                            series: [{
+                                value: 31,
+                                className: "home-color"
+                            }, {
+                                value: 69,
+                                className: "away-color"
+                            }],
+                        }, {
+                            donut: true,
+                            donutWidth: 30,
+                            startAngle: 270,
+                            total: 200,
+                            showLabel: false
+                        });
+                        new Chartist.Pie('#ct-goals', {
+                            series: [{
+                                value: 38,
+                                className: "home-color"
+                            }, {
+                                value: 62,
+                                className: "away-color"
+                            }],
+                        }, {
+                            donut: true,
+                            donutWidth: 30,
+                            startAngle: 270,
+                            total: 200,
+                            showLabel: false
+                        });
+
+                    }
+                }
+            });
+        </script>
+
+</body>
+
+</html>
