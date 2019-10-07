@@ -172,7 +172,14 @@
                                 <tbody v-if="home_team">
                                     <tr v-for="(player, index) in home_team.roster">
                                         <td class="text-center">{{player.name}}</td>
-                                        <td><input type="text" name=""></td>
+                                        <td>
+                                            <div  v-if="player.tracker_id">
+                                                <input type="text" name="" v-model="player.tracker_id" disabled style="border: 0">
+                                            </div>
+                                            <div v-else>
+                                                <input type="text" name="" v-model="player.tracker_id">
+                                            </div> 
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -188,7 +195,14 @@
                                 <tbody v-if="away_team">
                                     <tr v-for="(player, index) in away_team.roster">
                                         <td class="text-center">{{player.name}}</td>
-                                        <td><input type="text" name=""></td>
+                                        <td>
+                                            <div  v-if="player.tracker_id">
+                                                <input type="text" name="" v-model="player.tracker_id" disabled style="border: 0">
+                                            </div>
+                                            <div v-else>
+                                                <input type="text" name="" v-model="player.tracker_id">
+                                            </div> 
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -199,7 +213,7 @@
                             <button type="button" class="btn btn-outline btn btn-secondary" style="margin-top: 5%" v-on:click="gotoDaily()">
                                 Back to daily matches
                             </button>
-                            <button type="button" class="btn btn-outline btn btn-primary" style="margin-top: 5%; margin-left: 15px">
+                            <button type="button" class="btn btn-outline btn btn-primary" style="margin-top: 5%; margin-left: 15px" v-on:click="save">
                                 Save
                             </button>
                         </div>
@@ -256,7 +270,8 @@
                     away: {}
                 },
                 home_team: {},
-                away_team: {}
+                away_team: {},
+                tracker_ids: {}
             },
             computed: {
                 leagues: function() {
@@ -296,12 +311,19 @@
                     });
                 },
                 getTeamsDetails: function(home_id, away_id) {
-                    Promise.all([this.getTeamDetails(home_id, true), this.getTeamDetails(away_id, false)]);
+                    const self = this;
+                    Promise.all([this.getTeamDetails(home_id, true), this.getTeamDetails(away_id, false)])
+                    .then(() => {
+                        return self.getTrackers()
+                    })
+                    .then(() => {
+                        console.log(this.tracker_ids)
+                    })
                 },
                 getTeamDetails: function(id, home) {
                     const self = this,
                         url = "http://localhost:8080/team/" + id;
-                    this.$http.get(url).then(function(resp) {
+                    return this.$http.get(url).then(function(resp) {
                         if (home) {
                             self.home_team = resp.body;
                         } else {
@@ -313,6 +335,65 @@
                 },
                 gotoDaily: function() {
                     window.location = "/daily.html"
+                },
+                getTrackers: function() {
+                    console.log("Getting trackers")
+                    const self = this;
+                    return this.$http.get("http://localhost:8080/tracker/get/"+this.matchID).then(resp => {
+                        resp.body.forEach(p => {
+                            self.home_team.roster = self.home_team.roster.map(player => {
+                                if (player.id.toString() === p.player_id.toString()) {
+                                    return {
+                                        ...player,
+                                        tracker_id: p.tracker_id
+                                    }
+                                }
+                                return player
+                            })
+                            self.away_team.roster = self.away_team.roster.map(player => {
+                                if (player.id.toString() === p.player_id.toString()) {
+                                    return {
+                                        ...player,
+                                        tracker_id: p.tracker_id
+                                    }
+                                }
+                                return player
+                            })
+                        })
+                    })
+                },
+                save: function() {
+                    console.log(this.matchID, this.home_team.roster, this.away_team.roster)
+                    let tracks = []
+                    for (let i=0; i<this.home_team.roster.length; i++) {
+                        const tracker_id = this.home_team.roster[i].tracker_id,
+                        player_id = this.home_team.roster[i].id
+                        if (tracker_id && tracker_id.trim() !== "") {
+                            tracks.push({
+                                match_id: this.matchID,
+                                player_id,
+                                tracker_id: parseInt(tracker_id)
+                            })
+                        }
+                    }
+                    for (let i=0; i<this.away_team.roster.length; i++) {
+                        const tracker_id = this.away_team.roster[i].tracker_id,
+                        player_id = this.away_team.roster[i].id
+                        if (tracker_id && tracker_id.trim() !== "") {
+                            tracks.push({
+                                match_id: this.matchID,
+                                player_id,
+                                tracker_id: tracker_id.trim()
+                            })
+                        }
+                    }
+                    const body = {
+                        match_id: this.matchID,
+                        trackers: tracks
+                    }
+                    this.$http.post("http://localhost:8080/tracker/", body).then(resp => {
+                        console.log(resp.body)
+                    })
                 },
                 getCenterCookie: function() {
                     var nameEQ = "center=";
