@@ -125,6 +125,7 @@
 
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="css/plugins/chartist/chartist.min.css" rel="stylesheet">
     <link href="css/animate.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
     <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-32x32.png" sizes="32x32" />
@@ -139,6 +140,14 @@
         .float-right {
             float: right;
             color: #75acda
+        }
+
+        .home-color {
+            stroke: rgb(41, 81, 130);
+        }
+
+        .away-color {
+            stroke: rgb(117, 172, 218);
         }
     </style>
 
@@ -193,6 +202,7 @@
                                         <a style="font-size: 50px" class="text-center"><strong> <span style="color: #295182" v-on:click="gotoTeam(match.home.team_id)"> {{match.home.name}}</span> <span style="color: #4c4949" v-if="match.home.score>=0"> {{match.home.score}}</span> - <span style="color: #4c4949" v-if="match.away.score>=0">{{match.away.score}}</span> </span> <span style="color: #75acda" v-on:click="gotoTeam(match.away.team_id)"> {{match.away.name}} </strong></a>
                                         <h3 style="margin: 8px; cursor: pointer;" v-on:click="gotoLeague(league.id)"><b>{{league.name}}</b></h3>
                                         <h3>{{season.name}}</h3>
+                                        {{match.start}}
                                     </div>
                                 </div>
                             </div>
@@ -201,54 +211,152 @@
                 </div>
 
                 <div class="row animated fadeInRight">
-                    <div class="col-lg-4">
-                        <div class="ibox ">
-                            <div class="ibox-title">
-                                <h5>Match recap</h5>
-                            </div>
-                            <div>
-                                <div class="ibox-content no-padding border-left-right">
-                                    <div v-if="scoreplay_videos.recording.url">
-                                        <iframe class="video" allow="autoplay" :src="scoreplay_videos.recording.url" frameborder="0" allowfullscreen></iframe>
+
+                    <div class="col-lg-5">
+
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="ibox">
+                                    <div class="ibox-title">
+                                        <h5>Match recap</h5>
                                     </div>
-                                    <div v-else>
-                                        <div v-if="videos.length">
-                                            <figure v-for="video in videos" style="margin: 0">
-                                                <iframe class="video" allow="autoplay" :src="video.embed" frameborder="0" allowfullscreen></iframe>
-                                            </figure>
-                                        </div>
-                                        <div v-else>
-                                            <figure style="margin: 0" v-if="rental_vid">
-                                                <iframe class="video" allow="autoplay" :src="rental_vid" frameborder="0" allowfullscreen></iframe>
-                                            </figure>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="ibox-content profile-content">
-                                    <h4><strong>{{match.home.name}} <span v-if="match.home.score>=0">{{match.home.score}}</span> - <span v-if="match.away.score>=0">{{match.away.score}}</span> {{match.away.name}}</strong></h4>
-                                    <p />
-                                    <p><i class="fa fa-map-marker"></i> {{match.field}} <i>at</i> {{facility.name}}</p>
-                                    <p><i class="fa fa-calendar"></i> {{match.start}}</p>
-                                    <!-- <p><i class="fa fa-male"></i> {{referee.firstname+" "+referee.lastname}}</p> -->
-                                    <div class="user-button">
+                                    <div class="ibox-content no-padding border-left-right">
                                         <div class="row">
-                                            <div class="col-md-6">
-                                                <!-- <div class="fb-share-button" data-href="https://www.dailymotion.com/video/x7g35qd" data-layout="button" data-size="large"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.dailymotion.com%2Fvideo%2Fx7g35qd&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a></div> -->
+                                            <div class="col-sm-12" style="text-align: center">
+                                                <div v-if="scoreplay_videos.recording.url">
+                                                    <iframe class="video" allow="autoplay" :src="scoreplay_videos.recording.url" frameborder="0" allowfullscreen></iframe>
+                                                </div>
+                                                <div v-else>
+                                                    <div v-if="videos.length">
+                                                        <figure v-for="video in videos" style="margin: 0">
+                                                            <iframe class="video" allow="autoplay" :src="video.embed" frameborder="0" allowfullscreen></iframe>
+                                                        </figure>
+                                                    </div>
+                                                    <div v-else>
+                                                        <figure style="margin: 0" v-if="rental_vid">
+                                                            <iframe class="video" allow="autoplay" :src="rental_vid" frameborder="0" allowfullscreen></iframe>
+                                                        </figure>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <!--                                           <div class="col-md-6">
-                                                <button type="button" class="btn btn-default btn-sm btn-block"><i class="fa fa-pencil"></i> Referee assessment</button>
-                                            </div> -->
                                         </div>
                                     </div>
                                 </div>
-                                <br />
-                                <sofive-standings :standings="leaderboard" :team="match.home.name" :opponent="match.away.name" />
                             </div>
                         </div>
+
+                        <div class="row show-match-stats" style="display: none">
+                            <div class="col-sm-12 col-md-4">
+                                <div class="ibox ">
+                                    <div class="ibox-title">
+                                        <h5>Passes</h5>
+                                    </div>
+                                    <div class="ibox-content">
+                                        <div class="row" style="height: 100px">
+                                            <div id="ct-passes"></div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6 ct-passes-home" style="text-align: center;"></div>
+                                            <div class="col-sm-6 ct-passes-away" style="text-align: center;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-4">
+                                <div class="ibox ">
+                                    <div class="ibox-title">
+                                        <h5>Shots</h5>
+                                    </div>
+                                    <div class="ibox-content">
+                                        <div class="row" style="height: 100px">
+                                            <div id="ct-shots"></div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6 ct-shots-home" style="text-align: center;"></div>
+                                            <div class="col-sm-6 ct-shots-away" style="text-align: center;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-4">
+                                <div class="ibox ">
+                                    <div class="ibox-title">
+                                        <h5>Goals</h5>
+                                    </div>
+                                    <div class="ibox-content">
+                                        <div class="row" style="height: 100px">
+                                            <div id="ct-goals"></div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6 ct-goals-home" style="text-align: center;"></div>
+                                            <div class="col-sm-6 ct-goals-away" style="text-align: center;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row rosters">
+                            <div class="col-lg-12">
+                                <div class="ibox">
+                                    <div class="ibox-title">
+                                        <h5>Rosters</h5>
+                                        <div class="ibox-tools">
+                                            <a class="collapse-link">
+                                                <i class="fa fa-chevron-up"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="ibox-content">
+
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <table class="table table-hover margin bottom">
+                                                    <thead>
+                                                        <tr>
+                                                            <th style="width: 1%" class="text-center">No.</th>
+                                                            <th>Players</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody v-if="home_team">
+                                                        <tr v-for="(player, index) in home_team.roster" v-on:click="buildAndRunChart('1238')">
+                                                            <td class="text-center">{{index+1}}</td>
+                                                            <td> {{player.name}}
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <table class="table table-hover margin bottom">
+                                                    <thead>
+                                                        <tr>
+                                                            <th style="width: 1%" class="text-center">No.</th>
+                                                            <th>Player</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody v-if="away_team">
+                                                        <tr v-for="(player, index) in away_team.roster" v-on:click="buildAndRunChart(
+                                                        '1257')">
+                                                            <td class="text-center">{{index+1}}</td>
+                                                            <td> {{player.name}}
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
 
-                    <div class="col-lg-8">
-                        <div class="ibox ">
+                    <!-- Right column -->
+                    <div class="col-lg-7">
+
+                        <div class="ibox">
                             <div class="ibox-title">
                                 <h5>Live</h5>
                                 <div class="ibox-tools">
@@ -257,7 +365,7 @@
                                     </a>
                                 </div>
                             </div>
-                            <div class="ibox-content" style="height: 76vh; overflow: scroll;">
+                            <div class="ibox-content" style="height: 65vh; padding: 0; overflow: scroll;">
                                 <h2 v-if="events.length === 0">No events recorded for this match</h2>
                                 <div class="scroll_content" v-if="events.length">
 
@@ -274,67 +382,34 @@
                                             <div :class="{'vertical-timeline-content': true,
                                             'float-right': (match.home.name !== event.side),
                                             'float-left': (match.home.name === event.side)}" style="padding: 10px">
-                                                <h2>{{event.date}} <b>{{event.type}}</b> from <b>
+                                                <h2>{{event.date}}. <b>
                                                         <span v-if="(scoreplay_videos.clips[i] && scoreplay_videos.clips[i].player_id)">{{(all_rosters.find(p => (p.id.toString() === scoreplay_videos.clips[i].player_id)) || {'name':''}).name}} <small><br />({{event.side}})</small></span><span v-else>{{event.side}}</span>
-                                                    </b></h2>
-                                                <div v-html="event.subtitle"></div>
-                                                <a v-if="scoreplay_videos.clips[i]" v-on:click="select_vid(scoreplay_videos.clips[i], match.home.name === event.side)" target="blank" class="btn btn-sm btn-primary" style="float: right; color: white" data-toggle="modal" data-target="#edit">Video</a>
+                                                    </b> ({{event.subtitle}})</h2>
+                                                <a v-if="scoreplay_videos.clips[i]" v-on:click="select_vid(scoreplay_videos.clips[i], match.home.name === event.side)" target="blank" class="btn btn-sm btn-primary" style="float: right; color: white" data-toggle="modal" data-target="#edit">watch & assign goal</a>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div><br />
-                        <div class="ibox">
-                            <div class="ibox-title">
-                                <h5>Rosters</h5>
-                                <div class="ibox-tools">
-                                    <a class="collapse-link">
-                                        <i class="fa fa-chevron-up"></i>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="ibox-content">
+                        </div>
 
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        <table class="table table-hover margin bottom">
-                                            <thead>
-                                                <tr>
-                                                    <th style="width: 1%" class="text-center">No.</th>
-                                                    <th>Players</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody v-if="home_team">
-                                                <tr v-for="(player, index) in home_team.roster">
-                                                    <td class="text-center">{{index+1}}</td>
-                                                    <td> {{player.name}}
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                        <div class="row show-player-stats" style="display: none">
+                            <div class="col-lg-12">
+                                <div class="ibox ">
+                                    <div class="ibox-title">
+                                        <h5>Player scores <small>(Click on the player on the left)</small></h5>
                                     </div>
-                                    <div class="col-lg-6">
-                                        <table class="table table-hover margin bottom">
-                                            <thead>
-                                                <tr>
-                                                    <th style="width: 1%" class="text-center">No.</th>
-                                                    <th>Player</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody v-if="away_team">
-                                                <tr v-for="(player, index) in away_team.roster">
-                                                    <td class="text-center">{{index+1}}</td>
-                                                    <td> {{player.name}}
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                                    <div class="ibox-content">
+                                        <div>
+                                            <canvas id="radarChart"></canvas>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
                     </div>
+
                 </div>
             </div>
 
@@ -384,6 +459,8 @@
         <script src="js/bootstrap.js"></script>
         <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
         <script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+        <script src="js/plugins/chartJs/Chart.min.js"></script>
+        <script src="js/plugins/chartist/chartist.min.js"></script>
 
         <!-- Custom and plugin javascript -->
         <script src="js/inspinia.js"></script>
@@ -438,7 +515,11 @@
                     video_roster: [],
                     selected_scorer: "0",
                     center_str: "",
-                    rental_vid: null
+                    rental_vid: null,
+                    home_stats: {},
+                    away_stats: {},
+                    player_stats: [],
+                    stats: false
                 },
                 mounted: function mounted() {
 
@@ -449,6 +530,9 @@
 
                     var params = this.findGetParameter();
                     this.matchID = params.id;
+                    if (this.matchID.indexOf("manual") !== (-1)) {
+                        document.querySelector(".rosters").style.display = "none"
+                    }
                     this.getDashMatch()
                         .then(function() {
                             this.getScoreplayVideos();
@@ -578,6 +662,8 @@
                         return this.$http.get(url).then(function(resp) {
                             _this2.match = resp.body;
                             _this2.match.start = moment(_this2.match.start, "YYYY-MM-DDTHH:mm:ss").format("YYYY-MM-DD - h:mma");
+
+                            _this2.getStats()
 
                             _this2.getTeamsDetails(_this2.match.home.team_id, _this2.match.away.team_id);
 
@@ -733,7 +819,7 @@
                                         side: ev.details.side === "home" ? home : away,
                                         type: "goal",
                                         date: moment.duration(moment(ev.date, "YYYY-MM-DD HH:mm:ss").diff(match_start)).get("minutes") + "\"",
-                                        subtitle: home + " <b>" + home_score + " - " + away_score + "</b> " + away
+                                        subtitle: home_score + " - " + away_score
                                     });
                                 }
                             }
@@ -761,6 +847,89 @@
                         }
 
                         return null;
+                    },
+                    getStats: function() {
+                        const self = this;
+                        this.$http.get("http://localhost:8080/game/stats/" + this.matchID)
+                            .then(resp => {
+                                if (resp.body.team_stats) {
+                                    document.querySelector(".show-match-stats").style.display = "flex"
+                                    document.querySelector(".show-player-stats").style.display = "block"
+                                }
+                                self.home_stats = resp.body.team_stats["1"]
+                                self.away_stats = resp.body.team_stats["0"]
+                                self.player_stats = resp.body.results
+                                self.buildVsCharts()
+                            })
+                    },
+                    buildVsCharts: function() {
+                        this.buildSingleVsChart("ct-goals", this.match.home.score, this.match.away.score)
+                        this.buildSingleVsChart("ct-passes", this.home_stats.stats.passes, this.away_stats.stats.passes)
+                        this.buildSingleVsChart("ct-shots", this.home_stats.stats.shots, this.away_stats.stats.shots)
+                    },
+                    buildSingleVsChart: function(id, home_val, away_val) {
+                        const total = parseFloat(home_val + away_val),
+                            home_perc = parseFloat(home_val) * 100 / total,
+                            away_perc = 100 - home_perc;
+                        new Chartist.Pie('#' + id, {
+                            series: [{
+                                value: home_perc,
+                                className: "home-color"
+                            }, {
+                                value: away_perc,
+                                className: "away-color"
+                            }],
+                        }, {
+                            donut: true,
+                            donutWidth: 30,
+                            startAngle: 270,
+                            total: 200,
+                            showLabel: false
+                        });
+                        document.querySelector('.' + id + "-home").textContent = home_val
+                        document.querySelector('.' + id + "-away").textContent = away_val
+                    },
+                    buildAndRunChart: function(player_id) {
+
+                        console.log("Stats", player_id)
+
+                        const found = this.player_stats.find(p => (p.tracker.name === player_id))
+
+                        if (!found) {
+                            return
+                        }
+
+                        var radarData = {
+                            labels: ["Stamina", "Dribbling", "Defending", "Passing", "Shooting", "Speed"],
+                            datasets: [{
+                                label: "Player stats",
+                                backgroundColor: "rgba(26,179,148,0.2)",
+                                borderColor: "rgba(26,179,148,1)",
+                                data: [
+                                    found.player.stamina_score,
+                                    found.player.dribbling_score,
+                                    found.player.defending_score,
+                                    found.player.passing_score,
+                                    found.player.shooting_score,
+                                    found.player.speed_score
+                                ]
+                            }]
+                        };
+                        var radarOptions = {
+                            responsive: true,
+                            scale: {
+                                ticks: {
+                                    display: false
+                                }
+                            }
+                        };
+                        var ctx5 = document.getElementById("radarChart").getContext("2d");
+                        new Chart(ctx5, {
+                            type: 'radar',
+                            data: radarData,
+                            options: radarOptions
+                        });
+
                     }
                 }
             });
