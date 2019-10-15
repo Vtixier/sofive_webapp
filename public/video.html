@@ -292,6 +292,8 @@
                     $('.input-group.date').on('changeDate', function(e) {
                         self.date = moment(e.date).format("MM-DD-YYYY");
                     });
+
+                    this.getRecordings()
                 },
                 methods: {
                     getRecordings: function getRecordings() {
