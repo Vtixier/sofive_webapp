@@ -511,6 +511,7 @@
                     },
                     video_url: "",
                     video_id: 0,
+                    seconds: 0,
                     video_share_url: "",
                     video_roster: [],
                     selected_scorer: "0",
@@ -541,10 +542,13 @@
                 watch: {
                     selected_scorer: function(new_val, old_val) {
                         console.log("Scorer change", old_val, new_val, this.video_id)
-                        this.$http.post("https://video.scoreplay.io/clip/scorer", {
-                            id: this.video_id,
-                            player_id: new_val.toString()
-                        })
+                        const d = {
+                            match_id: this.matchID,
+                            seconds: this.seconds,
+                            dash_id: new_val
+                        }
+                        console.log(d)
+                        this.$http.post("http://localhost:8080/goal/", d)
                     }
                 },
                 computed: {
@@ -571,6 +575,7 @@
                         console.log("Sel", v, is_home)
                         this.video_url = v.url;
                         this.video_id = v.id;
+                        this.seconds = v.seconds;
                         let i = v.url.indexOf('video/') + 6,
                             j = v.url.indexOf('?autoplay')
                         this.getFb(v.url.slice(i, j))
@@ -588,40 +593,52 @@
                     getScoreplayVideos: function getScoreplayVideos() {
                         var _this = this;
 
-                        var url = "https://video.scoreplay.io/match/" + this.matchID;
-                        this.$http.get(url).then(function(resp) {
-                            var v = resp.body;
-                            var rec_url = v.recording.url;
+                        this.$http.get("http://localhost:8080/goal/get/" + this.matchID)
+                        .then((goals_resp) => {
+                            const goals = goals_resp.body;
+                            var url = "https://video.scoreplay.io/match/" + this.matchID;
+                            this.$http.get(url).then(function(resp) {
+                                var v = resp.body;
+                                var rec_url = v.recording.url;
 
-                            if (rec_url !== "") {
-                                rec_url = "https://www.dailymotion.com/embed/video/" + v.recording.url.replace("https://www.dailymotion.com/video/", "") + "?queue-enable=false&queue-autoplay-next=false&ui-start-screen-info=false";
-                            }
+                                if (rec_url !== "") {
+                                    rec_url = "https://www.dailymotion.com/embed/video/" + v.recording.url.replace("https://www.dailymotion.com/video/", "") + "?queue-enable=false&queue-autoplay-next=false&ui-start-screen-info=false";
+                                }
 
-                            let clips = []
-                            if (v.clips) {
-                                if (v.clips.length > 0) {
-                                    clips = v.clips.map(function(c) {
-                                        c['url'] = "https://www.dailymotion.com/embed/video/" + c.url.replace("https://www.dailymotion.com/video/", "") + "?autoplay=1&queue-enable=false&queue-autoplay-next=false&ui-start-screen-info=false"
-                                        return c;
-                                    })
-                                } else {
-                                    const event_num = _this.match.home.score + _this.match.away.score
-                                    for (let i = 0; i < event_num; i++) {
-                                        const url = "https://www.dailymotion.com/embed/video/" + v.recording.url.replace("https://www.dailymotion.com/video/", "") + "?autoplay=1&queue-enable=false&queue-autoplay-next=false&ui-start-screen-info=false&start=" + parseInt(i * 20 + 4).toString()
-                                        clips.push({
-                                            url
-                                        }) // +4 to handle intro
+                                let clips = []
+                                if (v.clips) {
+                                    if (v.clips.length > 0) {
+                                        clips = v.clips.map(function(c) {
+                                            c['url'] = "https://www.dailymotion.com/embed/video/" + c.url.replace("https://www.dailymotion.com/video/", "") + "?autoplay=1&queue-enable=false&queue-autoplay-next=false&ui-start-screen-info=false"
+                                            return c;
+                                        })
+                                    } else {
+                                        const event_num = _this.match.home.score + _this.match.away.score
+                                        for (let i = 0; i < event_num; i++) {
+                                            const seconds = parseInt(i * 20 + 4),
+                                            url = "https://www.dailymotion.com/embed/video/" + v.recording.url.replace("https://www.dailymotion.com/video/", "") + "?autoplay=1&queue-enable=false&queue-autoplay-next=false&ui-start-screen-info=false&start=" + seconds.toString()
+                                            let player_id = goals.find(g => (g.seconds === seconds))
+                                            if (player_id) {
+                                                player_id = player_id.dash_id
+                                            }
+                                            clips.push({
+                                                url,
+                                                seconds,
+                                                player_id
+                                            }) // +4 to handle intro
+                                        }
                                     }
                                 }
-                            }
 
-                            v['clips'] = clips
+                                v['clips'] = clips
 
-                            v['recording']['url'] = rec_url
+                                v['recording']['url'] = rec_url
 
-                            _this.scoreplay_videos = v
+                                _this.scoreplay_videos = v
 
-                        }).catch(function(err) {
+                            })
+                        })
+                        .catch(function(err) {
                             console.log("getScoreplayVideos", err);
                         });
                     },
