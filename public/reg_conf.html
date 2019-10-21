@@ -571,7 +571,7 @@
 
                     var early_bird = "No";
 
-                    if (this.data.early_bird) {
+                    if (this.data.early_bird && (this.data.reg_type !== "team")) {
                         early_bird = "Yes";
                     }
 
@@ -637,7 +637,10 @@
 
                     var d = this.getBody(true),
                         self = this;
-                    this.$http.post("http://localhost:8080/product/registration/get", d).then(function(resp) {
+                    this.$http.post("http://localhost:8080/product/registration/get", {
+                        ...d,
+                        early_bird: "No"
+                    }).then(function(resp) {
                         console.log(resp);
                         _this3.deposit = resp.body.product;
                         var p = _this3.deposit.price;
