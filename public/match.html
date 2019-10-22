@@ -168,7 +168,7 @@
                 <sofive-header />
             </div>
 
-            <div class="modal inmodal" id="edit" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal inmodal assign_modal" id="edit" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content animated bounceInRight">
                         <div class="modal-body">
@@ -183,7 +183,7 @@
                             <div class="col-md-4">
                                 <select class="select_center form-control" v-model="selected_scorer">
                                     <option value="0">Select scorer</option>
-                                    <option v-for="player in video_roster" :value="player.id">{{player.name}}</option>
+                                    <option v-for="player in video_roster" :value="JSON.stringify(player)">{{player.name}}</option>
                                 </select>
                             </div>
                         </div>
@@ -520,7 +520,8 @@
                     home_stats: {},
                     away_stats: {},
                     player_stats: [],
-                    stats: false
+                    stats: false,
+                    assign_modal_open: false
                 },
                 mounted: function mounted() {
 
@@ -528,6 +529,12 @@
                     if (center) {
                         this.center_str = facilityMap[center];
                     }
+
+                    const self = this;
+
+                    $(".assign_modal").on('hide.bs.modal', function(){
+                      self.assign_modal_open = false
+                    });
 
                     var params = this.findGetParameter();
                     this.matchID = params.id;
@@ -541,11 +548,16 @@
                 },
                 watch: {
                     selected_scorer: function(new_val, old_val) {
-                        console.log("Scorer change", old_val, new_val, this.video_id)
+                        if (!this.assign_modal_open) {
+                            return
+                        }
+                        console.log("Scorer change", old_val, new_val)
+                        const parsed = JSON.parse(new_val)
                         const d = {
                             match_id: this.matchID,
                             seconds: this.seconds,
-                            dash_id: new_val
+                            dash_id: parsed.id,
+                            first_name: parsed.name
                         }
                         console.log(d)
                         this.$http.post("http://localhost:8080/goal/", d)
@@ -589,6 +601,7 @@
                         } else {
                             this.selected_scorer = "0"
                         }
+                        this.assign_modal_open = true
                     },
                     getScoreplayVideos: function getScoreplayVideos() {
                         var _this = this;
@@ -606,28 +619,20 @@
                                 }
 
                                 let clips = []
-                                if (v.clips) {
-                                    if (v.clips.length > 0) {
-                                        clips = v.clips.map(function(c) {
-                                            c['url'] = "https://www.dailymotion.com/embed/video/" + c.url.replace("https://www.dailymotion.com/video/", "") + "?autoplay=1&queue-enable=false&queue-autoplay-next=false&ui-start-screen-info=false"
-                                            return c;
-                                        })
-                                    } else {
-                                        const event_num = _this.match.home.score + _this.match.away.score
-                                        for (let i = 0; i < event_num; i++) {
-                                            const seconds = parseInt(i * 20 + 4),
-                                            url = "https://www.dailymotion.com/embed/video/" + v.recording.url.replace("https://www.dailymotion.com/video/", "") + "?autoplay=1&queue-enable=false&queue-autoplay-next=false&ui-start-screen-info=false&start=" + seconds.toString()
-                                            let player_id = goals.find(g => (g.seconds === seconds))
-                                            if (player_id) {
-                                                player_id = player_id.dash_id
-                                            }
-                                            clips.push({
-                                                url,
-                                                seconds,
-                                                player_id
-                                            }) // +4 to handle intro
-                                        }
+
+                                const event_num = _this.match.home.score + _this.match.away.score
+                                for (let i = 0; i < event_num; i++) {
+                                    const seconds = parseInt(i * 20 + 4),
+                                    url = "https://www.dailymotion.com/embed/video/" + v.recording.url.replace("https://www.dailymotion.com/video/", "") + "?autoplay=1&queue-enable=false&queue-autoplay-next=false&ui-start-screen-info=false&start=" + seconds.toString()
+                                    let player_id = goals.find(g => (g.seconds === seconds))
+                                    if (player_id) {
+                                        player_id = player_id.dash_id
                                     }
+                                    clips.push({
+                                        url,
+                                        seconds,
+                                        player_id
+                                    }) // +4 to handle intro
                                 }
 
                                 v['clips'] = clips
