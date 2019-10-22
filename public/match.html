@@ -551,13 +551,20 @@
                         if (!this.assign_modal_open) {
                             return
                         }
+                        if (!new_val) {
+                            return
+                        }
                         console.log("Scorer change", old_val, new_val)
                         const parsed = JSON.parse(new_val)
+                        if (!parsed.id) {
+                            return
+                        }
                         const d = {
                             match_id: this.matchID,
                             seconds: this.seconds,
                             dash_id: parsed.id,
-                            first_name: parsed.name
+                            first_name: parsed.name,
+                            league_id: this.match.league_id.toString()
                         }
                         console.log(d)
                         this.$http.post("http://localhost:8080/goal/", d)
@@ -597,7 +604,7 @@
                             this.video_roster = this.away_team.roster
                         }
                         if (v.player_id) {
-                            this.selected_scorer = v.player_id.toString()
+                            this.selected_scorer = JSON.stringify(v)
                         } else {
                             this.selected_scorer = "0"
                         }

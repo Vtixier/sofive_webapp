@@ -124,6 +124,7 @@
 
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="css/plugins/toastr/toastr.min.css" rel="stylesheet">
     <link href="css/animate.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
     <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-32x32.png" sizes="32x32" />
@@ -173,12 +174,10 @@
                                     <tr v-for="(player, index) in home_team.roster">
                                         <td class="text-center">{{player.name}}</td>
                                         <td>
-                                            <div v-if="player.tracker_id">
-                                                <input type="text" name="" v-model="player.tracker_id" disabled style="border: 0">
-                                            </div>
-                                            <div v-else>
-                                                <input type="text" name="" v-model="player.tracker_id">
-                                            </div>
+                                            <!-- <input type="text" name="" v-model="player.tracker_id"> -->
+                                            <select v-model="player.tracker_id">
+                                                <option v-for="tracker in trackers" :value="tracker.id">{{tracker.name}}</option>
+                                            </select>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -196,12 +195,10 @@
                                     <tr v-for="(player, index) in away_team.roster">
                                         <td class="text-center">{{player.name}}</td>
                                         <td>
-                                            <div v-if="player.tracker_id">
-                                                <input type="text" name="" v-model="player.tracker_id" disabled style="border: 0">
-                                            </div>
-                                            <div v-else>
-                                                <input type="text" name="" v-model="player.tracker_id">
-                                            </div>
+                                            <!-- <input type="text" name="" v-model="player.tracker_id"> -->
+                                            <select v-model="player.tracker_id">
+                                                <option v-for="tracker in trackers" :value="tracker.id">{{tracker.name}}</option>
+                                            </select>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -253,6 +250,7 @@
 
     <script src="js/plugins/dataTables/datatables.min.js"></script>
     <script src="js/plugins/dataTables/dataTables.bootstrap4.min.js"></script>
+    <script src="js/plugins/toastr/toastr.min.js"></script>
 
     <script type="text/javascript">
         var app = new Vue({
@@ -271,7 +269,8 @@
                 },
                 home_team: {},
                 away_team: {},
-                tracker_ids: {}
+                tracker_ids: {},
+                trackers: []
             },
             computed: {
                 leagues: function() {
@@ -286,6 +285,7 @@
                 const params = this.findGetParameter();
                 this.matchID = params.id;
                 this.getDashMatch()
+                this.getAllTrackers()
             },
             methods: {
                 findGetParameter: function() {
@@ -294,6 +294,16 @@
                         queryDict[item.split("=")[0]] = item.split("=")[1];
                     });
                     return queryDict;
+                },
+                getAllTrackers: function() {
+                    const self = this
+                    return this.$http.get("http://localhost:8080/tracker/all")
+                    .then(function(resp) {
+                        self.trackers = resp.body.filter(t => (t.is_available))
+
+                    }).catch(function(err) {
+                        console.log("getDashMatch", err);
+                    });
                 },
                 getDashMatch: function() {
                     const self = this,
@@ -324,22 +334,23 @@
                     const self = this,
                         url = "http://localhost:8080/team/" + id;
                     return this.$http.get(url).then(function(resp) {
+                        const t = resp.body
                         if (home) {
-                            self.home_team = resp.body.map(t => ({
+                            self.home_team = {
                                 ...t,
                                 roster: t.roster.map(r => ({
                                     ...r,
                                     side
                                 }))
-                            }));
+                            }
                         } else {
-                            self.away_team = resp.body.map(t => ({
+                            self.away_team = {
                                 ...t,
                                 roster: t.roster.map(r => ({
                                     ...r,
                                     side
                                 }))
-                            }));
+                            }
                         }
                     }).catch(function(err) {
                         console.log(err);
@@ -354,7 +365,7 @@
                     return this.$http.get("http://localhost:8080/tracker/get/" + this.matchID).then(resp => {
                         resp.body.forEach(p => {
                             self.home_team.roster = self.home_team.roster.map(player => {
-                                if (player.id.toString() === p.player_id.toString()) {
+                                if (player.id.toString() === p.dash_id.toString()) {
                                     return {
                                         ...player,
                                         tracker_id: p.tracker_id
@@ -363,7 +374,7 @@
                                 return player
                             })
                             self.away_team.roster = self.away_team.roster.map(player => {
-                                if (player.id.toString() === p.player_id.toString()) {
+                                if (player.id.toString() === p.dash_id.toString()) {
                                     return {
                                         ...player,
                                         tracker_id: p.tracker_id
@@ -379,12 +390,12 @@
                     let tracks = []
                     for (let i = 0; i < this.home_team.roster.length; i++) {
                         const tracker_id = this.home_team.roster[i].tracker_id,
-                            player_id = this.home_team.roster[i].id,
+                            dash_id = this.home_team.roster[i].id,
                             side = this.home_team.roster[i].side;
-                        if (tracker_id && tracker_id.trim() !== "") {
+                        if (tracker_id && tracker_id.toString().trim() !== "") {
                             tracks.push({
                                 match_id: this.matchID,
-                                player_id,
+                                dash_id,
                                 tracker_id: parseInt(tracker_id),
                                 side
                             })
@@ -392,12 +403,12 @@
                     }
                     for (let i = 0; i < this.away_team.roster.length; i++) {
                         const tracker_id = this.away_team.roster[i].tracker_id,
-                            player_id = this.away_team.roster[i].id,
+                            dash_id = this.away_team.roster[i].id,
                             side = this.home_team.roster[i].side;
                         if (tracker_id && tracker_id.trim() !== "") {
                             tracks.push({
                                 match_id: this.matchID,
-                                player_id,
+                                dash_id,
                                 tracker_id: tracker_id.trim(),
                                 side
                             })
@@ -408,7 +419,9 @@
                         trackers: tracks
                     }
                     this.$http.post("http://localhost:8080/tracker/", body).then(resp => {
-                        console.log(resp.body)
+                        toastr.info('All trackers saved successfully.', {
+                            progressBar: true
+                        });
                     })
                 },
                 getCenterCookie: function() {
