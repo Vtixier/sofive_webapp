@@ -183,7 +183,7 @@
                             <div class="col-md-4">
                                 <select class="select_center form-control" v-model="selected_scorer">
                                     <option value="0">Select scorer</option>
-                                    <option v-for="player in video_roster" :value="JSON.stringify(player)">{{player.name}}</option>
+                                    <option v-for="player in video_roster" :value="player.id">{{player.name}}</option>
                                 </select>
                             </div>
                         </div>
@@ -521,7 +521,8 @@
                     away_stats: {},
                     player_stats: [],
                     stats: false,
-                    assign_modal_open: false
+                    assign_modal_open: false,
+                    selected_scorer_details: {}
                 },
                 mounted: function mounted() {
 
@@ -555,19 +556,30 @@
                             return
                         }
                         console.log("Scorer change", old_val, new_val)
-                        const parsed = JSON.parse(new_val)
-                        if (!parsed.id) {
-                            return
+                        let player = {}
+                        if (this.selected_scorer_details.is_home) {
+                            player = this.home_team.roster.find(p => (p.id === new_val))
+                        } else {
+                            player = this.away_team.roster.find(p => (p.id === new_val))
                         }
                         const d = {
-                            match_id: this.matchID,
-                            seconds: this.seconds,
-                            dash_id: parsed.id,
-                            first_name: parsed.name,
-                            league_id: this.match.league_id.toString()
-                        }
+                            ...this.selected_scorer_details,
+                            dash_id: player.id,
+                            first_name: player.name,
+                        }, self = this;
                         console.log(d)
                         this.$http.post("http://localhost:8080/goal/", d)
+                        .then(() => {
+                            self.scoreplay_videos.clips = self.scoreplay_videos.clips.map(c => {
+                                if (c.seconds === self.selected_scorer_details.seconds) {
+                                    return {
+                                        ...c,
+                                        player_id: player.id
+                                    }
+                                }
+                                return c
+                            })
+                        })
                     }
                 },
                 computed: {
@@ -598,15 +610,25 @@
                         let i = v.url.indexOf('video/') + 6,
                             j = v.url.indexOf('?autoplay')
                         this.getFb(v.url.slice(i, j))
+                        let team_id = this.home_team.id
                         if (is_home) {
                             this.video_roster = this.home_team.roster
                         } else {
                             this.video_roster = this.away_team.roster
+                            team_id = this.away_team.id
                         }
                         if (v.player_id) {
-                            this.selected_scorer = JSON.stringify(v)
+                            this.selected_scorer = v.player_id
                         } else {
                             this.selected_scorer = "0"
+                        }
+                        console.log("Team", team_id)
+                        this.selected_scorer_details = {
+                            team_id,
+                            seconds: v.seconds,
+                            match_id: this.matchID,
+                            league_id: this.match.league_id.toString(),
+                            is_home
                         }
                         this.assign_modal_open = true
                     },
