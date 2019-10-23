@@ -393,7 +393,7 @@
                             </div>
                         </div>
 
-                        <div class="row show-player-stats" style="display: none">
+<!--                         <div class="row show-player-stats" style="display: none">
                             <div class="col-lg-12">
                                 <div class="ibox ">
                                     <div class="ibox-title">
@@ -406,11 +406,97 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
 
                     </div>
 
                 </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="ibox">
+                            <div class="ibox-title">
+                                <h5>Run stats</h5>
+                                <div class="ibox-tools">
+                                    <a class="collapse-link">
+                                        <i class="fa fa-chevron-up"></i>
+                                    </a>
+                                    <a class="close-link">
+                                        <i class="fa fa-times"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="ibox-content">
+                                <table class="table table-hover margin bottom table-responsive" style="width: 100%">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">No.</th>
+                                            <th class="text-center">Name</th>
+                                            <th class="text-center">Team</th>
+                                            <th class="text-center">Distance<br/><small>km</small></th>
+                                            <th class="text-center">Sprints</th>
+                                            <th class="text-center">Sprint speed<br/><small>km/h</small></th>
+                                            <th class="text-center">Score<br/><small>/100</small></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="(stat, i) in run_stats">
+                                            <td class="text-center">{{i+1}}</td>
+                                            <td class="text-center">{{stat.player_name}}</td>
+                                            <td class="text-center">{{stat.team}}</td>
+                                            <td class="text-center">{{stat.distance}}</td>
+                                            <td class="text-center">{{stat.sprints}}</td>
+                                            <td class="text-center">{{stat.sprint_speed}}</td>
+                                            <td class="text-center">{{stat.score}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="ibox">
+                            <div class="ibox-title">
+                                <h5>Technical stats</h5>
+                                <div class="ibox-tools">
+                                    <a class="collapse-link">
+                                        <i class="fa fa-chevron-up"></i>
+                                    </a>
+                                    <a class="close-link">
+                                        <i class="fa fa-times"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="ibox-content">
+                                <table class="table table-hover margin bottom table-responsive" style="width: 100%">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">No.</th>
+                                            <th class="text-center">Name</th>
+                                            <th class="text-center">Team</th>
+                                            <th class="text-center">Passes</th>
+                                            <th class="text-center">Shots</th>
+                                            <th class="text-center">Shot speed<br/><small>km/h</small></th>
+                                            <th class="text-center">Score<br/><small>/100</small></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="(stat, i) in technical_stats">
+                                            <td class="text-center">{{i+1}}</td>
+                                            <td class="text-center">{{stat.player_name}}</td>
+                                            <td class="text-center">{{stat.team}}</td>
+                                            <td class="text-center">{{stat.passes}}</td>
+                                            <td class="text-center">{{stat.shots}}</td>
+                                            <td class="text-center">{{stat.shot_speed}}</td>
+                                            <td class="text-center">{{stat.score}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
             <div>
@@ -522,7 +608,9 @@
                     player_stats: [],
                     stats: false,
                     assign_modal_open: false,
-                    selected_scorer_details: {}
+                    selected_scorer_details: {},
+                    run_stats: [],
+                    technical_stats: []
                 },
                 mounted: function mounted() {
 
@@ -714,8 +802,6 @@
                             _this2.match = resp.body;
                             _this2.match.start = moment(_this2.match.start, "YYYY-MM-DDTHH:mm:ss").format("YYYY-MM-DD - h:mma");
 
-                            _this2.getStats()
-
                             _this2.getTeamsDetails(_this2.match.home.team_id, _this2.match.away.team_id);
 
                             _this2.getLeagueDetails(_this2.match.league_id);
@@ -806,17 +892,35 @@
                             });
                     },
                     getTeamsDetails: function getTeamsDetails(home_id, away_id) {
-                        Promise.all([this.getTeamDetails(home_id, true), this.getTeamDetails(away_id, false)]);
+                        const self = this;
+                        return Promise.all([this.getTeamDetails(home_id, true), this.getTeamDetails(away_id, false)])
+                        .then(() => {
+                            self.getStats()
+                        })
                     },
                     getTeamDetails: function getTeamDetails(id, home) {
                         var _this5 = this;
 
                         var url = "http://localhost:8080/team/" + id;
-                        this.$http.get(url).then(function(resp) {
+                        return this.$http.get(url).then(function(resp) {
                             if (home) {
-                                _this5.home_team = resp.body;
+                                _this5.home_team = {
+                                    ...resp.body,
+                                    roster: resp.body.roster.map(p => ({
+                                        ...p,
+                                        home: 1,
+                                        team: resp.body.name
+                                    }))
+                                }
                             } else {
-                                _this5.away_team = resp.body;
+                                _this5.away_team = {
+                                    ...resp.body,
+                                    roster: resp.body.roster.map(p => ({
+                                        ...p,
+                                        home: 0,
+                                        team: resp.body.name
+                                    }))
+                                }
                             }
                         }).catch(function(err) {
                             console.log(err);
@@ -903,20 +1007,53 @@
                         const self = this;
                         this.$http.get("http://localhost:8080/game/stats/" + this.matchID)
                             .then(resp => {
-                                if (resp.body.team_stats) {
-                                    document.querySelector(".show-match-stats").style.display = "flex"
-                                    document.querySelector(".show-player-stats").style.display = "block"
-                                }
-                                self.home_stats = resp.body.team_stats["1"]
-                                self.away_stats = resp.body.team_stats["0"]
-                                self.player_stats = resp.body.results
-                                self.buildVsCharts()
+                                document.querySelector(".show-match-stats").style.display = "flex"
+                                // document.querySelector(".show-player-stats").style.display = "block"
+
+                                let run_stats = [], technical_stats = [],
+                                home_passes = 0, away_passes = 0,
+                                home_shots = 0, away_shots = 0
+                                resp.body.forEach(s => {
+                                    const player = self.all_rosters.find(p => (p.id.toString() === s.dash_id)),
+                                    player_name = player.name,
+                                    team = player.team
+
+                                    if (player.home) {
+                                        home_passes += s.details.pass_number
+                                        home_shots += s.details.shot_number
+                                    } else {
+                                        away_passes += s.details.pass_number
+                                        away_shots += s.details.shot_number
+                                    }
+
+                                    run_stats.push({
+                                        player_name,
+                                        team,
+                                        distance: self.round(s.details.distance_run/1000),
+                                        sprints: s.details.number_of_runs,
+                                        sprint_speed: self.round(s.details.avg_sprint_speed),
+                                        score: self.round(s.details.speed_score)
+                                    })
+                                    technical_stats.push({
+                                        player_name,
+                                        team,
+                                        passes: s.details.pass_number,
+                                        shots: s.details.shot_number,
+                                        shot_speed: self.round(s.details.avg_shot_speed),
+                                        score: self.round(s.details.technical_score)
+                                    })
+                                })
+
+                                self.run_stats = run_stats.sort((a,b) => (b.score > a.score))
+                                self.technical_stats = technical_stats.sort((a,b) => (b.score > a.score))
+
+                                self.buildVsCharts(home_passes, away_passes, home_shots, away_shots)
                             })
                     },
-                    buildVsCharts: function() {
+                    buildVsCharts: function(home_passes, away_passes, home_shots, away_shots) {
                         this.buildSingleVsChart("ct-goals", this.match.home.score, this.match.away.score)
-                        this.buildSingleVsChart("ct-passes", this.home_stats.stats.passes, this.away_stats.stats.passes)
-                        this.buildSingleVsChart("ct-shots", this.home_stats.stats.shots, this.away_stats.stats.shots)
+                        this.buildSingleVsChart("ct-passes", home_passes, away_passes)
+                        this.buildSingleVsChart("ct-shots", home_shots, away_shots)
                     },
                     buildSingleVsChart: function(id, home_val, away_val) {
                         const total = parseFloat(home_val + away_val),
@@ -981,6 +1118,9 @@
                             options: radarOptions
                         });
 
+                    },
+                    round: function(x) {
+                        return Math.round(x * 100) / 100
                     }
                 }
             });

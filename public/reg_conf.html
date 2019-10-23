@@ -698,6 +698,9 @@
                     }
 
                     var d = this.getBody(deposit);
+                    if (deposit) {
+                        d.early_bird = "No"
+                    }
 
                     // Pre add the registration
                     this.$http.post("http://localhost:8080/product/registration", d).then(function(resp) {

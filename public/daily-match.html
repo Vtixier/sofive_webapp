@@ -392,7 +392,7 @@
                         const tracker_id = this.home_team.roster[i].tracker_id,
                             dash_id = this.home_team.roster[i].id,
                             side = this.home_team.roster[i].side;
-                        if (tracker_id && tracker_id.toString().trim() !== "") {
+                        if (tracker_id) {
                             tracks.push({
                                 match_id: this.matchID,
                                 dash_id,
@@ -404,12 +404,12 @@
                     for (let i = 0; i < this.away_team.roster.length; i++) {
                         const tracker_id = this.away_team.roster[i].tracker_id,
                             dash_id = this.away_team.roster[i].id,
-                            side = this.home_team.roster[i].side;
-                        if (tracker_id && tracker_id.trim() !== "") {
+                            side = this.away_team.roster[i].side;
+                        if (tracker_id) {
                             tracks.push({
                                 match_id: this.matchID,
                                 dash_id,
-                                tracker_id: tracker_id.trim(),
+                                tracker_id: parseInt(tracker_id),
                                 side
                             })
                         }
