@@ -332,6 +332,44 @@
                     </div>
                 </div>
 
+                <div class="row" v-if="goal_leaderboard.length">
+                    <div class="col-md-12">
+                        <div class="ibox">
+                            <div class="ibox-title">
+                                <h5>Top scorer</h5>
+                                <div class="ibox-tools">
+                                    <a class="collapse-link">
+                                        <i class="fa fa-chevron-up"></i>
+                                    </a>
+                                    <a class="close-link">
+                                        <i class="fa fa-times"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="ibox-content">
+                                <table class="table table-hover margin bottom table-responsive no-inline-if-mob">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">No.</th>
+                                            <th class="text-center">Name</th>
+                                            <th class="text-center">Team</th>
+                                            <th class="text-center">Goals</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="(player, i) in goal_leaderboard" v-on:click="gotoPlayer(player.dash_id)" style="cursor: pointer;">
+                                            <td class="text-center">{{i+1}}</td>
+                                            <td class="text-center">{{player.name}}</td>
+                                            <td class="text-center">{{player.team_name}}</td>
+                                            <td class="text-center">{{player.goals}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
             <div>
@@ -372,15 +410,20 @@
                 playoffs: [],
                 facility: {},
                 season: {},
-                league: {}
+                league: {},
+                goal_leaderboard: []
             },
             mounted: function mounted() {
                 var params = this.findGetParameter(),
-                    id = params.id || "";
+                    id = params.id || "",
+                    self = this;
 
                 if (id !== "") {
-                    this.getStandings(id);
                     this.getLeagueDetails(id);
+                    this.getStandings(id)
+                    .then(() => {
+                        self.getGoalDetails(id)
+                    })
                 }
             },
             methods: {
@@ -393,7 +436,6 @@
                 },
                 getLeagueDetails: function getLeagueDetails(league_id) {
                     var _this = this;
-
                     var url = "http://localhost:8080/league/" + league_id;
                     this.$http.get(url).then(function(resp) {
                         _this.facility = resp.body.facility;
@@ -403,12 +445,29 @@
                         console.log(err);
                     });
                 },
+                getGoalDetails: function getGoalDetails(league_id) {
+                    const self = this;
+                    var url = "http://localhost:8080/goal/league/" + league_id;
+                    this.$http.get(url).then(function(resp) {
+                        self.goal_leaderboard = resp.body.map(g => {
+                            const team_name = self.standings.find(t => (t.id.toString() === g.team_id)).Team
+                            return {
+                                ...g,
+                                team_name
+                            }
+                        }).sort((a, b) => {
+                            return b.goals > a.goals
+                        })
+                    }).catch(function(err) {
+                        console.log(err);
+                    });
+                },
                 getStandings: function getStandings(league_id) {
                     var _this2 = this;
 
                     this.standings_loading = true;
                     var url = "http://localhost:8080/league/" + league_id + "/scores";
-                    this.$http.get(url).then(function(resp) {
+                    return this.$http.get(url).then(function(resp) {
                         console.log(resp);
                         _this2.name = resp.body.name;
                         _this2.standings = resp.body.leaderboard;
@@ -477,7 +536,10 @@
                 },
                 gotoTeam: function gotoTeam(id) {
                     window.location = "team.html?id=" + id;
-                }
+                },
+                gotoPlayer: function gotoPlayer(id) {
+                    window.location = "player.html?id=" + id;
+                },
             }
         });
     </script>

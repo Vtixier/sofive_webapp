@@ -204,7 +204,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="(player, index) in roster">
+                                    <tr v-for="(player, index) in roster" v-on:click="gotoPlayer(player.id)" style="cursor: pointer;">
                                         <td class="text-center">{{index+1}}</td>
                                         <td> {{player.name}}
                                         </td>
@@ -469,7 +469,10 @@
                 },
                 gotoLeague: function gotoLeague(league_id) {
                     window.location = "league.html?id=" + league_id;
-                }
+                },
+                gotoPlayer: function gotoPlayer(player_id) {
+                    window.location = "player.html?id=" + player_id;
+                },
             }
         });
     </script>
