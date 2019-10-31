@@ -140,30 +140,30 @@
 
 <body class="fixed-sidebar">
 
-    <div class="modal inmodal" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog">
-        <div class="modal-content animated bounceInRight">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                    <i class="fa fa-facebook-square modal-icon"></i>
-                    <h4 class="modal-title">Get your standings and video highlights right on messenger</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="messenger_plugin" style="display: none;">
-                        <div class="fb-send-to-messenger" messenger_app_id="402678167007969" page_id="254076015141321" data-ref="test_ref" color="white" cta_text="SUBSCRIBE_IN_MESSENGER" size="large"></div>
+    <div id="wrapper">
+
+        <div class="modal inmodal" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+            <div class="modal-content animated bounceInRight">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <i class="fa fa-facebook-square modal-icon"></i>
+                        <h4 class="modal-title">Get your standings and video highlights right on messenger</h4>
                     </div>
-                    <div v-if="show_check">
-                        You're all set! Check your messenger inbox for details.
+                    <div class="modal-body">
+                        <div class="messenger_plugin" style="display: none;">
+                            <div class="fb-send-to-messenger" messenger_app_id="402678167007969" page_id="254076015141321" data-ref="test_ref" color="white" cta_text="SUBSCRIBE_IN_MESSENGER" size="large"></div>
+                        </div>
+                        <div v-if="show_check">
+                            You're all set! Check your messenger inbox for details.
+                        </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-
-    <div id="wrapper">
 
         <div>
             <sofive-left-menu />
@@ -438,7 +438,6 @@
                     });
                     FB.Event.subscribe('send_to_messenger', function(e) {
                         if (e.event === "opt_in") {
-                            console.log("Opt in done", e)
                             self.show_check = true
                             document.querySelector('.messenger_plugin').style.display = "none"
                         }
