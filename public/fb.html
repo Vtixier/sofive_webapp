@@ -286,15 +286,6 @@
                     this.selected.facility_id = center
                 }
 
-                var fb_cookie = this.getCookie("fb")
-                if (fb_cookie) {
-                    this.i = 2
-                    this.show_check = true
-                    this.instructions = "You've already configured the chatbot, you're all good"
-                    document.querySelector('.messenger_plugin').style.display = "none"
-                    document.querySelector('.notification_settings').style.display = "none"
-                }
-
                 const self = this;
 
                 this.getProducts();
@@ -310,7 +301,6 @@
                         if (e.event === "opt_in") {
                             self.instructions = "All good! Now check that you received your first messenger message !"
                             self.show_check = true
-                            self.setFbCookie()
                             document.querySelector('.messenger_plugin').style.display = "none"
                         }
                     });
@@ -492,12 +482,6 @@
                         }).catch(function(err) {
                             console.log(err.body.errors);
                         });
-                },
-                setFbCookie: function() {
-                    var date = new Date();
-                    date.setTime(date.getTime() + (9999 * 24 * 60 * 60 * 1000));
-                    let expires = "; expires=" + date.toUTCString();
-                    document.cookie = "fb=1" + expires + "; path=/";
                 },
                 getCookie: function(name) {
                     var nameEQ = name + "=";
