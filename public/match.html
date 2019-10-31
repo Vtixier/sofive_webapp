@@ -218,27 +218,23 @@
                             <div class="col-sm-12">
                                 <div class="ibox">
                                     <div class="ibox-title">
-                                        <h5>Match recap</h5>
+                                        <h5>Highlights video</h5>
                                     </div>
-                                    <div class="ibox-content no-padding border-left-right">
-                                        <div class="row">
-                                            <div class="col-sm-12" style="text-align: center">
-                                                <div v-if="scoreplay_videos.recording.url">
-                                                    <iframe class="video" allow="autoplay" :src="scoreplay_videos.recording.url" frameborder="0" allowfullscreen></iframe>
-                                                </div>
-                                                <div v-else>
-                                                    <div v-if="videos.length">
-                                                        <figure v-for="video in videos" style="margin: 0">
-                                                            <iframe class="video" allow="autoplay" :src="video.embed" frameborder="0" allowfullscreen></iframe>
-                                                        </figure>
-                                                    </div>
-                                                    <div v-else>
-                                                        <figure style="margin: 0" v-if="rental_vid">
-                                                            <iframe class="video" allow="autoplay" :src="rental_vid" frameborder="0" allowfullscreen></iframe>
-                                                        </figure>
-                                                    </div>
-                                                </div>
+                                    <div>
+                                        <div class="ibox-content no-padding border-left-right">
+                                            <div v-if="scoreplay_videos.recording.url">
+                                                <figure style="margin: 0; width: 100%; padding: 15px">
+                                                    <iframe class="video" allow="autoplay" :src="scoreplay_videos.recording.url" frameborder="0" allowfullscreen style="margin: 0; width: 100%"></iframe>
+                                                </figure>
                                             </div>
+                                            <div v-else>
+                                                <figure style="margin: 0; width: 100%" v-if="rental_vid">
+                                                    <iframe class="video" allow="autoplay" :src="rental_vid" frameborder="0" allowfullscreen></iframe>
+                                                </figure>
+                                            </div>
+                                        </div>
+                                        <div class="ibox-content profile-content">
+                                            <button type="button" class="btn btn-block btn-outline btn-primary" v-on:click="gotoLeague(league.id)">Calendar & results</button>
                                         </div>
                                     </div>
                                 </div>
@@ -365,7 +361,7 @@
                                     </a>
                                 </div>
                             </div>
-                            <div class="ibox-content" style="height: 65vh; padding: 0; overflow: scroll;">
+                            <div class="ibox-content" style="height: 80vh; padding: 0; overflow: scroll;">
                                 <h2 v-if="events.length === 0">No events recorded for this match</h2>
                                 <div class="scroll_content" v-if="events.length">
 
