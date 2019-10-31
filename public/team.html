@@ -438,6 +438,7 @@
                     });
                     FB.Event.subscribe('send_to_messenger', function(e) {
                         if (e.event === "opt_in") {
+                            console.log("Opt in done", e)
                             self.show_check = true
                             document.querySelector('.messenger_plugin').style.display = "none"
                         }
