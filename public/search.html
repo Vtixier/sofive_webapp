@@ -151,58 +151,52 @@
                 <sofive-header />
             </div>
 
-            <div class="row">
-                <div class="col-lg-12">
-                    <h1>Team search</h1>
-                </div>
-            </div>
+            <br>
 
             <div class="row">
-                <div class="col-lg-2"></div>
-                <div class="col-lg-8">
-                    <div class="form-group">
-                        <div class="input-group"><input type="text" placeholder="Search for a team..." v-model="query" class="form-control" name="top-search" v-on:keyup.enter="search">
-                            <span class="input-group-append"> <button v-on:click="search()" type="button" class="btn btn-primary">Search
-                                </button> </span></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-lg-12">
-
-                    <div v-if="loading">
-                        <div>
-                            <div class="sk-spinner sk-spinner-wave">
-                                <div class="sk-rect1"></div>
-                                <div class="sk-rect2"></div>
-                                <div class="sk-rect3"></div>
-                                <div class="sk-rect4"></div>
-                                <div class="sk-rect5"></div>
+                <div class="col-sm-12">
+                    <div class="ibox">
+                        <div class="ibox-content">
+                            <div style="margin-bottom: 5%">
+                                <h1>Search for your team</h1>
                             </div>
-                        </div>
-                    </div>
-
-                    <div class="vote-item" v-for="team in teams">
-                        <div class="row" v-on:click="gotoTeam(team)">
-                            <div class="col-md-10">
-                                <a href="#" class="vote-title">
-                                    {{team.name}} <span class="badge badge-info" :style="facilities[team.facility.name]">{{team.facility.name}}</span>
-                                </a>
-                                <div class="vote-info">
-                                    <i class="fa fa-clock-o"></i> <a href="#">Season: <b>{{team.season.name}}</b></a><br />
-                                    <i class="fa fa-user"></i> <a href="#">League: <b>{{team.league.name}}</b></a>
+                            <div class="form-group" style="margin-bottom: 5%">
+                                <div class="input-group"><input type="text" placeholder="Search for a team..." v-model="query" class="form-control" name="top-search" v-on:keyup.enter="search">
+                                    <span class="input-group-append"> <button v-on:click="search()" type="button" class="btn btn-primary">Search
+                                        </button> </span></div>
+                            </div>
+                            <div v-if="loading">
+                                <div>
+                                    <div class="sk-spinner sk-spinner-wave">
+                                        <div class="sk-rect1"></div>
+                                        <div class="sk-rect2"></div>
+                                        <div class="sk-rect3"></div>
+                                        <div class="sk-rect4"></div>
+                                        <div class="sk-rect5"></div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-md-2 ">
-                                <div class="vote-icon">
-                                    <div class="letterpic" :title="team.name"></div>
+                            <div class="vote-item" v-for="team in teams">
+                                <div class="row" v-on:click="gotoTeam(team)">
+                                    <div class="col-md-10">
+                                        <a href="#" class="vote-title">
+                                            {{team.name}} <span class="badge badge-info" :style="facilities[team.facility.name]">{{team.facility.name}}</span>
+                                        </a>
+                                        <div class="vote-info">
+                                            <i class="fa fa-clock-o"></i> <a href="#">Season: <b>{{team.season.name}}</b></a><br />
+                                            <i class="fa fa-user"></i> <a href="#">League: <b>{{team.league.name}}</b></a>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2 ">
+                                        <div class="vote-icon">
+                                            <div class="letterpic" :title="team.name"></div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+
                     </div>
-
-
                 </div>
             </div>
 
