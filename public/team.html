@@ -140,6 +140,26 @@
 
 <body class="fixed-sidebar">
 
+    <div class="modal inmodal" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content animated bounceInRight">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <i class="fa fa-facebook-square modal-icon"></i>
+                    <h4 class="modal-title">Get your standings and video highlights right on messenger</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="messenger_plugin" style="display: none;">
+                        <div class="fb-send-to-messenger" messenger_app_id="402678167007969" page_id="254076015141321" data-ref="test_ref" color="white" cta_text="SUBSCRIBE_IN_MESSENGER" size="large"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="wrapper">
 
         <div>
@@ -163,6 +183,9 @@
                                         <h2><b>{{team.league.name}}</b></h2>
                                     </a>
                                     <h3><i class="fa fa-map-marker"></i> {{team.facility.name}}</h3>
+                                    <a class="btn btn-success btn-facebook" data-toggle="modal" data-target="#myModal" style="background-color: #0084ff; color: white">
+                                        <i class="fa fa-facebook-messenger"> </i> Messenger Chatbot
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -371,6 +394,7 @@
             el: '#wrapper',
             data: {
                 team_id: "",
+                facility_id: "",
                 team: {
                     name: "Loading...",
                     facility: {},
@@ -390,10 +414,40 @@
                 var params = this.findGetParameter(),
                     id = params.id || "";
 
+                var center = this.getCookie("center");
+                if (center) {
+                    this.facility_id = center
+                }
+
                 if (id !== "") {
                     this.team_id = id;
                     this.getTeam();
                 }
+
+                window.fbAsyncInit = function() {
+                    FB.init({
+                        appId: '402678167007969',
+                        autoLogAppEvents: true,
+                        xfbml: true,
+                        version: 'v4.0'
+                    });
+                    FB.Event.subscribe('send_to_messenger', function(e) {
+                        if (e.event === "opt_in") {
+                            self.instructions = "All good! Now check that you received your first messenger message !"
+                            self.show_check = true
+                            document.querySelector('.messenger_plugin').style.display = "none"
+                        }
+                    });
+                };
+
+                (function(d, s, id) { // Load the SDK asynchronously
+                    var js, fjs = d.getElementsByTagName(s)[0];
+                    if (d.getElementById(id)) return;
+                    js = d.createElement(s);
+                    js.id = id;
+                    js.src = "https://connect.facebook.net/en_US/sdk.js";
+                    fjs.parentNode.insertBefore(js, fjs);
+                }(document, 'script', 'facebook-jssdk'));
             },
             methods: {
                 findGetParameter: function findGetParameter() {
@@ -411,7 +465,7 @@
                         _this.team = resp.body;
                         _this.roster = resp.body.roster;
                         _this.loading.roster = false;
-
+                        _this.buildChatbotButton()
                         _this.getResults();
                     }).catch(function(err) {
                         console.log(err.body.errors);
@@ -473,6 +527,32 @@
                 gotoPlayer: function gotoPlayer(player_id) {
                     window.location = "player.html?id=" + player_id;
                 },
+                buildChatbotButton: function() {
+                    const center_id = this.facility_id,
+                        program = "League",
+                        league_id = this.team.league.id,
+                        team_id = this.team_id,
+                        details = this.team.league.name + " - " + this.team.name,
+                        marketing_notif = "1";
+
+                    const ref = center_id + "_" + program + "_" + league_id + "_" + team_id + "_" + marketing_notif
+
+                    document.querySelector(".fb-send-to-messenger").setAttribute("data-ref", ref.replace(/ /g, '+'))
+
+                    FB.XFBML.parse()
+
+                    document.querySelector('.messenger_plugin').style.display = "block"
+                },
+                getCookie: function(name) {
+                    var nameEQ = name + "=";
+                    var ca = document.cookie.split(';');
+                    for (var i = 0; i < ca.length; i++) {
+                        var c = ca[i];
+                        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+                    }
+                    return null;
+                }
             }
         });
     </script>
