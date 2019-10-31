@@ -152,6 +152,9 @@
                     <div class="messenger_plugin" style="display: none;">
                         <div class="fb-send-to-messenger" messenger_app_id="402678167007969" page_id="254076015141321" data-ref="test_ref" color="white" cta_text="SUBSCRIBE_IN_MESSENGER" size="large"></div>
                     </div>
+                    <div v-if="show_check">
+                        You're all set! Check your messenger inbox for details.
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
@@ -408,7 +411,8 @@
                 roster: [],
                 leaderboard: [],
                 matches: [],
-                next_matches: []
+                next_matches: [],
+                show_check: false
             },
             mounted: function mounted() {
                 var params = this.findGetParameter(),
@@ -424,6 +428,7 @@
                     this.getTeam();
                 }
 
+                const self = this
                 window.fbAsyncInit = function() {
                     FB.init({
                         appId: '402678167007969',
@@ -433,7 +438,6 @@
                     });
                     FB.Event.subscribe('send_to_messenger', function(e) {
                         if (e.event === "opt_in") {
-                            self.instructions = "All good! Now check that you received your first messenger message !"
                             self.show_check = true
                             document.querySelector('.messenger_plugin').style.display = "none"
                         }
