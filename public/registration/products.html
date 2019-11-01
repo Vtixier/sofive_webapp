@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+
+    <title>Sofive Soccer Center</title>
+    <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=976102449200043&ev=PageView&noscript=1" /></noscript>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-56051013-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-56051013-1');
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale = 1, minimum-scale = 1, maximum-scale = 1, user-scalable = no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link rel="apple-touch-icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" />
+    <meta name="apple-mobile-web-app-title" content="Sofive">
+    <style type="text/css">
+        body {
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+        }
+    </style>
+
+    <link href="/css/plugins/select2/select2.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.css" rel="stylesheet">
+
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+    <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-32x32.png" sizes="32x32" />
+    <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" sizes="192x192" />
+    <link href="/css/plugins/footable/footable.core.css" rel="stylesheet">
+
+    <link href="/css/plugins/dataTables/datatables.min.css" rel="stylesheet">
+
+</head>
+
+<body class="fixed-sidebar">
+
+    <div id="wrapper">
+
+        <div>
+            <sofive-left-menu />
+        </div>
+
+        <div id="page-wrapper" class="gray-bg">
+
+            <div>
+                <sofive-header />
+            </div>
+
+            <div class="wrapper wrapper-content animated fadeInRight" style="padding-bottom: 15px">
+                <div class="ibox-content m-b-sm border-bottom">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <h2>Online registration</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row text-center" style="padding-top: 2%">
+                <div class="col-sm-12">
+                    <h1>Select your product :</h1>
+                </div>
+            </div>
+
+            <div class="row" style="padding-top: 1%">
+                <div class="col-md-2 offset-md-1">
+                    <div class="ibox">
+                        <div class="ibox-content product-box text-center">
+                            <div class="product-imitation" style="padding: 0"><img src="/img/sofive/Adult League.jpg" style="width: 100%"></div>
+                            <div class="product-desc">
+                                <span class="product-price">
+                                    AL
+                                </span>
+                                <small class="text-muted">{{facility}}</small>
+                                <a href="#" class="product-name"> Adult Leagues</a>
+                                <div class="m-t text-center">
+                                    <a v-on:click="gotoPage('/registration/adult_leagues.html')" class="btn btn-xs btn-outline btn-primary">Register <i class="fa fa-long-arrow-right"></i> </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="ibox">
+                        <div class="ibox-content product-box text-center">
+                            <div class="product-imitation" style="padding: 0"><img src="/img/sofive/Youth League.jpg" style="width: 100%"></div>
+                            <div class="product-desc">
+                                <span class="product-price">
+                                    YL
+                                </span>
+                                <small class="text-muted">{{facility}}</small>
+                                <a href="#" class="product-name"> Youth Leagues</a>
+                                <div class="m-t text-righ">
+                                    <a v-on:click="gotoPage('/registration/youth_leagues.html')" class="btn btn-xs btn-outline btn-primary">Register <i class="fa fa-long-arrow-right"></i> </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="ibox">
+                        <div class="ibox-content product-box text-center">
+                            <div class="product-imitation" style="padding: 0"><img src="/img/sofive/Adult Tournament.jpg" style="width: 100%"></div>
+                            <div class="product-desc">
+                                <span class="product-price">
+                                    AT
+                                </span>
+                                <small class="text-muted">{{facility}}</small>
+                                <a href="#" class="product-name"> Adult Tournaments</a>
+                                <div class="m-t text-righ">
+                                    <a v-on:click="gotoPage('/registration/adult_tournaments.html')" class="btn btn-xs btn-outline btn-primary">Register <i class="fa fa-long-arrow-right"></i> </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="ibox">
+                        <div class="ibox-content product-box text-center">
+                            <div class="product-imitation" style="padding: 0"><img src="/img/sofive/Youth Tournament.jpg" style="width: 100%"></div>
+                            <div class="product-desc">
+                                <span class="product-price">
+                                    YT
+                                </span>
+                                <small class="text-muted">{{facility}}</small>
+                                <a href="#" class="product-name"> Youth Tournaments</a>
+                                <div class="m-t text-righ">
+                                    <a v-on:click="gotoPage('/registration/youth_tournaments.html')" class="btn btn-xs btn-outline btn-primary">Register <i class="fa fa-long-arrow-right"></i> </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="ibox">
+                        <div class="ibox-content product-box text-center">
+                            <div class="product-imitation" style="padding: 0"><img src="/img/sofive/Youth Classes.jpg" style="width: 100%"></div>
+                            <div class="product-desc">
+                                <span class="product-price">
+                                    YC
+                                </span>
+                                <small class="text-muted">{{facility}}</small>
+                                <a href="#" class="product-name"> Youth Classes</a>
+                                <div class="m-t text-righ">
+                                    <a v-on:click="gotoPage('/registration/youth_classes.html')" class="btn btn-xs btn-outline btn-primary">Register <i class="fa fa-long-arrow-right"></i> </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <sofive-footer />
+            </div>
+        </div>
+    </div>
+
+    <!-- Mainly scripts -->
+    <script src="/js/jquery-3.1.1.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.js"></script>
+    <script src="/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.js"></script>
+
+    <!-- Custom and plugin javascript -->
+    <script src="/js/inspinia.js"></script>
+
+    <script src="/js/plugins/select2/select2.full.min.js"></script>
+
+    <script src="/js/vue.js"></script>
+
+    <script type="text/javascript" src="/js/vue-resource.js"></script>
+    <script type="text/javascript" src="/js/moment.js"></script>
+
+    <script type="text/javascript" src="/js/navigation.js"></script>
+    <script type="text/javascript" src="/js/header.js"></script>
+    <script type="text/javascript" src="/js/footer.js"></script>
+
+    <script src="/js/plugins/footable/footable.all.min.js"></script>
+
+    <script src="/js/plugins/dataTables/datatables.min.js"></script>
+    <script src="/js/plugins/dataTables/dataTables.bootstrap4.min.js"></script>
+
+    <script type="text/javascript">
+        var facilityMap = {
+            "1": "Sofive Meadowlands",
+            "2": "Sofive Elkins Park",
+            "3": "Sofive Brooklyn",
+            "4": "Sofive Rockville",
+            "5": "Sofive Columbia"
+        }
+        var app = new Vue({
+            el: '#wrapper',
+            data: {
+                loading: true,
+                products: [
+                    {
+                        name: "Adult Leagues",
+                        url: "/registration/adult_leagues.html?facility_id="
+                    },
+                    {
+                        name: "Youth Leagues",
+                        url: "/registration/youth_leagues.html?facility_id="
+                    },
+                    {
+                        name: "Adult Tournaments",
+                        url: "/registration/adult_tournaments.html?facility_id="
+                    },
+                    {
+                        name: "Youth Tournament",
+                        url: "/registration/youth_tournaments.html?facility_id="
+                    },
+                    {
+                        name: "Youth Classes",
+                        url: "/registration/youth_classes.html?facility_id="
+                    },
+                ],
+                facility_id: "0",
+                facility: ""
+            },
+            mounted: function mounted() {
+                var center = this.getCenterCookie();
+                if (center) {
+                    this.facility_id = center;
+                    this.facility = facilityMap[center];
+                }
+            },
+            methods: {
+                gotoPage: function(url) {
+                    window.location = url+"?facility_id="+this.facility_id
+                },
+                getCenterCookie: function() {
+                    var nameEQ = "center=";
+                    var ca = document.cookie.split(';');
+
+                    for (var i = 0; i < ca.length; i++) {
+                        var c = ca[i];
+
+                        while (c.charAt(0) == ' ') {
+                            c = c.substring(1, c.length);
+                        }
+
+                        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+                    }
+
+                    return null;
+                }
+            }
+        });
+    </script>
+
+</body>
+
+</html>

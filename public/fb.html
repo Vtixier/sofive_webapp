@@ -190,11 +190,11 @@
                                                 </select>
                                             </div>
                                         </div><br />
-                                        <div class="row" style="margin: 0">
+<!--                                         <div class="row" style="margin: 0">
                                             <div class="col-sm-12 text-center">
                                                 <label><input type="checkbox" checked class="i-checks"> Receive special offers </label>
                                             </div>
-                                        </div><br />
+                                        </div><br /> -->
                                         <div class="row">
                                             <div class="col s12 text-center">
                                                 <button class="btn btn-large btn-primary text-center" v-on:click="next"><strong>Next</strong>
@@ -348,10 +348,10 @@
                     self.selected.team = doc;
                 });
 
-                $('.i-checks').iCheck({
-                    checkboxClass: 'icheckbox_square-green',
-                    radioClass: 'iradio_square-green'
-                });
+                // $('.i-checks').iCheck({
+                //     checkboxClass: 'icheckbox_square-green',
+                //     radioClass: 'iradio_square-green'
+                // });
 
             },
             computed: {
@@ -470,7 +470,7 @@
                             league_id: this.selected.league.id,
                             team_id: this.selected.team.id,
                             details: this.selected.league.name + " - " + this.selected.team.name,
-                            marketing_notif: document.querySelector('.i-checks').checked
+                            marketing_notif: true
                         },
                         self = this;
                     this.$http.post("https://app.scoreplay.io/fb/user/preference", d)

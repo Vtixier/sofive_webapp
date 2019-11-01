@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+
+    <title>Sofive Soccer Center</title>
+    <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=976102449200043&ev=PageView&noscript=1" /></noscript>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-56051013-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-56051013-1');
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale = 1, minimum-scale = 1, maximum-scale = 1, user-scalable = no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link rel="apple-touch-icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" />
+    <meta name="apple-mobile-web-app-title" content="Sofive">
+    <style type="text/css">
+        body {
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+        }
+    </style>
+
+    <link href="/css/plugins/select2/select2.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.css" rel="stylesheet">
+
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+    <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-32x32.png" sizes="32x32" />
+    <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" sizes="192x192" />
+    <link href="/css/plugins/footable/footable.core.css" rel="stylesheet">
+
+    <link href="/css/plugins/dataTables/datatables.min.css" rel="stylesheet">
+
+</head>
+
+<body class="fixed-sidebar">
+
+    <div id="wrapper">
+
+        <div class="modal inmodal fade" id="more_info_modal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="font-bold">{{selected_league.season.name}}</h4>
+                        <h4 class="modal-title">{{selected_league.name}}</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div v-if="selected_league.description" class="league_desc" v-html="selected_league.description"></div><br />
+                        <div class="mediums m-t-xs">
+                            Starts on : {{selected_league.start}}<br />
+                            <span v-if="selected_league.start !== selected_league.end">Ends on : {{selected_league.end}}</span>
+                            <br /><br />
+                            <!-- <div v-if="selected.league.class">${{selected.league.price}} per class</div> -->
+                            <div v-if="product.price">{{product.price/100}}$ for teams</div><br />
+                            <div v-if="free_agent.price">{{free_agent.price/100}}$ for Free Agents</div>
+                            <br>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="text-align: left">
+                        <div>
+                            <button v-on:click="choose('team')" class="btn btn-primary">Register as team</button>
+                            <button v-on:click="choose('individual')" class="btn btn-primary">Register as a free agent</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <sofive-left-menu />
+        </div>
+
+        <div id="page-wrapper" class="gray-bg">
+
+            <div>
+                <sofive-header />
+            </div>
+
+            <div class="wrapper wrapper-content animated fadeInRight" style="padding-bottom: 15px">
+                <div class="ibox-content m-b-sm border-bottom">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h2>Adult leagues</h2>
+                        </div>
+                        <div class="col-md-4" style="padding-top: 5px">
+                            <select class="select_season form-control" style="width: 100%" v-model="selected_season">
+                                <option value="">All seasons</option>
+                                <option v-for="season in seasons" :value="season.id">{{season.display_name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" style="padding-top: 20px">
+                <div class="col-lg-12" v-if="loading">
+                    <div>
+                        <div>
+                            <div class="sk-spinner sk-spinner-wave">
+                                <div class="sk-rect1"></div>
+                                <div class="sk-rect2"></div>
+                                <div class="sk-rect3"></div>
+                                <div class="sk-rect4"></div>
+                                <div class="sk-rect5"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12 text-center" v-if="!loading && filtered_leagues.length==0">
+                    <h3>Sorry, there are currently no adult leagues available for registration!</h3>
+                </div>
+                <div class="col-md-4" v-for="league in filtered_leagues">
+                    <div class="ibox">
+                        <div class="ibox-content product-box">
+                            <div v-if="league.early_bird" class="product-imitation" style="padding: 6px 0; color: white; background-color: #03793E">
+                                {{league.early_bird}} !
+                            </div>
+                            <div class="product-desc">
+                                <small class="text-muted">{{league.season.name}}</small>
+                                <a href="#" class="product-name">{{league.name}}</a>
+                                <div class="mediums m-t-xs">
+                                    Starts on : {{league.start}}<br />
+                                    <span v-if="league.start !== league.end">Ends on : {{league.end}}</span>
+                                    <!--                                     <br>
+                                    <div v-if="league.class">${{league.price}} per class</div>
+                                    <div v-else>${{league.price}} Teams <span v-if="league.agent">/ ${{league.agent}} Free Agents</span></div> -->
+                                    <br>
+                                </div>
+                                <button v-on:click="selectLeague(league)" type="button" class="btn btn-outline btn btn-primary" style="margin-top: 5%">
+                                    Find out more
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <sofive-footer />
+            </div>
+        </div>
+    </div>
+
+    <!-- Mainly scripts -->
+    <script src="/js/jquery-3.1.1.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.js"></script>
+    <script src="/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.js"></script>
+
+    <!-- Custom and plugin javascript -->
+    <script src="/js/inspinia.js"></script>
+
+    <script src="/js/plugins/select2/select2.full.min.js"></script>
+
+    <script src="/js/vue.js"></script>
+
+    <script type="text/javascript" src="/js/vue-resource.js"></script>
+    <script type="text/javascript" src="/js/moment.js"></script>
+
+    <script type="text/javascript" src="/js/navigation.js"></script>
+    <script type="text/javascript" src="/js/header.js"></script>
+    <script type="text/javascript" src="/js/footer.js"></script>
+
+    <script src="/js/plugins/footable/footable.all.min.js"></script>
+
+    <script src="/js/plugins/dataTables/datatables.min.js"></script>
+    <script src="/js/plugins/dataTables/dataTables.bootstrap4.min.js"></script>
+
+    <script type="text/javascript">
+        var facilityMap = {
+            "1": "Sofive Meadowlands",
+            "2": "Sofive Elkins Park",
+            "3": "Sofive Brooklyn",
+            "4": "Sofive Rockville",
+            "5": "Sofive Columbia"
+        }
+        var app = new Vue({
+            el: '#wrapper',
+            data: {
+                loading: true,
+                centers: [],
+                seasons: [],
+                leagues: [],
+                facility_id: "0",
+                product_id: "0",
+                selected_season: "",
+                selected_league: {
+                    season: {}
+                },
+                product: {},
+                free_agent: {}
+            },
+            computed: {
+            	filtered_leagues: function() {
+                    const self = this;
+                    var filtered = this.leagues;
+                    if (this.selected_season !== "") {
+                        filtered = this.leagues.filter(l => (l.season.id === self.selected_season))
+                    }
+                    return filtered
+                },
+            },
+            mounted: function() {
+                const params = this.findGetParameter();
+                this.facility_id = params.facility_id
+                this.getCenters()
+                this.getSeasons()
+            },
+            methods: {
+                getCenters: function getCenters() {
+                    const self = this;
+                    this.centers = [];
+                    return this.$http.get("http://localhost:8080/facility/")
+                    .then(function(resp) {
+                        self.centers = resp.body;
+                    }).catch(function(err) {
+                        console.log(err.body.errors);
+                    });
+                },
+                getSeasons: function() {
+                    const self = this;
+                    this.seasons = [];
+                    this.leagues = [];
+                    this.loading = true;
+                    var body = {
+                        "facility_id": this.facility_id,
+                        "program_id": "1",
+                        "date": moment().format("YYYY-MM-DD")
+                    };
+                    this.$http.post("http://localhost:8080/program/seasons/current", body)
+                    .then(resp => {
+                    	let p = [];
+                    	self.seasons = resp.body.map(s => {
+                    		p.push(self.getEvents(s.id));
+                    		if (s.name.indexOf("-") !== (-1)) {
+                                if (s.name.indexOf("-") !== (-1)) {
+                                    display_name = s.name.split("-")[1].trim().split("(")[0]
+                                } else {
+                                    display_name = s.name.split("-")[1].trim()
+                                }
+                            }
+                            return {
+                            	...s,
+                            	display_name
+                            }
+                    	})
+                        if (p.length === 0) {
+                            self.loading = false
+                            return
+                        }
+						Promise.all(p)
+						.then(leagues => {
+							self.loading = false
+							self.leagues = self.flatten(leagues).sort((a,b) => {
+								const diff = moment(a.start, "MM-DD-YYYY").diff(moment(b.start, "MM-DD-YYYY"), 'seconds');
+                                if (diff > 0) {
+                                    return 1;
+                                } else if (diff < 0) {
+                                    return -1;
+                                } else {
+                                    return 0;
+                                }
+							})
+						})
+                    })
+                },
+                getEvents: function getEvents(season_id) {
+                    const self = this;
+                    console.log("Season", season_id);
+                    this.leagues = [];
+                    var body = {
+                        "season_id": season_id
+                    };
+                    return this.$http.post("http://localhost:8080/program/leagues", body)
+                    .then(resp => {
+                    	return resp.body.map(l => {
+                    		const season = self.seasons.find(s => (parseInt(s.id) === l.season_id)),
+                    		description = l.description
+                    		if (description.indexOf("Early Bird: ") !== -1) {
+                                var i = description.indexOf('Early Bird: '),
+                                    text = description.slice(i, i + 33),
+                                    final_date = text.slice(text.length - 10, text.length),
+                                    parsed_final_date = moment(final_date, "MM/DD/YYYY"),
+                                    diff = moment().diff(parsed_final_date);
+
+                                if (diff < 0) {
+                                    l.early_bird = description.slice(i, i + 33);
+                                }
+                            }
+                    		return {
+                    			...l,
+                    			season,
+                    			start: moment(l.start_date, "YYYY-MM-DDTHH:mm:ss").format("MM-DD-YYYY"),
+                    			end: moment(season.end_date, "YYYY-MM-DDTHH:mm:ss").format("MM-DD-YYYY"),
+                    		}
+                    	})
+                    })
+                },
+                selectLeague: function(league) {
+                    this.selected_league = league;
+                    $('#more_info_modal').modal({
+                        keyboard: false
+                    });
+                    this.getTeamPrice(league)
+                    this.getFreeAgentPrice(league)
+                },
+                getBody: function(league, team_fee) {
+                    const self = this;
+                    return {
+                        "dash_id": league.dash_id,
+                        "product_type": "Adult Leagues",
+                        "early_bird": "No",
+                        "center": self.centers.find(c => (c.id === self.facility_id)).name,
+                        "payment": team_fee ? "Team Fee" : "Individual",
+                        "deposit": "No",
+                        "season": league.season.name,
+                    };
+                },
+                getTeamPrice: function(league) {
+                    const d = this.getBody(league, true),
+                        self = this;
+                    this.$http.post("http://localhost:8080/product/registration/get", d)
+                    .then(resp => {
+                        let product = resp.body.product,
+                        p = product.price
+                        if (d.center === "Sofive Rockville, MD") {
+                            product.price = Math.round(p / 1.1 * 100) / 100;
+                            product.tax = "10%";
+                        }
+                        if (d.center === "Sofive Columbia, MD") {
+                            product.price = Math.round(p / 1.05 * 100) / 100;
+                            product.tax = "5%";
+                        }
+                        return {
+                            ...product,
+                            full_price: p
+                        }
+                    })
+                    .catch(function(err) {
+                        console.log(err);
+                    });
+                },
+                getFreeAgentPrice: function(league) {
+                    const d = this.getBody(league, false),
+                        self = this;
+                    this.$http.post("http://localhost:8080/product/registration/get", d)
+                    .then(resp => {
+                        let free_agent = resp.body.product,
+                        p = free_agent.price
+                        if (d.center === "Sofive Rockville, MD") {
+                            free_agent.price = Math.round(p / 1.1 * 100) / 100;
+                            free_agent.tax = "10%";
+                        }
+                        if (d.center === "Sofive Columbia, MD") {
+                            free_agent.price = Math.round(p / 1.05 * 100) / 100;
+                            free_agent.tax = "5%";
+                        }
+                        return {
+                            ...free_agent,
+                            full_price: p
+                        }
+                    })
+                    .catch(function(err) {
+                        console.log(err);
+                    });
+                },
+                choose: function(reg_type) {
+                    const self = this,
+                    data = btoa(JSON.stringify({
+                        ...self.selected_league,
+                        reg_type,
+                        product_type: self.product.name,
+                        center: self.centers.find(c => (c.id === self.facility_id)).name,
+                    }))
+                    window.location = "/reg_conf.html?sel=" + data;
+                },
+                flatten: function(arr) {
+                    var self = this;
+                    return arr.reduce(function(flat, toFlatten) {
+                        return flat.concat(Array.isArray(toFlatten) ? self.flatten(toFlatten) : toFlatten);
+                    }, []);
+                },
+                findGetParameter: function() {
+                    var queryDict = {}
+                    decodeURI(location.search).substr(1).split("&").forEach(function(item) {
+                        queryDict[item.split("=")[0]] = item.split("=")[1]
+                    })
+                    return queryDict
+                },
+            }
+        });
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+
+    <title>Sofive Soccer Center</title>
+    <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=976102449200043&ev=PageView&noscript=1" /></noscript>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-56051013-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-56051013-1');
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale = 1, minimum-scale = 1, maximum-scale = 1, user-scalable = no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link rel="apple-touch-icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" />
+    <meta name="apple-mobile-web-app-title" content="Sofive">
+    <style type="text/css">
+        body {
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+        }
+    </style>
+
+    <link href="/css/plugins/select2/select2.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.css" rel="stylesheet">
+
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+    <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-32x32.png" sizes="32x32" />
+    <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" sizes="192x192" />
+    <link href="/css/plugins/footable/footable.core.css" rel="stylesheet">
+
+    <link href="/css/plugins/dataTables/datatables.min.css" rel="stylesheet">
+
+</head>
+
+<body class="fixed-sidebar">
+
+    <div id="wrapper">
+
+        <div>
+            <sofive-left-menu />
+        </div>
+
+        <div id="page-wrapper" class="gray-bg">
+
+            <div>
+                <sofive-header />
+            </div>
+
+            <div class="wrapper wrapper-content animated fadeInRight" style="padding-bottom: 15px">
+                <div class="ibox-content m-b-sm border-bottom">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h2>Youth tournaments</h2>
+                        </div>
+                        <div class="col-md-4" style="padding-top: 5px">
+                            <select class="select_season form-control" style="width: 100%" v-model="selected_date">
+                                <option value="">All dates</option>
+                                <option v-for="tournament_date in tournament_dates" :value="tournament_date">{{tournament_date}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" style="padding-top: 20px">
+                <div class="col-lg-12" v-if="loading">
+                    <div>
+                        <div>
+                            <div class="sk-spinner sk-spinner-wave">
+                                <div class="sk-rect1"></div>
+                                <div class="sk-rect2"></div>
+                                <div class="sk-rect3"></div>
+                                <div class="sk-rect4"></div>
+                                <div class="sk-rect5"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12 text-center" v-if="!loading && tournaments.length==0">
+                    <h3>Sorry, there are currently no youth tournaments available for registration!</h3>
+                </div>
+                <div class="col-md-4" v-for="tournament in filtered_tournaments">
+                    <div class="ibox">
+                        <div class="ibox-content product-box">
+                            <div class="product-desc">
+                                <small class="text-muted">{{tournament.age}}</small>
+                                <a href="#" class="product-name">{{tournament.name}}</a>
+                                <div class="mediums m-t-xs">
+                                    Starts on : {{tournament.day}} ({{tournament.date}})<br />
+                                </div>
+                                <button v-on:click="gotoGotsoccer(tournament.link)" type="button" class="btn btn-outline btn btn-primary" style="margin-top: 5%">
+                                    Find out more
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <sofive-footer />
+            </div>
+        </div>
+    </div>
+
+    <!-- Mainly scripts -->
+    <script src="/js/jquery-3.1.1.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.js"></script>
+    <script src="/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.js"></script>
+
+    <!-- Custom and plugin javascript -->
+    <script src="/js/inspinia.js"></script>
+
+    <script src="/js/plugins/select2/select2.full.min.js"></script>
+
+    <script src="/js/vue.js"></script>
+
+    <script type="text/javascript" src="/js/vue-resource.js"></script>
+    <script type="text/javascript" src="/js/moment.js"></script>
+
+    <script type="text/javascript" src="/js/navigation.js"></script>
+    <script type="text/javascript" src="/js/header.js"></script>
+    <script type="text/javascript" src="/js/footer.js"></script>
+
+    <script src="/js/plugins/footable/footable.all.min.js"></script>
+
+    <script src="/js/plugins/dataTables/datatables.min.js"></script>
+    <script src="/js/plugins/dataTables/dataTables.bootstrap4.min.js"></script>
+
+    <script type="text/javascript">
+        var facilityMap = {
+            "1": "Sofive Meadowlands",
+            "2": "Sofive Elkins Park",
+            "3": "Sofive Brooklyn",
+            "4": "Sofive Rockville",
+            "5": "Sofive Columbia"
+        }
+        var app = new Vue({
+            el: '#wrapper',
+            data: {
+                loading: true,
+                tournaments: [],
+                facility_id: "0",
+                product_id: "0",
+                selected_season: "",
+                selected_date: "",
+            },
+            computed: {
+                tournament_dates: function() {
+                    return [...new Set(this.tournaments.map(l => (l.date)))].sort();
+                },
+                filtered_tournaments: function() {
+                    if (this.selected_date == "") {
+                        return this.tournaments
+                    }
+                    return this.tournaments.filter(l => (l.date === this.selected_date))
+                }
+            },
+            mounted: function() {
+                const params = this.findGetParameter();
+                this.facility_id = params.facility_id
+                this.getTournaments()
+            },
+            methods: {
+                getTournaments: function() {
+                    const self = this;
+                    var body = {
+                        "facility_id": parseInt(this.facility_id)
+                    };
+                    this.$http.post("http://localhost:8080/program/tournaments", body)
+                    .then(resp => {
+                    	self.tournaments = resp.body.map(t => {
+                    		const d = moment(t.date, "MMM D, YYYY"),
+                                //June 8, 2019
+                                i = t.description.indexOf("Fee: $"),
+                                j = t.description.indexOf(" per team"),
+                                price = t.description.slice(i + 5, j),
+                                k = t.description.indexOf(" minutes each"),
+                                duration = t.description.slice(k - 2, k) + " min",
+                                second_part = t.name.split(",")[1].trim();
+                            let min_age = 0,
+                                max_age = 0;
+                            if (second_part.indexOf("-") > -1) {
+                                let third_split = second_part.split("-");
+                                min_age = parseInt(third_split[0].replace("U", ""));
+                                let f_split = third_split[1].split(" ");
+                                max_age = parseInt(f_split[0].replace("U", ""));
+                            } else {
+                                let _f_split = second_part.split(" ");
+                                min_age = parseInt(_f_split[0].replace("U", ""));
+                                max_age = min_age;
+                            }
+                            return {
+                            	...t,
+                            	date: d.format("YYYY-MM-DD"),
+                                day: d.format("dddd"),
+                                price,
+                                duration,
+                            	min_age,
+                                max_age,
+                                age: second_part
+                            }
+                    	})
+                        self.loading = false
+                    })
+                    .catch(function(err) {
+                        console.log(err);
+                    });
+                },
+                gotoGotsoccer: function(link) {
+                    var win = window.open(link, '_blank');
+                    win.focus();
+                },
+                findGetParameter: function() {
+                    var queryDict = {}
+                    decodeURI(location.search).substr(1).split("&").forEach(function(item) {
+                        queryDict[item.split("=")[0]] = item.split("=")[1]
+                    })
+                    return queryDict
+                },
+            }
+        });
+    </script>
+
+</body>
+
+</html>

@@ -1,8 +1,8 @@
 Vue.component('sofive-left-menu', {
-  template: "<div><nav class=\"navbar-default navbar-static-side\" role=\"navigation\"><div class=\"sidebar-collapse\"><ul class=\"nav metismenu\" id=\"side-menu\"><li class=\"nav-header\"><div class=\"dropdown profile-element\"><a href=\"index.html\"> <img alt=\"image\" class=\"image\" style=\"max-width: 150px\" :src=\"img\" /> </a><a data-toggle=\"dropdown\" class=\"dropdown-toggle\" href=\"#\"><br/><br/><span class=\"text-muted text-xs block\" style=\"color: white !important\">Change center <b class=\"caret\"></b></span></a><ul class=\"dropdown-menu animated fadeInRight m-t-xs\"><li><a class=\"dropdown-item\" v-on:click=\"setCookie('1')\">Sofive Meadowlands</a></li><li><a class=\"dropdown-item\" v-on:click=\"setCookie('3')\">Sofive Brooklyn</a></li><li><a class=\"dropdown-item\" v-on:click=\"setCookie('4')\">Sofive Rockville</a></li><li><a class=\"dropdown-item\" v-on:click=\"setCookie('2')\">Sofive Elkins Park</a></li><li><a class=\"dropdown-item\" v-on:click=\"setCookie('5')\">Sofive Columbia</a></li></ul><br/></div></li><li style=\"border-left: 4px solid #19aa8d\"><a href=\"search.html\"><i class=\"fa fa-users\"></i><span class=\"nav-label\">My team</span></a></li><li><a href=\"reg.html\"><i class=\"fa fa-plus-square-o\"></i><span class=\"nav-label\">Register</span></a></li><li><a href=\"book.html\"><i class=\"fa fa-calendar\"></i><span class=\"nav-label\">Book a field</span></a></li><li><a href=\"video.html\"><i class=\"fa fa-video-camera\"></i><span class=\"nav-label\">Videos</span></a></li><li><a href=\"standings.html\"><i class=\"fa fa-trophy\"></i><span class=\"nav-label\">Schedule & standings</span></a></li><li><a href=\"fb.html\"><i class=\"fa\">&#xf09a;</i><span class=\"nav-label\">Chatbot</span><span class=\"label label-info float-right\" style=\"color: white\">NEW</span></a></li><li><a href=\"https://sofive.com\" target=\"blank\"><i class=\"fa fa-home\"></i><span class=\"nav-label\">Go to <b>sofive.com</b></span></a></li></ul></div></nav><div class=\"modal inmodal fade\" id=\"myModal5\" data-backdrop=\"static\" tabindex=\"-1\" role=\"dialog\" aria-hidden=\"true\"><div class=\"modal-dialog modal-lg\"><div class=\"modal-content\"><div class=\"modal-header\"><h4 class=\"modal-title\">Select center location</h4><small class=\"font-bold\">Please select your prefered location</small></div><div class=\"modal-body\"><label class=\"col-form-label\" for=\"status\"><div v-if=\"facility_loading\"><div><div class=\"sk-spinner sk-spinner-wave\"><div class=\"sk-rect1\"></div><div class=\"sk-rect2\"></div><div class=\"sk-rect3\"></div><div class=\"sk-rect4\"></div><div class=\"sk-rect5\"></div></div></div></div></label><div class=\"vote-item text-center\" v-for=\"center in centers\"><div class=\"row\" v-on:click=\"setCookie(center.id)\"><div class=\"col-md-12\"><a href=\"#\" class=\"vote-title\" style=\"margin-left: 0; color: rgb(3, 121, 62);\">{{center.name}}</a></div></div></div></div></div></div></div><button id=\"auto-open\" type=\"button\" style=\"display: none\" data-toggle=\"modal\" data-target=\"#myModal5\">Large Modal</button></div>",
+  template: "<div><nav class=\"navbar-default navbar-static-side\" role=\"navigation\"><div class=\"sidebar-collapse\"><ul class=\"nav metismenu\" id=\"side-menu\"><li class=\"nav-header\"><div class=\"dropdown profile-element\"><a href=\"/index.html\"> <img alt=\"image\" class=\"image\" style=\"max-width: 150px\" :src=\"img\" /> </a><a data-toggle=\"dropdown\" class=\"dropdown-toggle\" href=\"/#\"><br/><br/><span class=\"text-muted text-xs block\" style=\"color: white !important\">Change center <b class=\"caret\"></b></span></a><ul class=\"dropdown-menu animated fadeInRight m-t-xs\"><li><a class=\"dropdown-item\" v-on:click=\"setCookie('1')\">Sofive Meadowlands</a></li><li><a class=\"dropdown-item\" v-on:click=\"setCookie('3')\">Sofive Brooklyn</a></li><li><a class=\"dropdown-item\" v-on:click=\"setCookie('4')\">Sofive Rockville</a></li><li><a class=\"dropdown-item\" v-on:click=\"setCookie('2')\">Sofive Elkins Park</a></li><li><a class=\"dropdown-item\" v-on:click=\"setCookie('5')\">Sofive Columbia</a></li></ul><br/></div></li><li style=\"border-left: 4px solid #19aa8d\"><a href=\"/search.html\"><i class=\"fa fa-users\"></i><span class=\"nav-label\">My team</span></a></li><li><a href=\"/reg.html\"><i class=\"fa fa-plus-square-o\"></i><span class=\"nav-label\">Register</span></a></li><li><a href=\"/book.html\"><i class=\"fa fa-calendar\"></i><span class=\"nav-label\">Book a field</span></a></li><li><a href=\"/video.html\"><i class=\"fa fa-video-camera\"></i><span class=\"nav-label\">Videos</span></a></li><li><a href=\"/standings.html\"><i class=\"fa fa-trophy\"></i><span class=\"nav-label\">Schedule & standings</span></a></li><li><a href=\"/fb.html\"><i class=\"fa\">&#xf09a;</i><span class=\"nav-label\">Chatbot</span><span class=\"label label-info float-right\" style=\"color: white\">NEW</span></a></li><li><a href=\"/https://sofive.com\" target=\"blank\"><i class=\"fa fa-home\"></i><span class=\"nav-label\">Go to <b>sofive.com</b></span></a></li></ul></div></nav><div class=\"modal inmodal fade\" id=\"myModal5\" data-backdrop=\"static\" tabindex=\"-1\" role=\"dialog\" aria-hidden=\"true\"><div class=\"modal-dialog modal-lg\"><div class=\"modal-content\"><div class=\"modal-header\"><h4 class=\"modal-title\">Select center location</h4><small class=\"font-bold\">Please select your prefered location</small></div><div class=\"modal-body\"><label class=\"col-form-label\" for=\"status\"><div v-if=\"facility_loading\"><div><div class=\"sk-spinner sk-spinner-wave\"><div class=\"sk-rect1\"></div><div class=\"sk-rect2\"></div><div class=\"sk-rect3\"></div><div class=\"sk-rect4\"></div><div class=\"sk-rect5\"></div></div></div></div></label><div class=\"vote-item text-center\" v-for=\"center in centers\"><div class=\"row\" v-on:click=\"setCookie(center.id)\"><div class=\"col-md-12\"><a href=\"/#\" class=\"vote-title\" style=\"margin-left: 0; color: rgb(3, 121, 62);\">{{center.name}}</a></div></div></div></div></div></div></div><button id=\"auto-open\" type=\"button\" style=\"display: none\" data-toggle=\"modal\" data-target=\"#myModal5\">Large Modal</button></div>",
   data: function() {
     return {
-        img: "img/sofive/sofive.png",
+        img: "/img/sofive/sofive.png",
         open: false,
         centers: [],
         facility_loading: false,
@@ -36,22 +36,22 @@ Vue.component('sofive-left-menu', {
         if (!c) {
             return setTimeout(self.getCenterImage, 5000) // wait for cookie to be set
         }
-        let img = "img/sofive/sofive.png"
+        let img = "/img/sofive/sofive.png"
         switch (c) {
             case "1":
-                img = "img/sofive/sofivemdl.png"
+                img = "/img/sofive/sofivemdl.png"
                 break;
             case "2":
-                img = "img/sofive/sofiveekp.png"
+                img = "/img/sofive/sofiveekp.png"
                 break;
             case "3":
-                img = "img/sofive/sofivebrk.png"
+                img = "/img/sofive/sofivebrk.png"
                 break;
             case "4":
-                img = "img/sofive/sofiverok.png"
+                img = "/img/sofive/sofiverok.png"
                 break;
             case "5":
-                img = "img/sofive/sofivecol.png"
+                img = "/img/sofive/sofivecol.png"
                 break;
             default:
         }
