@@ -430,7 +430,7 @@
                                 return self.getSingleMatchDetails(match_data)
                             }))
                             .then(highlights => {
-                                self.highlights = highlights
+                                self.highlights = highlights.filter(h => h)
                                 console.log(highlights)
                             })
                     },
@@ -473,8 +473,11 @@
                             .then(details => {
                                 return this.$http.get("https://video.scoreplay.io/match/"+match_id)
                                 .then(videoResp => {
-                                    const url = videoResp.body.recording.url,
-                                    videoID = url.slice(url.indexOf("/video") + 7, url.length)
+                                    const url = videoResp.body.recording.url
+                                    if (url === "") {
+                                        return null
+                                    }
+                                    const videoID = url.slice(url.indexOf("/video") + 7, url.length)
                                     return {
                                         match_id,
                                         details,
