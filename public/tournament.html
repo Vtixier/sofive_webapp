@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+
+    <title>Sofive Soccer Center</title>
+    <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=976102449200043&ev=PageView&noscript=1" /></noscript>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-56051013-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-56051013-1');
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale = 1, minimum-scale = 1, maximum-scale = 1, user-scalable = no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link rel="apple-touch-icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" />
+    <meta name="apple-mobile-web-app-title" content="Sofive">
+    <style type="text/css">
+        body {
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+        }
+
+        @media only screen and (max-width: 768px) {
+            .no-inline-if-mob {
+                display: block;
+            }
+        }
+
+        @media only screen and (min-width: 768px) {
+            .no-inline-if-mob {
+                display: inline-table !important;
+            }
+        }
+    </style>
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="css/animate.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-32x32.png" sizes="32x32" />
+    <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" sizes="192x192" />
+</head>
+
+<body class="fixed-sidebar">
+
+    <div id="wrapper">
+
+        <div>
+            <sofive-left-menu />
+        </div>
+
+        <div id="page-wrapper" class="gray-bg">
+
+            <div>
+                <sofive-header />
+            </div>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox ">
+                        <div class="ibox-content text-center p-md">
+                            <div class="row">
+                                <div class="col-sm">
+                                    <a style="font-size: 40px; color: #295182" class="text-center"><strong>{{name}}</strong></a>
+                                    <p><i class="fa fa-map-marker"></i> Meadowlands</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-12" v-if="standings_loading">
+                    <div>
+                        <div>
+                            <div class="sk-spinner sk-spinner-wave">
+                                <div class="sk-rect1"></div>
+                                <div class="sk-rect2"></div>
+                                <div class="sk-rect3"></div>
+                                <div class="sk-rect4"></div>
+                                <div class="sk-rect5"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="wrapper wrapper-content animated fadeInRight">
+
+                <div class="tabs-container">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li v-for="(tournament, i) in tournaments">
+                        	<a v-if="i==0" class="nav-link active" data-toggle="tab" :href="'#tab-'+i.toString()"> {{tournament.name}}</a>
+                        	<a v-else class="nav-link" data-toggle="tab" :href="'#tab-'+i.toString()"> {{tournament.name}}</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div role="tabpanel" v-for="(tournament, i) in tournaments" :id="'tab-'+i.toString()" v-bind:class="{'tab-pane': true, 'active': (i==0)}">
+                            <div class="panel-body">
+                            	<h2>Standings</h2>
+                                <table class="table table-hover margin bottom table-responsive">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 1%" class="text-center">No.</th>
+                                            <th class="text-center">Team</th>
+                                            <th class="text-center">Games</th>
+                                            <th class="text-center">W</th>
+                                            <th class="text-center">D</th>
+                                            <th class="text-center">L</th>
+                                            <th class="text-center">GF</th>
+                                            <th class="text-center">GA</th>
+                                            <th class="text-center">Pts</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="(standing, index) in tournament.standings" style="cursor: pointer;" v-on:click="gotoTeam(standing.id)">
+                                            <td class="text-center">{{index+1}}</td>
+                                            <td class="text-center">{{standing.team}}</td>
+                                            <td class="text-center">{{standing.played}}</td>
+                                            <td class="text-center">{{standing.won}}</td>
+                                            <td class="text-center">{{standing.draw}}</td>
+                                            <td class="text-center">{{standing.lost}}</td>
+                                            <td class="text-center">{{standing.goal_for}}</td>
+                                            <td class="text-center">{{standing.goal_against}}</td>
+                                            <td class="text-center">{{standing.points}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <hr/>
+                                <h2>Matches</h2>
+                                <table class="table table-hover margin bottom table-responsive no-inline-if-mob">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">Time</th>
+                                            <th class="text-center">Home</th>
+                                            <th class="text-center">Score</th>
+                                            <th class="text-center">Away</th>
+                                            <th class="text-center"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="(match, i) in tournament.results">
+                                            <td class="text-center">{{match.time}}</td>
+                                            <td class="text-center">{{match.home_team}}</td>
+                                            <td class="text-center">{{match.home_score}} - {{match.away_score}}</td>
+                                            <td class="text-center">{{match.away_team}}</td>
+                                            <td style="text-align: center"><a v-on:click="gotoMatch(match.id)"><span class="label label-primary">view videos</span></a></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div>
+                <sofive-footer />
+            </div>
+        </div>
+    </div>
+
+    <!-- Mainly scripts -->
+    <script src="js/jquery-3.1.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+    <!-- Custom and plugin javascript -->
+    <script src="js/inspinia.js"></script>
+
+    <script src="js/vue.js"></script>
+
+    <script type="text/javascript" src="js/vue-resource.js"></script>
+    <script type="text/javascript" src="js/moment.js"></script>
+
+    <script type="text/javascript" src="js/navigation.js"></script>
+    <script type="text/javascript" src="js/header.js"></script>
+    <script type="text/javascript" src="js/footer.js"></script>
+
+    <script type="text/javascript">
+        "use strict";
+
+        var app = new Vue({
+            el: '#wrapper',
+            data: {
+                name: "Loading...",
+                id: "",
+                standings: [],
+                standings_loading: false,
+                tournaments: []
+            },
+            mounted: function mounted() {
+                var params = this.findGetParameter(),
+                    id = params.id || "",
+                    self = this;
+
+                if (id !== "") {
+                	this.id = id
+                    this.getTournamentDetails();
+                }
+            },
+            methods: {
+                findGetParameter: function findGetParameter() {
+                    var queryDict = {};
+                    decodeURI(location.search).substr(1).split("&").forEach(function(item) {
+                        queryDict[item.split("=")[0]] = item.split("=")[1];
+                    });
+                    return queryDict;
+                },
+                getTournamentDetails: function() {
+                	const self = this;
+                	this.$http.get("http://localhost:8080/program/gotsoccer/tournament/"+this.id)
+                	.then(resp => {
+                		self.name = resp.body.name
+                		self.tournaments = resp.body.tournaments
+                	})
+                },
+                gotoMatch: function(id) {
+                    window.location = "match.html?id=" + id;
+                },
+            }
+        });
+    </script>
+
+</body>
+
+</html>

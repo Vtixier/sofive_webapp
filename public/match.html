@@ -800,7 +800,7 @@
                     getDashMatch: function getDashMatch() {
                         var _this2 = this;
 
-                        if (this.matchID.indexOf("manual") !== (-1)) {
+                        if ((this.matchID.indexOf("manual") !== (-1)) || (this.matchID.indexOf("::") !== (-1))) {
                             return _this2.getManualMatchDetails();
                         }
 
