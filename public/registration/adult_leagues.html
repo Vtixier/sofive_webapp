@@ -388,6 +388,7 @@
                         reg_type,
                         product_type: self.product.name,
                         center: self.centers.find(c => (c.id === self.facility_id)).name,
+                        facility_id: self.facility_id
                     }))
                     window.location = "/reg_conf.html?sel=" + data;
                 },
