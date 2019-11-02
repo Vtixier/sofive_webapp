@@ -140,7 +140,7 @@
                                 <small class="text-muted">{{facility}}</small>
                                 <a href="#" class="product-name"> Youth<br/>Tournaments</a>
                                 <div class="m-t text-righ">
-                                    <a class="btn btn-xs btn-outline btn-primary" style="color: #03793E">Select <i class="fa fa-long-arrow-right"></i> </a>
+                                    <a v-on:click="gotoTournament()" class="btn btn-xs btn-outline btn-primary" style="color: #03793E">Select <i class="fa fa-long-arrow-right"></i> </a>
                                 </div>
                             </div>
                         </div>
@@ -226,6 +226,9 @@
                 },
                 gotoLeague: function(id) {
                     window.location = "/standings/leagues.html?facility_id="+this.facility_id+"&product_id="+id
+                },
+                gotoTournament: function() {
+                    window.location = "/standings/tournaments.html?facility_id="+this.facility_id
                 },
                 getCenterCookie: function() {
                     var nameEQ = "center=";
