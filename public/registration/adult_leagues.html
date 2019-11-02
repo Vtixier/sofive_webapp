@@ -386,7 +386,7 @@
                     data = btoa(JSON.stringify({
                         ...self.selected_league,
                         reg_type,
-                        product_type: self.product.name,
+                        product_type: "Adult Leagues",
                         center: self.centers.find(c => (c.id === self.facility_id)).name,
                         facility_id: parseInt(self.facility_id)
                     }))
