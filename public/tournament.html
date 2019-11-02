@@ -115,26 +115,26 @@
                                         <tr>
                                             <th style="width: 1%" class="text-center">No.</th>
                                             <th class="text-center">Team</th>
+                                            <th class="text-center">Pts</th>
                                             <th class="text-center">Games</th>
                                             <th class="text-center">W</th>
                                             <th class="text-center">D</th>
                                             <th class="text-center">L</th>
                                             <th class="text-center">GF</th>
                                             <th class="text-center">GA</th>
-                                            <th class="text-center">Pts</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr v-for="(standing, index) in tournament.standings" style="cursor: pointer;" v-on:click="gotoTeam(standing.id)">
                                             <td class="text-center">{{index+1}}</td>
                                             <td class="text-center">{{standing.team}}</td>
+                                            <td class="text-center">{{standing.points}}</td>
                                             <td class="text-center">{{standing.played}}</td>
                                             <td class="text-center">{{standing.won}}</td>
                                             <td class="text-center">{{standing.draw}}</td>
                                             <td class="text-center">{{standing.lost}}</td>
                                             <td class="text-center">{{standing.goal_for}}</td>
                                             <td class="text-center">{{standing.goal_against}}</td>
-                                            <td class="text-center">{{standing.points}}</td>
                                         </tr>
                                     </tbody>
                                 </table>
