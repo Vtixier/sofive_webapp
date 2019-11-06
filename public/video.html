@@ -157,21 +157,7 @@
                     <div class="col-lg-3" v-for="highlight in highlights">
                         <div class="ibox">
                             <div>
-                                <div v-if="highlight.details.pickup">
-                                    <div class="ibox-content profile-content">
-                                        <p><b>Pickup</b></p>
-                                        <p><i class="fa fa-calendar"></i> {{highlight.details.hour}}</p>
-                                    </div>
-                                    <div class="ibox-content no-padding border-left-right">
-                                        <iframe v-on:load="onMyFrameLoad" frameborder="0" :src="highlight.highlight" allowfullscreen style="width: 100%"></iframe>
-                                    </div>
-                                    <div class="ibox-content profile-content">
-                                        <button type="button" class="btn btn-outline btn btn-primary">
-                                            View all highlights
-                                        </button>
-                                    </div>
-                                </div>
-                                <div v-else>
+                                <div>
                                     <div class="ibox-content profile-content">
                                         <h3>{{highlight.details.home_team}} : <b>{{highlight.details.home_score}}</b></h3>
                                         <h3>{{highlight.details.away_team}} : <b>{{highlight.details.away_score}}</b></h3>
@@ -370,15 +356,16 @@
                         let matchMap = {}
 
                         this.loading = true;
-                        this.$http.post('https://video.scoreplay.io/rental/get', d).then(function(resp) {
-                            let match_ids = []
+                        this.$http.post('https://video.scoreplay.io/rental/get', d)
+                        .then(function(resp) {
+                            let matches = []
                             self.recordings = resp.data.map(function(rec) {
                                 const videoID = rec.url.slice(rec.url.indexOf("/video") + 7, rec.url.length),
                                     moment_hour = moment(rec.hour, "HH"),
                                     moment_date = moment(rec.date, "YYYY-MM-DD"),
                                     simple_hour = moment_hour.format("h"),
                                     vid_time = moment_hour.format("h:00A");
-                                match_ids = match_ids.concat(rec.match_ids.filter(m => (m.toString().indexOf("manual") === (-1))))
+                                matches = matches.concat(rec.matches.filter(m => (m.match_id.toString().indexOf("manual") === (-1))))
                                 return {
                                     ...rec,
                                     embed: "https://www.dailymotion.com/embed/video/" + videoID + "?queue-enable=false&queue-autoplay-next=false&ui-start-screen-info=false",
@@ -387,25 +374,26 @@
                                 }
                             }).sort(self.dateSortFunc);
                             self.loading = false;
-                            console.log("Matches", match_ids)
-                            self.getMatchDetails(match_ids)
+                            console.log("Matches", matches)
+                            self.getMatchDetails(matches)
                         }).catch(function(err) {
                             self.loading = false;
                             console.log(err);
                         });
                     },
-                    getMatchDetails: function(match_ids) {
+                    getMatchDetails: function(matches) {
                         const self = this
-                        return Promise.all(match_ids.map(function(match_id) {
-                                return self.getSingleMatchDetails(match_id)
+                        return Promise.all(matches.map(function(match) {
+                                return self.getSingleMatchDetails(match)
                             }))
                             .then(highlights => {
                                 self.highlights = highlights.filter(h => h)
                                 console.log(highlights)
                             })
                     },
-                    getSingleMatchDetails: function getMatchDetails(match_id) {
-                        console.log("Getting details", match_id)
+                    getSingleMatchDetails: function(match) {
+                        console.log("Getting details", match)
+                        const match_id = match.match_id;
                         return this.$http.post("https://app.scoreplay.io/match/details", {
                                 match_id: match_id.toString()
                             })
@@ -433,12 +421,15 @@
                                         }
                                     }
                                 })
+                                const url = match.url,
+                                videoID = url.slice(url.indexOf("/video") + 7, url.length)
                                 return {
                                     home_team,
                                     away_team,
                                     home_score,
                                     away_score,
-                                    ...match_data,
+                                    highlight: "https://www.dailymotion.com/embed/video/" + videoID + "?queue-enable=false&queue-autoplay-next=false&ui-start-screen-info=false",
+                                    ...match,
                                 }
                             })
                             .then(details => {
