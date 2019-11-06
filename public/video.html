@@ -432,21 +432,6 @@
                                     ...match,
                                 }
                             })
-                            .then(details => {
-                                return this.$http.get("https://video.scoreplay.io/match/"+match_id)
-                                .then(videoResp => {
-                                    const url = videoResp.body.recording.url
-                                    if (url === "") {
-                                        return null
-                                    }
-                                    const videoID = url.slice(url.indexOf("/video") + 7, url.length)
-                                    return {
-                                        match_id,
-                                        details,
-                                        highlight: "https://www.dailymotion.com/embed/video/" + videoID + "?queue-enable=false&queue-autoplay-next=false&ui-start-screen-info=false"
-                                    }
-                                })
-                            })
                     },
                     resetLoaded: function resetLoaded() {
                         this.loaded = 0;
