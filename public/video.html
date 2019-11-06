@@ -376,17 +376,8 @@
                                     moment_hour = moment(rec.hour, "HH"),
                                     moment_date = moment(rec.date, "YYYY-MM-DD"),
                                     simple_hour = moment_hour.format("h"),
-                                    vid_time = moment_hour.format("h:00A")
-                                rec.matches.forEach(m => {
-                                    const hour = parseInt(m.match.Start/3600),
-                                    key = hour.toString()+"_"+m.match.field,
-                                    d = {match_id: m.match.match_id, hour: vid_time}
-                                    if (key in matchMap) {
-                                        matchMap[key] = matchMap[key].concat(d)
-                                    } else {
-                                        matchMap[key] = [d]
-                                    }
-                                    console.log(key, m)
+                                    vid_time = moment_hour.format("h:00A"),
+                                    match_ids = rec.matches.filter(m => (m.indexOf("manual") === (-1)))
                                 })
                                 return {
                                     ...rec,
@@ -396,46 +387,24 @@
                                 }
                             }).sort(self.dateSortFunc);
                             self.loading = false;
-                            console.log("Match map", matchMap)
-                            self.getMatchDetails(matchMap)
+                            console.log("Matches", match_ids)
+                            self.getMatchDetails(match_ids)
                         }).catch(function(err) {
                             self.loading = false;
                             console.log(err);
                         });
                     },
                     getMatchDetails: function(matchMap) {
-                        let matches_data = []
-                        Object.keys(matchMap).forEach(key => {
-                            const spl = key.split("_")
-                            if (matchMap[key].length < 4) {
-                                matchMap[key].forEach(m => {
-                                    matches_data.push({
-                                        match_id: m.match_id,
-                                        pickup: false
-                                    })
-                                })
-                            }
-                            // else { // its pickup
-                            //     const first = matchMap[key][0]
-                            //     matches_data.push({
-                            //         match_id: first.match_id,
-                            //         pickup: true,
-                            //         ids: JSON.stringify(matchMap[key]),
-                            //         hour: first.hour
-                            //     })
-                            // }
-                        })
                         const self = this
-                        return Promise.all(matches_data.map(function(match_data) {
-                                return self.getSingleMatchDetails(match_data)
+                        return Promise.all(match_ids.map(function(match_id) {
+                                return self.getSingleMatchDetails(match_id)
                             }))
                             .then(highlights => {
                                 self.highlights = highlights.filter(h => h)
                                 console.log(highlights)
                             })
                     },
-                    getSingleMatchDetails: function getMatchDetails(match_data) {
-                        const match_id = match_data.match_id
+                    getSingleMatchDetails: function getMatchDetails(match_id) {
                         return this.$http.post("https://app.scoreplay.io/match/details", {
                                 match_id
                             })
