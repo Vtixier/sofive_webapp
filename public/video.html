@@ -406,7 +406,7 @@
                     },
                     getSingleMatchDetails: function getMatchDetails(match_id) {
                         return this.$http.post("https://app.scoreplay.io/match/details", {
-                                match_id
+                                match_id: match_id.toString()
                             })
                             .then(function(resp) {
                                 let body = resp.body
