@@ -378,7 +378,7 @@
                                     moment_date = moment(rec.date, "YYYY-MM-DD"),
                                     simple_hour = moment_hour.format("h"),
                                     vid_time = moment_hour.format("h:00A");
-                                match_ids += rec.matches.filter(m => (m.indexOf("manual") === (-1)))
+                                match_ids += rec.match_ids.filter(m => (m.indexOf("manual") === (-1)))
                                 return {
                                     ...rec,
                                     embed: "https://www.dailymotion.com/embed/video/" + videoID + "?queue-enable=false&queue-autoplay-next=false&ui-start-screen-info=false",
