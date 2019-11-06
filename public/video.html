@@ -394,7 +394,7 @@
                             console.log(err);
                         });
                     },
-                    getMatchDetails: function(matchMap) {
+                    getMatchDetails: function(match_ids) {
                         const self = this
                         return Promise.all(match_ids.map(function(match_id) {
                                 return self.getSingleMatchDetails(match_id)
