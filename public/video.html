@@ -405,10 +405,12 @@
                             })
                     },
                     getSingleMatchDetails: function getMatchDetails(match_id) {
+                        console.log("Getting details", match_id)
                         return this.$http.post("https://app.scoreplay.io/match/details", {
                                 match_id: match_id.toString()
                             })
                             .then(function(resp) {
+                                console.log(resp)
                                 let body = resp.body
                                 body['match_id'] = match_id
                                 let home_team = "",
