@@ -102,6 +102,7 @@
                                 <a href="#" class="product-name">{{tournament.name}}</a>
                                 <div class="mediums m-t-xs">
                                     Starts on : {{tournament.day}} ({{tournament.date}})<br />
+                                    Price : ${{tournament.price}}<br />
                                 </div>
                                 <button v-on:click="gotoGotsoccer(tournament.link)" type="button" class="btn btn-outline btn btn-primary" style="margin-top: 5%">
                                     Find out more
@@ -190,9 +191,6 @@
                     	self.tournaments = resp.body.map(t => {
                     		const d = moment(t.date, "MMM D, YYYY"),
                                 //June 8, 2019
-                                i = t.description.indexOf("Fee: $"),
-                                j = t.description.indexOf(" per team"),
-                                price = t.description.slice(i + 5, j),
                                 k = t.description.indexOf(" minutes each"),
                                 duration = t.description.slice(k - 2, k) + " min",
                                 second_part = t.name.split(",")[1].trim();
@@ -207,6 +205,11 @@
                                 let _f_split = second_part.split(" ");
                                 min_age = parseInt(_f_split[0].replace("U", ""));
                                 max_age = min_age;
+                            }
+                            let price = "195"
+                            const month = parseInt(d.format("M")
+                            if (month >= 1 && month <= 3) {
+                                price = "250"
                             }
                             return {
                             	...t,
