@@ -64,13 +64,25 @@
             <div class="wrapper wrapper-content animated fadeInRight" style="padding-bottom: 15px">
                 <div class="ibox-content m-b-sm border-bottom">
                     <div class="row">
-                        <div class="col-md-8">
+                        <div class="col-md-3">
                             <h2>Youth tournaments</h2>
                         </div>
-                        <div class="col-md-4" style="padding-top: 5px">
+                        <div class="col-md-3" style="padding-top: 5px">
                             <select class="select_season form-control" style="width: 100%" v-model="selected_date">
                                 <option value="">All dates</option>
                                 <option v-for="tournament_date in tournament_dates" :value="tournament_date">{{tournament_date}}</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3" style="padding-top: 5px">
+                            <select class="select_season form-control" style="width: 100%" v-model="tournament_gender">
+                                <option value="">All genders</option>
+                                <option v-for="gender in genders" :value="gender">{{gender}}</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3" style="padding-top: 5px">
+                            <select class="select_season form-control" style="width: 100%" v-model="tournament_age">
+                                <option value="">All ages</option>
+                                <option v-for="age in ages" :value="age">{{age}}</option>
                             </select>
                         </div>
                     </div>
@@ -97,11 +109,13 @@
                 <div class="col-md-4" v-for="tournament in filtered_tournaments">
                     <div class="ibox">
                         <div class="ibox-content product-box">
+                            <div class="product-imitation" style="padding: 6px 0; color: #676a6c">
+                                {{tournament.date}} ({{tournament.day}})
+                            </div>
                             <div class="product-desc">
                                 <small class="text-muted">{{tournament.age}}</small>
                                 <a href="#" class="product-name">{{tournament.name}}</a>
                                 <div class="mediums m-t-xs">
-                                    Starts on : {{tournament.day}} ({{tournament.date}})<br />
                                     Price : ${{tournament.price}}<br />
                                 </div>
                                 <button v-on:click="gotoGotsoccer(tournament.link)" type="button" class="btn btn-outline btn btn-primary" style="margin-top: 5%">
@@ -163,16 +177,27 @@
                 product_id: "0",
                 selected_season: "",
                 selected_date: "",
+                ages: [],
+                genders: [],
+                tournament_age: "",
+                tournament_gender: ""
             },
             computed: {
                 tournament_dates: function() {
                     return [...new Set(this.tournaments.map(l => (l.date)))].sort();
                 },
                 filtered_tournaments: function() {
-                    if (this.selected_date == "") {
-                        return this.tournaments
+                    let tournaments = this.tournaments
+                    if (this.selected_date !== "") {
+                        tournaments = tournaments.filter(l => (l.date === this.selected_date))
                     }
-                    return this.tournaments.filter(l => (l.date === this.selected_date))
+                    if (this.tournament_age !== "") {
+                        tournaments = tournaments.filter(l => (l.age.indexOf(this.tournament_age) !== (-1)))
+                    }
+                    if (this.tournament_gender !== "") {
+                        tournaments = tournaments.filter(l => (l.gender.indexOf(this.tournament_gender) !== (-1)))
+                    }
+                    return tournaments
                 }
             },
             mounted: function() {
@@ -188,6 +213,8 @@
                     };
                     this.$http.post("http://localhost:8080/program/tournaments", body)
                     .then(resp => {
+                        let age_map = {},
+                        gender_map = {}
                     	self.tournaments = resp.body.map(t => {
                     		const d = moment(t.date, "MMM D, YYYY"),
                                 //June 8, 2019
@@ -211,17 +238,39 @@
                             if (month >= 1 && month <= 3) {
                                 price = "250"
                             }
+                            let name = t.name
+                            if (name.indexOf(")") !== (-1)) {
+                                const spl = name.split(")")
+                                if (spl.length > 1) {
+                                    name = spl[1]
+                                }
+                            }
+                            if (name.indexOf(",") !== (-1)) {
+                                const spl2 = name.split(",")
+                                if (spl2.length > 1) {
+                                    name = spl2[0]
+                                }
+                            }
+                            for (let i=0; i<t.age.length; i++) {
+                                age_map[t.age[i]] = ""
+                            }
+                            for (let i=0; i<t.gender.length; i++) {
+                                gender_map[t.gender[i]] = ""
+                            }
                             return {
                             	...t,
-                            	date: d.format("YYYY-MM-DD"),
+                            	date: d.format("MM-DD-YYYY"),
                                 day: d.format("dddd"),
                                 price,
                                 duration,
                             	min_age,
                                 max_age,
-                                age: second_part
+                                age: second_part,
+                                name
                             }
                     	})
+                        self.ages = Object.keys(age_map)
+                        self.genders = Object.keys(gender_map)
                         self.loading = false
                     })
                     .catch(function(err) {
