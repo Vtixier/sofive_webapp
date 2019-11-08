@@ -267,8 +267,8 @@
                             }
                             let boys = [], girls = [],
                                 year = parseInt(moment().format("YYYY")),
-                                month = parseInt(moment().format("M"))
-                            if (month >= 9) {
+                                s_month = parseInt(moment().format("M"))
+                            if (s_month >= 9) {
                                 year += 1
                             }
                             Object.keys(t.gender_age_map).forEach(gender => {
