@@ -193,6 +193,7 @@
                         tournaments = tournaments.filter(l => (l.date === this.selected_date))
                     }
                     if (this.tournament_age !== "") {
+                        console.log(this.tournament_age.toString(), tournaments.map(t => (t.age)))
                         tournaments = tournaments.filter(l => (l.age.indexOf(this.tournament_age.toString()) !== (-1)))
                     }
                     if (this.tournament_gender !== "") {
