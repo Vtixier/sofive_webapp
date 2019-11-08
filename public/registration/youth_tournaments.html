@@ -184,7 +184,16 @@
             },
             computed: {
                 tournament_dates: function() {
-                    return [...new Set(this.tournaments.map(l => (l.date)))].sort();
+                    return [...new Set(this.tournaments.map(l => (l.date)))].sort((a,b) => {
+                        const diff = moment(a.start, "MM-DD-YYYY").diff(moment(b.start, "MM-DD-YYYY"), 'seconds');
+                        if (diff > 0) {
+                            return 1;
+                        } else if (diff < 0) {
+                            return -1;
+                        } else {
+                            return 0;
+                        }
+                    });
                 },
                 filtered_tournaments: function() {
                     let tournaments = this.tournaments
@@ -219,20 +228,7 @@
                     		const d = moment(t.date, "MMM D, YYYY"),
                                 //June 8, 2019
                                 k = t.description.indexOf(" minutes each"),
-                                duration = t.description.slice(k - 2, k) + " min",
-                                second_part = t.name.split(",")[1].trim();
-                            let min_age = 0,
-                                max_age = 0;
-                            if (second_part.indexOf("-") > -1) {
-                                let third_split = second_part.split("-");
-                                min_age = parseInt(third_split[0].replace("U", ""));
-                                let f_split = third_split[1].split(" ");
-                                max_age = parseInt(f_split[0].replace("U", ""));
-                            } else {
-                                let _f_split = second_part.split(" ");
-                                min_age = parseInt(_f_split[0].replace("U", ""));
-                                max_age = min_age;
-                            }
+                                duration = t.description.slice(k - 2, k) + " min";
                             let price = "195"
                             const month = parseInt(d.format("M"))
                             if (month >= 1 && month <= 3) {
@@ -263,9 +259,6 @@
                                 day: d.format("dddd"),
                                 price,
                                 duration,
-                            	min_age,
-                                max_age,
-                                age: second_part,
                                 name,
                                 ages: t.age,
                                 genders: t.gender
