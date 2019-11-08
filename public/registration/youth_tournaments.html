@@ -192,10 +192,10 @@
                         tournaments = tournaments.filter(l => (l.date === this.selected_date))
                     }
                     if (this.tournament_age !== "") {
-                        tournaments = tournaments.filter(l => (l.age.indexOf(this.tournament_age) !== (-1)))
+                        tournaments = tournaments.filter(l => (l.age.indexOf(this.tournament_age) === (-1)))
                     }
                     if (this.tournament_gender !== "") {
-                        tournaments = tournaments.filter(l => (l.gender.indexOf(this.tournament_gender) !== (-1)))
+                        tournaments = tournaments.filter(l => (l.gender.indexOf(this.tournament_gender) === (-1)))
                     }
                     return tournaments
                 }
