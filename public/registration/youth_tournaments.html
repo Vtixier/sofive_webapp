@@ -75,13 +75,11 @@
                         </div>
                         <div class="col-md-3" style="padding-top: 5px">
                             <select class="select_season form-control" style="width: 100%" v-model="tournament_gender">
-                                <option value="">All genders</option>
                                 <option v-for="gender in genders" :value="gender">{{gender}}</option>
                             </select>
                         </div>
                         <div class="col-md-3" style="padding-top: 5px">
                             <select class="select_season form-control" style="width: 100%" v-model="tournament_age">
-                                <option value="">All ages</option>
                                 <option v-for="age in ages" :value="age">{{age}}</option>
                             </select>
                         </div>
@@ -113,9 +111,11 @@
                                 {{tournament.date}} ({{tournament.day}})
                             </div>
                             <div class="product-desc">
-                                <a href="#" class="product-name">{{tournament.name}}</a>
+                                <a href="#" class="product-name">{{tournament.name}}</a><br />
                                 <div class="mediums m-t-xs">
-                                    Price : ${{tournament.price}}<br />
+                                    <b>Price</b> : ${{tournament.price}}<br /><br />
+                                    <span v-if="tournament.boys.length"><b>Boys</b> : {{tournament.boys.join(', ')}}</span><br />
+                                    <span v-if="tournament.girls.length"><b>Girls</b>: {{tournament.girls.join(', ')}}</span><br />
                                 </div>
                                 <button v-on:click="gotoGotsoccer(tournament.link)" type="button" class="btn btn-outline btn btn-primary" style="margin-top: 5%">
                                     Register
@@ -177,9 +177,9 @@
                 selected_season: "",
                 selected_date: "",
                 ages: [],
-                genders: [],
-                tournament_age: "",
-                tournament_gender: ""
+                genders: ["All", "Boys", "Girls"],
+                tournament_age: "All",
+                tournament_gender: "All"
             },
             computed: {
                 tournament_dates: function() {
@@ -199,11 +199,31 @@
                     if (this.selected_date !== "") {
                         tournaments = tournaments.filter(l => (l.date === this.selected_date))
                     }
-                    if (this.tournament_age !== "") {
-                        tournaments = tournaments.filter(l => (l.ages.indexOf(this.tournament_age) !== (-1)))
-                    }
-                    if (this.tournament_gender !== "") {
-                        tournaments = tournaments.filter(l => (l.genders.indexOf(this.tournament_gender) !== (-1)))
+                    if (this.tournament_age !== "All") {
+                        if (this.tournament_gender !== "All") {
+                            let y = parseInt(this.tournament_age)
+                            tournaments = tournaments.filter(t => {
+                                if (this.tournament_gender === "Boys") {
+                                    return (t.boys.indexOf(y) !== (-1))
+                                } else {
+                                    return (t.girls.indexOf(y) !== (-1))
+                                }
+                            })
+                        } else {
+                            tournaments = tournaments.filter(t => {
+                                return (t.boys.indexOf(y) !== (-1)) || (t.girls.indexOf(y) !== (-1))
+                            })
+                        }
+                    } else {
+                        tournaments = tournaments.filter(t => {
+                            if (this.tournament_gender === "Boys") {
+                                return t.boys.length > 1
+                            }
+                            if (this.tournament_gender === "Girls") {
+                                return t.girls.length > 1
+                            }
+                            return true
+                        })
                     }
                     return tournaments
                 }
@@ -221,8 +241,7 @@
                     };
                     this.$http.post("http://localhost:8080/program/tournaments", body)
                     .then(resp => {
-                        let age_map = {},
-                        gender_map = {}
+                        let age_map = {}
                     	self.tournaments = resp.body.map(t => {
                     		const d = moment(t.date, "MMM D, YYYY"),
                                 //June 8, 2019
@@ -246,12 +265,23 @@
                                     name = spl2[0]
                                 }
                             }
-                            for (let i=0; i<t.age.length; i++) {
-                                age_map[t.age[i]] = ""
+                            let boys = [], girls = [],
+                                year = parseInt(moment().format("YYYY")),
+                                month = parseInt(moment().format("M"))
+                            if (month >= 9) {
+                                year += 1
                             }
-                            for (let i=0; i<t.gender.length; i++) {
-                                gender_map[t.gender[i]] = ""
-                            }
+                            Object.keys(t.gender_age_map).forEach(gender => {
+                                Object.keys(t.gender_age_map[gender]).forEach(age => {
+                                    let y = year-parseInt(age)
+                                    if (gender === "Boys") {
+                                        boys.push(y)
+                                    } else {
+                                        girls.push(y)
+                                    }
+                                    age_map[y] = {}
+                                })
+                            })
                             return {
                             	...t,
                             	date: d.format("MM-DD-YYYY"),
@@ -259,12 +289,11 @@
                                 price,
                                 duration,
                                 name,
-                                ages: t.age,
-                                genders: t.gender
+                                boys: boys.sort(),
+                                girls: girls.sort()
                             }
                     	})
-                        self.ages = Object.keys(age_map)
-                        self.genders = Object.keys(gender_map)
+                        self.ages = ["All"].concat(Object.keys(age_map).sort())
                         self.loading = false
                     })
                     .catch(function(err) {
