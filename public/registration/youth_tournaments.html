@@ -187,17 +187,15 @@
                     return [...new Set(this.tournaments.map(l => (l.date)))].sort();
                 },
                 filtered_tournaments: function() {
-                    console.log(this.tournament_age, this.tournament_gender)
                     let tournaments = this.tournaments
                     if (this.selected_date !== "") {
                         tournaments = tournaments.filter(l => (l.date === this.selected_date))
                     }
                     if (this.tournament_age !== "") {
-                        console.log(this.tournament_age.toString(), tournaments.map(t => (t.age)))
-                        tournaments = tournaments.filter(l => (l.age.indexOf(this.tournament_age.toString()) !== (-1)))
+                        tournaments = tournaments.filter(l => (l.ages.indexOf(this.tournament_age) !== (-1)))
                     }
                     if (this.tournament_gender !== "") {
-                        tournaments = tournaments.filter(l => (l.gender.indexOf(this.tournament_gender.toString()) !== (-1)))
+                        tournaments = tournaments.filter(l => (l.genders.indexOf(this.tournament_gender) !== (-1)))
                     }
                     return tournaments
                 }
@@ -268,7 +266,9 @@
                             	min_age,
                                 max_age,
                                 age: second_part,
-                                name
+                                name,
+                                ages: t.age,
+                                genders: t.gender
                             }
                     	})
                         self.ages = Object.keys(age_map)
