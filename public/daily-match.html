@@ -297,7 +297,7 @@
                 },
                 getAllTrackers: function() {
                     const self = this
-                    return this.$http.get("http://localhost:8080/tracker/all")
+                    return this.$http.get(this.backend+"/tracker/all")
                     .then(function(resp) {
                         self.trackers = resp.body.filter(t => (t.is_available))
 
@@ -307,7 +307,7 @@
                 },
                 getDashMatch: function() {
                     const self = this,
-                        url = "http://localhost:8080/match/" + this.matchID;
+                        url = this.backend+"/match/" + this.matchID;
 
                     return this.$http.get(url).then(function(resp) {
                         self.match = {
@@ -332,7 +332,7 @@
                 },
                 getTeamDetails: function(id, home, side) {
                     const self = this,
-                        url = "http://localhost:8080/team/" + id;
+                        url = this.backend+"/team/" + id;
                     return this.$http.get(url).then(function(resp) {
                         const t = resp.body
                         if (home) {
@@ -362,7 +362,7 @@
                 getTrackers: function() {
                     console.log("Getting trackers")
                     const self = this;
-                    return this.$http.get("http://localhost:8080/tracker/get/" + this.matchID).then(resp => {
+                    return this.$http.get(this.backend+"/tracker/get/" + this.matchID).then(resp => {
                         resp.body.forEach(p => {
                             self.home_team.roster = self.home_team.roster.map(player => {
                                 if (player.id.toString() === p.dash_id.toString()) {
@@ -418,7 +418,7 @@
                         match_id: this.matchID,
                         trackers: tracks
                     }
-                    this.$http.post("http://localhost:8080/tracker/", body).then(resp => {
+                    this.$http.post(this.backend+"/tracker/", body).then(resp => {
                         toastr.info('All trackers saved successfully.', {
                             progressBar: true
                         });

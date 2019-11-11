@@ -185,7 +185,7 @@
                         date: this.date
                     }, self = this;
                     this.loading = true
-                    this.$http.post("http://localhost:8080/program/gotsoccer/tournaments", d)
+                    this.$http.post(this.backend+"/program/gotsoccer/tournaments", d)
                     .then(resp => {
                         self.tournaments = resp.body
                         self.loading = false

@@ -268,7 +268,7 @@
                     var _this = this;
 
                     this.loading = true;
-                    this.$http.post("http://localhost:8080/team/", {
+                    this.$http.post(this.backend+"/team/", {
                         name: encodeURI(this.query),
                         facility_id: this.center
                     }).then(function(resp) {

@@ -608,7 +608,7 @@
 
                         this.facility_loading = true;
                         this.centers = [];
-                        this.$http.get("http://localhost:8080/facility/").then(function(resp) {
+                        this.$http.get(this.backend+"/facility/").then(function(resp) {
                             _this.centers = resp.body;
                             _this.facility_loading = false;
                         }).catch(function(err) {
@@ -661,7 +661,7 @@
                             duration: parseInt(this.selected.duration),
                             field_type: this.selected.field
                         };
-                        this.$http.post("http://localhost:8080/event/", body).then(function(resp) {
+                        this.$http.post(this.backend+"/event/", body).then(function(resp) {
                             if (resp.body.free.length == 0) {
                                 _this2.missing = true;
                                 _this2.available_field = null;
@@ -704,7 +704,7 @@
                             time: prev_hour,
                             duration: parseInt(this.selected.duration)
                         };
-                        this.$http.post("http://localhost:8080/event/", body).then(function(resp) {
+                        this.$http.post(this.backend+"/event/", body).then(function(resp) {
                             if (resp.body.free.length == 0) {
                                 return;
                             }
@@ -735,7 +735,7 @@
                             time: next_hour,
                             duration: parseInt(this.selected.duration)
                         };
-                        this.$http.post("http://localhost:8080/event/", body).then(function(resp) {
+                        this.$http.post(this.backend+"/event/", body).then(function(resp) {
                             if (resp.body.free.length == 0) {
                                 return;
                             }
@@ -770,7 +770,7 @@
                             time: time,
                             duration: 60
                         };
-                        this.$http.post("http://localhost:8080/event/", body).then(function(resp) {
+                        this.$http.post(this.backend+"/event/", body).then(function(resp) {
                             if (resp.body.free.length == 0) {
                                 return;
                             }
@@ -801,7 +801,7 @@
                             time: time,
                             duration: 60
                         };
-                        this.$http.post("http://localhost:8080/event/", body).then(function(resp) {
+                        this.$http.post(this.backend+"/event/", body).then(function(resp) {
                             if (resp.body.free.length == 0) {
                                 return;
                             }

@@ -224,7 +224,7 @@
                 },
                 getTournamentDetails: function() {
                 	const self = this;
-                	this.$http.get("http://localhost:8080/program/gotsoccer/tournament/"+this.id)
+                	this.$http.get(this.backend+"/program/gotsoccer/tournament/"+this.id)
                 	.then(resp => {
                 		self.name = resp.body.name
                 		self.tournaments = resp.body.tournaments

@@ -235,7 +235,7 @@
                 getCenters: function getCenters() {
                     const self = this;
                     this.centers = [];
-                    return this.$http.get("http://localhost:8080/facility/")
+                    return this.$http.get(this.backend+"/facility/")
                     .then(function(resp) {
                         self.centers = resp.body;
                     }).catch(function(err) {
@@ -252,7 +252,7 @@
                         "program_id": "4",
                         "date": moment().format("YYYY-MM-DD")
                     };
-                    this.$http.post("http://localhost:8080/program/seasons/current", body)
+                    this.$http.post(this.backend+"/program/seasons/current", body)
                     .then(resp => {
                     	let p = [];
                     	self.seasons = resp.body.map(s => {
@@ -296,7 +296,7 @@
                     var body = {
                         "season_id": season_id
                     };
-                    return this.$http.post("http://localhost:8080/program/leagues", body)
+                    return this.$http.post(this.backend+"/program/leagues", body)
                     .then(resp => {
                     	return resp.body.map(l => {
                     		const season = self.seasons.find(s => (parseInt(s.id) === l.season_id)),
@@ -351,7 +351,7 @@
                 getTeamPrice: function(league) {
                     const d = this.getBody(league, true),
                         self = this;
-                    this.$http.post("http://localhost:8080/product/registration/get", d)
+                    this.$http.post(this.backend+"/product/registration/get", d)
                     .then(resp => {
                         let product = resp.body.product,
                         p = product.price
@@ -375,7 +375,7 @@
                 getFreeAgentPrice: function(league) {
                     const d = this.getBody(league, false),
                         self = this;
-                    this.$http.post("http://localhost:8080/product/registration/get", d)
+                    this.$http.post(this.backend+"/product/registration/get", d)
                     .then(resp => {
                         let free_agent = resp.body.product,
                         p = free_agent.price

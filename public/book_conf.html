@@ -404,7 +404,7 @@
                         deposit: deposit
                     });
                     return new Promise(function(yes, no) {
-                        _this2.$http.post("http://localhost:8080/product/booking", body).then(function(resp) {
+                        _this2.$http.post(_this2.backend+"/product/booking", body).then(function(resp) {
                             yes(resp.body);
                         }).catch(no);
                     });
@@ -431,12 +431,12 @@
                             duration: parseInt(this.data.duration)
                         },
                         self = this;
-                    this.$http.post("http://localhost:8080/event/book", d).then(function(resp) {
+                    this.$http.post(this.backend+"/event/book", d).then(function(resp) {
                         _this3.stripeRedirect(resp.body.booking_id, deposit);
                     }).catch(function(err) {
                         console.log(err);
                         setTimeout(function() {
-                            self.$http.post("http://localhost:8080/event/book", d).then(function(respons) {
+                            self.$http.post(this.backend+"/event/book", d).then(function(respons) {
                                 self.stripeRedirect(respons.body.booking_id, deposit);
                             }).catch(function(err) {
                                 console.log("ERR", err);
@@ -447,8 +447,8 @@
                         }, 2000);
                     });
                 },
-                stripeRedirect: function stripeRedirect(booking_id, deposit) {
-                    var redirect_url = 'http://localhost:8080/event/confirm/' + booking_id + '?sel=' + this.sel,
+                stripeRedirect: function(booking_id, deposit) {
+                    var redirect_url = this.backend+'/event/confirm/' + booking_id + '?sel=' + this.sel,
                         self = this;
                     var sku = this.product.sku;
 

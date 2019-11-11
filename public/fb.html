@@ -371,7 +371,7 @@
                     const self = this;
                     this.products = [];
                     this.loading.product = true;
-                    this.$http.get("http://localhost:8080/program/").then(function(resp) {
+                    this.$http.get(this.backend+"/program/").then(function(resp) {
                         self.products = resp.body.filter(function(p) {
                             return p.name !== "Youth Classes" && p.name !== "Youth Tournament";
                         });
@@ -388,7 +388,7 @@
                         "program_id": this.selected.product.id,
                         "date": moment().subtract(14, 'd').format("YYYY-MM-DD")
                     };
-                    var url = "http://localhost:8080/program/seasons";
+                    var url = this.backend+"/program/seasons";
                     this.$http.post(url, body).then(function(resp) {
                         self.seasons = resp.body.map(function(s) {
                             let display_name = s.name
@@ -420,7 +420,7 @@
                     const self = this;
                     this.loading.league = true;
                     this.leagues = [];
-                    var url = "http://localhost:8080/facility/" + this.selected.facility_id + "/" + season_id + "/leagues";
+                    var url = this.backend+"/facility/" + this.selected.facility_id + "/" + season_id + "/leagues";
                     return new Promise(function(yes, no) {
                         self.$http.get(url).then(function(resp) {
                             return yes(resp.body);
@@ -431,7 +431,7 @@
                     const self = this;
                     this.teams = [];
                     this.loading.team = true;
-                    this.$http.get("http://localhost:8080/team/league/" + this.selected.league.id.toString())
+                    this.$http.get(this.backend+"/team/league/" + this.selected.league.id.toString())
                         .then(function(resp) {
                             self.teams = resp.body
                             self.loading.team = false;

@@ -265,7 +265,7 @@
                             facility_id: this.facility_id
                         },
                         self = this;
-                    this.$http.post("http://localhost:8080/match/today", body).then((resp) => {
+                    this.$http.post(this.backend+"/match/today", body).then((resp) => {
                         self.matches = resp.body.map(m => {
                             const moment_date = moment(m.start, "YYYY-MM-DDTHH:mm:ss")
                             return {

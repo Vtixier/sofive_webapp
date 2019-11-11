@@ -239,7 +239,7 @@
                     var body = {
                         "facility_id": parseInt(this.facility_id)
                     };
-                    this.$http.post("http://localhost:8080/program/tournaments", body)
+                    this.$http.post(this.backend+"/program/tournaments", body)
                     .then(resp => {
                         let age_map = {}
                     	self.tournaments = resp.body.map(t => {

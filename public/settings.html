@@ -240,9 +240,9 @@
                     var fd = new FormData();
                     fd.append('products', document.querySelector('.custom-file-input').files[0]);
 
-                    let url = "http://localhost:8080/product/file/product"
+                    let url = this.backend+"/product/file/product"
                     if (document.querySelector('input[name="a"]:checked')) {
-                        url = "http://localhost:8080/product/file/sku"
+                        url = this.backend+"/product/file/sku"
                     }
 
                     return this.$http.post(url, fd, {

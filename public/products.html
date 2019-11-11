@@ -361,7 +361,7 @@
                     const self = this
                     this.selected_product['payment'] = this.selected_product.payment
                     this.selected_product['price'] = parseFloat(this.selected_product.price) * 100
-                    this.$http.post("http://localhost:8080/product/edit", this.selected_product).then(function(resp) {
+                    this.$http.post(this.backend+"/product/edit", this.selected_product).then(function(resp) {
                         self.products = self.products.map(function(p) {
                             if (p.id === self.selected_product.id) {
                                 return {
@@ -378,7 +378,7 @@
                 },
                 create: function create() {
                     this.new_product['price'] = parseInt(this.new_product.price) * 100
-                    this.$http.post("http://localhost:8080/product/add", this.new_product).then(function(resp) {
+                    this.$http.post(this.backend+"/product/add", this.new_product).then(function(resp) {
                         console.log(resp);
                         window.location = "/products.html";
                     }).catch(function(err) {
@@ -389,7 +389,7 @@
                     var _this = this;
 
                     this.products = [];
-                    this.$http.get("http://localhost:8080/product/").then(function(resp) {
+                    this.$http.get(this.backend+"/product/").then(function(resp) {
                         _this.products = resp.body.map(function(p) {
                             p['price'] = p.price / 100
                             return p

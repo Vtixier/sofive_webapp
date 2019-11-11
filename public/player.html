@@ -253,7 +253,7 @@
             methods: {
                 getPlayerDetails: function() {
                     const self = this;
-                    var url = "http://localhost:8080/player/" + this.player_id;
+                    var url = this.backend+"/player/" + this.player_id;
                     this.$http.get(url).then(function(resp) {
                         self.player = resp.body.player
                         self.getVideos(resp.body.goals)
@@ -291,7 +291,7 @@
                 },
                 getTeamDetails: function(id) {
                     const self = this;
-                    var url = "http://localhost:8080/team/" + id;
+                    var url = this.backend+"/team/" + id;
                     this.$http.get(url).then(function(resp) {
                         self.team = resp.body;
                         console.log(resp.body)
@@ -301,7 +301,7 @@
                 },
                 getTeamResults: function(team_id, league_id) {
                     const self = this;
-                    var url = "http://localhost:8080/league/" + league_id + "/scores";
+                    var url = this.backend+"/league/" + league_id + "/scores";
                     this.$http.get(url).then(function(resp) {
                         self.matches = resp.body.matches.filter(function(m) {
                             return m.home.team_id.toString() == team_id || m.away.team_id.toString() == team_id;

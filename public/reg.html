@@ -572,7 +572,7 @@
                     this.selected.product = {};
                     this.selected.season = "";
                     this.selected.age = "";
-                    return this.$http.get("http://localhost:8080/facility/").then(function(resp) {
+                    return this.$http.get(this.backend+"/facility/").then(function(resp) {
                         _this2.centers = resp.body;
                         _this2.loading.facility = false;
                     }).catch(function(err) {
@@ -586,7 +586,7 @@
                     this.loading.product = true;
                     this.selected.season = "";
                     this.selected.age = "";
-                    this.$http.get("http://localhost:8080/program/").then(function(resp) {
+                    this.$http.get(this.backend+"/program/").then(function(resp) {
                         _this3.products = resp.body;
                         _this3.loading.product = false;
 
@@ -612,7 +612,7 @@
                         "program_id": this.selected.product.id,
                         "date": moment().format("YYYY-MM-DD")
                     };
-                    this.$http.post("http://localhost:8080/program/seasons/current", body).then(function(resp) {
+                    this.$http.post(this.backend+"/program/seasons/current", body).then(function(resp) {
                         _this4.seasons = resp.body.map(function(s) {
                             let display_name = s.name
                             if (s.name.indexOf("-") !== (-1)) {
@@ -661,7 +661,7 @@
                         "season_id": season_id
                     };
                     return new Promise(function(yes, no) {
-                        _this5.$http.post("http://localhost:8080/program/leagues", body).then(function(resp) {
+                        _this5.$http.post(this.backend+"/program/leagues", body).then(function(resp) {
                             return yes(resp.body.map(function(l) {
                                 var season = _this5.seasons.find(function(s) {
                                     return parseInt(s.id) === l.season_id;
@@ -734,7 +734,7 @@
                     var body = {
                         "facility_id": parseInt(this.selected.facility_id)
                     };
-                    this.$http.post("http://localhost:8080/program/tournaments", body).then(function(resp) {
+                    this.$http.post(this.backend+"/program/tournaments", body).then(function(resp) {
                         _this6.tournaments = resp.body.map(function(t) {
                             var d = moment(t.date, "MMM D, YYYY"),
                                 //June 8, 2019
@@ -867,7 +867,7 @@
                 getTeamPrice: function(league) {
                     const d = this.getBody(league, true),
                         _this2 = this;
-                    this.$http.post("http://localhost:8080/product/registration/get", d).then(function(resp) {
+                    this.$http.post(this.backend+"/product/registration/get", d).then(function(resp) {
                         console.log(resp);
                         _this2.product = resp.body.product;
                         var p = _this2.product.price;
@@ -891,7 +891,7 @@
                 getFreeAgentPrice: function(league) {
                     const d = this.getBody(league, false),
                         _this2 = this;
-                    this.$http.post("http://localhost:8080/product/registration/get", d).then(function(resp) {
+                    this.$http.post(this.backend+"/product/registration/get", d).then(function(resp) {
                         console.log(resp);
                         _this2.free_agent = resp.body.product;
                         var p = _this2.free_agent.price;

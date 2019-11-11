@@ -651,7 +651,7 @@
                             first_name: player.name,
                         }, self = this;
                         console.log(d)
-                        this.$http.post("http://localhost:8080/goal/", d)
+                        this.$http.post(this.backend+"/goal/", d)
                         .then(() => {
                             self.scoreplay_videos.clips = self.scoreplay_videos.clips.map(c => {
                                 if (c.seconds === self.selected_scorer_details.seconds) {
@@ -730,7 +730,7 @@
                     getScoreplayVideos: function getScoreplayVideos() {
                         var _this = this;
 
-                        this.$http.get("http://localhost:8080/goal/get/" + this.matchID)
+                        this.$http.get(this.backend+"/goal/get/" + this.matchID)
                         .then((goals_resp) => {
                             const goals = goals_resp.body;
                             var url = "https://video.scoreplay.io/match/" + this.matchID;
@@ -804,7 +804,7 @@
                             return _this2.getManualMatchDetails();
                         }
 
-                        var url = "http://localhost:8080/match/" + this.matchID;
+                        var url = this.backend+"/match/" + this.matchID;
                         return this.$http.get(url).then(function(resp) {
                             _this2.match = resp.body;
                             _this2.match.start = moment(_this2.match.start, "YYYY-MM-DDTHH:mm:ss").format("YYYY-MM-DD - h:mma");
@@ -827,7 +827,7 @@
                     getLeagueDetails: function getLeagueDetails(league_id) {
                         var _this3 = this;
 
-                        var url = "http://localhost:8080/league/" + league_id;
+                        var url = this.backend+"/league/" + league_id;
                         this.$http.get(url).then(function(resp) {
                             _this3.facility = resp.body.facility;
                             _this3.season = resp.body.season;
@@ -908,7 +908,7 @@
                     getTeamDetails: function getTeamDetails(id, home) {
                         var _this5 = this;
 
-                        var url = "http://localhost:8080/team/" + id;
+                        var url = this.backend+"/team/" + id;
                         return this.$http.get(url).then(function(resp) {
                             if (home) {
                                 _this5.home_team = {
@@ -936,7 +936,7 @@
                     getResults: function getResults(league_id) {
                         var _this6 = this;
 
-                        var url = "http://localhost:8080/league/" + league_id + "/scores";
+                        var url = this.backend+"/league/" + league_id + "/scores";
                         this.$http.get(url).then(function(resp) {
                             _this6.leaderboard = resp.body.leaderboard;
                         }).catch(function(err) {
@@ -1012,7 +1012,7 @@
                     },
                     getStats: function() {
                         const self = this;
-                        this.$http.get("http://localhost:8080/game/stats/" + this.matchID)
+                        this.$http.get(this.backend+"/game/stats/" + this.matchID)
                             .then(resp => {
                                 document.querySelector(".show-match-stats").style.display = "flex"
                                 // document.querySelector(".show-player-stats").style.display = "block"

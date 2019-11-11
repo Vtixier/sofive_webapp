@@ -409,9 +409,9 @@
                             end: moment(this.end, "MM-DD-YYYY").add(1, 'd').unix()
                         };
                         console.log(d, this.start, this.end);
-                        p = this.$http.post("http://localhost:8080/product/registrations/past", d);
+                        p = this.$http.post(this.backend+"/product/registrations/past", d);
                     } else {
-                        p = this.$http.get("http://localhost:8080/product/registrations");
+                        p = this.$http.get(this.backend+"/product/registrations");
                     }
 
                     p.then(function(resp) {
@@ -433,7 +433,7 @@
                     this.loading = true;
 
                     this.registrations = [];
-                    this.$http.get("http://localhost:8080/product/registrations").then(function(resp) {
+                    this.$http.get(this.backend+"/product/registrations").then(function(resp) {
                         _this2.process(resp);
 
                         _this2.loading = false
@@ -515,7 +515,7 @@
                         return e.value;
                     });
 
-                    this.$http.post("http://localhost:8080/product/registrations/validate", {
+                    this.$http.post(this.backend+"/product/registrations/validate", {
                         ids: validated
                     }).then(function(resp) {
                         window.location.reload(false);

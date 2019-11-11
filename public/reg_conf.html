@@ -501,7 +501,7 @@
                 },
                 checkOpen: function checkOpen() {
                     const self = this;
-                    this.$http.post("http://localhost:8080/program/open", {
+                    this.$http.post(this.backend+"/program/open", {
                         season_id: self.data.season_id.toString()
                     }).then(function(resp) {
                         self.open = resp.body
@@ -528,7 +528,7 @@
                         duration: parseInt(this.data.duration)
                     };
                     console.log(d);
-                    this.$http.post("http://localhost:8080/event/book", d).then(function(resp) {
+                    this.$http.post(this.backend+"/event/book", d).then(function(resp) {
                         console.log(resp);
 
                         _this.stripeRedirect();
@@ -611,7 +611,7 @@
                     var _this2 = this;
 
                     var d = this.getBody(false);
-                    this.$http.post("http://localhost:8080/product/registration/get", d).then(function(resp) {
+                    this.$http.post(this.backend+"/product/registration/get", d).then(function(resp) {
                         console.log(resp);
                         _this2.product = resp.body.product;
                         var p = _this2.product.price;
@@ -637,7 +637,7 @@
 
                     var d = this.getBody(true),
                         self = this;
-                    this.$http.post("http://localhost:8080/product/registration/get", {
+                    this.$http.post(this.backend+"/product/registration/get", {
                         ...d,
                         early_bird: "No"
                     }).then(function(resp) {
@@ -703,7 +703,7 @@
                     }
 
                     // Pre add the registration
-                    this.$http.post("http://localhost:8080/product/registration", d).then(function(resp) {
+                    this.$http.post(this.backend+"/product/registration", d).then(function(resp) {
                         console.log("Pre add", resp);
                         const id = resp.body;
 
@@ -760,7 +760,7 @@
                         keyboard: false
                     });
                     this.team_search_loading = true;
-                    this.$http.post("http://localhost:8080/team/", {
+                    this.$http.post(this.backend+"/team/", {
                         name: encodeURI(this.team_search),
                         facility_id: this.selected.center
                     }).then(function(resp) {

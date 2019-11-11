@@ -191,7 +191,7 @@
                         "program_id": this.product_id,
                         "date": moment().subtract(14, 'd').format("YYYY-MM-DD")
                     };
-                    var url = "http://localhost:8080/program/seasons";
+                    var url = this.backend+"/program/seasons";
                     this.$http.post(url, body).then(function(resp) {
                     	let p = [];
                         self.seasons = resp.body.map(s => {
@@ -246,7 +246,7 @@
                     const self = this;
                     this.loading.league = true;
                     this.leagues = [];
-                    var url = "http://localhost:8080/facility/" + this.facility_id + "/" + season_id + "/leagues";
+                    var url = this.backend+"/facility/" + this.facility_id + "/" + season_id + "/leagues";
                     return new Promise(function(yes, no) {
                         self.$http.get(url).then(function(resp) {
                         	const season = self.seasons.find(s => (parseInt(s.id) === parseInt(season_id)))
