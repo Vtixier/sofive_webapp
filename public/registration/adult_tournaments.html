@@ -253,6 +253,7 @@
                     	let p = [];
                     	self.seasons = resp.body.map(s => {
                     		p.push(self.getEvents(s.id));
+                            let display_name = s.name
                     		if (s.name.indexOf("-") !== (-1)) {
                                 if (s.name.indexOf("-") !== (-1)) {
                                     display_name = s.name.split("-")[1].trim().split("(")[0]
@@ -295,7 +296,7 @@
                     return this.$http.post(this.backend+"/program/leagues", body)
                     .then(resp => {
                     	return resp.body.map(l => {
-                    		const season = self.seasons.find(s => (parseInt(s.id) === l.season_id)),
+                    		const season = self.seasons.find(s => (parseInt(s.id) === parseInt(l.season_id))),
                     		description = l.description
                     		if (description.indexOf("Early Bird: ") !== -1) {
                                 var i = description.indexOf('Early Bird: '),

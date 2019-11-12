@@ -16,7 +16,7 @@ RUN apk --no-cache add ca-certificates curl
 WORKDIR /root/
 
 COPY public ./public
-RUN sed -i 's/localhost/app.sofive.com/g' public/js/navigation.js 
+RUN sed -i 's/http\:\/\/localhost/https\:\/\/app.sofive.com/g' public/js/navigation.js 
 
 COPY --from=builder /go/bin/frontend .
 
