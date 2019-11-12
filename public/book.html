@@ -702,7 +702,8 @@
                             facility_id: parseInt(this.selected.center),
                             date: today.format("YYYY-MM-DD"),
                             time: prev_hour,
-                            duration: parseInt(this.selected.duration)
+                            duration: parseInt(this.selected.duration),
+                            field_type: this.selected.field
                         };
                         this.$http.post(this.backend+"/event/", body).then(function(resp) {
                             if (resp.body.free.length == 0) {
@@ -733,7 +734,8 @@
                             facility_id: parseInt(this.selected.center),
                             date: today.format("YYYY-MM-DD"),
                             time: next_hour,
-                            duration: parseInt(this.selected.duration)
+                            duration: parseInt(this.selected.duration),
+                            field_type: this.selected.field
                         };
                         this.$http.post(this.backend+"/event/", body).then(function(resp) {
                             if (resp.body.free.length == 0) {
@@ -768,7 +770,8 @@
                             facility_id: parseInt(this.selected.center),
                             date: today.format("YYYY-MM-DD"),
                             time: time,
-                            duration: 60
+                            duration: 60,
+                            field_type: this.selected.field
                         };
                         this.$http.post(this.backend+"/event/", body).then(function(resp) {
                             if (resp.body.free.length == 0) {
@@ -799,7 +802,8 @@
                             facility_id: parseInt(this.selected.center),
                             date: tomorrow.format("YYYY-MM-DD"),
                             time: time,
-                            duration: 60
+                            duration: 60,
+                            field_type: this.selected.field
                         };
                         this.$http.post(this.backend+"/event/", body).then(function(resp) {
                             if (resp.body.free.length == 0) {
