@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+	<meta charset="utf-8">
+
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/style.css" rel="stylesheet">
+
+	<style type="text/css">
+
+	.group {
+		background: white;
+		box-shadow: 0 7px 14px 0 rgba(49,49,93,0.10),
+		0 3px 6px 0 rgba(0,0,0,0.08);
+		border-radius: 4px;
+		margin-bottom: 20px;
+	}
+
+	label {
+		position: relative;
+		color: #8898AA;
+		font-weight: 300;
+		height: 40px;
+		line-height: 40px;
+		margin-left: 20px;
+		display: flex;
+		flex-direction: row;
+	}
+
+	.group label:not(:last-child) {
+		border-bottom: 1px solid #F0F5FA;
+	}
+
+	label > span {
+		width: 80px;
+		text-align: right;
+		margin-right: 30px;
+	}
+
+	.field {
+		background: transparent;
+		font-weight: 300;
+		border: 0;
+		color: #31325F;
+		outline: none;
+		flex: 1;
+		padding-right: 10px;
+		padding-left: 10px;
+		cursor: text;
+	}
+
+	.field::-webkit-input-placeholder { color: #CFD7E0; }
+	.field::-moz-placeholder { color: #CFD7E0; }
+
+	button {
+		float: left;
+		display: block;
+		background: #666EE8;
+		color: white;
+		box-shadow: 0 7px 14px 0 rgba(49,49,93,0.10),
+		0 3px 6px 0 rgba(0,0,0,0.08);
+		border-radius: 4px;
+		border: 0;
+		margin-top: 20px;
+		font-size: 15px;
+		font-weight: 400;
+		width: 100%;
+		height: 40px;
+		line-height: 38px;
+		outline: none;
+	}
+
+	button:focus {
+		background: #555ABF;
+	}
+
+	button:active {
+		background: #43458B;
+	}
+
+	.outcome {
+		float: left;
+		width: 100%;
+		padding-top: 8px;
+		min-height: 24px;
+		text-align: center;
+	}
+
+	.error {
+		color: #E4584C;
+	}
+
+	.success {
+		color: #666EE8;
+	}
+
+	.success .token {
+		font-weight: 500;
+		font-size: 13px;
+	}
+
+</style>
+
+</head>
+
+<body class="fixed-sidebar" style="background-color: #f3f3f4">
+
+		<div id="app" style="padding-top: 5%;">
+
+			<div class="row">
+
+				<div class="col-md-6 col-sm-12 offset-md-3">
+					
+					<div class="row">
+						<div class="col-sm-12 col-md-4 offset-md-4 text-center">
+							<img src="https://preview.gotsoccer.com/content/directors/logos/t_69051.png" style="width: 70%">
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12 text-center">
+							<h3 style="text-align: center; margin-top: 3%; margin-bottom: 3%">{{product.name}}</h3>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-12 col-md-8 offset-md-2 text-center">
+							<form>
+								<div class="group">
+									<label>
+										<span>Name</span>
+										<input id="name" class="field" placeholder="Jane Doe" v-model="name" />
+									</label>
+									<label>
+										<span>Email</span>
+										<input id="email" class="field" placeholder="jane.doe@example.com" v-model="email" />
+									</label>
+									<label>
+										<span>Card</span>
+										<div id="card-element" class="field"></div>
+									</label>
+								</div>
+								<button type="submit">Pay ${{product.display_price}}</button>
+								<div class="outcome">
+									<div class="error" v-if="error">{{error}}</div>
+									<div class="success" v-if="token">
+										Success! Your Stripe token is <span class="token">{{token}}</span>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+					<hr/>
+					<div class="row">
+						<div class="col-sm-12 col-md-4 offset-md-4 text-center">
+							Session timeout: {{timer_text}}
+						</div>
+					</div>
+
+				</div>
+
+			</div>
+
+		</div>
+			
+	</div>
+
+	<script src="js/vue.js"></script>
+
+	<script type="text/javascript" src="js/info-mdl.js"></script>
+    <script type="text/javascript" src="js/info-brk.js"></script>
+    <script type="text/javascript" src="js/info-col.js"></script>
+    <script type="text/javascript" src="js/info-rok.js"></script>
+    <script type="text/javascript" src="js/info-ekp.js"></script>
+
+	<script type="text/javascript" src="js/navigation.js"></script>
+	<script type="text/javascript" src="js/vue-resource.js"></script>
+	<script src="https://js.stripe.com/v3/"></script>
+	<script type="text/javascript">
+
+		let stripe = Stripe(`pk_test_1AfVoOISnSBi3YL546sR6wVO00z2t7grwj`);
+		var elements = stripe.elements(), card = null
+
+		var app = new Vue({
+            el: '#app',
+            data: {
+            	token: "",
+            	error: "",
+            	name: "",
+            	email: "",
+            	product: {
+            		name: "",
+            		price: 0,
+            		currency: "",
+            		display_price: ""
+            	},
+            	sku: null,
+            	id: 0,
+            	timer: 600,
+            	selected: {
+            		center: "1"
+            	}
+            },
+            computed: {
+            	timer_text: function() {
+            		const mins = parseInt(this.timer/60),
+            		seconds = this.timer - mins*60
+            		let min_text = mins.toString()
+            		if (min_text.length == 1) {
+            			min_text = "0"+min_text
+            		}
+            		let sec_text = seconds.toString()
+            		if (sec_text.length == 1) {
+            			sec_text = "0"+sec_text
+            		}
+            		return min_text+":"+sec_text
+            	}
+            },
+            mounted: function() {
+            	const self = this,
+            		params = this.findGetParameter()
+            	if (params.sku && params.id) {
+            		this.sku = params.sku
+            		this.id = parseInt(params.id)
+            		this.getSKU()
+            	} else {
+            		return
+            	}
+            	this.runTimer()
+
+            	card = elements.create('card', {
+					style: {
+						base: {
+							iconColor: '#666EE8',
+							color: '#31325F',
+							lineHeight: '40px',
+							fontWeight: 300,
+							fontFamily: 'Helvetica Neue',
+							fontSize: '15px',
+							'::placeholder': {
+								color: '#CFD7E0',
+							},
+						},
+					}
+				});
+				card.mount('#card-element');
+            	document.querySelector('form').addEventListener('submit', function(e) {
+            		e.preventDefault();
+            		self.stripeGetToken()
+            	})
+            },
+            methods: {
+            	runTimer: function() {
+            		this.timer -= 1
+            		if (this.timer === 0) {
+            			alert("Expired")
+            			return
+            		}
+            		setTimeout(this.runTimer, 1000)
+            	},
+            	getSKU: function() {
+            		const self = this
+            		this.$http.get(this.backend+"/event/sku/"+this.sku)
+            		.then(resp => {
+            			console.log(resp.body)
+            			self.product.name = resp.body.attributes.name
+            			self.product.price = resp.body.price
+            			self.product.currency = resp.body.currency
+            			self.product.display_price = (Math.round(resp.body.price) / 100).toString()
+            		})
+            	},
+            	stripeGetToken: function() {
+            		const self = this
+					if (this.name === "") {
+						alert("Missing name")
+						return
+					}
+					if (this.email === "") {
+						alert("Missing email")
+						return
+					}
+					var options = {
+						name: this.name,
+						email: this.email
+					};
+					stripe.createToken(card, options).then(result => {
+						console.log("Res", result)
+						if (result.token) {
+							self.token = result.token.id
+							self.createBookingCharge(result.token.id)
+						} else if (result.error) {
+							self.error = result.error.message
+						}
+					});
+            	},
+            	createBookingCharge: function(token) {
+            		const self = this;
+            		return this.$http.post(this.backend+"/event/charge", {
+            			token,
+            			name: this.name,
+            			email: this.email,
+            			sku: this.sku,
+            			booking_id: this.id
+            		})
+            		.then(resp => {
+            			console.log(resp)
+            			window.location = "/booking/done.html?booking_id="+self.id
+            		})
+            	},
+            	findGetParameter: function() {
+                    var queryDict = {};
+                    decodeURI(location.search).substr(1).split("&").forEach(function(item) {
+                        queryDict[item.split("=")[0]] = item.split("=")[1];
+                    });
+                    return queryDict;
+                },
+            }
+        })
+</script>
+
+</body>
+
+</html>

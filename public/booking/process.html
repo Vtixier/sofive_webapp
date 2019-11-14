@@ -119,44 +119,23 @@
         }
     </style>
 
-    <link href="css/plugins/select2/select2.min.css" rel="stylesheet">
+    <link href="/css/plugins/select2/select2.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.css" rel="stylesheet">
 
-    <link href="css/plugins/datapicker/datepicker3.css" rel="stylesheet">
-    <link href="css/plugins/iCheck/custom.css" rel="stylesheet">
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
-    <link href="css/animate.css" rel="stylesheet">
-    <link href="css/style.css" rel="stylesheet">
+    <link href="/css/plugins/ladda/ladda-themeless.min.css" rel="stylesheet">
+
+    <link href="/css/plugins/datapicker/datepicker3.css" rel="stylesheet">
+    <link href="/css/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
     <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-32x32.png" sizes="32x32" />
     <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" sizes="192x192" />
     <!-- Toastr style -->
-    <link href="css/plugins/toastr/toastr.min.css" rel="stylesheet">
+    <link href="/css/plugins/toastr/toastr.min.css" rel="stylesheet">
     <!-- Sweet Alert -->
-    <link href="css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
-
-    <style type="text/css">
-        @media only screen and (max-width: 768px) {
-            .hide-if-mob {
-                display: none;
-            }
-
-            .hide-if-not-mob {
-                display: block
-            }
-        }
-
-        @media only screen and (min-width: 768px) {
-            .hide-if-mob {
-                display: block;
-            }
-
-            .hide-if-not-mob {
-                display: none
-            }
-        }
-    </style>
-
+    <link href="/css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
 </head>
 
 <body class="fixed-sidebar">
@@ -173,32 +152,19 @@
                 <sofive-header />
             </div>
 
-            <div class="wrapper wrapper-content animated fadeInRight">
-                <div class="row">
-                    <div class="col-12 hide-if-mob">
-                        <div class="widget style1 navy-bg">
-                            <div class="row">
-                                <div class="col-1 text-center">
-                                    <i class="fa fa-check-square fa-5x"></i>
-                                </div>
-                                <div class="col-3 text-left">
-                                    <h1 class="font-bold">You're all set!</h1>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 hide-if-not-mob">
-                        <div class="widget style1 navy-bg">
-                            <div class="row">
-                                <div class="col-3 text-center">
-                                    <i class="fa fa-check-square fa-5x"></i>
-                                </div>
-                                <div class="col-9 text-right">
-                                    <h1 class="font-bold">You're all set!</h1>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+            <div class="row wrapper border-bottom white-bg page-heading">
+                <div class="col-lg-10">
+                    <h2>Book a field</h2>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="book_a_field.html">Selection</a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            <strong>Confirmation</strong>
+                        </li>
+                    </ol>
+                </div>
+                <div class="col-lg-2">
                 </div>
             </div>
 
@@ -210,7 +176,7 @@
                     <div class="col-md-8">
                         <div class="ibox">
                             <div class="ibox-title">
-                                <h5>Booking confirmation</h5>
+                                <h5>Cart Summary</h5>
                             </div>
                             <div class="ibox-content">
                                 <div class="panel panel-default">
@@ -220,9 +186,36 @@
                                         <h3 style="color: #03793E"><i class="fa fa-map-marker"></i> {{data.name}}</h3>
                                     </div>
                                 </div>
+                                <span>
+                                    Total : <span class="font-bold" style="font-size: 2em">${{product.price/100}} <small v-if="product.tax">(+{{product.tax}} tax)</small></span>
+                                </span>
+                                <hr>
+                                <span class="text">
+                                    <form role="form" class="form" id="loginForm">
+                                        <div class="form-group row"><label class="col-sm-2 col-form-label">Name</label>
+                                            <div class="col-sm-10"><input type="text" placeholder="Enter name" class="form-control" v-model="name" required=""></div>
+                                        </div>
+                                        <div class="form-group row"><label class="col-sm-2 col-form-label">Email</label>
+                                            <div class="col-sm-10"><input type="email" placeholder="Enter email" class="form-control" v-model="email" required=""></div>
+                                        </div>
+                                        <div class="form-group row"><label class="col-sm-2 col-form-label">Phone</label>
+                                            <div class="col-sm-10"><input type="text" placeholder="Enter phone" class="form-control" v-model="phone" required=""></div>
+                                        </div>
+                                        <div class="hr-line-dashed"></div>
+                                        <div class="form-group row"><label class="col-sm-2 col-form-label">Preference<br />
+                                            </label>
+
+                                            <div class="col-sm-10">
+                                                <div class="i-checks"><label> <input name="a" checked type="radio" value="full"> <i></i>Pay full price</label></div>
+                                                <div class="i-checks"><label> <input name="a" type="radio" value="deposit"> <i></i> Pay a flat $50 deposit <i>(non-refundable)</i></label></div>
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="ladda-button ladda-button-checkout btn btn-primary"><i class="fa fa-shopping-cart"></i> Checkout</button>
+                                    </form>
+                                </span>
+
                             </div>
                         </div>
-
                         <div id="error-message"></div>
 
                     </div>
@@ -284,38 +277,43 @@
     </div>
 
     <!-- Mainly scripts -->
-    <script src="js/jquery-3.1.1.min.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="js/bootstrap.js"></script>
-    <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
-    <script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="/js/jquery-3.1.1.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.js"></script>
+    <script src="/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.js"></script>
 
     <!-- Custom and plugin javascript -->
-    <script src="js/inspinia.js"></script>
+    <script src="/js/inspinia.js"></script>
 
-    <script src="js/plugins/select2/select2.full.min.js"></script>
+    <script src="/js/plugins/select2/select2.full.min.js"></script>
 
-    <script src="js/vue.js"></script>
+    <script src="/js/vue.js"></script>
 
-    <script type="text/javascript" src="js/vue-resource.js"></script>
-    <script type="text/javascript" src="js/moment.js"></script>
-    <script src="js/plugins/datapicker/bootstrap-datepicker.js"></script>
-    <script type="text/javascript" src="js/he.js"></script>
+    <script type="text/javascript" src="/js/vue-resource.js"></script>
+    <script type="text/javascript" src="/js/moment.js"></script>
+    <script src="/js/plugins/datapicker/bootstrap-datepicker.js"></script>
 
-    <script type="text/javascript" src="js/navigation.js"></script>
-    <script type="text/javascript" src="js/header.js"></script>
-    <script type="text/javascript" src="js/footer.js"></script>
-    <script type="text/javascript" src="js/info-mdl.js"></script>
-    <script type="text/javascript" src="js/info-brk.js"></script>
-    <script type="text/javascript" src="js/info-col.js"></script>
-    <script type="text/javascript" src="js/info-rok.js"></script>
-    <script type="text/javascript" src="js/info-ekp.js"></script>
+    <script type="text/javascript" src="/js/navigation.js"></script>
+    <script type="text/javascript" src="/js/header.js"></script>
+    <script type="text/javascript" src="/js/footer.js"></script>
     <!-- iCheck -->
-    <script src="js/plugins/iCheck/icheck.min.js"></script>
-    <script src="js/plugins/sweetalert/sweetalert.min.js"></script>
+    <script src="/js/plugins/iCheck/icheck.min.js"></script>
+    <script src="/js/plugins/sweetalert/sweetalert.min.js"></script>
+
+    <script src="/js/plugins/ladda/spin.min.js"></script>
+    <script src="/js/plugins/ladda/ladda.min.js"></script>
+    <script src="/js/plugins/ladda/ladda.jquery.min.js"></script>
+    <script src="/js/plugins/toastr/toastr.min.js"></script>
 
     <script src="https://js.stripe.com/v3/"></script>
+
+    <script type="text/javascript" src="/js/info-mdl.js"></script>
+    <script type="text/javascript" src="/js/info-brk.js"></script>
+    <script type="text/javascript" src="/js/info-col.js"></script>
+    <script type="text/javascript" src="/js/info-rok.js"></script>
+    <script type="text/javascript" src="/js/info-ekp.js"></script>
 
     <script type="text/javascript">
         let stripe = Stripe(`pk_live_u3cyg4FEiEES4YUFKHeziPdY00kEYW2kt7`);
@@ -328,26 +326,149 @@
                     subtitle: "",
                     name: "",
                     id: 0,
-                    facility_id: 0,
-                }
+                    facility_id: 0
+                },
+                selected: {
+                    center: "0"
+                },
+                name: "",
+                email: "",
+                phone: "",
+                product: {},
+                deposit: {},
+                sel: ""
             },
-            mounted: function() {
-                const params = this.findGetParameter(),
+            mounted: function mounted() {
+                var params = this.findGetParameter(),
                     parsed = JSON.parse(atob(params.sel));
-                this.data = parsed
-                console.log(this.data)
-
+                this.data = parsed;
+                this.sel = params.sel;
+                this.getPricing();
+                var center = this.getCenterCookie(),
+                    self = this;
+                this.selected.center = center;
+                var l = Ladda.bind('.ladda-button-checkout');
+                $(document).ready(function() {
+                    $('.i-checks').iCheck({
+                        checkboxClass: 'icheckbox_square-green',
+                        radioClass: 'iradio_square-green'
+                    });
+                    $('#loginForm').on('submit', function(ev) {
+                        console.log(ev);
+                        self.pay();
+                        return false;
+                    });
+                });
             },
             methods: {
-                findGetParameter: function() {
-                    var queryDict = {}
+                findGetParameter: function findGetParameter() {
+                    var queryDict = {};
                     decodeURI(location.search).substr(1).split("&").forEach(function(item) {
-                        queryDict[item.split("=")[0]] = item.split("=")[1]
-                    })
-                    return queryDict
+                        queryDict[item.split("=")[0]] = item.split("=")[1];
+                    });
+                    return queryDict;
+                },
+                getPricing: function getPricing() {
+                    const self = this;
+                    this.getPricingDetails("No").then(function(d) {
+                        self.product = d;
+                        var p = self.product.price;
+                        self.product.full_price = p;
+
+                        if (d.center === "Sofive Rockville, MD") {
+                            self.product.price = Math.round(p / 1.1 * 100) / 100;
+                            self.product["tax"] = "10%";
+                        }
+
+                        if (d.center === "Sofive Columbia, MD") {
+                            self.product.price = Math.round(p / 1.05 * 100) / 100;
+                            self.product["tax"] = "5%";
+                        }
+
+                        return self.getPricingDetails("Yes")
+                        .then(function(dep) {
+                            self.deposit = Object.assign(dep);
+                        }).catch(function(err) {
+                            console.log(err);
+                        });
+                    }).catch(function(err) {
+                        console.error(err);
+                    });
+                },
+                getPricingDetails: function getPricingDetails(deposit) {
+                    const self = this;
+                    var body = Object.assign(this.data.booking, {
+                        deposit: deposit
+                    });
+                    return new Promise(function(yes, no) {
+                        self.$http.post(self.backend+"/product/booking", body)
+                        .then(function(resp) {
+                            yes(resp.body);
+                        }).catch(no);
+                    });
+                },
+                pay: function pay() {
+                    var paid = this.product.full_price;
+                    var deposit = false;
+                    if (document.querySelector('input[name="a"]:checked').value === "deposit") {
+                        paid = 5000;
+                        deposit = true;
+                    }
+
+                    var d = {
+                            customer_name: this.name,
+                            customer_email: this.email,
+                            customer_phone: this.phone,
+                            amount: paid,
+                            facility_id: this.data.facility_id,
+                            field_id: this.data.id,
+                            start: this.data.start,
+                            duration: parseInt(this.data.duration)
+                        },
+                        self = this;
+                    this.$http.post(this.backend+"/event/book", d)
+                    .then(function(resp) {
+                        self.stripeRedirect(resp.body.booking_id, deposit);
+                    }).catch(function(err) {
+                        console.log(err);
+                        setTimeout(function() {
+                            self.$http.post(this.backend+"/event/book", d)
+                            .then(function(respons) {
+                                self.stripeRedirect(respons.body.booking_id, deposit);
+                            }).catch(function(err) {
+                                console.log("ERR", err);
+                                toastr.error('Booking error', 'Please call the center for your booking.', {
+                                    progressBar: true
+                                });
+                            });
+                        }, 2000);
+                    });
+                },
+                stripeRedirect: function(booking_id, deposit) {
+                    let sku = this.product.sku;
+                    if (deposit) {
+                        sku = this.deposit.sku;
+                    }
+                    window.location = "/checkout.html?id="+booking_id+"&sku="+sku
+                },
+                getCenterCookie: function getCenterCookie() {
+                    var nameEQ = "center=";
+                    var ca = document.cookie.split(';');
+
+                    for (var i = 0; i < ca.length; i++) {
+                        var c = ca[i];
+
+                        while (c.charAt(0) == ' ') {
+                            c = c.substring(1, c.length);
+                        }
+
+                        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+                    }
+
+                    return null;
                 }
             }
-        })
+        });
     </script>
 
 </body>

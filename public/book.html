@@ -587,7 +587,7 @@
                     var self = this;
                     var center = this.getCenterCookie();
                     this.selected.center = center;
-                    this.date = moment().format("MM-DD-YYYY");
+                    this.date = moment().subtract(3, 'd').format("MM-DD-YYYY");
                     var endDate = moment().add(15, 'd').format("MM-DD-YYYY");
                     this.getCenters();
                     $('.input-group.date').datepicker({
@@ -840,7 +840,7 @@
                                 field_type: this.selected.field.split("_")[0]
                             }
                         });
-                        window.location = "book_conf.html?sel=" + btoa(JSON.stringify(d));
+                        window.location = "/booking/process.html?sel=" + btoa(JSON.stringify(d));
                     },
                     getCenterCookie: function getCenterCookie() {
                         var nameEQ = "center=";
