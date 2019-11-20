@@ -140,7 +140,10 @@
 										<div id="card-element" class="field"></div>
 									</label>
 								</div>
-								<button type="submit">Pay ${{product.display_price}}</button>
+								<button type="submit">
+									<span v-if="!loading">Pay ${{product.display_price}}</span>
+									<span v-else>Loading...</span>
+								</button>
 								<div class="outcome">
 									<div class="error" v-if="error">{{error}}</div>
 									<div class="success" v-if="token">
@@ -153,7 +156,7 @@
 					<hr/>
 					<div class="row">
 						<div class="col-sm-12 col-md-4 offset-md-4 text-center">
-							Session timeout: {{timer_text}}
+							<h2 style="color: red">Session timeout: {{timer_text}}</h2>
 						</div>
 					</div>
 
@@ -195,11 +198,13 @@
             		display_price: ""
             	},
             	sku: null,
-            	id: 0,
+            	booking_id: 0,
+            	registration_id: 0,
             	timer: 600,
             	selected: {
             		center: "1"
-            	}
+            	},
+            	loading: false
             },
             computed: {
             	timer_text: function() {
@@ -219,9 +224,13 @@
             mounted: function() {
             	const self = this,
             		params = this.findGetParameter()
-            	if (params.sku && params.id) {
+            	if (params.sku && params.booking_id) {
             		this.sku = params.sku
-            		this.id = parseInt(params.id)
+            		this.booking_id = parseInt(params.booking_id)
+            		this.getSKU()
+            	} else if (params.sku && params.registration_id) {
+            		this.sku = params.sku
+            		this.registration_id = parseInt(params.registration_id)
             		this.getSKU()
             	} else {
             		return
@@ -253,8 +262,15 @@
             	runTimer: function() {
             		this.timer -= 1
             		if (this.timer === 0) {
-            			alert("Expired")
-            			return
+            			if (this.booking_id !== 0) {
+            				alert("Payment expired, returing to booking page")
+            				window.location = "/book.html"
+            				return
+            			} else {
+            				alert("Payment expired, returing to registration page")
+            				window.location = "/register.html"
+            				return
+            			}
             		}
             		setTimeout(this.runTimer, 1000)
             	},
@@ -283,11 +299,16 @@
 						name: this.name,
 						email: this.email
 					};
+					this.loading = true
 					stripe.createToken(card, options).then(result => {
 						console.log("Res", result)
 						if (result.token) {
 							self.token = result.token.id
-							self.createBookingCharge(result.token.id)
+							if (self.booking_id !== 0) {
+								self.createBookingCharge(result.token.id)
+							} else {
+								self.createRegistrationCharge(result.token.id)
+							}
 						} else if (result.error) {
 							self.error = result.error.message
 						}
@@ -300,11 +321,25 @@
             			name: this.name,
             			email: this.email,
             			sku: this.sku,
-            			booking_id: this.id
+            			booking_id: this.booking_id
             		})
             		.then(resp => {
             			console.log(resp)
-            			window.location = "/booking/done.html?booking_id="+self.id
+            			window.location = "/booking/done.html?booking_id="+self.booking_id
+            		})
+            	},
+            	createRegistrationCharge: function(token) {
+            		const self = this;
+            		return this.$http.post(this.backend+"/event/charge", {
+            			token,
+            			name: this.name,
+            			email: this.email,
+            			sku: this.sku,
+            			registration_id: this.registration_id
+            		})
+            		.then(resp => {
+            			console.log(resp)
+            			window.location = "/registration/done.html?registration_id="+self.registration_id
             		})
             	},
             	findGetParameter: function() {

@@ -119,21 +119,21 @@
         }
     </style>
 
-    <link href="css/plugins/select2/select2.min.css" rel="stylesheet">
+    <link href="/css/plugins/select2/select2.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.css" rel="stylesheet">
 
-    <link href="css/plugins/datapicker/datepicker3.css" rel="stylesheet">
-    <link href="css/plugins/iCheck/custom.css" rel="stylesheet">
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
-    <link href="css/animate.css" rel="stylesheet">
-    <link href="css/style.css" rel="stylesheet">
+    <link href="/css/plugins/datapicker/datepicker3.css" rel="stylesheet">
+    <link href="/css/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
     <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-32x32.png" sizes="32x32" />
     <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" sizes="192x192" />
     <!-- Toastr style -->
-    <link href="css/plugins/toastr/toastr.min.css" rel="stylesheet">
+    <link href="/css/plugins/toastr/toastr.min.css" rel="stylesheet">
     <!-- Sweet Alert -->
-    <link href="css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+    <link href="/css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
 </head>
 
 <body class="fixed-sidebar">
@@ -375,52 +375,44 @@
     </div>
 
     <!-- Mainly scripts -->
-    <script src="js/jquery-3.1.1.min.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="js/bootstrap.js"></script>
-    <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
-    <script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="/js/jquery-3.1.1.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.js"></script>
+    <script src="/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.js"></script>
 
     <!-- Custom and plugin javascript -->
-    <script src="js/inspinia.js"></script>
+    <script src="/js/inspinia.js"></script>
 
-    <script src="js/plugins/select2/select2.full.min.js"></script>
+    <script src="/js/plugins/select2/select2.full.min.js"></script>
 
-    <script src="js/vue.js"></script>
+    <script src="/js/vue.js"></script>
 
-    <script type="text/javascript" src="js/vue-resource.js"></script>
-    <script type="text/javascript" src="js/moment.js"></script>
-    <script src="js/plugins/datapicker/bootstrap-datepicker.js"></script>
-    <script type="text/javascript" src="js/he.js"></script>
+    <script type="text/javascript" src="/js/vue-resource.js"></script>
+    <script type="text/javascript" src="/js/moment.js"></script>
+    <script src="/js/plugins/datapicker/bootstrap-datepicker.js"></script>
+    <script type="text/javascript" src="/js/he.js"></script>
 
-    <script type="text/javascript" src="js/navigation.js"></script>
-    <script type="text/javascript" src="js/header.js"></script>
-    <script type="text/javascript" src="js/footer.js"></script>
+    <script type="text/javascript" src="/js/navigation.js"></script>
+    <script type="text/javascript" src="/js/header.js"></script>
+    <script type="text/javascript" src="/js/footer.js"></script>
 
-    <script type="text/javascript" src="js/info-mdl.js"></script>
-    <script type="text/javascript" src="js/info-brk.js"></script>
-    <script type="text/javascript" src="js/info-col.js"></script>
-    <script type="text/javascript" src="js/info-rok.js"></script>
-    <script type="text/javascript" src="js/info-ekp.js"></script>
+    <script type="text/javascript" src="/js/info-mdl.js"></script>
+    <script type="text/javascript" src="/js/info-brk.js"></script>
+    <script type="text/javascript" src="/js/info-col.js"></script>
+    <script type="text/javascript" src="/js/info-rok.js"></script>
+    <script type="text/javascript" src="/js/info-ekp.js"></script>
     <!-- iCheck -->
-    <script src="js/plugins/iCheck/icheck.min.js"></script>
-    <script src="js/plugins/sweetalert/sweetalert.min.js"></script>
-    <script src="js/plugins/toastr/toastr.min.js"></script>
+    <script src="/js/plugins/iCheck/icheck.min.js"></script>
+    <script src="/js/plugins/sweetalert/sweetalert.min.js"></script>
+    <script src="/js/plugins/toastr/toastr.min.js"></script>
 
     <script src="https://js.stripe.com/v3/"></script>
-    <script src="js/plugins/typehead/bootstrap3-typeahead.min.js"></script>
+    <script src="/js/plugins/typehead/bootstrap3-typeahead.min.js"></script>
 
     <script type="text/javascript">
         let stripe = Stripe(`pk_live_u3cyg4FEiEES4YUFKHeziPdY00kEYW2kt7`); //pk_test_1AfVoOISnSBi3YL546sR6wVO00z2t7grwj
-
-        let priceMap = {
-            60: 135,
-            90: 150,
-            120: 200
-        }
-
-        "use strict";
 
         var app = new Vue({
             el: '#wrapper',
@@ -509,16 +501,13 @@
                         console.log(err);
                     });
                 },
-                pay: function pay() {
-                    var _this = this;
-
-                    var paid = this.price;
-
+                pay: function() {
+                    const self = this;
+                    let paid = this.price;
                     if (document.querySelector('input[name="a"]:checked').value === "half") {
                         paid = this.price / 2;
                     }
-
-                    var d = {
+                    const d = {
                         customer_name: this.name,
                         customer_email: this.email,
                         amount: paid,
@@ -528,11 +517,12 @@
                         duration: parseInt(this.data.duration)
                     };
                     console.log(d);
-                    this.$http.post(this.backend+"/event/book", d).then(function(resp) {
-                        console.log(resp);
-
-                        _this.stripeRedirect();
-                    }).catch(function(err) {
+                    this.$http.post(this.backend+"/event/book", d)
+                    .then(resp => {
+                    	console.log(resp)
+                    	self.stripeRedirect();
+                    })
+                    .catch(function(err) {
                         console.log(err);
                     });
                 },
@@ -601,59 +591,57 @@
                         "email": this.email,
                         "phone": this.phone,
                         "paid": paid,
-                        "details": JSON.stringify(Object.assign(this.yl, {
-                            league: this.data.name,
+                        "details": JSON.stringify({
+                        	...this.yl,
+                        	league: this.data.name,
                             kid: this.kid,
-                        }))
+                        })
                     };
                 },
                 getRegistration: function getRegistration() {
-                    var _this2 = this;
-
-                    var d = this.getBody(false);
-                    this.$http.post(this.backend+"/product/registration/get", d).then(function(resp) {
+                    const self = this,
+                    	d = this.getBody(false);
+                    this.$http.post(this.backend+"/product/registration/get", d)
+                    .then(function(resp) {
                         console.log(resp);
-                        _this2.product = resp.body.product;
-                        var p = _this2.product.price;
-                        _this2.product.full_price = p;
+                        self.product = resp.body.product;
+                        var p = self.product.price;
+                        self.product.full_price = p;
 
                         if (d.center === "Sofive Rockville, MD") {
-                            _this2.product.price = Math.round(p / 1.1 * 100) / 100;
-                            _this2.product["tax"] = "10%";
+                            self.product.price = Math.round(p / 1.1 * 100) / 100;
+                            self.product["tax"] = "10%";
                         }
 
                         if (d.center === "Sofive Columbia, MD") {
-                            _this2.product.price = Math.round(p / 1.05 * 100) / 100;
-                            _this2.product["tax"] = "5%";
+                            self.product.price = Math.round(p / 1.05 * 100) / 100;
+                            self.product["tax"] = "5%";
                         }
-
                         console.log("Got price", p);
                     }).catch(function(err) {
                         console.log(err);
                     });
                 },
                 getDeposit: function getDeposit() {
-                    var _this3 = this;
-
-                    var d = this.getBody(true),
-                        self = this;
+                    const self = this,
+                    	d = this.getBody(true)
                     this.$http.post(this.backend+"/product/registration/get", {
                         ...d,
                         early_bird: "No"
                     }).then(function(resp) {
                         console.log(resp);
-                        _this3.deposit = resp.body.product;
-                        var p = _this3.deposit.price;
-                        _this3.deposit.full_price = p;
+                        self.deposit = resp.body.product;
+                        var p = self.deposit.price;
+                        self.deposit.full_price = p;
 
                         if (d.center === "Sofive Rockville, MD") {
-                            _this3.deposit.price = Math.round(p / 1.1 * 100) / 100;
-                            _this3.deposit["tax"] = "10%";
+                            self.deposit.price = Math.round(p / 1.1 * 100) / 100;
+                            self.deposit["tax"] = "10%";
                         }
 
                         if (d.center === "Sofive Columbia, MD") {
-                            _this3.deposit.price = Math.round(p / 1.05 * 100) / 100;
-                            _this3.deposit["tax"] = "5%";
+                            self.deposit.price = Math.round(p / 1.05 * 100) / 100;
+                            self.deposit["tax"] = "5%";
                         }
 
                         console.log("Got price", p);
@@ -703,24 +691,12 @@
                     }
 
                     // Pre add the registration
-                    this.$http.post(this.backend+"/product/registration", d).then(function(resp) {
+                    this.$http.post(this.backend+"/product/registration", d)
+                    .then(function(resp) {
                         console.log("Pre add", resp);
                         const id = resp.body;
 
-                        var redirect_url = 'http://localhost/reg_confirmation.html?id=' + id.toString();
-                        stripe.redirectToCheckout({
-                            items: [{
-                                sku: sku,
-                                quantity: 1
-                            }],
-                            successUrl: redirect_url,
-                            cancelUrl: 'https://scoreplay.io/canceled'
-                        }).then(function(result) {
-                            if (result.error) {
-                                var displayError = document.getElementById('error-message');
-                                displayError.textContent = result.error.message;
-                            }
-                        });
+                        window.location = "/checkout.html?registration_id="+id.toString()+"&sku="+sku
 
 
                     }).catch(function(err) {
