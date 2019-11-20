@@ -115,7 +115,7 @@
 					
 					<div class="row">
 						<div class="col-sm-12 col-md-4 offset-md-4 text-center">
-							<img src="https://preview.gotsoccer.com/content/directors/logos/t_69051.png" style="width: 70%">
+							<img :src="image" style="width: 70%">
 						</div>
 					</div>
 					<div class="row">
@@ -146,9 +146,9 @@
 								</button>
 								<div class="outcome">
 									<div class="error" v-if="error">{{error}}</div>
-									<div class="success" v-if="token">
+<!-- 									<div class="success" v-if="token">
 										Success! Your Stripe token is <span class="token">{{token}}</span>
-									</div>
+									</div> -->
 								</div>
 							</form>
 						</div>
@@ -204,7 +204,8 @@
             	selected: {
             		center: "1"
             	},
-            	loading: false
+            	loading: false,
+            	image: "/img/sofive/sofivegreen.png"
             },
             computed: {
             	timer_text: function() {
@@ -283,6 +284,7 @@
             			self.product.price = resp.body.price
             			self.product.currency = resp.body.currency
             			self.product.display_price = (Math.round(resp.body.price) / 100).toString()
+            			self.image = self.getCenterImage(resp.body.attributes.name)
             		})
             	},
             	stripeGetToken: function() {
@@ -349,6 +351,25 @@
                     });
                     return queryDict;
                 },
+                getCenterImage: function(name) {
+                	const lowerName = name.toLowerCase()
+                	if (lowerName.indexOf("bkl") !== (-1)) {
+                		return "/img/sofive/sofivegreenbrk.png"
+                	}
+                	if (lowerName.indexOf("mdl") !== (-1)) {
+                		return "/img/sofive/sofivegreenmdl.png"
+                	}
+                	if (lowerName.indexOf("ekp") !== (-1)) {
+                		return "/img/sofive/sofivegreenekp.png"
+                	}
+                	if (lowerName.indexOf("col") !== (-1)) {
+                		return "/img/sofive/sofivegreencol.png"
+                	}
+                	if (lowerName.indexOf("rok") !== (-1)) {
+                		return "/img/sofive/sofivegreenrok.png"
+                	}
+                	return "/img/sofive/sofivegreen.png"
+                }
             }
         })
 </script>
