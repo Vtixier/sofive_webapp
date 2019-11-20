@@ -587,7 +587,7 @@
                     var self = this;
                     var center = this.getCenterCookie();
                     this.selected.center = center;
-                    this.date = moment().subtract(3, 'd').format("MM-DD-YYYY");
+                    this.date = moment().format("MM-DD-YYYY");
                     var endDate = moment().add(15, 'd').format("MM-DD-YYYY");
                     this.getCenters();
                     $('.input-group.date').datepicker({
