@@ -695,7 +695,7 @@
                         console.log("Pre add", resp);
                         const id = resp.body;
 
-                        window.location = "/checkout.html?registration_id="+id.toString()+"&sku="+sku
+                        window.location = "/checkout.html?registration_id="+id.toString()+"&sku="+sku+"&origin="+encodeURIComponent(window.location.href)
 
 
                     }).catch(function(err) {

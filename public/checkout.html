@@ -151,6 +151,9 @@
 									<span v-if="!loading">Pay ${{product.display_price}}</span>
 									<span v-else>Loading...</span>
 								</button>
+								<button style="width: 40%; margin-left: 30%; background: none">
+									<a :href="origin" style="color: black">Cancel</a>
+								</button>
 								<div class="outcome">
 									<div class="error" v-if="error">{{error}}</div>
 <!-- 									<div class="success" v-if="token">
@@ -212,7 +215,8 @@
             		center: "1"
             	},
             	loading: false,
-            	image: "/img/sofive/sofivegreen.png"
+            	image: "/img/sofive/sofivegreen.png",
+            	origin: null
             },
             computed: {
             	timer_text: function() {
@@ -242,6 +246,9 @@
             		this.getSKU()
             	} else {
             		return
+            	}
+            	if (params.origin) {
+            		this.origin = decodeURIComponent(params.origin)
             	}
             	this.runTimer()
 

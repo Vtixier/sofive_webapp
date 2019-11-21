@@ -296,6 +296,7 @@
                                             <th class="text-center">Name</th>
                                             <th class="text-center">Team</th>
                                             <th class="text-center">Goals</th>
+                                            <th class="text-center">Player page</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -304,6 +305,7 @@
                                             <td class="text-center">{{player.name}}</td>
                                             <td class="text-center">{{player.team_name}}</td>
                                             <td class="text-center">{{player.goals}}</td>
+                                            <td style="text-align: center" v-on:click="gotoPlayer(player.dash_id)"><a><span class="label label-primary">view videos</span></a></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -398,7 +400,7 @@
                                 team_name
                             }
                         }).sort((a, b) => {
-                            return b.goals > a.goals
+                            return parseInt(b.goals) > parseInt(a.goals)
                         })
                     }).catch(function(err) {
                         console.log(err);

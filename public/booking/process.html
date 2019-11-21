@@ -431,7 +431,7 @@
                     }).catch(function(err) {
                         console.log(err);
                         setTimeout(function() {
-                            self.$http.post(this.backend+"/event/book", d)
+                            self.$http.post(self.backend+"/event/book", d)
                             .then(function(respons) {
                                 self.stripeRedirect(respons.body.booking_id, deposit);
                             }).catch(function(err) {
@@ -448,7 +448,7 @@
                     if (deposit) {
                         sku = this.deposit.sku;
                     }
-                    window.location = "/checkout.html?booking_id="+booking_id+"&sku="+sku
+                    window.location = "/checkout.html?booking_id="+booking_id+"&sku="+sku+"&origin="+encodeURIComponent(window.location.href)
                 },
                 getCenterCookie: function getCenterCookie() {
                     var nameEQ = "center=";
