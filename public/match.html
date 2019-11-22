@@ -408,7 +408,7 @@
 
                 </div>
 
-                <div class="row">
+<!--                 <div class="row">
                     <div class="col-md-6">
                         <div class="ibox">
                             <div class="ibox-title">
@@ -489,7 +489,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
 
             </div>
 
@@ -639,30 +639,30 @@
                             return
                         }
                         console.log("Scorer change", old_val, new_val)
-                        let player = {}
+                        let player = {},
+                            team_id = this.match.away.team_id
                         if (this.selected_scorer_details.is_home) {
                             player = this.home_team.roster.find(p => (p.id === new_val))
+                            team_id = this.match.home.team_id
                         } else {
                             player = this.away_team.roster.find(p => (p.id === new_val))
                         }
+                        if (!player) {
+                            return
+                        }
                         const d = {
-                            ...this.selected_scorer_details,
+                            id: this.selected_scorer_details.match_id,
+                            player_id: player.id,
+                            league_id: this.league.id.toString(),
+                            team_id: team_id.toString()
+                        }, player_d = {
                             dash_id: player.id,
                             first_name: player.name,
+                            team_id: team_id.toString(),
+                            league_id: this.league.id.toString(),
                         }, self = this;
-                        console.log(d)
-                        this.$http.post(this.backend+"/goal/", d)
-                        .then(() => {
-                            self.scoreplay_videos.clips = self.scoreplay_videos.clips.map(c => {
-                                if (c.seconds === self.selected_scorer_details.seconds) {
-                                    return {
-                                        ...c,
-                                        player_id: player.id
-                                    }
-                                }
-                                return c
-                            })
-                        })
+                        return Promise.all([self.addPlayer(player_d), self.addScorer(d)])
+                        .catch(console.error)
                     }
                 },
                 computed: {
@@ -683,6 +683,24 @@
                     }
                 },
                 methods: {
+                    addScorer: function(d) {
+                        const self = this;
+                        return this.$http.post("https://video.scoreplay.io/clip/scorer", d)
+                        .then(() => {
+                            self.scoreplay_videos.clips = self.scoreplay_videos.clips.map(c => {
+                                if (c.id === self.selected_scorer_details.match_id) {
+                                    return {
+                                        ...c,
+                                        player_id: d.player_id
+                                    }
+                                }
+                                return c
+                            })
+                        })
+                    },
+                    addPlayer: function(d) {
+                        return this.$http.post(this.backend+"/player/", d)
+                    },
                     getFb: function getFB(video_id) {
                         this.video_share_url = 'https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.dailymotion.com%2Fvideo%2F' + video_id + '&amp;src=sdkpreparse'
                     },
@@ -700,72 +718,46 @@
                     select_vid: function select_vid(v, is_home) {
                         console.log("Sel", v, is_home)
                         this.video_url = v.url;
-                        this.video_id = v.id;
-                        this.seconds = v.seconds;
                         let i = v.url.indexOf('video/') + 6,
                             j = v.url.indexOf('?autoplay')
                         this.getFb(v.url.slice(i, j))
-                        let team_id = this.home_team.id
                         if (is_home) {
                             this.video_roster = this.home_team.roster
                         } else {
                             this.video_roster = this.away_team.roster
-                            team_id = this.away_team.id
                         }
                         if (v.player_id) {
                             this.selected_scorer = v.player_id
                         } else {
                             this.selected_scorer = "0"
                         }
-                        console.log("Team", team_id)
                         this.selected_scorer_details = {
-                            team_id,
-                            seconds: v.seconds,
-                            match_id: this.matchID,
-                            league_id: this.match.league_id.toString(),
+                            match_id: v.id,
                             is_home
                         }
                         this.assign_modal_open = true
                     },
-                    getScoreplayVideos: function getScoreplayVideos() {
-                        var _this = this;
-
-                        this.$http.get(this.backend+"/goal/get/" + this.matchID)
-                        .then((goals_resp) => {
-                            const goals = goals_resp.body;
-                            var url = "https://video.scoreplay.io/match/" + this.matchID;
-                            this.$http.get(url).then(function(resp) {
-                                var v = resp.body;
-                                var rec_url = v.recording.url;
-
-                                if (rec_url !== "") {
-                                    rec_url = "https://www.dailymotion.com/embed/video/" + v.recording.url.replace("https://www.dailymotion.com/video/", "") + "?queue-enable=false&queue-autoplay-next=false&ui-start-screen-info=false";
-                                }
-
-                                let clips = []
-
-                                const event_num = _this.match.home.score + _this.match.away.score
-                                for (let i = 0; i < event_num; i++) {
-                                    const seconds = parseInt(i * 20 + 4),
-                                    url = "https://www.dailymotion.com/embed/video/" + v.recording.url.replace("https://www.dailymotion.com/video/", "") + "?autoplay=1&queue-enable=false&queue-autoplay-next=false&ui-start-screen-info=false&start=" + seconds.toString()
-                                    let player_id = goals.find(g => (g.seconds === seconds))
-                                    if (player_id) {
-                                        player_id = player_id.dash_id
-                                    }
-                                    clips.push({
-                                        url,
-                                        seconds,
-                                        player_id
-                                    }) // +4 to handle intro
-                                }
-
-                                v['clips'] = clips
-
-                                v['recording']['url'] = rec_url
-
-                                _this.scoreplay_videos = v
-
-                            })
+                    getScoreplayVideos: function() {
+                        const self = this,
+                            url = "https://video.scoreplay.io/match/" + this.matchID;
+                        this.$http.get(url)
+                        .then(resp => {
+                            const v = resp.body;
+                            let rec_url = v.recording.url;
+                            if (rec_url !== "") {
+                                rec_url = "https://www.dailymotion.com/embed/video/" + v.recording.url.replace("https://www.dailymotion.com/video/", "") + "?queue-enable=false&queue-autoplay-next=false&ui-start-screen-info=false";
+                            }
+                            self.scoreplay_videos = {
+                                ...v,
+                                recording: {
+                                    ...v.recording,
+                                    url: rec_url
+                                },
+                                clips: v.clips.map(clip => ({
+                                    ...clip,
+                                    url: "https://www.dailymotion.com/embed/video/"+clip.url.replace("https://www.dailymotion.com/video/", "")+"?autoplay=1&queue-enable=false&queue-autoplay-next=false&ui-start-screen-info=false"
+                                }))
+                            }
                         })
                         .catch(function(err) {
                             console.log("getScoreplayVideos", err);
@@ -901,9 +893,9 @@
                     getTeamsDetails: function getTeamsDetails(home_id, away_id) {
                         const self = this;
                         return Promise.all([this.getTeamDetails(home_id, true), this.getTeamDetails(away_id, false)])
-                        .then(() => {
-                            self.getStats()
-                        })
+                        // .then(() => {
+                        //     self.getStats()
+                        // })
                     },
                     getTeamDetails: function getTeamDetails(id, home) {
                         var _this5 = this;

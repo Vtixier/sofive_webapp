@@ -248,7 +248,7 @@
                 const params = this.findGetParameter()
                 this.player_id = params.id;
                 this.getPlayerDetails()
-
+                this.getVideos()
             },
             methods: {
                 getPlayerDetails: function() {
@@ -256,7 +256,6 @@
                     var url = this.backend+"/player/" + this.player_id;
                     this.$http.get(url).then(function(resp) {
                         self.player = resp.body.player
-                        self.getVideos(resp.body.goals)
                         self.getTeamDetails(self.player.team_id)
                         self.getTeamResults(self.player.team_id, self.player.league_id)
                     }).catch(function(err) {
@@ -264,26 +263,16 @@
                         self.err = "No data on this player"
                     });
                 },
-                getVideos: function(goals) {
+                getVideos: function() {
                     const self = this;
-                    let match_ids = {}
-                    goals.forEach(g => {
-                        if (!(g.match_id in match_ids)) {
-                            match_ids[g.match_id] = 1
-                        }
+                    return this.$http.get("http://video.scoreplay.io/clip/player/"+this.player_id)
+                    .then(resp => {
+                        self.goals = resp.body.map(clip => ({
+                            ...clip,
+                            vid_url: "https://www.dailymotion.com/embed/video/" + clip.url.replace("https://www.dailymotion.com/video/", "") + "?autoplay=0&queue-enable=false&queue-autoplay-next=false&ui-start-screen-info=false"
+                        }))
                     })
-                    Promise.all(Object.keys(match_ids).map(self.getVideo))
-                    .then(videos => {
-                        self.goals = goals.map(g => {
-                            const vid = videos.find(v => (v.matchID === g.match_id)).video,
-                            videoID = vid.slice(vid.indexOf("/video") + 7, vid.length),
-                            vid_url = "https://www.dailymotion.com/embed/video/" + videoID + "?autoplay=0&queue-enable=false&queue-autoplay-next=false&ui-start-screen-info=false&start="+g.seconds.toString()
-                            return {
-                                ...g,
-                                vid_url
-                            }
-                        })
-                    })
+                    .catch(console.error)
                 },
                 getVideo: function(matchID) {
                     var url = "https://video.scoreplay.io/match/" + matchID;
