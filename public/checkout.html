@@ -147,6 +147,7 @@
 										<div id="card-element" class="field"></div>
 									</label>
 								</div>
+								<input type="checkbox" name="terms" value="terms"> I accept the <a href="/terms.html" target="_blank">terms & conditions</a><br>
 								<button type="submit">
 									<span v-if="!loading">Pay ${{product.display_price}}</span>
 									<span v-else>Loading...</span>
@@ -309,6 +310,10 @@
 					}
 					if (this.email === "") {
 						alert("Missing email")
+						return
+					}
+					if (!document.querySelector('input[name="terms"]').checked) {
+						alert("Please accept the terms & conditions")
 						return
 					}
 					var options = {

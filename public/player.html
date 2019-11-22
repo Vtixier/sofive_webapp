@@ -254,7 +254,8 @@
                 getPlayerDetails: function() {
                     const self = this;
                     var url = this.backend+"/player/" + this.player_id;
-                    this.$http.get(url).then(function(resp) {
+                    this.$http.get(url)
+                    .then(function(resp) {
                         self.player = resp.body.player
                         self.getTeamDetails(self.player.team_id)
                         self.getTeamResults(self.player.team_id, self.player.league_id)
@@ -265,7 +266,7 @@
                 },
                 getVideos: function() {
                     const self = this;
-                    return this.$http.get("http://video.scoreplay.io/clip/player/"+this.player_id)
+                    return this.$http.get("https://video.scoreplay.io/clip/player/"+this.player_id)
                     .then(resp => {
                         self.goals = resp.body.map(clip => ({
                             ...clip,
