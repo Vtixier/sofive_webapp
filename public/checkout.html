@@ -357,6 +357,7 @@
 							} else {
 								self.createRegistrationCharge(result.token.id)
 							}
+							fbq('track', 'Purchase', {currency: "USD", value: parseFloat(self.product.display_price)});
 						} else if (result.error) {
 							self.error = result.error.message
 						}
