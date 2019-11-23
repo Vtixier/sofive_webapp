@@ -787,7 +787,7 @@ mixpanel.init("cd042e17e8e2d45f238524b07e2187b2");</script><!-- end Mixpanel -->
                             console.log(err);
                         });
                     },
-                    getManualMatchDetails: function getManualMatchDetails() {
+                    getManualMatchDetails: function() {
                         var self = this;
 
                         return this.$http.post("https://app.scoreplay.io/match/details", {
@@ -799,8 +799,8 @@ mixpanel.init("cd042e17e8e2d45f238524b07e2187b2");</script><!-- end Mixpanel -->
                                     away_team = "",
                                     home_score = 0,
                                     away_score = 0
-                                home_team = resp.body.home.name
-                                away_team = resp.body.away.name
+                                home_team = (resp.body.details || resp.body).home.name
+                                away_team = (resp.body.details || resp.body).away.name
                                 resp.body.events.forEach(function(ev) {
                                     if (ev.type == "goal") {
                                         if (ev.details.side == "away") {
