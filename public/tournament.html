@@ -109,8 +109,8 @@ mixpanel.init("cd042e17e8e2d45f238524b07e2187b2");</script><!-- end Mixpanel -->
                     </ul>
                     <div class="tab-content">
                         <div role="tabpanel" v-for="(tournament, i) in tournaments" :id="'tab-'+i.toString()" v-bind:class="{'tab-pane': true, 'active': (i==0)}">
-                            <div class="panel-body">
-                            	<h2>Standings</h2>
+                            <div class="panel-body" v-for="bracket in tournament.brackets">
+                            	<h2>Standings ({{bracket.name}})</h2>
                                 <table class="table table-hover margin bottom table-responsive">
                                     <thead>
                                         <tr>
@@ -126,7 +126,7 @@ mixpanel.init("cd042e17e8e2d45f238524b07e2187b2");</script><!-- end Mixpanel -->
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr v-for="(standing, index) in tournament.standings" style="cursor: pointer;" v-on:click="gotoTeam(standing.id)">
+                                        <tr v-for="(standing, index) in bracket.standings" style="cursor: pointer;" v-on:click="gotoTeam(standing.id)">
                                             <td class="text-center">{{index+1}}</td>
                                             <td class="text-center">{{standing.team}}</td>
                                             <td class="text-center">{{standing.points}}</td>
