@@ -154,10 +154,10 @@
 									</label>
 								</div>
 								<input type="checkbox" name="terms" value="terms"> I accept the <a href="/terms.html" target="_blank">terms & conditions</a><br>
-								<button type="submit">
-									<span v-if="!loading">Pay ${{product.display_price}}</span>
-									<span v-else>Loading...</span>
+								<button type="submit" v-if="!loading">
+									<span>Pay ${{product.display_price}}</span>
 								</button>
+								<h4 v-else><br/>Booking, please wait <img src="/img/loading.gif" style="height: 20px"></h4>
 								<button style="width: 40%; margin-left: 30%; background: none">
 									<a :href="origin" style="color: black">Cancel</a>
 								</button>
