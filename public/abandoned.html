@@ -289,7 +289,7 @@ mixpanel.init("cd042e17e8e2d45f238524b07e2187b2");</script><!-- end Mixpanel -->
                     this.loading = true;
 
                     this.registrations = [];
-                    this.$http.get(`https://app.sofive.com:8080/product/registrations/abandoned?start=${moment(this.start, "MM-DD-YYYY").unix()}&end=${moment(this.end, "MM-DD-YYYY").unix()}`)
+                    this.$http.get(`https://backend.sofive.com/product/registrations/abandoned?start=${moment(this.start, "MM-DD-YYYY").unix()}&end=${moment(this.end, "MM-DD-YYYY").unix()}`)
                     .then(function(resp) {
                         _this2.process(resp);
 

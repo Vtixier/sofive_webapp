@@ -107,6 +107,9 @@ mixpanel.init("cd042e17e8e2d45f238524b07e2187b2");</script><!-- end Mixpanel -->
                 <div class="col-md-4" v-for="tournament in filtered_tournaments">
                     <div class="ibox">
                         <div class="ibox-content product-box">
+                            <div v-if="tournament.flag" class="product-imitation" style="padding: 6px 0; color: white; background-color: #03793E">
+                                {{tournament.flag}} !
+                            </div>
                             <div class="product-imitation" style="padding: 6px 0; color: #676a6c">
                                 {{tournament.date}} ({{tournament.day}})
                             </div>
@@ -254,6 +257,9 @@ mixpanel.init("cd042e17e8e2d45f238524b07e2187b2");</script><!-- end Mixpanel -->
             mounted: function() {
                 const params = this.findGetParameter();
                 this.facility_id = params.facility_id
+                if (this.facility_id === "4") {
+                    this.getExtraTournaments(5, "Played at Sofive - Columbia")
+                }
                 this.getTournaments()
             },
             methods: {
@@ -265,7 +271,73 @@ mixpanel.init("cd042e17e8e2d45f238524b07e2187b2");</script><!-- end Mixpanel -->
                     this.$http.post(this.backend+"/program/tournaments", body)
                     .then(resp => {
                         let age_map = {}
-                    	self.tournaments = resp.body.map(t => {
+                        self.tournaments = self.tournaments.concat(resp.body.map(t => {
+                            const d = moment(t.date, "MMM D, YYYY"),
+                                //June 8, 2019
+                                k = t.description.indexOf(" minutes each"),
+                                duration = t.description.slice(k - 2, k) + " min";
+                            let price = "195"
+                            const month = parseInt(d.format("M"))
+                            if (month >= 1 && month <= 3) {
+                                price = "250"
+                            }
+                            let name = t.name
+                            if (name.indexOf(")") !== (-1)) {
+                                const spl = name.split(")")
+                                if (spl.length > 1) {
+                                    name = spl[1]
+                                }
+                            }
+                            if (name.indexOf(",") !== (-1)) {
+                                const spl2 = name.split(",")
+                                if (spl2.length > 1) {
+                                    name = spl2[0]
+                                }
+                            }
+                            let boys = [], girls = [],
+                                year = parseInt(moment().format("YYYY")),
+                                s_month = parseInt(moment().format("M"))
+                            if (s_month >= 9) {
+                                year += 1
+                            }
+                            Object.keys(t.gender_age_map).forEach(gender => {
+                                Object.keys(t.gender_age_map[gender]).forEach(age => {
+                                    let y = year-parseInt(age)
+                                    if (gender === "Boys") {
+                                        boys.push(y)
+                                    } else {
+                                        girls.push(y)
+                                    }
+                                    age_map[y] = {}
+                                })
+                            })
+                            return {
+                                ...t,
+                                date: d.format("MM-DD-YYYY"),
+                                day: d.format("dddd"),
+                                price,
+                                duration,
+                                name,
+                                boys: boys.sort(),
+                                girls: girls.sort()
+                            }
+                        }))
+                        self.ages = [...new Set(["All"].concat(Object.keys(age_map).sort()).concat(self.ages))]
+                        self.loading = false
+                    })
+                    .catch(function(err) {
+                        console.log(err);
+                    });
+                },
+                getExtraTournaments: function(facility_id, flag) {
+                    const self = this;
+                    var body = {
+                        facility_id
+                    };
+                    this.$http.post(this.backend+"/program/tournaments", body)
+                    .then(resp => {
+                        let age_map = {}
+                    	self.tournaments = self.tournaments.concat(resp.body.map(t => {
                     		const d = moment(t.date, "MMM D, YYYY"),
                                 //June 8, 2019
                                 k = t.description.indexOf(" minutes each"),
@@ -313,10 +385,11 @@ mixpanel.init("cd042e17e8e2d45f238524b07e2187b2");</script><!-- end Mixpanel -->
                                 duration,
                                 name,
                                 boys: boys.sort(),
-                                girls: girls.sort()
+                                girls: girls.sort(),
+                                flag
                             }
-                    	})
-                        self.ages = ["All"].concat(Object.keys(age_map).sort())
+                    	}))
+                        self.ages = [...new Set(["All"].concat(Object.keys(age_map).sort()).concat(self.ages))]
                         self.loading = false
                     })
                     .catch(function(err) {
