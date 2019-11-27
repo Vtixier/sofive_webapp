@@ -214,12 +214,12 @@ mixpanel.init("cd042e17e8e2d45f238524b07e2187b2");</script><!-- end Mixpanel -->
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr v-for="(player, i) in goal_leaderboard" v-on:click="gotoPlayer(player.dash_id)" style="cursor: pointer;">
+                                        <tr v-for="(player, i) in goal_leaderboard" v-on:click="gotoPlayer(player.player_id)" style="cursor: pointer;">
                                             <td class="text-center">{{i+1}}</td>
                                             <td class="text-center">{{player.name}}</td>
                                             <td class="text-center">{{player.team_name}}</td>
                                             <td class="text-center">{{player.goals}}</td>
-                                            <td style="text-align: center" v-on:click="gotoPlayer(player.dash_id)"><a><span class="label label-primary">view videos</span></a></td>
+                                            <td style="text-align: center" v-on:click="gotoPlayer(player.player_id)"><a><span class="label label-primary">view videos</span></a></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -330,18 +330,38 @@ mixpanel.init("cd042e17e8e2d45f238524b07e2187b2");</script><!-- end Mixpanel -->
                     const self = this;
                     var url = "https://video.scoreplay.io/clip/league/" + league_id;
                     this.$http.get(url).then(function(resp) {
-                        self.goal_leaderboard = resp.body.map(g => {
-                            const team_name = self.standings.find(t => (t.id.toString() === g.team_id.toString())).Team
-                            return {
-                                ...g,
-                                team_name
+                        let playerMap = {}, player_ids = []
+                        resp.body.forEach(g => {
+                            if (!(g.player_id in playerMap)) {
+                                const team = self.standings.find(t => (t.id.toString() === g.team_id.toString()))
+                                playerMap[g.player_id] = {
+                                    ...g,
+                                    team_name: team.Team,
+                                    goals: 0
+                                }
+                                player_ids.push(g.player_id)
                             }
-                        }).sort((a, b) => {
-                            return parseInt(b.goals) > parseInt(a.goals)
+                            playerMap[g.player_id].goals += 1
+                        })
+                        return Promise.all(player_ids.map(self.getCustomer))
+                        .then(players => {
+                            self.goal_leaderboard = Object.keys(playerMap).map(player_id => {
+                                return {
+                                    ...playerMap[player_id],
+                                    player_id,
+                                    name: players.find(p => (p.dash_id === player_id)).name
+                                }
+                            }).sort((a, b) => {
+                                return parseInt(b.goals) > parseInt(a.goals)
+                            })
                         })
                     }).catch(function(err) {
                         console.log(err);
                     });
+                },
+                getCustomer: function(dash_id) {
+                    return this.$http.get(this.backend+"/user/dash/"+dash_id)
+                    .then(resp => ({dash_id, name: resp.body.name}))
                 },
                 getStandings: function getStandings(league_id) {
                     var _this2 = this;
