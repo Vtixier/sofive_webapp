@@ -239,8 +239,6 @@ mixpanel.init("cd042e17e8e2d45f238524b07e2187b2");</script><!-- end Mixpanel -->
     <!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KHK4JK2"
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <!-- End Google Tag Manager (noscript) —>
-
     
     <script>
       !function(f,b,e,v,n,t,s)
@@ -258,8 +256,6 @@ mixpanel.init("cd042e17e8e2d45f238524b07e2187b2");</script><!-- end Mixpanel -->
       src="https://www.facebook.com/tr?id=976102449200043&ev=PageView&noscript=1"
     /></noscript>
     
-
-    <!-- Mainly scripts -->
     <script src="js/jquery-3.1.1.min.js"></script>
     <script src="js/popper.min.js"></script>
     <script src="js/bootstrap.js"></script>
@@ -351,8 +347,15 @@ mixpanel.init("cd042e17e8e2d45f238524b07e2187b2");</script><!-- end Mixpanel -->
                                     player_id,
                                     name: players.find(p => (p.dash_id === player_id)).name
                                 }
-                            }).sort((a, b) => {
-                                return parseInt(b.goals) > parseInt(a.goals)
+                            }).sort((a,b) => {
+                                const diff = b.goals-a.goals
+                                if (diff > 0) {
+                                    return 1;
+                                } else if (diff < 0) {
+                                    return -1;
+                                } else {
+                                    return 0;
+                                }
                             })
                         })
                     }).catch(function(err) {
@@ -409,20 +412,9 @@ mixpanel.init("cd042e17e8e2d45f238524b07e2187b2");</script><!-- end Mixpanel -->
                         _this2.playoffs = playoffs.sort(_this2.dateSortFunc);
                         _this2.standings_loading = false;
 
-                        _this2.getPlayerClips(match.map(function(m) {
-                            return m.id
-                        }))
                     }).catch(function(err) {
                         console.log(err);
                     });
-                },
-                getPlayerClips: function getPlayerClips(match_ids) {
-                    this.$http.post("https://video.scoreplay.io/clip/league", {
-                            match_ids
-                        })
-                        .then(function(resp) {
-                            console.log("Got resp", resp.body)
-                        })
                 },
                 dateSortFunc: function dateSortFunc(a, b) {
                     var diff = a.moment_date.diff(b.moment_date, 'seconds');
