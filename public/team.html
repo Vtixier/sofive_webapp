@@ -214,7 +214,7 @@ mixpanel.init("cd042e17e8e2d45f238524b07e2187b2");</script><!-- end Mixpanel -->
                                             <h2> <span style="color: green"> vs. {{(match.home.name === team.name) ? match.away.name : match.home.name}} </h2>
                                             <a>
                                                 {{match.start_parsed}} <br />
-                                                <span style="color: green"> Opponent rank : 3rd </span>
+                                                <span style="color: green"> Opponent rank : {{match.rank}} </span>
                                             </a>
                                         </div>
                                     </div>
@@ -442,10 +442,23 @@ mixpanel.init("cd042e17e8e2d45f238524b07e2187b2");</script><!-- end Mixpanel -->
                         }).sort(_this2.dateSortFunc);
                         _this2.next_matches = _this2.matches.filter(function(m) {
                             return (m.home.score === -1 || m.away.score === -1) && moment.duration(moment().diff(m.moment_date)).get("minutes") < 0;
-                        });
+                        }).map(m => {
+                            let i = 0,
+                            team = (m.home.name === _this2.team.name) ? m.away.name : m.home.name
+                            _this2.leaderboard.forEach((t,j) => {
+                                if (t.Team === team) {
+                                    i = j
+                                }
+                            })
+                            return {
+                                ...m,
+                                rank: (i+1).toString()
+                            }
+                        })
+                        _this2.next_matches.reverse()
                         _this2.loading.results = false;
                     }).catch(function(err) {
-                        console.log(err.body.errors);
+                        console.log(err);
                     });
                 },
                 dateSortFunc: function dateSortFunc(a, b) {

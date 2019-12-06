@@ -150,6 +150,7 @@ mixpanel.init("cd042e17e8e2d45f238524b07e2187b2");</script><!-- end Mixpanel -->
                                         <tr>
                                             <th class="text-center">Day</th>
                                             <th class="text-center">Hour</th>
+                                            <th class="text-center">Field</th>
                                             <th class="text-center">Type</th>
                                             <th class="text-center">Home</th>
                                             <th class="text-center">Score</th>
@@ -163,6 +164,7 @@ mixpanel.init("cd042e17e8e2d45f238524b07e2187b2");</script><!-- end Mixpanel -->
                                             </td>
                                             <td class="text-center" style="border-top: none" v-else></td>
                                             <td class="text-center">{{single_match.hour_parsed}}</td>
+                                            <td class="text-center">{{single_match.field}}</td>
                                             <td class="text-center">{{single_match.name}}</td>
                                             <td class="text-center">{{single_match.home.name}}</td>
                                             <td class="text-center"><span v-if="single_match.home.score !== (-1) && single_match.away.score !== (-1)">{{single_match.home.score}} - {{single_match.away.score}}</span></td>
@@ -177,7 +179,7 @@ mixpanel.init("cd042e17e8e2d45f238524b07e2187b2");</script><!-- end Mixpanel -->
                                         <tr>
                                             <th class="text-center">Day</th>
                                             <th class="text-center">Hour</th>
-                                            <th class="text-center">Type</th>
+                                            <th class="text-center">Field</th>
                                             <th class="text-center">Team</th>
                                             <th class="text-center">Score</th>
                                             <th class="text-center">Team</th>
@@ -191,7 +193,7 @@ mixpanel.init("cd042e17e8e2d45f238524b07e2187b2");</script><!-- end Mixpanel -->
                                             </td>
                                             <td class="text-center" style="border-top: none" v-else></td>
                                             <td class="text-center">{{match.hour_parsed}}</td>
-                                            <td class="text-center">{{match.match_type}}</td>
+                                            <td class="text-center">{{match.field}}</td>
                                             <td class="text-center">{{match.home.name}}</td>
                                             <td class="text-center"><span v-if="match.home.score !== (-1) && match.away.score !== (-1)">{{match.home.score}} - {{match.away.score}}</span></td>
                                             <td class="text-center">{{match.away.name}}</td>
