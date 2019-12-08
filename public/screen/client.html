@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+
+    <title>Sofive Soccer Center</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale = 1, minimum-scale = 1, maximum-scale = 1, user-scalable = no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link rel="apple-touch-icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" />
+    <meta name="apple-mobile-web-app-title" content="Sofive">
+    <style type="text/css">
+        body {
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+        }
+    </style>
+
+    <link href="/css/plugins/select2/select2.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.css" rel="stylesheet">
+
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+    <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-32x32.png" sizes="32x32" />
+    <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" sizes="192x192" />
+    <link href="/css/plugins/footable/footable.core.css" rel="stylesheet">
+
+    <link href="/css/plugins/dataTables/datatables.min.css" rel="stylesheet">
+
+</head>
+
+<body class="fixed-sidebar" style="margin: 0; padding: 0">
+
+    <div id="wrapper" style="margin: 0; padding: 0">
+
+        <iframe :src="url" style="border: 0; width: 100vw; height: 100vh">Your browser doesn't support iFrames.</iframe>
+
+    </div>
+
+    <!-- Mainly scripts -->
+    <script src="/js/jquery-3.1.1.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.js"></script>
+    <script src="/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.js"></script>
+
+    <!-- Custom and plugin javascript -->
+    <script src="/js/inspinia.js"></script>
+
+    <script src="/js/plugins/select2/select2.full.min.js"></script>
+
+    <script src="/js/vue.js"></script>
+
+    <script type="text/javascript" src="/js/vue-resource.js"></script>
+    <script type="text/javascript" src="/js/moment.js"></script>
+
+    <script type="text/javascript" src="/js/navigation.js"></script>
+    <script type="text/javascript" src="/js/header.js"></script>
+    <script type="text/javascript" src="/js/footer.js"></script>
+
+    <script src="/js/plugins/footable/footable.all.min.js"></script>
+
+    <script src="/js/plugins/dataTables/datatables.min.js"></script>
+    <script src="/js/plugins/dataTables/dataTables.bootstrap4.min.js"></script>
+
+    <script type="text/javascript">
+
+        var facilityMap = {
+            "1": "Sofive Meadowlands",
+            "2": "Sofive Elkins Park",
+            "3": "Sofive Brooklyn",
+            "4": "Sofive Rockville",
+            "5": "Sofive Columbia"
+        }
+
+        var app = new Vue({
+            el: '#wrapper',
+            data: {
+                screen_id: null,
+                ws: null,
+                url: "https://app.sofive.com"
+            },
+            mounted: function mounted() {
+                const params = this.findGetParameter()
+                if (params.screen_id) {
+                    this.setupWebsocket(params.screen_id)
+                }
+            },
+            methods: {
+                findGetParameter: function() {
+                    var queryDict = {};
+                    decodeURI(location.search).substr(1).split("&").forEach(function(item) {
+                        queryDict[item.split("=")[0]] = item.split("=")[1];
+                    });
+                    return queryDict;
+                },
+                setupWebsocket: function(screen_id) {
+                    const self = this;
+                    self.screen_id = screen_id
+                    self.ws = new WebSocket("ws://18.209.184.41:8080/ws")
+                    self.ws.onopen = function(evt) {
+                      console.log("[SOCKET] Connection successfull");
+                      self.ws.send(JSON.stringify({id: screen_id}))
+                    }
+                    self.ws.onclose = function(evt) {
+                      console.log("[SOCKET] Closed");
+                      self.ws = null; // todo: reconnect
+                    }
+                    self.ws.onmessage = function(evt) {
+                      console.log("[SOCKET] Got URL", evt.data);
+                      self.url = evt.data
+                    }
+                    self.ws.onerror = function(evt) {
+                      console.log("[SOCKET] Error " + evt.data);
+                    }
+                },
+            }
+        });
+    </script>
+
+</body>
+
+</html>

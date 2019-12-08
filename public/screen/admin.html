@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+
+    <title>Sofive Soccer Center</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale = 1, minimum-scale = 1, maximum-scale = 1, user-scalable = no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link rel="apple-touch-icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" />
+    <meta name="apple-mobile-web-app-title" content="Sofive">
+    <style type="text/css">
+        body {
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+        }
+    </style>
+
+    <link href="/css/plugins/select2/select2.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.css" rel="stylesheet">
+
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+    <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-32x32.png" sizes="32x32" />
+    <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" sizes="192x192" />
+    <link href="/css/plugins/footable/footable.core.css" rel="stylesheet">
+
+    <link href="/css/plugins/dataTables/datatables.min.css" rel="stylesheet">
+
+</head>
+
+<body class="fixed-sidebar">
+
+    <div id="wrapper">
+
+        <div class="modal inmodal fade" id="more_info_modal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Enter the custom URL</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="col-md-12">
+                            <input type="text" v-model="new_url" placeholder="URL..." style="width: 100%" />
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="text-align: left">
+                        <div>
+                            <button class="btn btn-white" data-dismiss="modal" v-on:click="save">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <sofive-left-menu />
+        </div>
+
+        <div id="page-wrapper" class="gray-bg">
+
+            <div>
+                <sofive-header />
+            </div>
+
+            <div class="wrapper wrapper-content animated fadeInRight" style="padding-bottom: 15px">
+                <div class="ibox-content m-b-sm border-bottom">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <h2>Clubhouse TVs</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" style="padding-top: 20px">
+                <div class="col-lg-12" v-if="loading">
+                    <div>
+                        <div>
+                            <div class="sk-spinner sk-spinner-wave">
+                                <div class="sk-rect1"></div>
+                                <div class="sk-rect2"></div>
+                                <div class="sk-rect3"></div>
+                                <div class="sk-rect4"></div>
+                                <div class="sk-rect5"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4" v-for="screen in screens">
+                    <div class="ibox">
+                        <div class="ibox-content product-box">
+                            <div class="product-desc">
+                                <small class="text-muted">{{screen.center}}</small>
+                                <a href="#" class="product-name">
+                                    {{screen.name}}
+                                    <small v-if="screen.connected" style="color: #03793E">connected</small>
+                                    <small v-else style="color: #ff0000a8">disconnected</small>
+                                </a>
+                                <div class="mediums m-t-xs">
+                                    URL : {{screen.url}}<br />
+                                    <br>
+                                </div>
+                                <button type="button" class="btn btn-outline btn btn-primary" style="margin-top: 5%" v-on:click="editURL(screen.id)">
+                                    Set URL
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <sofive-footer />
+            </div>
+        </div>
+    </div>
+
+    <!-- Mainly scripts -->
+    <script src="/js/jquery-3.1.1.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.js"></script>
+    <script src="/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.js"></script>
+
+    <!-- Custom and plugin javascript -->
+    <script src="/js/inspinia.js"></script>
+
+    <script src="/js/plugins/select2/select2.full.min.js"></script>
+
+    <script src="/js/vue.js"></script>
+
+    <script type="text/javascript" src="/js/vue-resource.js"></script>
+    <script type="text/javascript" src="/js/moment.js"></script>
+
+    <script type="text/javascript" src="/js/navigation.js"></script>
+    <script type="text/javascript" src="/js/header.js"></script>
+    <script type="text/javascript" src="/js/footer.js"></script>
+
+    <script src="/js/plugins/footable/footable.all.min.js"></script>
+
+    <script src="/js/plugins/dataTables/datatables.min.js"></script>
+    <script src="/js/plugins/dataTables/dataTables.bootstrap4.min.js"></script>
+
+    <script type="text/javascript">
+
+        var facilityMap = {
+            "1": "Sofive Meadowlands",
+            "2": "Sofive Elkins Park",
+            "3": "Sofive Brooklyn",
+            "4": "Sofive Rockville",
+            "5": "Sofive Columbia"
+        }
+
+        var app = new Vue({
+            el: '#wrapper',
+            data: {
+                loading: true,
+                screens: [],
+                ws: null,
+                new_url: "",
+                selected_screen_id: 0
+            },
+            mounted: function mounted() {
+                this.getScreens()
+                this.setupWebsocket()
+            },
+            methods: {
+                getScreens: function() {
+                    const self = this;
+                    this.$http.get(this.backend+"/screen/")
+                    .then((resp) => {
+                        self.screens = resp.body.map(m => {
+                            return {
+                                ...m,
+                                center: facilityMap[m.facility_id.toString()],
+                                connected: false
+                            }
+                        }).sort((a,b) => {
+                            if (b.name<a.name) {
+                                return 1
+                            }
+                            return -1
+                        })
+                        self.loading = false
+                    })
+                },
+                setupWebsocket: function() {
+                    const self = this;
+                    self.ws = new WebSocket("ws://18.209.184.41:8080/ws")
+                    self.ws.onopen = function(evt) {
+                      console.log("[SOCKET] Connection successfull");
+                      self.ws.send(JSON.stringify({admin: true}))
+                    }
+                    self.ws.onclose = function(evt) {
+                      console.log("[SOCKET] Closed");
+                      self.ws = null; // todo: reconnect
+                    }
+                    self.ws.onmessage = function(evt) {
+                      console.log("[SOCKET] Got screens", evt.data);
+                      const screens = JSON.parse(evt.data).screens
+                      self.screens = self.screens.map(s => ({...s, connected: false}))
+                      Object.keys(screens).map(screen_id_str => {
+                        const screen_id = parseInt(screen_id_str)
+                        self.screens = self.screens.map(s => {
+                            if (s.id === screen_id) {
+                                return {
+                                    ...s,
+                                    connected: true
+                                }
+                            }
+                            return s
+                        })
+                      })
+                    }
+                    self.ws.onerror = function(evt) {
+                      console.log("[SOCKET] Error " + evt.data);
+                    }
+                },
+                editURL: function(screen_id) {
+                    this.selected_screen_id = parseInt(screen_id)
+                    $('#more_info_modal').modal({
+                        keyboard: false
+                    });
+                },
+                save: function() {
+                    const d = {
+                        screen_id: this.selected_screen_id,
+                        url: this.new_url
+                    }, self = this;
+                    self.ws.send(JSON.stringify({
+                        screen_id: d.screen_id.toString(),
+                        url: d.url
+                    }))
+                    self.$http.post(this.backend+"/screen/url", d)
+                    self.screens = self.screens.map(s => {
+                        if (s.id === self.selected_screen_id) {
+                            return {
+                                ...s,
+                                url: d.url
+                            }
+                        }
+                        return s
+                    })
+                }
+            }
+        });
+    </script>
+
+</body>
+
+</html>
