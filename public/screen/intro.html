@@ -36,11 +36,11 @@
 
 </head>
 
-<body class="fixed-sidebar" style="margin: 0; padding: 0">
+<body class="fixed-sidebar" style="margin: 0; padding: 0; background-color: #03793e">
 
-    <div id="wrapper" style="margin: 0; padding: 0">
+    <div style="display: flex; flex-direction: column; align-items: center;">
 
-        <iframe :src="screen.url" style="border: 0; width: 100vw; height: 100vh">Your browser doesn't support iFrames.</iframe>
+    	<img src="/img/highlightstv.png" style="height: 40%;position: fixed;top: 50%;left: 50%;transform: translate(-50%, -50%);">
 
     </div>
 
@@ -84,63 +84,11 @@
         var app = new Vue({
             el: '#wrapper',
             data: {
-                screen: {
-                    id: "",
-                    facility_id: 0,
-                    name: "",
-                    url: "/screen/intro.html"
-                },
+                screen_id: null,
                 ws: null,
-            },
-            mounted: function mounted() {
-                const params = this.findGetParameter(),
-                self = this;
-                if (params.screen_id) {
-                    this.screen.id = params.screen_id
-                    this.getScreenDetails()
-                    .then(() => {
-                        self.setupWebsocket()
-                    })
-                }
+                url: "https://app.sofive.com"
             },
             methods: {
-                findGetParameter: function() {
-                    var queryDict = {};
-                    decodeURI(location.search).substr(1).split("&").forEach(function(item) {
-                        queryDict[item.split("=")[0]] = item.split("=")[1];
-                    });
-                    return queryDict;
-                },
-                getScreenDetails: function() {
-                    const self = this;
-                    return this.$http.get(this.backend+"/screen/single/"+this.screen.id)
-                    .then(resp => {
-                        self.screen.name = resp.body.name
-                        self.screen.facility_id = resp.body.facility_id
-                        if (resp.body.url && (resp.body.url !== "")) {
-                            self.screen.url = resp.body.url+"?facility_id="+resp.body.facility_id.toString()
-                        }
-                    })
-                },
-                setupWebsocket: function() {
-                    const self = this;
-                    self.ws = new WebSocket("ws://18.209.184.41:8080/ws")
-                    self.ws.onopen = function(evt) {
-                      console.log("[SOCKET] Connection successfull");
-                      self.ws.send(JSON.stringify({id: self.screen.id}))
-                    }
-                    self.ws.onclose = function(evt) {
-                      console.log("[SOCKET] Closed");
-                      self.ws = null; // todo: reconnect
-                    }
-                    self.ws.onmessage = function(evt) {
-                      console.log("[SOCKET] Got URL", evt.data);
-                      self.screen.url = evt.data+"?facility_id="+self.screen.facility_id.toString()
-                    }
-                    self.ws.onerror = function(evt) {
-                      console.log("[SOCKET] Error " + evt.data);
-                    }
-                },
             }
         });
     </script>

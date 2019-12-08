@@ -48,7 +48,10 @@
                     </div>
                     <div class="modal-body">
                         <div class="col-md-12">
-                            <input type="text" v-model="new_url" placeholder="URL..." style="width: 100%" />
+                            <select class="select_league form-control" v-model="selected_url">
+                                <option value="0">Select a template</option>
+                                <option v-for="url in available_urls" :value="url.path">{{url.name}}</option>
+                            </select>
                         </div>
                     </div>
                     <div class="modal-footer" style="text-align: left">
@@ -105,7 +108,7 @@
                                     <small v-else style="color: #ff0000a8">disconnected</small>
                                 </a>
                                 <div class="mediums m-t-xs">
-                                    URL : {{screen.url}}<br />
+                                    Template : <b>{{getTemplateName(screen.url)}}</b><br />
                                     <br>
                                 </div>
                                 <button type="button" class="btn btn-outline btn btn-primary" style="margin-top: 5%" v-on:click="editURL(screen.id)">
@@ -160,6 +163,14 @@
             "5": "Sofive Columbia"
         }
 
+        const available_urls = [{
+            name: "Intro",
+            path: "/screen/intro.html",
+        }, {
+            name: "Auto highlights",
+            path: "/screen/video.html",
+        }]
+
         var app = new Vue({
             el: '#wrapper',
             data: {
@@ -167,7 +178,8 @@
                 screens: [],
                 ws: null,
                 new_url: "",
-                selected_screen_id: 0
+                selected_screen_id: 0,
+                selected_url: "0"
             },
             mounted: function mounted() {
                 this.getScreens()
@@ -234,7 +246,7 @@
                 save: function() {
                     const d = {
                         screen_id: this.selected_screen_id,
-                        url: this.new_url
+                        url: this.selected_url
                     }, self = this;
                     self.ws.send(JSON.stringify({
                         screen_id: d.screen_id.toString(),
@@ -250,6 +262,13 @@
                         }
                         return s
                     })
+                },
+                getTemplateName: function(url) {
+                    const sel_url = available_urls.find(u => (u.path === url))
+                    if (sel_url) {
+                        return sel_url.name
+                    }
+                    return ""
                 }
             }
         });

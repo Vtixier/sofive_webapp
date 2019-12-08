@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+
+    <title>Sofive Soccer Center</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale = 1, minimum-scale = 1, maximum-scale = 1, user-scalable = no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link rel="apple-touch-icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" />
+    <meta name="apple-mobile-web-app-title" content="Sofive">
+    <style type="text/css">
+        body {
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+        }
+    </style>
+
+    <link href="/css/plugins/select2/select2.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.css" rel="stylesheet">
+
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+    <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-32x32.png" sizes="32x32" />
+    <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" sizes="192x192" />
+    <link href="/css/plugins/footable/footable.core.css" rel="stylesheet">
+
+    <link href="/css/plugins/dataTables/datatables.min.css" rel="stylesheet">
+
+    <style type="text/css">
+    	@font-face {
+		  font-family: 'Dead';
+		  src: url('/css/dead.ttf');
+		}
+		body {
+		  font-family: Dead;
+		  margin: 0;
+		  padding: 0;
+		  background-color: #03793e;
+		}
+    </style>
+
+</head>
+
+<body class="fixed-sidebar">
+
+    <div id="wrapper" style="display: flex; flex-direction: column; align-items: center; height: 100vh;">
+
+    	<div style="height: 80vh; width: 80vw; margin-top: 3vh">
+<!-- 			<iframe frameborder="0" :src="current_video.url" style="width: 100%; height: 100%; border: 2px solid white"></iframe> -->
+			<div id="player" style="width: 100%; height: 100%; border: 2px solid white"></div>
+    	</div>
+    	<div class="row align-middle" style="height: 10vh; color: white">
+    		<div class="col-sm-12 text-center">
+    			<h1 style="margin-top: 10px; margin-bottom: 0"><span style="font-size: 70px">{{current_video.match.home}}</span> <span style="font-size: 70px; margin-left: 40px; margin-right: 40px">vs</span> <span style="font-size: 70px;">{{current_video.match.away}}</span></h1>
+    			<h1 style="margin-top: 0">{{current_video.match.league}}</h1>
+    		</div>
+    	</div>
+
+    </div>
+
+    <!-- Mainly scripts -->
+    <script src="/js/jquery-3.1.1.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.js"></script>
+    <script src="/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.js"></script>
+
+    <!-- Custom and plugin javascript -->
+    <script src="/js/inspinia.js"></script>
+
+    <script src="/js/plugins/select2/select2.full.min.js"></script>
+
+    <script src="/js/vue.js"></script>
+
+    <script type="text/javascript" src="/js/vue-resource.js"></script>
+    <script type="text/javascript" src="/js/moment.js"></script>
+
+    <script type="text/javascript" src="/js/navigation.js"></script>
+    <script type="text/javascript" src="/js/header.js"></script>
+    <script type="text/javascript" src="/js/footer.js"></script>
+
+    <script src="/js/plugins/footable/footable.all.min.js"></script>
+
+    <script src="/js/plugins/dataTables/datatables.min.js"></script>
+    <script src="/js/plugins/dataTables/dataTables.bootstrap4.min.js"></script>
+    <script src="https://api.dmcdn.net/all.js"></script>
+
+    <script type="text/javascript">
+
+        var facilityMap = {
+            "1": "Meadowlands",
+            "2": "ElkinsPark",
+            "3": "Brooklyn",
+            "4": "Rockville",
+            "5": "Columbia"
+        }
+
+        var app = new Vue({
+            el: '#wrapper',
+            data: {
+            	videos: [],
+            	current_video: {
+            		video_id: "",
+            		match: {
+            			home: "",
+	            		away: "",
+	            		league: "",
+	            		date: "",
+            		}
+            	},
+            	player: null,
+            	center: {
+            		id: "",
+            		name: ""
+            	}
+            },
+            mounted: function() {
+            	const self = this,
+            	params = this.findGetParameter()
+            	if (!params.facility_id) {
+            		return
+            	}
+            	this.center = {
+            		id: params.facility_id,
+            		name: facilityMap[params.facility_id]
+            	}
+            	return this.getVideoQueue()
+            	.then(() => {
+            		self.player = DM.player(document.getElementById("player"), {
+	            		autoplay: true, mute: true,
+	            		controls: false, "queue-autoplay-next": false,
+	            		"queue-enable": false, "sharing-enable": false,
+	            	});
+				    self.player.addEventListener('apiready', function(event) {
+					  self.playNextVideo()
+					});
+					self.player.addEventListener('end', function(event) {
+					  self.playNextVideo()
+					});
+            	})
+            },
+            methods: {
+            	findGetParameter: function() {
+                    var queryDict = {};
+                    decodeURI(location.search).substr(1).split("&").forEach(function(item) {
+                        queryDict[item.split("=")[0]] = item.split("=")[1];
+                    });
+                    return queryDict;
+                },
+                getVideoQueue: function() {
+                	const self = this
+                	return this.$http.get("https://video.scoreplay.io/recording/last/"+this.center.name)
+                	.then(resp => {
+                		const videos = resp.body
+                		console.log("Videos", videos)
+                		return Promise.all(videos.map(self.getMatchDetails))
+                		.then(vids => {
+                			self.videos = vids
+                		})
+                	})
+                },
+                getMatchDetails: function(v) {
+                	const self = this
+                	return this.$http.post("https://app.scoreplay.io/match/details", {match_id: v.id})
+                	.then(resp => {
+                		const vid_url = v.url,
+                			video_id = vid_url.slice(vid_url.indexOf("/video") + 7, vid_url.length)
+                		return {
+	                		...v,
+	                		video_id,
+	                		match: {
+	                			home: self.getTeamText(resp.body.details.home.teamName),
+	                			away: self.getTeamText(resp.body.details.away.teamName),
+	                			date: resp.body.details.date,
+	                			league: self.cleanLeague(resp.body.details.event),
+	                		}
+	                	}
+                	})
+                },
+            	playNextVideo: function() {
+            		if (this.videos.length === 0) {
+            			return this.getVideoQueue()
+            			.then(this.playNextVideo)
+            		}
+            		const vid = this.videos.pop()
+            		this.current_video = vid
+            		this.player.load({ video: vid.video_id })
+            	},
+            	getTeamText: function(s) {
+            		if (s.length <= 15) {
+            			return s.replace("-", "").replace("(", "").replace(")", "")
+            		}
+            		return s.replace("-", "").replace("(", "").replace(")", "").slice(0,15)+"."
+            	},
+            	cleanLeague: function(s) {
+            		return s.replace("-", "").replace("(", "").replace(")", "")
+            	}
+            }
+        });
+    </script>
+
+</body>
+
+</html>
