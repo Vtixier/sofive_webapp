@@ -131,7 +131,8 @@
                     }
                     self.ws.onclose = function(evt) {
                       console.log("[SOCKET] Closed");
-                      self.ws = null; // todo: reconnect
+                      self.ws = null;
+                      setTimeout(self.setupWebsocket, 1000)
                     }
                     self.ws.onmessage = function(evt) {
                       console.log("[SOCKET] Got URL", evt.data);
@@ -139,6 +140,7 @@
                     }
                     self.ws.onerror = function(evt) {
                       console.log("[SOCKET] Error " + evt.data);
+                      self.ws.close()
                     }
                 },
             }
