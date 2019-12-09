@@ -207,7 +207,7 @@
                 },
                 setupWebsocket: function() {
                     const self = this;
-                    self.ws = new WebSocket("ws://18.209.184.41:8080/ws")
+                    self.ws = new WebSocket("wss://socket.sofive.com/ws")
                     self.ws.onopen = function(evt) {
                       console.log("[SOCKET] Connection successfull");
                       self.ws.send(JSON.stringify({admin: true}))
