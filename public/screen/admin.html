@@ -78,9 +78,9 @@
                                 </select>
                                 <div v-if="selected_url === 'custom_game'">
                                     <br/>
-                                    <select class="select_league form-control" v-model="selected_url">
-                                        <option value="0">Select a template</option>
-                                        <option v-for="url in available_urls" :value="url.path">{{url.name}}</option>
+                                    <select class="select_league form-control" v-model="second_selected_url">
+                                        <option value="0">Select a match</option>
+                                        <option v-for="match in matches" :value="'/screen/video.html?video_id='+match.video_id+'&match_id='+match.id">{{match.match.home}} - {{match.match.away}}</option>
                                     </select>
                                 </div>
                             </div>
@@ -172,7 +172,7 @@
             name: "Intro",
             path: "/screen/intro.html?",
         }, {
-            name: "Auto highlights",
+            name: "Highlights",
             path: "/screen/video.html?",
         }, {
             name: "Custom Game",
@@ -188,11 +188,14 @@
                 new_url: "",
                 selected_screen_id: 0,
                 selected_url: "0",
-                search_string: ""
+                second_selected_url: "0",
+                search_string: "",
+                matches: []
             },
             mounted: function mounted() {
                 this.getScreens()
                 this.setupWebsocket()
+                this.getDailyHighlights("Brooklyn")
             },
             computed: {
                 filtered_screens: function() {
@@ -260,16 +263,25 @@
                     });
                 },
                 save: function(screen_id) {
-                    if (this.selected_url === "") {
+                    if (this.selected_url === "0") {
                         return
+                    }
+                    let url = this.selected_url, second = false
+                    if (this.selected_url === "custom_game") {
+                        if (this.second_selected_url === "0") {
+                            return
+                        }
+                        url = this.second_selected_url
+                        second = true
                     }
                     const d = {
                         screen_id,
-                        url: this.selected_url
+                        url: second ? "/screen/video.html?" : url
                     }, self = this;
+                    console.log(d)
                     self.ws.send(JSON.stringify({
                         screen_id: screen_id.toString(),
-                        url: d.url
+                        url
                     }))
                     self.$http.post(this.backend+"/screen/url", d)
                     self.screens = self.screens.map(s => {
@@ -282,12 +294,68 @@
                         return s
                     })
                 },
+                getDailyHighlights: function(center) {
+                    const self = this,
+                    // day = moment().format("YYYY-MM-DD")
+                    day = "2019-12-07"
+                    return this.$http.get("https://video.scoreplay.io/recording/day/"+center+"?day="+day)
+                    .then(resp => {
+                        const videos = resp.body
+                        return Promise.all(videos.map(self.getMatchDetails))
+                        .then(vids => {
+                            console.log("Videos", vids)
+                            let matchMap = {}
+                            vids.map(v => {
+                                if (!(v.match.home in matchMap)) {
+                                    matchMap[v.match.home] = []
+                                }
+                                matchMap[v.match.home].push(v)
+                                if (!(v.match.away in matchMap)) {
+                                    matchMap[v.match.away] = []
+                                }
+                                matchMap[v.match.away].push({
+                                    ...v,
+                                    match: {
+                                        ...v.match,
+                                        home: v.match.away, // invers for dropdown
+                                        away: v.match.home
+                                    }
+                                })
+                            })
+                            let matches = []
+                            Object.keys(matchMap).sort().map(team => {
+                                matchMap[team].forEach(m => {
+                                    matches.push(m)
+                                })
+                            })
+                            self.matches = matches
+                        })
+                    })
+                },
+                getMatchDetails: function(v) {
+                    const self = this
+                    return this.$http.post("https://app.scoreplay.io/match/details", {match_id: v.id})
+                    .then(resp => {
+                        const vid_url = v.url,
+                            video_id = vid_url.slice(vid_url.indexOf("/video") + 7, vid_url.length)
+                        return {
+                            ...v,
+                            video_id,
+                            match: {
+                                home: resp.body.details.home.teamName,
+                                away: resp.body.details.away.teamName,
+                                date: resp.body.details.date,
+                                league: resp.body.details.event,
+                            }
+                        }
+                    })
+                },
                 getTemplateName: function(url) {
                     const sel_url = available_urls.find(u => (u.path === url))
                     if (sel_url) {
                         return sel_url.name
                     }
-                    return ""
+                    return "Auto highlights"
                 }
             }
         });

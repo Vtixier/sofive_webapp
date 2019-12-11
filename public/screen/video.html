@@ -133,6 +133,23 @@
             		id: params.facility_id,
             		name: facilityMap[params.facility_id]
             	}
+                if (params.match_id && params.video_id) {
+                    console.log("Custom vid", params)
+                    return this.getSingleVid(params.match_id, params.video_id)
+                    .then(() => {
+                        self.player = DM.player(document.getElementById("player"), {
+                            autoplay: true, mute: true,
+                            controls: false, "queue-autoplay-next": false,
+                            "queue-enable": false, "sharing-enable": false,
+                        });
+                        self.player.addEventListener('apiready', function(event) {
+                          self.playNextVideo()
+                        });
+                        self.player.addEventListener('end', function(event) {
+                          self.playNextVideo()
+                        });
+                    })
+                }
             	return this.getVideoQueue()
             	.then(() => {
             		self.player = DM.player(document.getElementById("player"), {
@@ -155,6 +172,21 @@
                         queryDict[item.split("=")[0]] = item.split("=")[1];
                     });
                     return queryDict;
+                },
+                getSingleVid: function(match_id, video_id) {
+                    const self = this
+                    return this.$http.post("https://app.scoreplay.io/match/details", {match_id})
+                    .then(resp => {
+                        self.videos =  [{
+                            video_id,
+                            match: {
+                                home: self.getTeamText(resp.body.details.home.teamName),
+                                away: self.getTeamText(resp.body.details.away.teamName),
+                                date: resp.body.details.date,
+                                league: self.cleanLeague(resp.body.details.event),
+                            }
+                        }]
+                    })
                 },
                 getVideoQueue: function() {
                 	const self = this
