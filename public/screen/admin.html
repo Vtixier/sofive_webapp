@@ -40,29 +40,6 @@
 
     <div id="wrapper">
 
-        <div class="modal inmodal fade" id="more_info_modal" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Enter the custom URL</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div class="col-md-12">
-                            <select class="select_league form-control" v-model="selected_url">
-                                <option value="0">Select a template</option>
-                                <option v-for="url in available_urls" :value="url.path">{{url.name}}</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="modal-footer" style="text-align: left">
-                        <div>
-                            <button class="btn btn-white" data-dismiss="modal" v-on:click="save">Save</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <div>
             <sofive-left-menu />
         </div>
@@ -74,48 +51,76 @@
             </div>
 
             <div class="wrapper wrapper-content animated fadeInRight" style="padding-bottom: 15px">
-                <div class="ibox-content m-b-sm border-bottom">
-                    <div class="row">
-                        <div class="col-sm-3">
-                            <h2>Clubhouse TVs</h2>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="ibox ">
+                            <div class="ibox-content text-center p-md">
 
-            <div class="row" style="padding-top: 20px">
-                <div class="col-lg-12" v-if="loading">
-                    <div>
-                        <div>
-                            <div class="sk-spinner sk-spinner-wave">
-                                <div class="sk-rect1"></div>
-                                <div class="sk-rect2"></div>
-                                <div class="sk-rect3"></div>
-                                <div class="sk-rect4"></div>
-                                <div class="sk-rect5"></div>
+                                <h2><span class="text-navy">Clubhouse TVs</span> settings.</h2>
+                                <p>
+                                    Select a template on the left, then send it to your lobby TVs on the right.
+                                </p>
+
+
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4" v-for="screen in screens">
-                    <div class="ibox">
-                        <div class="ibox-content product-box">
-                            <div class="product-desc">
-                                <small class="text-muted">{{screen.center}}</small>
-                                <a href="#" class="product-name">
-                                    {{screen.name}}
-                                    <small v-if="screen.connected" style="color: #03793E">connected</small>
-                                    <small v-else style="color: #ff0000a8">disconnected</small>
-                                </a>
-                                <div class="mediums m-t-xs">
-                                    Template : <b>{{getTemplateName(screen.url)}}</b><br />
-                                    <br>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="ibox ">
+                            <div class="ibox-content text-center p-md">
+                                <h4 class="m-b-xxs">Templates</h4>
+                                <br/>
+                                <select class="select_league form-control" v-model="selected_url">
+                                    <option value="0">Select a template</option>
+                                    <option v-for="url in available_urls" :value="url.path">{{url.name}}</option>
+                                </select>
+                                <div v-if="selected_url === 'custom_game'">
+                                    <br/>
+                                    <select class="select_league form-control" v-model="selected_url">
+                                        <option value="0">Select a template</option>
+                                        <option v-for="url in available_urls" :value="url.path">{{url.name}}</option>
+                                    </select>
                                 </div>
-                                <button type="button" class="btn btn-outline btn btn-primary" style="margin-top: 5%" v-on:click="editURL(screen.id)">
-                                    Set URL
-                                </button>
                             </div>
                         </div>
+
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="ibox ">
+                            <div class="ibox-content text-center p-md">
+                                <h4 class="m-b-xxs">Screens</h4>
+                                <br/>
+                                <div class="input-group"><input type="text" placeholder="Search" class="form-control-sm form-control" v-model="search_string"></div>
+                                <br/>
+                                <div class="project-list">
+                                    <table class="table table-hover">
+                                        <tbody>
+                                            <tr v-for="screen in filtered_screens">
+                                                <td class="project-status" style="padding: 10">
+                                                    <span class="label label-primary" v-if="screen.connected">Online</span>
+                                                    <span class="label label-default" v-else>Offline</span>
+                                                </td>
+                                                <td class="project-title" style="padding: 0">
+                                                    <a href="project_detail.html">{{screen.name}}</a>
+                                                    <br/>
+                                                    <small>{{screen.center}}</small>
+                                                </td>
+                                                <td class="project-completion" style="padding: 0">
+                                                        <a><b>{{getTemplateName(screen.url)}}</b></a>
+                                                </td>
+                                                <td class="project-actions" style="padding: 10">
+                                                    <a href="#" class="btn btn-white btn-sm" v-on:click="save(screen.id)">Send</a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -165,10 +170,13 @@
 
         const available_urls = [{
             name: "Intro",
-            path: "/screen/intro.html",
+            path: "/screen/intro.html?",
         }, {
             name: "Auto highlights",
-            path: "/screen/video.html",
+            path: "/screen/video.html?",
+        }, {
+            name: "Custom Game",
+            path: "custom_game",
         }]
 
         var app = new Vue({
@@ -179,11 +187,20 @@
                 ws: null,
                 new_url: "",
                 selected_screen_id: 0,
-                selected_url: "0"
+                selected_url: "0",
+                search_string: ""
             },
             mounted: function mounted() {
                 this.getScreens()
                 this.setupWebsocket()
+            },
+            computed: {
+                filtered_screens: function() {
+                    if (this.search_string === "") {
+                        return this.screens
+                    }
+                    return this.screens.filter(s => (JSON.stringify(s).toLowerCase().indexOf(this.search_string.toLowerCase()) !== (-1)))
+                }
             },
             methods: {
                 getScreens: function() {
@@ -218,20 +235,17 @@
                       setTimeout(self.setupWebsocket, 1000)
                     }
                     self.ws.onmessage = function(evt) {
-                      console.log("[SOCKET] Got screens", evt.data);
-                      const screens = JSON.parse(evt.data).screens
+                      console.log("[SOCKET] Got screen data", evt.data);
+                      const screen_data = JSON.parse(evt.data)
                       self.screens = self.screens.map(s => ({...s, connected: false}))
-                      Object.keys(screens).map(screen_id_str => {
-                        const screen_id = parseInt(screen_id_str)
-                        self.screens = self.screens.map(s => {
-                            if (s.id === screen_id) {
-                                return {
-                                    ...s,
-                                    connected: true
-                                }
+                      self.screens = self.screens.map(s => {
+                        if (screen_data.screen_id === s.id.toString()) {
+                            return {
+                                ...s,
+                                connected: screen_data.connected
                             }
-                            return s
-                        })
+                        }
+                        return s
                       })
                     }
                     self.ws.onerror = function(evt) {
@@ -245,18 +259,21 @@
                         keyboard: false
                     });
                 },
-                save: function() {
+                save: function(screen_id) {
+                    if (this.selected_url === "") {
+                        return
+                    }
                     const d = {
-                        screen_id: this.selected_screen_id,
+                        screen_id,
                         url: this.selected_url
                     }, self = this;
                     self.ws.send(JSON.stringify({
-                        screen_id: d.screen_id.toString(),
+                        screen_id: screen_id.toString(),
                         url: d.url
                     }))
                     self.$http.post(this.backend+"/screen/url", d)
                     self.screens = self.screens.map(s => {
-                        if (s.id === self.selected_screen_id) {
+                        if (s.id === screen_id) {
                             return {
                                 ...s,
                                 url: d.url

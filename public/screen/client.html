@@ -118,7 +118,7 @@
                         self.screen.name = resp.body.name
                         self.screen.facility_id = resp.body.facility_id
                         if (resp.body.url && (resp.body.url !== "")) {
-                            self.screen.url = resp.body.url+"?facility_id="+resp.body.facility_id.toString()
+                            self.screen.url = resp.body.url+"&facility_id="+resp.body.facility_id.toString()
                         }
                     })
                 },
@@ -136,7 +136,9 @@
                     }
                     self.ws.onmessage = function(evt) {
                       console.log("[SOCKET] Got URL", evt.data);
-                      self.screen.url = evt.data+"?facility_id="+self.screen.facility_id.toString()
+                      const new_url = evt.data+"&facility_id="+self.screen.facility_id.toString()
+                      console.log(new_url)
+                      self.screen.url = new_url
                     }
                     self.ws.onerror = function(evt) {
                       console.log("[SOCKET] Error " + evt.data);
