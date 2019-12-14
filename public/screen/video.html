@@ -206,14 +206,25 @@
                 	.then(resp => {
                 		const vid_url = v.url,
                 			video_id = vid_url.slice(vid_url.indexOf("/video") + 7, vid_url.length)
+                        console.log("EL", resp.body)
+                        let home_name = "",
+                        away_name = "",
+                        league = ""
+                        if (resp.body.details) {
+                            home_name = self.getTeamText(resp.body.details.home.teamName)
+                            away_name = self.getTeamText(resp.body.details.away.teamName)
+                            league = self.cleanLeague(resp.body.details.event)
+                        } else {
+                            home_name = self.getTeamText(resp.body.home.name)
+                            away_name = self.getTeamText(resp.body.away.name)
+                        }
                 		return {
 	                		...v,
 	                		video_id,
 	                		match: {
-	                			home: self.getTeamText(resp.body.details.home.teamName),
-	                			away: self.getTeamText(resp.body.details.away.teamName),
-	                			date: resp.body.details.date,
-	                			league: self.cleanLeague(resp.body.details.event),
+	                			home: home_name,
+	                			away: away_name,
+	                			league,
 	                		}
 	                	}
                 	})
