@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+
+    <title>Sofive Soccer Center</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale = 1, minimum-scale = 1, maximum-scale = 1, user-scalable = no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link rel="apple-touch-icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" />
+    <meta name="apple-mobile-web-app-title" content="Sofive">
+    <style type="text/css">
+        body {
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+        }
+    </style>
+
+    <link href="/css/plugins/select2/select2.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.css" rel="stylesheet">
+
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+    <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-32x32.png" sizes="32x32" />
+    <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" sizes="192x192" />
+    <link href="/css/plugins/footable/footable.core.css" rel="stylesheet">
+
+    <link href="/css/plugins/dataTables/datatables.min.css" rel="stylesheet">
+
+</head>
+
+<body class="fixed-sidebar" style="margin: 0; padding: 0; background-color: #03793e; color: white">
+
+    <div id="vuehere">
+
+        <div class="row" style="height: 50vh; border: 1px solid black; border-bottom: none">
+            <div class="col" style="border: 1px solid black; text-align: center;">
+                <h1><b>01 - Parc des Princes</b></h1>
+                <hr/>
+                <div v-if="blocks[1]">
+                    <h2>{{blocks[1].desc}}</h2>
+                    <h4>{{blocks[1].event}}</h4>
+                    <p><u>Start</u> : {{blocks[1].start}}</p>
+                    <p><u>End</u> : {{blocks[1].end}}</p>
+                </div>
+                <div v-else><h2 style="text-decoration: underline;">Free</h2></div>
+            </div>
+            <div class="col" style="border: 1px solid black; text-align: center;">
+                <h1><b>03 - San Siro</b></h1>
+                <hr/>
+                <div v-if="blocks[3]">
+                    <h2>{{blocks[3].desc}}</h2>
+                    <h4>{{blocks[3].event}}</h4>
+                    <p><u>Start</u> : {{blocks[3].start}}</p>
+                    <p><u>End</u> : {{blocks[3].end}}</p>
+                </div>
+                <div v-else><h2 style="text-decoration: underline;">Free</h2></div>
+            </div>
+            <div class="col" style="border: 1px solid black; text-align: center;">
+                <h1><b>05 - Anfield</b></h1>
+                <hr/>
+                <div v-if="blocks[5]">
+                    <h2>{{blocks[5].desc}}</h2>
+                    <h4>{{blocks[5].event}}</h4>
+                    <p><u>Start</u> : {{blocks[5].start}}</p>
+                    <p><u>End</u> : {{blocks[5].end}}</p>
+                </div>
+                <div v-else><h2 style="text-decoration: underline;">Free</h2></div>
+            </div>
+            <div class="col" style="border: 1px solid black; text-align: center;">
+                <h1><b>07 - Camp Nou</b></h1>
+                <hr/>
+                <div v-if="blocks[7]">
+                    <h2>{{blocks[7].desc}}</h2>
+                    <h4>{{blocks[7].event}}</h4>
+                    <p><u>Start</u> : {{blocks[7].start}}</p>
+                    <p><u>End</u> : {{blocks[7].end}}</p>
+                </div>
+                <div v-else><h2 style="text-decoration: underline;">Free</h2></div>
+            </div>
+            <div class="col" style="border: 1px solid black; text-align: center;" v-if="ten">
+                <h1><b>09 - Stamford Bridge</b></h1>
+                <hr/>
+                <div v-if="blocks[9]">
+                    <h2>{{blocks[9].desc}}</h2>
+                    <h4>{{blocks[9].event}}</h4>
+                    <p><u>Start</u> : {{blocks[9].start}}</p>
+                    <p><u>End</u> : {{blocks[9].end}}</p>
+                </div>
+                <div v-else><h2 style="text-decoration: underline;">Free</h2></div>
+            </div>
+        </div>
+
+        <div class="row" style="height: 50vh; border: 1px solid black; border-top: none">
+            <div class="col" style="border: 1px solid black; text-align: center;">
+                <h1><b>02 - Bernabeu</b></h1>
+                <hr/>
+                <div v-if="blocks[2]">
+                    <h2>{{blocks[2].desc}}</h2>
+                    <h4>{{blocks[2].event}}</h4>
+                    <p><u>Start</u> : {{blocks[2].start}}</p>
+                    <p><u>End</u> : {{blocks[2].end}}</p>
+                </div>
+                <div v-else><h2 style="text-decoration: underline;">Free</h2></div>
+            </div>
+            <div class="col" style="border: 1px solid black; text-align: center;">
+                <h1><b>04 - Old Trafford</b></h1>
+                <hr/>
+                <div v-if="blocks[4]">
+                    <h2>{{blocks[4].desc}}</h2>
+                    <h4>{{blocks[4].event}}</h4>
+                    <p><u>Start</u> : {{blocks[4].start}}</p>
+                    <p><u>End</u> : {{blocks[4].end}}</p>
+                </div>
+                <div v-else><h2 style="text-decoration: underline;">Free</h2></div>
+            </div>
+            <div class="col" style="border: 1px solid black; text-align: center;">
+                <h1><b>06 - Maracana</b></h1>
+                <hr/>
+                <div v-if="blocks[6]">
+                    <h2>{{blocks[6].desc}}</h2>
+                    <h4>{{blocks[6].event}}</h4>
+                    <p><u>Start</u> : {{blocks[6].start}}</p>
+                    <p><u>End</u> : {{blocks[6].end}}</p>
+                </div>
+                <div v-else><h2 style="text-decoration: underline;">Free</h2></div>
+            </div>
+            <div class="col" style="border: 1px solid black; text-align: center;">
+                <h1><b>08 - Monumental</b></h1>
+                <hr/>
+                <div v-if="blocks[8]">
+                    <h2>{{blocks[8].desc}}</h2>
+                    <h4>{{blocks[8].event}}</h4>
+                    <p><u>Start</u> : {{blocks[8].start}}</p>
+                    <p><u>End</u> : {{blocks[8].end}}</p>
+                </div>
+                <div v-else><h2 style="text-decoration: underline;">Free</h2></div>
+            </div>
+            <div class="col" style="border: 1px solid black; text-align: center;" v-if="ten">
+                <h1><b>10 - Bombonera</b></h1>
+                <hr/>
+                <div v-if="blocks[10]">
+                    <h2>{{blocks[10].desc}}</h2>
+                    <h4>{{blocks[10].event}}</h4>
+                    <p><u>Start</u> : {{blocks[10].start}}</p>
+                    <p><u>End</u> : {{blocks[10].end}}</p>
+                </div>
+                <div v-else><h2 style="text-decoration: underline;">Free</h2></div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Mainly scripts -->
+    <script src="/js/jquery-3.1.1.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.js"></script>
+    <script src="/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.js"></script>
+
+    <!-- Custom and plugin javascript -->
+    <script src="/js/inspinia.js"></script>
+
+    <script src="/js/plugins/select2/select2.full.min.js"></script>
+
+    <script src="/js/vue.js"></script>
+
+    <script type="text/javascript" src="/js/vue-resource.js"></script>
+    <script type="text/javascript" src="/js/moment.js"></script>
+
+    <script type="text/javascript" src="/js/navigation.js"></script>
+    <script type="text/javascript" src="/js/header.js"></script>
+    <script type="text/javascript" src="/js/footer.js"></script>
+
+    <script src="/js/plugins/footable/footable.all.min.js"></script>
+
+    <script src="/js/plugins/dataTables/datatables.min.js"></script>
+    <script src="/js/plugins/dataTables/dataTables.bootstrap4.min.js"></script>
+
+    <script type="text/javascript">
+
+        var facilityMap = {
+            "1": "Sofive Meadowlands",
+            "2": "Sofive Elkins Park",
+            "3": "Sofive Brooklyn",
+            "4": "Sofive Rockville",
+            "5": "Sofive Columbia"
+        }
+
+        var app = new Vue({
+            el: '#vuehere',
+            data: {
+                facility_id: null,
+                blocks: {}
+            },
+            computed: {
+                ten: function() {
+                    return this.facility_id === "3" || this.facility_id === "5"
+                }
+            },
+            mounted: function() {
+                const self = this,
+                params = this.findGetParameter()
+                if (!params.facility_id) {
+                    return
+                }
+                this.facility_id = params.facility_id
+                this.getTakenFields()
+            },
+            methods: {
+                findGetParameter: function() {
+                    var queryDict = {};
+                    decodeURI(location.search).substr(1).split("&").forEach(function(item) {
+                        queryDict[item.split("=")[0]] = item.split("=")[1];
+                    });
+                    return queryDict;
+                },
+                getTakenFields: function() {
+                    const self = this
+                    return this.$http.get(this.backend+"/event/fields/"+this.facility_id)
+                    .then(resp => {
+                        let blocks = {}
+                        resp.body.forEach(block => {
+                            let desc = block.desc
+                            if (desc.toLowerCase().indexOf("paid") !== (-1)) {
+                                let parenth = desc.indexOf("(")
+                                if (parenth > (-1)) {
+                                    desc = desc.slice(0, parenth)
+                                }
+                            }
+                            blocks[block.field_id] = {
+                                ...block,
+                                start: moment(block.start, "YYYY-MM-DDTHH:mm:ss").format("h:mmA"),
+                                end: moment(block.end, "YYYY-MM-DDTHH:mm:ss").format("h:mmA"),
+                                desc,
+                            }
+                        })
+                        self.blocks = blocks
+                        setTimeout(self.getTakenFields, 1000*60) // every minute
+                    })
+                },
+            }
+        });
+    </script>
+
+</body>
+
+</html>
