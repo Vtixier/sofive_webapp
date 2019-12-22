@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+
+    <title>Sofive Soccer Center</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale = 1, minimum-scale = 1, maximum-scale = 1, user-scalable = no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link rel="apple-touch-icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" />
+    <meta name="apple-mobile-web-app-title" content="Sofive">
+    <style type="text/css">
+        body {
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+        }
+    </style>
+
+    <link href="/css/plugins/select2/select2.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.css" rel="stylesheet">
+
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+    <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-32x32.png" sizes="32x32" />
+    <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" sizes="192x192" />
+    <link href="/css/plugins/footable/footable.core.css" rel="stylesheet">
+
+    <link href="/css/plugins/dataTables/datatables.min.css" rel="stylesheet">
+
+</head>
+
+<body class="fixed-sidebar" style="margin: 0; padding: 0; background-color: #03793e; color: white">
+
+    <div id="vuehere">
+
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <h1>{{name}}</h1>
+                <h2 v-if="tournaments[i]">{{tournaments[i].name}}</h2>
+            </div>
+        </div>
+
+        <hr/>
+
+        <div class="row" v-if="tournaments[i]">
+            <div class="col-lg-6 text-center" style="padding: 20px">
+                <h1><u>Standings</u></h1>
+                <hr/>
+                <table style="width: 100%; font-size: 2em">
+                    <tr>
+                        <th></th>
+                        <th>Team</th>
+                        <th>Pts</th>
+                        <th>G</th>
+                        <th>W</th>
+                        <th>L</th>
+                        <th>D</th>
+                        <th>GD</th>
+                    </tr>
+                    <tr v-for="(standing, j) in tournaments[i].standings">
+                        <td style="text-align: center;width: 2%">{{j+1}}</td>
+                        <td style="text-align: center;width: 50%">{{standing.team.trim()}}</td>
+                        <td style="text-align: center;width: 8%">{{standing.points}}</td>
+                        <td style="text-align: center;width: 8%">{{standing.played}}</td>
+                        <td style="text-align: center;width: 8%">{{standing.won}}</td>
+                        <td style="text-align: center;width: 8%">{{standing.lost}}</td>
+                        <td style="text-align: center;width: 8%">{{standing.draw}}</td>
+                        <td style="text-align: center;width: 8%">{{standing.goal_for-standing.goal_against}}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-lg-6 text-center" style="border-left: 1px solid rgba(0,0,0,.1)">
+                <div class="row" style="padding: 20px">
+                    <div class="col-lg-12 text-center">
+                        <h1><u>Results</u></h1>
+                        <hr/>
+                        <table style="width: 100%; font-size: 1.5em;">
+                            <tr>
+                                <th>Time</th>
+                                <th>Home team</th>
+                                <th>Score</th>
+                                <th>Away team</th>
+                            </tr>
+                            <tr v-for="result in tournaments[i].results">
+                                <td style="text-align: center;width: 20%">{{result.time}}</td>
+                                <td style="text-align: center;width: 30%">{{result.home_team.trim()}}</td>
+                                <td style="text-align: center;width: 20%">{{result.home_score}} - {{result.away_score}}</td>
+                                <td style="text-align: center;width: 30%">{{result.away_team.trim()}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-lg-12 text-center">
+                        <h1><u>Upcoming</u></h1>
+                        <hr/>
+                        <table style="width: 100%; font-size: 1.5em;">
+                            <tr>
+                                <th>Time</th>
+                                <th>Home team</th>
+                                <th>Away team</th>
+                            </tr>
+                            <tr v-for="result in tournaments[i].upcoming">
+                                <td style="text-align: center;width: 20%">{{result.time}}</td>
+                                <td style="text-align: center;width: 40%">{{result.home_team.trim()}}</td>
+                                <td style="text-align: center;width: 40%">{{result.away_team.trim()}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Mainly scripts -->
+    <script src="/js/jquery-3.1.1.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.js"></script>
+    <script src="/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.js"></script>
+
+    <!-- Custom and plugin javascript -->
+    <script src="/js/inspinia.js"></script>
+
+    <script src="/js/plugins/select2/select2.full.min.js"></script>
+
+    <script src="/js/vue.js"></script>
+
+    <script type="text/javascript" src="/js/vue-resource.js"></script>
+    <script type="text/javascript" src="/js/moment.js"></script>
+
+    <script type="text/javascript" src="/js/navigation.js"></script>
+    <script type="text/javascript" src="/js/header.js"></script>
+    <script type="text/javascript" src="/js/footer.js"></script>
+
+    <script src="/js/plugins/footable/footable.all.min.js"></script>
+
+    <script src="/js/plugins/dataTables/datatables.min.js"></script>
+    <script src="/js/plugins/dataTables/dataTables.bootstrap4.min.js"></script>
+
+    <script type="text/javascript">
+
+        var facilityMap = {
+            "1": "Sofive Meadowlands",
+            "2": "Sofive Elkins Park",
+            "3": "Sofive Brooklyn",
+            "4": "Sofive Rockville",
+            "5": "Sofive Columbia"
+        }
+
+        var app = new Vue({
+            el: '#vuehere',
+            data: {
+                facility_id: null,
+                event_id: null,
+                name: "",
+                tournaments: [],
+                i: 0
+            },
+            mounted: function() {
+                const self = this,
+                params = this.findGetParameter()
+                if (!params.facility_id) {
+                    return
+                }
+                this.facility_id = params.facility_id
+                this.getTodayTournament()
+            },
+            methods: {
+                findGetParameter: function() {
+                    var queryDict = {};
+                    decodeURI(location.search).substr(1).split("&").forEach(function(item) {
+                        queryDict[item.split("=")[0]] = item.split("=")[1];
+                    });
+                    return queryDict;
+                },
+                getTodayTournament: function() {
+                    const self = this
+                    return this.$http.post(this.backend+"/program/tournaments/today", {facility_id: parseInt(this.facility_id)})
+                    .then(resp => {
+                        if (resp.body.length === 0) {
+                            return
+                        }
+                        const tournament = resp.body[0]
+                        self.name = tournament.name
+                        const link = tournament.link,
+                        i = link.indexOf("EventID="),
+                        event_id = link.slice(i+8, link.length)
+                        if (event_id.trim() === "") {
+                            return
+                        }
+                        self.event_id = event_id
+                        self.getTournamentDetails()
+                        setTimeout(self.rotateTournaments, 30*1000+5*1000)
+                    })
+                },
+                getTournamentDetails: function() {
+                    const self = this
+                    return this.$http.get(this.backend+"/program/gotsoccer/tournament/"+this.event_id)
+                    .then(resp => {
+                        self.tournaments = resp.body.tournaments.map(t => {
+                            let standings = []
+                            if (t.brackets.length) {
+                                standings = t.brackets[0].standings
+                            }
+                            return {
+                                ...t,
+                                standings,
+                                results: t.results.filter(t => (t.home_score !== "")),
+                                upcoming: t.results.filter(t => (t.home_score === "")),
+                            }
+                        })
+                        setTimeout(self.getTournamentDetails, 2*60*1000) // update scores evry 2min
+                    })
+                },
+                rotateTournaments: function() {
+                    const self = this
+                    if (this.i < this.tournaments.length-1) {
+                        this.i += 1
+                    } else {
+                        this.i = 0
+                    }
+                    setTimeout(self.rotateTournaments, 30*1000)
+                }
+            }
+        });
+    </script>
+
+</body>
+
+</html>
