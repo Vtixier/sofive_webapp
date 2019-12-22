@@ -208,7 +208,21 @@
                         self.tournaments = resp.body.tournaments.map(t => {
                             let standings = []
                             if (t.brackets.length) {
-                                standings = t.brackets[0].standings
+                                standings = t.brackets[0].standings.sort((a,b) => {
+                                    if (b.points > a.points) {
+                                        return 1
+                                    }
+                                    if (b.points < a.points) {
+                                        return -1
+                                    }
+                                    if (b.goal_for - b.goal_against > a.goal_for - a.goal_against) {
+                                        return 1
+                                    }
+                                    if (b.goal_for - b.goal_against < a.goal_for - a.goal_against) {
+                                        return -1
+                                    }
+                                    return 1
+                                })
                             }
                             return {
                                 ...t,
