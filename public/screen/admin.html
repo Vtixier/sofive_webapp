@@ -67,7 +67,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-6">
+                    <div class="col-lg-4">
                         <div class="ibox ">
                             <div class="ibox-content text-center p-md">
                                 <h4 class="m-b-xxs">Templates</h4>
@@ -88,14 +88,22 @@
 
                     </div>
 
-                    <div class="col-lg-6">
-                        <div class="ibox ">
+                    <div class="col-lg-8">
+                        <div class="ibox">
                             <div class="ibox-content text-center p-md">
                                 <h4 class="m-b-xxs">Screens</h4>
                                 <br/>
-                                <div class="input-group"><input type="text" placeholder="Search" class="form-control-sm form-control" v-model="search_string"></div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <select class="form-control" v-model="screen_center">
+                                            <option value="0">All centers</option>
+                                            <option v-for="center in centers" :value="center">{{center}}</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-6"><div class="input-group"><input type="text" placeholder="Filter..." class="form-control-sm form-control" v-model="search_string"></div></div>
+                                </div>
                                 <br/>
-                                <div class="project-list">
+                                <div class="project-list" style="max-height: 500px; overflow: scroll;">
                                     <table class="table table-hover">
                                         <tbody>
                                             <tr v-for="screen in filtered_screens">
@@ -196,7 +204,8 @@
                 selected_url: "0",
                 second_selected_url: "0",
                 search_string: "",
-                matches: []
+                matches: [],
+                screen_center: "0"
             },
             mounted: function mounted() {
                 this.getScreens()
@@ -205,10 +214,17 @@
             },
             computed: {
                 filtered_screens: function() {
-                    if (this.search_string === "") {
-                        return this.screens
+                    let filtered_screens = this.screens
+                    if (this.search_string !== "") {
+                        filtered_screens = this.screens.filter(s => (JSON.stringify(s).toLowerCase().indexOf(this.search_string.toLowerCase()) !== (-1)))
                     }
-                    return this.screens.filter(s => (JSON.stringify(s).toLowerCase().indexOf(this.search_string.toLowerCase()) !== (-1)))
+                    if (this.screen_center !== "0") {
+                        filtered_screens = filtered_screens.filter(s => (s.center === this.screen_center))
+                    }
+                    return filtered_screens
+                },
+                centers: function() {
+                    return [...new Set(this.screens.map(s => s.center))]
                 }
             },
             methods: {
@@ -223,6 +239,12 @@
                                 connected: false
                             }
                         }).sort((a,b) => {
+                            if (a.facility_id > b.facility_id) {
+                                return 1
+                            }
+                            if (a.facility_id < b.facility_id) {
+                                return -1
+                            }
                             if (b.name<a.name) {
                                 return 1
                             }
