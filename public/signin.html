@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+
+    <title>Sofive Soccer Center</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale = 1, minimum-scale = 1, maximum-scale = 1, user-scalable = no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link rel="apple-touch-icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" />
+    <meta name="apple-mobile-web-app-title" content="Sofive">
+    <style type="text/css">
+        body {
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+        }
+    </style>
+
+    <link href="css/plugins/select2/select2.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="css/animate.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-32x32.png" sizes="32x32" />
+    <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" sizes="192x192" />
+
+</head>
+
+<body class="fixed-sidebar">
+
+    <div id="wrapper">
+
+        <div>
+            <sofive-left-menu />
+        </div>
+
+        <div id="page-wrapper" class="gray-bg">
+
+
+            <body class="gray-bg">
+
+                <div class="middle-box text-center loginscreen animated fadeInDown">
+                    <div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Email" required="" v-model="email">
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-control" placeholder="Password" required="" v-model="password">
+                        </div>
+                        <button v-on:click="login" class="btn btn-primary block full-width m-b">Login</button>
+                    </div>
+                </div>
+                <div>
+                    <sofive-footer />
+                </div>
+        </div>
+    </div>
+
+    <!-- Mainly scripts -->
+    <script src="js/jquery-3.1.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.js"></script>
+
+    <!-- Custom and plugin javascript -->
+    <script src="js/inspinia.js"></script>
+
+    <script src="js/plugins/select2/select2.full.min.js"></script>
+
+    <script src="js/vue.js"></script>
+
+    <script type="text/javascript" src="js/vue-resource.js"></script>
+    <script type="text/javascript" src="js/moment.js"></script>
+    <script type="text/javascript" src="js/he.js"></script>
+
+    <script type="text/javascript" src="js/navigation.js"></script>
+    <script type="text/javascript" src="js/header.js"></script>
+    <script type="text/javascript" src="js/footer.js"></script>
+
+    <script type="text/javascript">
+
+        var app = new Vue({
+            el: '#wrapper',
+            data: {
+            	email: "",
+                password: "",
+                url: ""
+            },
+            mounted: function() {
+                const params = this.findGetParameter()
+                this.url = params.url;
+            },
+            methods: {
+                findGetParameter: function() {
+                    var queryDict = {}
+                    decodeURI(location.search).substr(1).split("&").forEach(function(item) {
+                        queryDict[item.split("=")[0]] = item.split("=")[1]
+                    })
+                    return queryDict
+                },
+                login: function() {
+                	const d = {
+                		email: this.email,
+                		password: this.password
+                	}, self = this;
+                	return this.$http.post(this.backend+"/user/admin/login", d)
+                	.then(resp => {
+                        if (resp.body.token) {
+                            self.setCookie(resp.body.token)
+                        }
+                	})
+                	.catch(console.error)
+                },
+                setCookie: function(token) {
+                    var date = new Date();
+                    date.setTime(date.getTime() + (4000 * 24 * 60 * 60 * 1000));
+                    let expires = "; expires=" + date.toUTCString();
+                    document.cookie = "token=" + token + expires + "; path=/";
+                    window.location = this.url
+                },
+            }
+        })
+    </script>
+
+</body>
+
+</html>

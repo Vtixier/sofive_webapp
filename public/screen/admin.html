@@ -174,6 +174,13 @@
             "3": "Sofive Brooklyn",
             "4": "Sofive Rockville",
             "5": "Sofive Columbia"
+        },
+        videosMap = {
+            "1": "Meadowlands",
+            "2": "Elkins Park",
+            "3": "Brooklyn",
+            "4": "Rockville",
+            "5": "Columbia"
         }
 
         const available_urls = [{
@@ -208,9 +215,11 @@
                 screen_center: "0"
             },
             mounted: function mounted() {
+                // this.checkLoggedIn()
                 this.getScreens()
                 this.setupWebsocket()
-                this.getDailyHighlights("Brooklyn")
+                var center = this.getCenterCookie();
+                this.getDailyHighlights(videosMap[center])
             },
             computed: {
                 filtered_screens: function() {
@@ -324,8 +333,7 @@
                 },
                 getDailyHighlights: function(center) {
                     const self = this,
-                    // day = moment().format("YYYY-MM-DD")
-                    day = "2019-12-07"
+                    day = moment().format("YYYY-MM-DD")
                     return this.$http.get("https://video.scoreplay.io/recording/day/"+center+"?day="+day)
                     .then(resp => {
                         const videos = resp.body
@@ -384,6 +392,39 @@
                         return sel_url.name
                     }
                     return "Auto highlights"
+                },
+                getCenterCookie: function() {
+                    return this.getCookie("center");
+                },
+                checkLoggedIn: function() {
+                    const token = this.getLoginTokenCookie()
+                    if ((!token) || token.trim() === "") {
+                        return false
+                    }
+                    console.log("Token", token)
+                    return this.$http.get(this.backend+"/admin/check", {}, {
+                        headers: {
+                            'x-access-token': token,
+                            'Authentication': 'Bearer '+token,
+                        }
+                    })
+                    .then(console.log)
+                    .catch(console.error)
+                },
+                getLoginTokenCookie: function() {
+                    return this.getCookie("token");
+                },
+                getCookie: function(name) {
+                    const nameEQ = name+"="
+                    var ca = document.cookie.split(';');
+                    for (var i = 0; i < ca.length; i++) {
+                        var c = ca[i];
+                        while (c.charAt(0) == ' ') {
+                            c = c.substring(1, c.length);
+                        }
+                        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+                    }
+                    return null;
                 }
             }
         });

@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+
+    <title>Sofive Soccer Center</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale = 1, minimum-scale = 1, maximum-scale = 1, user-scalable = no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link rel="apple-touch-icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" />
+    <meta name="apple-mobile-web-app-title" content="Sofive">
+    <style type="text/css">
+        body {
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+        }
+    </style>
+
+    <link href="/css/plugins/select2/select2.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.css" rel="stylesheet">
+
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+    <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-32x32.png" sizes="32x32" />
+    <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" sizes="192x192" />
+    <link href="/css/plugins/footable/footable.core.css" rel="stylesheet">
+
+    <link href="/css/plugins/dataTables/datatables.min.css" rel="stylesheet">
+
+</head>
+
+<body class="fixed-sidebar">
+
+    <div id="wrapper">
+
+        <div>
+            <sofive-left-menu />
+        </div>
+
+        <div id="page-wrapper" class="gray-bg">
+
+            <div>
+                <sofive-header />
+            </div>
+
+            <div class="wrapper wrapper-content animated fadeInRight" style="padding-bottom: 15px">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="ibox ">
+                            <div class="ibox-content text-center p-md">
+
+                                <h2>Watch your <span class="text-navy">game highlights</span></h2>
+                                <p>{{center}}</p>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                	<div class="col-sm-12 text-center" v-if="matches.length === 0">No games today.</div>
+                    <div class="col-md-4" v-for="match in matches">
+	                    <div class="ibox">
+	                        <div class="ibox-content product-box">
+	                            <div class="product-desc">
+	                                <small class="text-muted">{{match.match.league}}</small>
+	                                <div class="mediums m-t-xs">
+	                                    Home : <b>{{match.match.home}}</b><br />
+	                                    Away : <b>{{match.match.away}}</b><br /><br />
+	                                    {{match.match.date}}
+	                                    <br>
+	                                </div>
+	                                <button v-on:click="save('/screen/video.html?video_id='+match.video_id+'&match_id='+match.id)" type="button" class="btn btn-outline btn btn-primary" style="margin-top: 5%">
+	                                    Play
+	                                </button>
+	                            </div>
+	                        </div>
+	                    </div>
+	                </div>
+                </div>
+            </div>
+
+            <div>
+                <sofive-footer />
+            </div>
+        </div>
+    </div>
+
+    <!-- Mainly scripts -->
+    <script src="/js/jquery-3.1.1.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.js"></script>
+    <script src="/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.js"></script>
+
+    <!-- Custom and plugin javascript -->
+    <script src="/js/inspinia.js"></script>
+
+    <script src="/js/plugins/select2/select2.full.min.js"></script>
+
+    <script src="/js/vue.js"></script>
+
+    <script type="text/javascript" src="/js/vue-resource.js"></script>
+    <script type="text/javascript" src="/js/moment.js"></script>
+
+    <script type="text/javascript" src="/js/navigation.js"></script>
+    <script type="text/javascript" src="/js/header.js"></script>
+    <script type="text/javascript" src="/js/footer.js"></script>
+
+    <script src="/js/plugins/footable/footable.all.min.js"></script>
+
+    <script src="/js/plugins/dataTables/datatables.min.js"></script>
+    <script src="/js/plugins/dataTables/dataTables.bootstrap4.min.js"></script>
+
+    <script type="text/javascript">
+
+        var facilityMap = {
+            "1": "Sofive Meadowlands",
+            "2": "Sofive Elkins Park",
+            "3": "Sofive Brooklyn",
+            "4": "Sofive Rockville",
+            "5": "Sofive Columbia"
+        },
+        videosMap = {
+            "1": "Meadowlands",
+            "2": "Elkins Park",
+            "3": "Brooklyn",
+            "4": "Rockville",
+            "5": "Columbia"
+        }
+
+        var app = new Vue({
+            el: '#wrapper',
+            data: {
+            	facility_id: null,
+            	center: "",
+            	screen_id: null,
+                ws: null,
+                matches: []
+            },
+            mounted: function mounted() {
+            	const params = this.findGetParameter(),
+                self = this;
+                if (!params.screen_id) {
+                	return
+                }
+                this.screen_id = params.screen_id
+                this.setupWebsocket()
+                var center = this.getCenterCookie();
+                if (center) {
+                	this.facility_id = center
+                	this.center = facilityMap[center]
+                	this.getDailyHighlights(videosMap[center])
+                }
+            },
+            methods: {
+            	findGetParameter: function() {
+                    var queryDict = {};
+                    decodeURI(location.search).substr(1).split("&").forEach(function(item) {
+                        queryDict[item.split("=")[0]] = item.split("=")[1];
+                    });
+                    return queryDict;
+                },
+                setupWebsocket: function() {
+                    const self = this;
+                    self.ws = new WebSocket("wss://socket.sofive.com/ws")
+                    self.ws.onopen = function(evt) {
+                      console.log("[SOCKET] Connection successfull");
+                      self.ws.send(JSON.stringify({admin: true}))
+                    }
+                    self.ws.onclose = function(evt) {
+                      console.log("[SOCKET] Closed");
+                      self.ws = null;
+                      setTimeout(self.setupWebsocket, 1000)
+                    }
+                    self.ws.onerror = function(evt) {
+                      console.log("[SOCKET] Error " + evt.data);
+                      self.ws.close()
+                    }
+                },
+                save: function(url) {
+                    const d = {
+                        screen_id: parseInt(this.screen_id),
+                        url
+                    }, self = this;
+                    console.log(d)
+                    self.ws.send(JSON.stringify({
+                        screen_id: this.screen_id,
+                        url
+                    }))
+                    self.$http.post(this.backend+"/screen/url", d)
+                },
+                getDailyHighlights: function(center) {
+                    const self = this,
+                    day = moment().format("YYYY-MM-DD")
+                    return this.$http.get("https://video.scoreplay.io/recording/day/"+center+"?day="+day)
+                    .then(resp => {
+                        const videos = resp.body
+                        return Promise.all(videos.map(self.getMatchDetails))
+                        .then(vids => {
+                            let matchMap = {}
+                            vids.map(v => {
+                                if (!(v.match.home in matchMap)) {
+                                    matchMap[v.match.home] = []
+                                }
+                                matchMap[v.match.home].push(v)
+                                if (!(v.match.away in matchMap)) {
+                                    matchMap[v.match.away] = []
+                                }
+                                matchMap[v.match.away].push({
+                                    ...v,
+                                    match: {
+                                        ...v.match,
+                                        home: v.match.away, // invers for dropdown
+                                        away: v.match.home
+                                    }
+                                })
+                            })
+                            let matches = []
+                            Object.keys(matchMap).sort().map(team => {
+                                matchMap[team].forEach(m => {
+                                    matches.push(m)
+                                })
+                            })
+                            self.matches = matches
+                        })
+                    })
+                },
+                getMatchDetails: function(v) {
+                    const self = this
+                    return this.$http.post("https://app.scoreplay.io/match/details", {match_id: v.id})
+                    .then(resp => {
+                        const vid_url = v.url,
+                            video_id = vid_url.slice(vid_url.indexOf("/video") + 7, vid_url.length)
+                        return {
+                            ...v,
+                            video_id,
+                            match: {
+                                home: resp.body.details.home.teamName,
+                                away: resp.body.details.away.teamName,
+                                date: resp.body.details.date,
+                                league: resp.body.details.event,
+                            }
+                        }
+                    })
+                },
+                getCenterCookie: function() {
+                    return this.getCookie("center");
+                },
+                getCookie: function(name) {
+                    const nameEQ = name+"="
+                    var ca = document.cookie.split(';');
+                    for (var i = 0; i < ca.length; i++) {
+                        var c = ca[i];
+                        while (c.charAt(0) == ' ') {
+                            c = c.substring(1, c.length);
+                        }
+                        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+                    }
+                    return null;
+                }
+            }
+        });
+    </script>
+
+</body>
+
+</html>
