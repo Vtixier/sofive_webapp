@@ -40,11 +40,7 @@
 
     <div id="wrapper">
 
-        <div>
-            <sofive-left-menu />
-        </div>
-
-        <div id="page-wrapper" class="gray-bg">
+        <div class="gray-bg">
 
             <div>
                 <sofive-header />
@@ -142,6 +138,7 @@
             data: {
             	facility_id: null,
             	center: "",
+                videoCenter: "",
             	screen_id: null,
                 ws: null,
                 matches: []
@@ -158,7 +155,8 @@
                 if (center) {
                 	this.facility_id = center
                 	this.center = facilityMap[center]
-                	this.getDailyHighlights(videosMap[center])
+                    this.videoCenter = videosMap[center]
+                	this.getHighlightsLoop()
                 }
             },
             methods: {
@@ -198,10 +196,10 @@
                     }))
                     self.$http.post(this.backend+"/screen/url", d)
                 },
-                getDailyHighlights: function(center) {
+                getDailyHighlights: function() {
                     const self = this,
                     day = moment().format("YYYY-MM-DD")
-                    return this.$http.get("https://video.scoreplay.io/recording/day/"+center+"?day="+day)
+                    return this.$http.get("https://video.scoreplay.io/recording/day/"+this.videoCenter+"?day="+day)
                     .then(resp => {
                         const videos = resp.body
                         return Promise.all(videos.map(self.getMatchDetails))
@@ -233,6 +231,10 @@
                             self.matches = matches
                         })
                     })
+                },
+                getHighlightsLoop: function() {
+                    this.getDailyHighlights()
+                    setTimeout(this.getHighlightsLoop, 1000*60*2) // evry 2min
                 },
                 getMatchDetails: function(v) {
                     const self = this
