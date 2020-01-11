@@ -40,13 +40,13 @@
 
     <div id="wrapper">
 
-        <div class="gray-bg">
+        <div class="gray-bg" style="width: 100vw">
 
             <div>
                 <sofive-header />
             </div>
 
-            <div class="wrapper wrapper-content animated fadeInRight" style="padding-bottom: 15px">
+            <div class="wrapper wrapper-content animated fadeInRight">
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="ibox ">
@@ -81,10 +81,6 @@
 	                    </div>
 	                </div>
                 </div>
-            </div>
-
-            <div>
-                <sofive-footer />
             </div>
         </div>
     </div>
@@ -198,7 +194,8 @@
                 },
                 getDailyHighlights: function() {
                     const self = this,
-                    day = moment().format("YYYY-MM-DD")
+                    // day = moment().format("YYYY-MM-DD")
+                    day = "2019-12-07"
                     return this.$http.get("https://video.scoreplay.io/recording/day/"+this.videoCenter+"?day="+day)
                     .then(resp => {
                         const videos = resp.body

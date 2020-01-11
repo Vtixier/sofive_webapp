@@ -61,31 +61,32 @@
                                     Select a template on the left, then send it to your lobby TVs on the right.
                                 </p>
 
-
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-lg-4">
-                        <div class="ibox ">
+                        <div class="ibox">
                             <div class="ibox-content text-center p-md">
                                 <h4 class="m-b-xxs">Templates</h4>
                                 <br/>
-                                <select class="select_league form-control" v-model="selected_url">
+                                <select class="select_league form-control" v-model="selected_template_id">
                                     <option value="0">Select a template</option>
-                                    <option v-for="url in available_urls" :value="url.path">{{url.name}}</option>
+                                    <option v-for="template in templates" :value="template.id">{{template.name}}</option>
                                 </select>
-                                <div v-if="selected_url === 'custom_game'">
-                                    <br/>
-                                    <select class="select_league form-control" v-model="second_selected_url">
-                                        <option value="0">Select a match</option>
-                                        <option v-for="match in matches" :value="'/screen/video.html?video_id='+match.video_id+'&match_id='+match.id">{{match.match.home}} - {{match.match.away}}</option>
-                                    </select>
-                                </div>
                             </div>
                         </div>
-
+                        <div class="ibox" v-if="selected_template_id === 0">
+                            <div class="ibox-content text-center p-md">
+                                <h4 class="m-b-xxs">Custom game</h4>
+                                <br/>
+                                <select class="select_league form-control" v-model="selected_custom_game">
+                                    <option value="0">Select a match</option>
+                                    <option v-for="match in matches" :value="JSON.stringify({video_id: match.video_id, match_id: match.id})">{{match.match.home}} - {{match.match.away}}</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="col-lg-8">
@@ -112,12 +113,12 @@
                                                     <span class="label label-default" v-else>Offline</span>
                                                 </td>
                                                 <td class="project-title" style="padding: 0">
-                                                    <a href="project_detail.html">{{screen.name}}</a>
+                                                    <a>{{screen.name}}</a>
                                                     <br/>
-                                                    <small>{{screen.center}}</small>
+                                                    <small>{{screen.center}} / id={{screen.id}}</small>
                                                 </td>
                                                 <td class="project-completion" style="padding: 0">
-                                                        <a><b>{{getTemplateName(screen.url)}}</b></a>
+                                                        <a><b>{{screen.template.name}}</b></a>
                                                 </td>
                                                 <td class="project-actions" style="padding: 10">
                                                     <a href="#" class="btn btn-white btn-sm" v-on:click="save(screen.id)">Send</a>
@@ -183,41 +184,24 @@
             "5": "Columbia"
         }
 
-        const available_urls = [{
-            name: "Intro",
-            path: "/screen/intro.html?",
-        }, {
-            name: "Highlights",
-            path: "/screen/video.html?",
-        }, {
-            name: "Dash fixtures",
-            path: "/screen/dash.html?",
-        }, {
-            name: "Gotsoccer tournament",
-            path: "/screen/gotsoccer.html?",
-        }, {
-            name: "Custom Game",
-            path: "custom_game",
-        }]
-
         var app = new Vue({
             el: '#wrapper',
             data: {
                 loading: true,
                 screens: [],
                 ws: null,
-                new_url: "",
-                selected_screen_id: 0,
-                selected_url: "0",
-                second_selected_url: "0",
+                selected_template_id: "0",
+                selected_custom_game: "0",
                 search_string: "",
                 matches: [],
-                screen_center: "0"
+                screen_center: "0",
+                templates: []
             },
             mounted: function mounted() {
                 // this.checkLoggedIn()
                 this.getScreens()
                 this.setupWebsocket()
+                this.getTemplates()
                 var center = this.getCenterCookie();
                 this.getDailyHighlights(videosMap[center])
             },
@@ -237,9 +221,19 @@
                 }
             },
             methods: {
+                getTemplates: function() {
+                    const self = this
+                    return this.$http.get("https://clubhouse-backend.sofive.com/template")
+                    .then(resp => {
+                        self.templates = resp.data.concat([{
+                            id: 0,
+                            name: "Custom game"
+                        }])
+                    })
+                },
                 getScreens: function() {
                     const self = this;
-                    this.$http.get(this.backend+"/screen/")
+                    return this.$http.get("https://clubhouse-backend.sofive.com/tv")
                     .then((resp) => {
                         self.screens = resp.body.map(m => {
                             return {
@@ -268,6 +262,7 @@
                     self.ws.onopen = function(evt) {
                       console.log("[SOCKET] Connection successfull");
                       self.ws.send(JSON.stringify({admin: true}))
+                      self.screens = self.screens.map(s => ({...s, connected: false}))
                     }
                     self.ws.onclose = function(evt) {
                       console.log("[SOCKET] Closed");
@@ -277,7 +272,6 @@
                     self.ws.onmessage = function(evt) {
                       console.log("[SOCKET] Got screen data", evt.data);
                       const screen_data = JSON.parse(evt.data)
-                      self.screens = self.screens.map(s => ({...s, connected: false}))
                       self.screens = self.screens.map(s => {
                         if (screen_data.screen_id === s.id.toString()) {
                             return {
@@ -300,35 +294,57 @@
                     });
                 },
                 save: function(screen_id) {
-                    if (this.selected_url === "0") {
+                    if (this.selected_template_id === 0 && this.selected_custom_game !== "0") {
+                        return this.saveCustomGame(screen_id)
+                    }
+                    if (this.selected_template_id === "0") {
                         return
                     }
-                    let url = this.selected_url, second = false
-                    if (this.selected_url === "custom_game") {
-                        if (this.second_selected_url === "0") {
-                            return
-                        }
-                        url = this.second_selected_url
-                        second = true
-                    }
-                    const d = {
-                        screen_id,
-                        url: second ? "/screen/video.html?" : url
-                    }, self = this;
-                    console.log(d)
-                    self.ws.send(JSON.stringify({
-                        screen_id: screen_id.toString(),
-                        url
-                    }))
-                    self.$http.post(this.backend+"/screen/url", d)
-                    self.screens = self.screens.map(s => {
-                        if (s.id === screen_id) {
-                            return {
-                                ...s,
-                                url: d.url
+                    const template_id = parseInt(this.selected_template_id),
+                    self = this;
+                    return this.$http.post("https://clubhouse-backend.sofive.com/program", {
+                        tv_id: screen_id,
+                        template_id
+                    }).then(() => {
+                        self.ws.send(JSON.stringify({
+                            screen_id: screen_id.toString(),
+                            action: "update"
+                        }))
+                        self.screens = self.screens.map(s => {
+                            if (s.id === screen_id) {
+                                return {
+                                    ...s,
+                                    template: self.templates.find(t => (t.id === template_id))
+                                }
                             }
-                        }
-                        return s
+                            return s
+                        })
+                    })
+                },
+                saveCustomGame: function(screen_id) {
+                    const template_id = this.templates.find(t => (t.template_type === "auto_highlights")).id,
+                    self = this;
+                    if (!template_id) {
+                        return
+                    }
+                    return this.$http.post("https://clubhouse-backend.sofive.com/program", {
+                        tv_id: screen_id,
+                        template_id,
+                        details: this.selected_custom_game,
+                    }).then(() => {
+                        self.ws.send(JSON.stringify({
+                            screen_id: screen_id.toString(),
+                            action: "update"
+                        }))
+                        self.screens = self.screens.map(s => {
+                            if (s.id === screen_id) {
+                                return {
+                                    ...s,
+                                    template: self.templates.find(t => (t.id === template_id))
+                                }
+                            }
+                            return s
+                        })
                     })
                 },
                 getDailyHighlights: function(center) {
