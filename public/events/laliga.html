@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+
+    <title>Sofive Soccer Center</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale = 1, minimum-scale = 1, maximum-scale = 1, user-scalable = no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link rel="apple-touch-icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" />
+    <meta name="apple-mobile-web-app-title" content="Sofive">
+    <style type="text/css">
+        body {
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+        }
+    </style>
+
+    <link href="/css/plugins/select2/select2.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.css" rel="stylesheet">
+
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+    <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-32x32.png" sizes="32x32" />
+    <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" sizes="192x192" />
+    <link href="/css/plugins/footable/footable.core.css" rel="stylesheet">
+
+    <link href="/css/plugins/dataTables/datatables.min.css" rel="stylesheet">
+
+</head>
+
+<body class="fixed-sidebar" style="margin: 0; padding: 0; background-color: #03793e">
+
+	<div id="vueapp">
+		<div class="container">
+			<div class="row">
+		    	<div class="col-sm-12 text-center">
+		    		<select class="select_season form-control" v-model="selected.level">
+		                <option value="0">Select level</option>
+		                <option v-for="level in levels" :value="level">{{level}}</option>
+		            </select>
+		    	</div>
+		    </div>
+		    <br/>
+		    <div class="row">
+		    	<div class="col-sm-12 text-center">
+		    		<select class="select_season form-control" v-model="selected.center">
+		                <option value="0">Select center</option>
+		                <option v-for="center in centers" :value="center">{{center}}</option>
+		            </select>
+		    	</div>
+		    </div>
+		    <br/>
+		    <div class="row">
+		    	<div class="col-sm-12 text-center">
+		    		<a v-on:click="purchase" class="btn btn-primary btn-rounded btn-block btn-outline" href="#" style="background-color: #007bff; color: white"></i>Purchase ticket</a>
+		    	</div>
+		    </div>
+		</div>
+	</div>
+
+    <!-- Mainly scripts -->
+    <script src="/js/jquery-3.1.1.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.js"></script>
+    <script src="/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.js"></script>
+
+    <!-- Custom and plugin javascript -->
+    <script src="/js/inspinia.js"></script>
+
+    <script src="/js/plugins/select2/select2.full.min.js"></script>
+
+    <script src="/js/vue.js"></script>
+
+    <script type="text/javascript" src="/js/vue-resource.js"></script>
+    <script type="text/javascript" src="/js/moment.js"></script>
+
+    <script type="text/javascript" src="/js/navigation.js"></script>
+    <script type="text/javascript" src="/js/header.js"></script>
+    <script type="text/javascript" src="/js/footer.js"></script>
+
+    <script src="/js/plugins/footable/footable.all.min.js"></script>
+
+    <script src="/js/plugins/dataTables/datatables.min.js"></script>
+    <script src="/js/plugins/dataTables/dataTables.bootstrap4.min.js"></script>
+
+    <script type="text/javascript">
+
+        var facilityMap = {
+            "1": "Sofive Meadowlands",
+            "2": "Sofive Elkins Park",
+            "3": "Sofive Brooklyn",
+            "4": "Sofive Rockville",
+            "5": "Sofive Columbia"
+        }
+
+        var app = new Vue({
+            el: '#vueapp',
+            data: {
+                screen_id: null,
+                ws: null,
+                selected: {
+                	level: "0",
+                	center: "0",
+                },
+                levels: ["Youth", "Adult"],
+                centers: Object.keys(facilityMap).map(c => facilityMap[c])
+            },
+            methods: {
+            	purchase: function() {
+            		let url = ""
+            		if ((this.selected.level === "0") || (this.selected.center === "0")) {
+            			return
+            		}
+            		if (this.selected.level === "Youth") {
+            			if (this.selected.center === "Sofive Meadowlands") {
+            				url = "https://bit.ly/2t8aw0F"
+            			}
+            			if (this.selected.center === "Sofive Elkins Park") {
+            				url = "https://bit.ly/37VoPoi"
+            			}
+            			if (this.selected.center === "Sofive Brooklyn") {
+            				url = "https://bit.ly/39XEpSc"
+            			}
+            			if (this.selected.center === "Sofive Rockville") {
+            				url = "https://bit.ly/2NghozU"
+            			}
+            			if (this.selected.center === "Sofive Columbia") {
+            				url = "https://bit.ly/2FFccBG"
+            			}
+            		}
+            		if (this.selected.level === "Adult") {
+            			if (this.selected.center === "Sofive Meadowlands") {
+            				url = "https://bit.ly/2FBHkBM"
+            			}
+            			if (this.selected.center === "Sofive Elkins Park") {
+            				url = "https://bit.ly/39XMGoW"
+            			}
+            			if (this.selected.center === "Sofive Brooklyn") {
+            				url = "https://bit.ly/36Jezz7"
+            			}
+            			if (this.selected.center === "Sofive Rockville") {
+            				url = "https://bit.ly/2T8Ox4t"
+            			}
+            			if (this.selected.center === "Sofive Columbia") {
+            				url = "https://bit.ly/2QGtcxt"
+            			}
+            		}
+            		var win = window.open(url, '_blank')
+            		win.focus()
+            	}
+            }
+        });
+    </script>
+
+</body>
+
+</html>

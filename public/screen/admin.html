@@ -199,8 +199,7 @@
             },
             mounted: function mounted() {
                 // this.checkLoggedIn()
-                this.getScreens()
-                this.setupWebsocket()
+                this.getScreens().then(this.setupWebsocket)
                 this.getTemplates()
                 var center = this.getCenterCookie();
                 this.getDailyHighlights(videosMap[center])
