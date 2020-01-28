@@ -823,6 +823,9 @@ mixpanel.init("cd042e17e8e2d45f238524b07e2187b2");</script><!-- end Mixpanel -->
                                     name: away_team,
                                     score: away_score
                                 }
+                                if (self.matchID.indexOf("::") !== (-1)) {
+                                    self.getGotsoccerDetails()
+                                }
                                 self.match.start = moment(resp.body.createdAt).format("YYYY-MM-DD - h:mma");
                                 self.setupEvents(resp.body.events);
 
@@ -830,6 +833,14 @@ mixpanel.init("cd042e17e8e2d45f238524b07e2187b2");</script><!-- end Mixpanel -->
                             }).catch(function(err) {
                                 console.log(err);
                             });
+                    },
+                    getGotsoccerDetails: function() {
+                        const spl = this.matchID.split("::"), self = this;
+                        return this.$http.get(this.backend+`/program/gotsoccer/playoffs?event_id=${spl[1]}&match_id=${spl[0]}`)
+                        .then(resp => {
+                            self.match.home.name = resp.body.home_name
+                            self.match.away.name = resp.body.away_name
+                        })
                     },
                     getTeamsDetails: function getTeamsDetails(home_id, away_id) {
                         const self = this;

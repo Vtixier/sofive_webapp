@@ -275,11 +275,21 @@ mixpanel.init("cd042e17e8e2d45f238524b07e2187b2");</script><!-- end Mixpanel -->
                                 //June 8, 2019
                                 k = t.description.indexOf(" minutes each"),
                                 duration = t.description.slice(k - 2, k) + " min";
+
                             let price = "195"
                             const month = parseInt(d.format("M"))
                             if (month >= 1 && month <= 3) {
                                 price = "250"
                             }
+
+                            // Side case
+                            const link_url = t.link,
+                            event_id = link_url.slice(link_url.indexOf("EventID=")+8),
+                            expensive_events = ["76471", "76472", "76474"]
+                            if (expensive_events.indexOf(event_id) !== (-1)) {
+                                price = "360"
+                            }
+
                             let name = t.name
                             if (name.indexOf(")") !== (-1)) {
                                 const spl = name.split(")")

@@ -257,7 +257,8 @@ mixpanel.init("cd042e17e8e2d45f238524b07e2187b2");</script><!-- end Mixpanel -->
                 	})
                 },
                 gotoMatch: function(id) {
-                    window.location = "match.html?id=" + id;
+                    var win = window.open("match.html?id=" + id, '_blank');
+                    win.focus();
                 },
             }
         });
