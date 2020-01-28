@@ -225,6 +225,7 @@ mixpanel.init("cd042e17e8e2d45f238524b07e2187b2");</script><!-- end Mixpanel -->
                                                         <tr>
                                                             <th style="width: 1%" class="text-center">No.</th>
                                                             <th>Players</th>
+                                                            <th>Clips</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody v-if="home_team">
@@ -232,6 +233,7 @@ mixpanel.init("cd042e17e8e2d45f238524b07e2187b2");</script><!-- end Mixpanel -->
                                                             <td class="text-center">{{index+1}}</td>
                                                             <td> {{player.name}}
                                                             </td>
+                                                            <td><a class="btn btn-sm btn-primary" style="color: white; line-height: 1.2"  v-on:click="gotoPlayer(player.id)">View</a></td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -242,6 +244,7 @@ mixpanel.init("cd042e17e8e2d45f238524b07e2187b2");</script><!-- end Mixpanel -->
                                                         <tr>
                                                             <th style="width: 1%" class="text-center">No.</th>
                                                             <th>Player</th>
+                                                            <th>Clips</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody v-if="away_team">
@@ -250,6 +253,7 @@ mixpanel.init("cd042e17e8e2d45f238524b07e2187b2");</script><!-- end Mixpanel -->
                                                             <td class="text-center">{{index+1}}</td>
                                                             <td> {{player.name}}
                                                             </td>
+                                                            <td><a class="btn btn-sm btn-primary" style="color: white; line-height: 1.2" v-on:click="gotoPlayer(player.id)">View</a></td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -921,6 +925,9 @@ mixpanel.init("cd042e17e8e2d45f238524b07e2187b2");</script><!-- end Mixpanel -->
                     },
                     gotoLeague: function gotoLeague(league_id) {
                         window.location = "league.html?id=" + league_id;
+                    },
+                    gotoPlayer: function gotoPlayer(player_id) {
+                        window.location = "player.html?id=" + player_id;
                     },
                     getCenterCookie: function getCenterCookie() {
                         var nameEQ = "center=";
