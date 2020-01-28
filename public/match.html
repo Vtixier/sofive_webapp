@@ -146,7 +146,7 @@ mixpanel.init("cd042e17e8e2d45f238524b07e2187b2");</script><!-- end Mixpanel -->
                                                 </figure>
                                             </div>
                                         </div>
-                                        <div class="ibox-content profile-content">
+                                        <div class="ibox-content profile-content" v-if="!manual">
                                             <button type="button" class="btn btn-block btn-outline btn-primary" v-on:click="gotoLeague(league.id)">Schedules & Standings</button>
                                         </div>
                                     </div>
@@ -205,7 +205,7 @@ mixpanel.init("cd042e17e8e2d45f238524b07e2187b2");</script><!-- end Mixpanel -->
                             </div>
                         </div>
 
-                        <div class="row rosters">
+                        <div class="row rosters" v-if="!manual">
                             <div class="col-lg-12">
                                 <div class="ibox">
                                     <div class="ibox-title">
@@ -282,7 +282,7 @@ mixpanel.init("cd042e17e8e2d45f238524b07e2187b2");</script><!-- end Mixpanel -->
 
                                         <div class="vertical-timeline-block" v-for="(event, i) in events" style="margin: 25px">
                                             <div class="vertical-timeline-icon navy-bg">
-                                                <i class="fa fa-soccer-ball-o" v-if="event.type == 'goal'"></i>
+                                                <i class="fa fa-soccer-ball-o" v-if="event.type == 'goal'" v-on:click="select_vid(scoreplay_videos.clips[i], match.home.name === event.side)" data-toggle="modal" data-target="#edit" style="cursor: pointer;"></i>
                                                 <i class="fa fa-meh-o" v-if="event.type == 'foul'"></i>
                                                 <img src="img/sofive/yellow_card.ico" style="margin-top: 10%" v-if="event.type == 'yellow_card'" />
                                                 <img src="img/sofive/red_card.ico" style="margin-top: 10%" v-if="event.type == 'red_card'" />
@@ -446,30 +446,9 @@ mixpanel.init("cd042e17e8e2d45f238524b07e2187b2");</script><!-- end Mixpanel -->
         <div id="fb-root"></div>
         <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v4.0&appId=402678167007969"></script>
 
-        <!-- Google Tag Manager (noscript) -->
         <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KHK4JK2"
         height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-        <!-- End Google Tag Manager (noscript) —>
 
-        
-        <script>
-          !function(f,b,e,v,n,t,s)
-          {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-          n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-          if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-          n.queue=[];t=b.createElement(e);t.async=!0;
-          t.src=v;s=b.getElementsByTagName(e)[0];
-          s.parentNode.insertBefore(t,s)}(window, document,'script',
-          'https://connect.facebook.net/en_US/fbevents.js');
-          fbq('init', '976102449200043');
-          fbq('track', 'PageView');
-        </script>
-        <noscript><img height="1" width="1" style="display:none"
-          src="https://www.facebook.com/tr?id=976102449200043&ev=PageView&noscript=1"
-        /></noscript>
-        
-
-        <!-- Mainly scripts -->
         <script src="js/jquery-3.1.1.min.js"></script>
         <script src="js/popper.min.js"></script>
         <script src="js/bootstrap.js"></script>
@@ -541,7 +520,8 @@ mixpanel.init("cd042e17e8e2d45f238524b07e2187b2");</script><!-- end Mixpanel -->
                     selected_scorer_details: {},
                     run_stats: [],
                     technical_stats: [],
-                    stat_team: "all"
+                    stat_team: "all",
+                    manual: false
                 },
                 mounted: function mounted() {
 
@@ -560,6 +540,9 @@ mixpanel.init("cd042e17e8e2d45f238524b07e2187b2");</script><!-- end Mixpanel -->
                     this.matchID = params.id;
                     if (this.matchID.indexOf("manual") !== (-1)) {
                         document.querySelector(".rosters").style.display = "none"
+                    }
+                    if ((this.matchID.indexOf("::") !== (-1)) || (this.matchID.indexOf("manual") !== (-1))) {
+                        this.manual = true
                     }
                     this.getDashMatch()
                         .then(function() {
@@ -823,10 +806,10 @@ mixpanel.init("cd042e17e8e2d45f238524b07e2187b2");</script><!-- end Mixpanel -->
                                     name: away_team,
                                     score: away_score
                                 }
-                                if (self.matchID.indexOf("::") !== (-1)) {
-                                    self.getGotsoccerDetails()
-                                }
                                 self.match.start = moment(resp.body.createdAt).format("YYYY-MM-DD - h:mma");
+                                if (self.matchID.indexOf("::") !== (-1)) {
+                                    return self.getGotsoccerDetails().then(() => self.setupEvents(resp.body.events))
+                                }
                                 self.setupEvents(resp.body.events);
 
 
@@ -933,6 +916,7 @@ mixpanel.init("cd042e17e8e2d45f238524b07e2187b2");</script><!-- end Mixpanel -->
                         this.events = final_events;
                     },
                     gotoTeam: function gotoTeam(id) {
+                        if (this.manual) return
                         window.location = "team.html?id=" + id;
                     },
                     gotoLeague: function gotoLeague(league_id) {
