@@ -147,7 +147,17 @@ mixpanel.init("cd042e17e8e2d45f238524b07e2187b2");</script><!-- end Mixpanel -->
                                             </div>
                                         </div>
                                         <div class="ibox-content profile-content" v-if="!manual">
-                                            <button type="button" class="btn btn-block btn-outline btn-primary" v-on:click="gotoLeague(league.id)">Schedules & Standings</button>
+                                            <div class="row">
+                                                <div class="col-sm-12 col-md-6" v-if="video_download.match">
+                                                    <button type="button" class="btn btn-block btn-outline btn-primary" v-on:click="gotoURL(video_download.match)">Download full match</button>
+                                                </div>
+                                                <div class="col-sm-12 col-md-6" v-if="video_download.highlight">
+                                                    <button type="button" class="btn btn-block btn-outline btn-primary" v-on:click="gotoURL(video_download.highlight)">Download highlights</button>
+                                                </div>
+                                                <div class="col-sm-12" style="padding-top: 25px">
+                                                <button type="button" class="btn btn-block btn-outline btn-primary" v-on:click="gotoLeague(league.id)">Schedules & Standings</button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -508,6 +518,10 @@ mixpanel.init("cd042e17e8e2d45f238524b07e2187b2");</script><!-- end Mixpanel -->
                         clips: [],
                         recording: {}
                     },
+                    video_download: {
+                        match: null,
+                        highlight: null
+                    },
                     video_url: "",
                     video_id: 0,
                     seconds: 0,
@@ -680,6 +694,12 @@ mixpanel.init("cd042e17e8e2d45f238524b07e2187b2");</script><!-- end Mixpanel -->
                                     ...clip,
                                     url: "https://www.dailymotion.com/embed/video/"+clip.url.replace("https://www.dailymotion.com/video/", "")+"?autoplay=1&queue-enable=false&queue-autoplay-next=false&ui-start-screen-info=false"
                                 }))
+                            }
+                            if (v.match.s3 && (v.match.s3 !== "")) {
+                                self.video_download.match = v.match.s3
+                            }
+                            if (v.recording.s3 && (v.recording.s3 !== "")) {
+                                self.video_download.highlight = v.recording.s3
                             }
                         })
                         .catch(function(err) {
@@ -928,6 +948,10 @@ mixpanel.init("cd042e17e8e2d45f238524b07e2187b2");</script><!-- end Mixpanel -->
                     },
                     gotoPlayer: function gotoPlayer(player_id) {
                         window.location = "player.html?id=" + player_id;
+                    },
+                    gotoURL: function(url) {
+                        var win = window.open(url, '_blank');
+                        win.focus();
                     },
                     getCenterCookie: function getCenterCookie() {
                         var nameEQ = "center=";
