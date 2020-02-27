@@ -93,7 +93,7 @@ mixpanel.init("cd042e17e8e2d45f238524b07e2187b2");</script><!-- end Mixpanel -->
                                 <button type="button" class="btn btn-primary btn-sm btn-block" style="background-color: #4267b2; border-color: #4267b2" v-on:click="gotoFb"><i class="fa fa-facebook-square"></i> Share on Facebook</button>
                             </div>
                             <div class="col-md-2"></div>
-                            <div class="col-md-4">
+                            <div class="col-md-4" v-if="!manual">
                                 <select class="select_center form-control" v-model="selected_scorer">
                                     <option value="0">Select scorer</option>
                                     <option v-for="player in video_roster" :value="player.id">{{player.name}}</option>
@@ -146,7 +146,7 @@ mixpanel.init("cd042e17e8e2d45f238524b07e2187b2");</script><!-- end Mixpanel -->
                                                 </figure>
                                             </div>
                                         </div>
-                                        <div class="ibox-content profile-content" v-if="!manual">
+                                        <div class="ibox-content profile-content">
                                             <div class="row">
                                                 <div class="col-sm-12 col-md-6" v-if="video_download.match">
                                                     <button type="button" class="btn btn-block btn-outline btn-primary" v-on:click="gotoURL(video_download.match)">Download full match</button>
@@ -154,7 +154,7 @@ mixpanel.init("cd042e17e8e2d45f238524b07e2187b2");</script><!-- end Mixpanel -->
                                                 <div class="col-sm-12 col-md-6" v-if="video_download.highlight">
                                                     <button type="button" class="btn btn-block btn-outline btn-primary" v-on:click="gotoURL(video_download.highlight)">Download highlights</button>
                                                 </div>
-                                                <div class="col-sm-12" style="padding-top: 25px">
+                                                <div class="col-sm-12" style="padding-top: 25px" v-if="!manual">
                                                 <button type="button" class="btn btn-block btn-outline btn-primary" v-on:click="gotoLeague(league.id)">Schedules & Standings</button>
                                                 </div>
                                             </div>
@@ -308,7 +308,7 @@ mixpanel.init("cd042e17e8e2d45f238524b07e2187b2");</script><!-- end Mixpanel -->
                                                 <h2>{{event.date}}. <b>
                                                         <span v-if="(scoreplay_videos.clips[i] && scoreplay_videos.clips[i].player_id)">{{(all_rosters.find(p => (p.id.toString() === scoreplay_videos.clips[i].player_id)) || {'name':''}).name}} <small><br />({{event.side}})</small></span><span v-else>{{event.side}}</span>
                                                     </b> ({{event.subtitle}})</h2>
-                                                <a v-if="scoreplay_videos.clips[i]" v-on:click="select_vid(scoreplay_videos.clips[i], match.home.name === event.side)" target="blank" class="btn btn-sm btn-primary" style="float: right; color: white" data-toggle="modal" data-target="#edit">watch & assign goal</a>
+                                                <a v-if="scoreplay_videos.clips[i]" v-on:click="select_vid(scoreplay_videos.clips[i], match.home.name === event.side)" target="blank" class="btn btn-sm btn-primary" style="float: right; color: white" data-toggle="modal" data-target="#edit">watch <span v-if="!manual">& assign </span>goal</a>
                                             </div>
                                         </div>
                                     </div>
