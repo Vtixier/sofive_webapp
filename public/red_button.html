@@ -54,7 +54,7 @@ mixpanel.init("cd042e17e8e2d45f238524b07e2187b2");</script><!-- end Mixpanel -->
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                     <i class="fa fa-video-camera modal-icon"></i>
-                    <h4 class="modal-title">How do I get my red button video ?</h4>
+                    <h4 class="modal-title">How do I get my highlight video ?</h4>
                 </div>
                 <div class="modal-body">
                     <h3>1. Download the application (<a target="_blank" href="https://apps.apple.com/us/app/sofive-scoreplay/id1436311329">iphone</a>/ <a target="_blank" href="https://play.google.com/store/apps/details?id=com.sofive&hl=fr_CA">android</a>)</h3>
@@ -124,7 +124,7 @@ mixpanel.init("cd042e17e8e2d45f238524b07e2187b2");</script><!-- end Mixpanel -->
 
             <div class="row text-center">
                 <div class="col-sm-12" style="margin-bottom: 2%">
-                    <h1>Red button <i class="fa fa-question-circle" data-toggle="modal" data-target="#myModal" style="cursor: pointer;"></i></h1>
+                    <h1>Manual match highlights <i class="fa fa-question-circle" data-toggle="modal" data-target="#myModal" style="cursor: pointer;"></i></h1>
                     <small v-if="videos.length === 0">No videos found for this date</small>
                 </div>
 
@@ -148,7 +148,7 @@ mixpanel.init("cd042e17e8e2d45f238524b07e2187b2");</script><!-- end Mixpanel -->
                             <div>
                                 <div>
                                     <div class="ibox-content profile-content">
-                                        <h3>{{video.match.home}} vs. {{video.match.away}}</h3>
+                                        <h3><a :href="'/match.html?id='+video.id" target="_blank">{{video.match.home}} vs. {{video.match.away}}</a></h3>
                                     </div>
                                     <div class="ibox-content no-padding border-left-right">
                                         <iframe v-on:load="onMyFrameLoad" frameborder="0" :src="video.embed" allowfullscreen style="width: 100%"></iframe>
