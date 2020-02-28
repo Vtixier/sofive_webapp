@@ -85,7 +85,7 @@ mixpanel.init("cd042e17e8e2d45f238524b07e2187b2");</script><!-- end Mixpanel -->
                 <div class="modal-dialog">
                     <div class="modal-content animated bounceInRight">
                         <div class="modal-body">
-                            <iframe class="video" allow="autoplay" :src="video_url" frameborder="0" allowfullscreen style="width: 100%"></iframe>
+                            <iframe class="video" allow="autoplay" :src="clip.video_url" frameborder="0" allowfullscreen style="width: 100%"></iframe>
                         </div>
                         <div class="row" style="margin-bottom: 5%">
                             <div class="col-md-1"></div>
@@ -98,6 +98,10 @@ mixpanel.init("cd042e17e8e2d45f238524b07e2187b2");</script><!-- end Mixpanel -->
                                     <option value="0">Select scorer</option>
                                     <option v-for="player in video_roster" :value="player.id">{{player.name}}</option>
                                 </select>
+                            </div>
+                            <div class="col-md-12" style="padding: 5%; padding-bottom: 0">
+                                <button type="button" class="btn btn-primary btn-sm btn-block" v-if="!clip.goal_of_the_month" v-on:click="assignGOTM">Nominate for <i>Goal-of-the-month</i></button>
+                                <button type="button" class="btn btn-primary btn-sm btn-block" disabled v-else> Nominated for <i>Goal-of-the-month</i></button>
                             </div>
                         </div>
                     </div>
@@ -522,9 +526,10 @@ mixpanel.init("cd042e17e8e2d45f238524b07e2187b2");</script><!-- end Mixpanel -->
                         match: null,
                         highlight: null
                     },
-                    video_url: "",
-                    video_id: 0,
-                    seconds: 0,
+                    clip: {
+                        url: "",
+                        goal_of_the_month: false,
+                    },
                     video_share_url: "",
                     video_roster: [],
                     selected_scorer: "0",
@@ -654,7 +659,11 @@ mixpanel.init("cd042e17e8e2d45f238524b07e2187b2");</script><!-- end Mixpanel -->
                     },
                     select_vid: function select_vid(v, is_home) {
                         console.log("Sel", v, is_home)
-                        this.video_url = v.url;
+                        this.clip = {
+                            id: v.id,
+                            url: v.url,
+                            goal_of_the_month: v.is_gotm
+                        }
                         let i = v.url.indexOf('video/') + 6,
                             j = v.url.indexOf('?autoplay')
                         this.getFb(v.url.slice(i, j))
@@ -673,6 +682,17 @@ mixpanel.init("cd042e17e8e2d45f238524b07e2187b2");</script><!-- end Mixpanel -->
                             is_home
                         }
                         this.assign_modal_open = true
+                    },
+                    assignGOTM: function() {
+                        const now = moment(),
+                            month = parseInt(now.format("MM")),
+                            year = parseInt(now.format("YYYY")),
+                            body = { clip_id: parseInt(this.clip.id), month, year },
+                            self = this;
+                        console.log("body", body)
+                        return this.$http.post("https://video.scoreplay.io/gotm/", body).then(() => {
+                            self.clip.goal_of_the_month = true
+                        }).catch(console.error)
                     },
                     getScoreplayVideos: function() {
                         const self = this,

@@ -358,7 +358,6 @@
 							} else {
 								self.createRegistrationCharge(result.token.id)
 							}
-							fbq('track', 'Purchase', {currency: "USD", value: parseFloat(self.product.display_price)});
 						} else if (result.error) {
 							self.error = result.error.message
 						}
@@ -375,6 +374,7 @@
             		})
             		.then(resp => {
             			console.log(resp)
+            			fbq('track', 'Purchase', {currency: "USD", value: parseFloat(self.product.display_price)});
             			window.location = "/booking/done.html?booking_id="+self.booking_id
             		})
             	},
@@ -389,6 +389,7 @@
             		})
             		.then(resp => {
             			console.log(resp)
+            			fbq('track', 'Purchase', {currency: "USD", value: parseFloat(self.product.display_price)});
             			window.location = "/registration/done.html?registration_id="+self.registration_id
             		})
             	},
