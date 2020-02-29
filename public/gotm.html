@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+
+    <title>Sofive Soccer Center</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale = 1, minimum-scale = 1, maximum-scale = 1, user-scalable = no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link rel="apple-touch-icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" />
+    <meta name="apple-mobile-web-app-title" content="Sofive">
+    <style type="text/css">
+        body {
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+        }
+    </style>
+
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="css/animate.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-32x32.png" sizes="32x32" />
+    <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" sizes="192x192" />
+
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-KHK4JK2');</script>
+
+</head>
+
+<body class="fixed-sidebar">
+
+    <div id="wrapper">
+
+        <div>
+            <sofive-left-menu />
+        </div>
+
+
+        <div id="page-wrapper" class="gray-bg">
+
+            <div>
+                <sofive-header />
+            </div>
+
+            <div class="row" style="text-align: center; background-color: rgba(232, 232, 232, 0.43); border: 1px solid #e6eaec;">
+                <div class="col-lg-12">
+                    <div class="ibox" style="margin-top: 2%; margin-bottom: 2%">
+                        <h1 style="color: #676a6c">Enjoy your online experience at<strong> <span style="color: #03793e"> {{name}}</span> </strong> !</h1>
+                        <div class="dropdown profile-element" style="text-align: center">
+                            <button style="margin-bottom: 2%" data-toggle="dropdown" class="btn btn-default dropdown-toggle">Change center</button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" v-on:click="setCookie('1')">Sofive Meadowlands</a></li>
+                                <li><a class="dropdown-item" v-on:click="setCookie('3')">Sofive Brooklyn</a></li>
+                                <li><a class="dropdown-item" v-on:click="setCookie('4')">Sofive Rockville</a></li>
+                                <li><a class="dropdown-item" v-on:click="setCookie('2')">Sofive Elkins Park</a></li>
+                                <li><a class="dropdown-item" v-on:click="setCookie('5')">Sofive Columbia</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-6 text-center">
+                    <img onClick="window.location='book.html'" src="img/sofive/online_booking.png" alt="dashboard" class="img-fluid" style="max-width: 80%; margin-top:3%; cursor: pointer;">
+                    <h2>Book a field directly online<h2>
+                            <a href="book.html"><button class="btn btn-outline btn-primary btn-sm">book</button></a>
+                </div>
+                <div class="col-lg-6 text-center espace">
+                    <img onClick="window.location='reg.html'" src="img/sofive/online_registration.png" alt="dashboard" class="img-fluid" style="max-width: 80%; margin-top:3%; cursor: pointer;">
+                    <h2>Register in our leagues and tournaments<h2>
+                            <a href="reg.html"><button class="btn btn-outline btn-primary btn-sm">register</button></a>
+                </div>
+                <div class="col-lg-6 text-center">
+                    <img onClick="window.location='videos.html'" src="img/sofive/videopage.png" alt="dashboard" class="img-fluid" style="max-width: 80%; margin-top:3%; cursor: pointer;">
+                    <h2>Watch the video replay of your last rental<h2>
+                            <a href="videos.html"><button class="btn btn-outline btn-primary btn-sm">browse</button></a>
+                </div>
+                <div class="col-lg-6 text-center">
+                    <img onClick="window.location='standings.html'" src="img/sofive/teampage.png" alt="dashboard" class="img-fluid" style="max-width: 80%; margin-top:3%; cursor: pointer;">
+                    <h2>Get all the info on your league<h2>
+                            <a href="standings.html"><button class="btn btn-outline btn-primary btn-sm">search</button></a>
+                </div>
+            </div>
+
+            <sofive-footer />
+        </div>
+    </div>
+
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KHK4JK2"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) —>
+
+    
+    <script>
+      !function(f,b,e,v,n,t,s)
+      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+      n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t,s)}(window, document,'script',
+      'https://connect.facebook.net/en_US/fbevents.js');
+      fbq('init', '976102449200043');
+      fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=976102449200043&ev=PageView&noscript=1"
+    /></noscript>
+    
+
+    <!-- Mainly scripts -->
+    <script src="js/jquery-3.1.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+    <!-- Custom and plugin javascript -->
+    <script src="js/inspinia.js"></script>
+
+    <script src="js/vue.js"></script>
+
+    <script type="text/javascript" src="js/vue-resource.js"></script>
+    <script type="text/javascript" src="js/moment.js"></script>
+
+    <script type="text/javascript" src="js/navigation.js"></script>
+    <script type="text/javascript" src="js/header.js"></script>
+    <script type="text/javascript" src="js/footer.js"></script>
+
+    <script type="text/javascript">
+        var app = new Vue({
+            el: '#wrapper',
+            data: {
+                info: "",
+                name: "Sofive"
+            },
+            mounted: function() {
+                this.getCenterName()
+                const params = this.findGetParameter(),
+                    origin = params.origin || "";
+                if (origin !== "") {
+                    this.info = JSON.parse(atob(origin))
+                }
+            },
+            methods: {
+                getCenterName: function() {
+                    const c = this.getCookie("center"),
+                        self = this;
+                    if (!c) {
+                        return setTimeout(self.getCenterName, 2000) // wait for cookie to be set
+                    }
+                    let name = "Sofive"
+                    switch (c) {
+                        case "1":
+                            name += " Meadowlands"
+                            break;
+                        case "2":
+                            name += " Elkins Park"
+                            break;
+                        case "3":
+                            name += " Brooklyn"
+                            break;
+                        case "4":
+                            name += " Rockville"
+                            break;
+                        case "5":
+                            name += " Columbia"
+                            break;
+                        default:
+                    }
+                    this.name = name
+                },
+                findGetParameter: function() {
+                    var queryDict = {}
+                    decodeURI(location.search).substr(1).split("&").forEach(function(item) {
+                        queryDict[item.split("=")[0]] = item.split("=")[1]
+                    })
+                    return queryDict
+                },
+                getCookie: function(name) {
+                    var nameEQ = name + "=";
+                    var ca = document.cookie.split(';');
+                    for (var i = 0; i < ca.length; i++) {
+                        var c = ca[i];
+                        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+                    }
+                    return null;
+                },
+                setCookie: function(value) {
+                    var date = new Date();
+                    date.setTime(date.getTime() + (9999 * 24 * 60 * 60 * 1000));
+                    let expires = "; expires=" + date.toUTCString();
+                    document.cookie = "center=" + (value || "") + expires + "; path=/";
+                    window.location = "index.html"
+                },
+            }
+        })
+    </script>
+
+</body>
+
+</html>
