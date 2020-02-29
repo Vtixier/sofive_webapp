@@ -55,41 +55,26 @@
             <div class="row" style="text-align: center; background-color: rgba(232, 232, 232, 0.43); border: 1px solid #e6eaec;">
                 <div class="col-lg-12">
                     <div class="ibox" style="margin-top: 2%; margin-bottom: 2%">
-                        <h1 style="color: #676a6c">Enjoy your online experience at<strong> <span style="color: #03793e"> {{name}}</span> </strong> !</h1>
-                        <div class="dropdown profile-element" style="text-align: center">
-                            <button style="margin-bottom: 2%" data-toggle="dropdown" class="btn btn-default dropdown-toggle">Change center</button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" v-on:click="setCookie('1')">Sofive Meadowlands</a></li>
-                                <li><a class="dropdown-item" v-on:click="setCookie('3')">Sofive Brooklyn</a></li>
-                                <li><a class="dropdown-item" v-on:click="setCookie('4')">Sofive Rockville</a></li>
-                                <li><a class="dropdown-item" v-on:click="setCookie('2')">Sofive Elkins Park</a></li>
-                                <li><a class="dropdown-item" v-on:click="setCookie('5')">Sofive Columbia</a></li>
-                            </ul>
-                        </div>
+                        <h1 style="color: #676a6c">View all nominated <strong> <span style="color: #03793e"> <i>goals of the month</i></span> </strong> !</h1>
+                        <h3>{{moment().format("MM - YYYY")}}</h3>
                     </div>
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-lg-6 text-center">
-                    <img onClick="window.location='book.html'" src="img/sofive/online_booking.png" alt="dashboard" class="img-fluid" style="max-width: 80%; margin-top:3%; cursor: pointer;">
-                    <h2>Book a field directly online<h2>
-                            <a href="book.html"><button class="btn btn-outline btn-primary btn-sm">book</button></a>
-                </div>
-                <div class="col-lg-6 text-center espace">
-                    <img onClick="window.location='reg.html'" src="img/sofive/online_registration.png" alt="dashboard" class="img-fluid" style="max-width: 80%; margin-top:3%; cursor: pointer;">
-                    <h2>Register in our leagues and tournaments<h2>
-                            <a href="reg.html"><button class="btn btn-outline btn-primary btn-sm">register</button></a>
-                </div>
-                <div class="col-lg-6 text-center">
-                    <img onClick="window.location='videos.html'" src="img/sofive/videopage.png" alt="dashboard" class="img-fluid" style="max-width: 80%; margin-top:3%; cursor: pointer;">
-                    <h2>Watch the video replay of your last rental<h2>
-                            <a href="videos.html"><button class="btn btn-outline btn-primary btn-sm">browse</button></a>
-                </div>
-                <div class="col-lg-6 text-center">
-                    <img onClick="window.location='standings.html'" src="img/sofive/teampage.png" alt="dashboard" class="img-fluid" style="max-width: 80%; margin-top:3%; cursor: pointer;">
-                    <h2>Get all the info on your league<h2>
-                            <a href="standings.html"><button class="btn btn-outline btn-primary btn-sm">search</button></a>
+            <div class="row wrapper" style="width: 100%">
+                <div class="col-lg-3" v-for="clip in clips">
+                    <div class="ibox">
+                        <div>
+                            <div>
+                                <div class="ibox-content profile-content">
+                                    <div>{{clip.team_name}}</div>
+                                </div>
+                                <div class="ibox-content no-padding border-left-right">
+                                    <iframe frameborder="0" :src="clip.url" allowfullscreen style="width: 100%"></iframe>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -100,24 +85,6 @@
     <!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KHK4JK2"
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <!-- End Google Tag Manager (noscript) —>
-
-    
-    <script>
-      !function(f,b,e,v,n,t,s)
-      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-      n.queue=[];t=b.createElement(e);t.async=!0;
-      t.src=v;s=b.getElementsByTagName(e)[0];
-      s.parentNode.insertBefore(t,s)}(window, document,'script',
-      'https://connect.facebook.net/en_US/fbevents.js');
-      fbq('init', '976102449200043');
-      fbq('track', 'PageView');
-    </script>
-    <noscript><img height="1" width="1" style="display:none"
-      src="https://www.facebook.com/tr?id=976102449200043&ev=PageView&noscript=1"
-    /></noscript>
     
 
     <!-- Mainly scripts -->
@@ -143,69 +110,54 @@
         var app = new Vue({
             el: '#wrapper',
             data: {
-                info: "",
-                name: "Sofive"
+                clips: []
             },
             mounted: function() {
-                this.getCenterName()
-                const params = this.findGetParameter(),
-                    origin = params.origin || "";
-                if (origin !== "") {
-                    this.info = JSON.parse(atob(origin))
-                }
+                this.getVideos()
             },
             methods: {
-                getCenterName: function() {
-                    const c = this.getCookie("center"),
-                        self = this;
-                    if (!c) {
-                        return setTimeout(self.getCenterName, 2000) // wait for cookie to be set
-                    }
-                    let name = "Sofive"
-                    switch (c) {
-                        case "1":
-                            name += " Meadowlands"
-                            break;
-                        case "2":
-                            name += " Elkins Park"
-                            break;
-                        case "3":
-                            name += " Brooklyn"
-                            break;
-                        case "4":
-                            name += " Rockville"
-                            break;
-                        case "5":
-                            name += " Columbia"
-                            break;
-                        default:
-                    }
-                    this.name = name
-                },
-                findGetParameter: function() {
-                    var queryDict = {}
-                    decodeURI(location.search).substr(1).split("&").forEach(function(item) {
-                        queryDict[item.split("=")[0]] = item.split("=")[1]
+                getVideos: function() {
+                    const date = moment(),
+                    month = parseInt(date.format("MM")),
+                    year = parseInt(date.format("YYYY")),
+                    self = this;
+                    return this.$http.post("https://video.scoreplay.io/gotm/get", {
+                        month, year,
+                    }).then(resp => {
+                        self.clips = resp.data.map(v => ({
+                            ...v,
+                            url: v.url.replace("/video/", "/embed/video/")
+                        }))
+                        return Promise.all(self.clips.map(self.getSingleMatchDetails))
+                        .then(vids => {
+                            self.clips = vids
+                        })
                     })
-                    return queryDict
                 },
-                getCookie: function(name) {
-                    var nameEQ = name + "=";
-                    var ca = document.cookie.split(';');
-                    for (var i = 0; i < ca.length; i++) {
-                        var c = ca[i];
-                        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
-                        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
-                    }
-                    return null;
-                },
-                setCookie: function(value) {
-                    var date = new Date();
-                    date.setTime(date.getTime() + (9999 * 24 * 60 * 60 * 1000));
-                    let expires = "; expires=" + date.toUTCString();
-                    document.cookie = "center=" + (value || "") + expires + "; path=/";
-                    window.location = "index.html"
-                },
+                getSingleMatchDetails: function(match) {
+                        console.log("Getting details", match)
+                        const match_id = match.match_id.toString();
+                        return this.$http.post("https://app.scoreplay.io/match/details", {
+                                match_id
+                            })
+                            .then(function(resp) {
+                                console.log(resp)
+                                let body = resp.body,
+                                team_name = "Rental team"
+                                if (match_id.indexOf("manual") === (-1)) {
+                                    if (match.side === "away") {
+                                        team_name = body.details.away.teamName
+                                    } else {
+                                        team_name = body.details.home.teamName
+                                    }
+                                    team_name += " ("+body.details.type+")"
+                                }
+                                return {
+                                    team_name,
+                                    ...match,
+                                }
+                            })
+                    },
             }
         })
     </script>
