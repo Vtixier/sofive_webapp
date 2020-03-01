@@ -110,6 +110,15 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-sm-3">
+                            <label class="col-form-label" for="status">
+                                Start time
+                            </label>
+                            <select class="select_season form-control" v-model="selected.time">
+                                <option value="0">Any time</option>
+                                <option v-for="time in times" :value="time">{{time}}</option>
+                            </select>
+                        </div>
                         <div class="col-sm-2" style="display: flex; align-items: center;">
                             <a v-on:click="getDailyHighlights" class="btn btn-primary btn-rounded btn-block btn-outline" href="#" style="margin-top: 8%"></i>Search</a>
                         </div>
@@ -121,7 +130,7 @@
             <div class="row text-center">
                 <div class="col-sm-12" style="margin-bottom: 2%">
                     <h1>Game highlights <i class="fa fa-question-circle" data-toggle="modal" data-target="#myModal" style="cursor: pointer;"></i></h1>
-                    <small v-if="highlights.length === 0">No videos found for this date</small>
+                    <small v-if="(highlights.length === 0) && (!loading)">No videos found for this date</small>
                 </div>
 
                 <div class="col-lg-12" v-if="loading">
@@ -139,7 +148,7 @@
                 </div>
 
                 <div class="row wrapper" style="width: 100%">
-                    <div class="col-lg-3" v-for="highlight in highlights">
+                    <div class="col-lg-3" v-for="highlight in filtered_highlights">
                         <div class="ibox">
                             <div>
                                 <div>
@@ -260,10 +269,11 @@
                 data: {
                     date: "",
                     centers: ["Meadowlands", "Brooklyn", "Rockville", "ElkinsPark", "Columbia"],
+                    times: ["7 am", "8 am", "9 am", "10 am", "11 am", "12 pm", "1 pm", "2 pm", "3 pm", "4 pm", "5 pm", "6 pm", "7 pm", "8 pm", "9 pm", "10 pm", "11 pm", "12 am"],
                     facility_loading: false,
                     recordings: [],
                     selected: {
-                        time: "8 pm",
+                        time: "0",
                         center: "Meadowlands",
                     },
                     loaded: 0,
@@ -271,15 +281,11 @@
                     highlights: []
                 },
                 computed: {
-                    filtered_recordings: function filtered_recordings() {
-                        var recs = this.recordings,
-                            self = this;
-                        if (this.selected.field !== "0") {
-                            recs = recs.filter(function(rec) {
-                                return rec.field === self.selected.field;
-                            });
+                    filtered_highlights: function() {
+                        if (this.selected.time === "0") {
+                            return this.highlights
                         }
-                        return recs;
+                        return this.highlights.filter(h => (h.simple_hour === this.selected.time));
                     }
                 },
                 mounted: function mounted() {
@@ -312,6 +318,7 @@
                         const self = this,
                         center = this.selected.center,
                         day = moment(this.date, "MM-DD-YYYY").format("YYYY-MM-DD")
+                        this.loading = true;
                         return this.$http.get("https://video.scoreplay.io/recording/day/"+center+"?day="+day)
                         .then(resp => {
                             const videos = resp.body.filter(v => (v.id.toString().indexOf("manual") === (-1))).map(v => ({
@@ -323,6 +330,7 @@
                             .then(vids => {
                                 console.log("Videos", vids)
                                 self.highlights = vids.sort(self.dateSortFunc)
+                                self.loading = false;
                             })
                         })
                     },
@@ -358,7 +366,7 @@
                                 })
                                 const videoID = match.url.slice(match.url.indexOf("/video") + 7, match.url.length),
                                     moment_date = moment(body.details.date, "YYYY-MM-DD HH:mm:ss"),
-                                    simple_hour = moment_date.format("h:00a")
+                                    simple_hour = moment_date.format("h a")
                                 return {
                                     home_team,
                                     away_team,
@@ -378,7 +386,7 @@
                     onMyFrameLoad: function onMyFrameLoad() {
                         this.loaded += 1;
 
-                        if (this.loaded >= Math.min(this.filtered_recordings.length, 20)) {
+                        if (this.loaded >= Math.min(this.filtered_highlights.length, 20)) {
                             console.log("ALL loaded");
                             this.loading = false;
                         }
