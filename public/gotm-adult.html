@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+
+    <title>Sofive Soccer Center</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale = 1, minimum-scale = 1, maximum-scale = 1, user-scalable = no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link rel="apple-touch-icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" />
+    <meta name="apple-mobile-web-app-title" content="Sofive">
+    <style type="text/css">
+        body {
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+        }
+    </style>
+
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="css/animate.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-32x32.png" sizes="32x32" />
+    <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" sizes="192x192" />
+
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-KHK4JK2');</script>
+
+</head>
+
+<body class="fixed-sidebar">
+
+    <div id="wrapper">
+
+        <div>
+            <sofive-left-menu />
+        </div>
+
+
+        <div id="page-wrapper" class="gray-bg">
+
+            <div>
+                <sofive-header />
+            </div>
+
+            <div class="row" style="text-align: center; background-color: rgba(232, 232, 232, 0.43); border: 1px solid #e6eaec;">
+                <div class="col-lg-12">
+                    <div class="ibox" style="margin-top: 2%">
+                        <h1 style="color: #676a6c">View all nominated <strong><span style="color: #03793e">adult goals</span></strong> !</h1>
+                        <h3>{{moment().format("MMMM YYYY")}}</h3>
+                    </div>
+                </div>
+                <div class="col-lg-12" style="margin-bottom: 2%">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-2 offset-md-5">
+                            <select class="select_season form-control" v-model="selected.center">
+                                <option value="0">All centers</option>
+                                <option v-for="center in centers" :value="center">{{center}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row wrapper" style="width: 100%">
+                <div class="col-md-1 offset-md-2"></div>
+                <div class="col-sm-12 col-md-2" v-for="clip in filtered_clips.podium" style="text-align: center;">
+                    <div class="ibox">
+                        <div class="ibox-content profile-content" style="text-align: center;">
+                            <div>
+                                <img src="https://image.flaticon.com/icons/svg/2583/2583259.svg" v-if="clip.first" style="height: 40px; margin-bottom: 5px">
+                                <img src="https://image.flaticon.com/icons/svg/2583/2583279.svg" v-if="clip.second" style="height: 40px; margin-bottom: 5px">
+                                <img src="https://image.flaticon.com/icons/svg/2583/2583398.svg" v-if="clip.third" style="height: 40px; margin-bottom: 5px">
+                                <br/>
+                                {{clip.team_name}}<br/>{{clip.event_type}}
+                            </div>
+                            <small style="color: green">{{clip.views}} views</small>
+                        </div>
+                        <div class="ibox-content no-padding border-left-right">
+                            <iframe frameborder="0" :src="clip.url" allowfullscreen style="width: 100%"></iframe>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3"></div>
+                <div class="col-lg-2" v-for="clip in filtered_clips.rest" style="text-align: center;">
+                    <div class="ibox">
+                        <div class="ibox-content profile-content">
+                            <div>
+                                <img src="https://cdn3.iconfinder.com/data/icons/flat-set-3-1/51/186-512.png" v-if="clip.first" style="height: 30px">
+                                <img src="https://cdn2.iconfinder.com/data/icons/award-and-reward/128/Silver-trophy-metal-award-prize-512.png" v-if="clip.second" style="height: 30px">
+                                <img src="https://images.onlinelabels.com/images/clip-art/Firkin/Bronze%20cup%202-301511.png" v-if="clip.third" style="height: 30px">
+                                {{clip.team_name}}<br/>{{clip.event_type}}
+                            </div>
+                            <small style="color: green">{{clip.views}} views</small>
+                        </div>
+                        <div class="ibox-content no-padding border-left-right">
+                            <iframe frameborder="0" :src="clip.url" allowfullscreen style="width: 100%"></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <sofive-footer />
+        </div>
+    </div>
+
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KHK4JK2"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    
+
+    <!-- Mainly scripts -->
+    <script src="js/jquery-3.1.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+    <!-- Custom and plugin javascript -->
+    <script src="js/inspinia.js"></script>
+
+    <script src="js/vue.js"></script>
+
+    <script type="text/javascript" src="js/vue-resource.js"></script>
+    <script type="text/javascript" src="js/moment.js"></script>
+
+    <script type="text/javascript" src="js/navigation.js"></script>
+    <script type="text/javascript" src="js/header.js"></script>
+    <script type="text/javascript" src="js/footer.js"></script>
+
+    <script type="text/javascript">
+        var app = new Vue({
+            el: '#wrapper',
+            data: {
+                clips: [],
+                selected: {
+                    center: "0",
+                    age_group: "0"
+                }
+            },
+            mounted: function() {
+                this.getVideos()
+            },
+            computed: {
+                filtered_clips: function() {
+                    let clips = this.clips.filter(c => (!c.youth))
+                    if (this.selected.center !== "0") {
+                        clips = clips.filter(c => (c.center === this.selected.center))
+                    }
+                    return {
+                        podium: clips.slice(0, 3).map((c, i) => {
+                        if (i==0) {
+                            return {...c, first: true}
+                        }
+                        if (i==1) {
+                            return {...c, second: true}
+                        }
+                        if (i==2) {
+                            return {...c, third: true}
+                        }
+                        return c
+                    }),
+                        rest: clips.slice(3)
+                    }
+                },
+                centers: function() {
+                    return [...new Set(this.clips.map(c => c.center))]
+                }
+            },
+            methods: {
+                getVideos: function() {
+                    const date = moment(),
+                    month = parseInt(date.format("MM")),
+                    year = parseInt(date.format("YYYY")),
+                    self = this;
+                    return this.$http.post("https://video.scoreplay.io/gotm/get", {
+                        month, year,
+                    }).then(resp => {
+                        self.clips = resp.data.map(v => ({
+                            ...v,
+                            url: v.url.replace("/video/", "/embed/video/")
+                        }))
+                        return Promise.all(self.clips.map(self.getSingleMatchDetails))
+                        .then(vids => {
+                            self.clips = vids.sort((a,b) => {
+                                if (b.views > a.views) {
+                                    return 1
+                                }
+                                if (a.views === b.views) {
+                                    return 0
+                                }
+                                return -1
+                            })
+                        })
+                    })
+                },
+                getSingleMatchDetails: function(match) {
+                        const match_id = match.match_id.toString();
+                        return this.$http.post("https://app.scoreplay.io/match/details", {
+                                match_id
+                            })
+                            .then(function(resp) {
+                                let body = resp.body,
+                                team_name = "Rental team",
+                                event_type = ""
+                                if (match_id.indexOf("manual") === (-1)) {
+                                    if (match.side === "away") {
+                                        team_name = body.details.away.teamName
+                                    } else {
+                                        team_name = body.details.home.teamName
+                                    }
+                                    if (match_id.indexOf("::") !== (-1)) {
+                                        event_type = "(youth tournament)"
+                                    } else {
+                                        event_type = "("+body.details.type+")"
+                                    }
+                                }
+                                return {
+                                    team_name,
+                                    event_type,
+                                    youth: (match_id.indexOf("::") !== (-1)) || (event_type.toLowerCase().indexOf("youth") !== (-1)),
+                                    ...match,
+                                }
+                            })
+                    },
+            }
+        })
+    </script>
+
+</body>
+
+</html>

@@ -7,6 +7,7 @@
 
     <title>Sofive Soccer Center</title>
 
+
     <meta name="viewport" content="width=device-width, initial-scale = 1, minimum-scale = 1, maximum-scale = 1, user-scalable = no" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <link rel="apple-touch-icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" />
@@ -21,13 +22,18 @@
         }
     </style>
 
+    <link href="/css/plugins/select2/select2.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.css" rel="stylesheet">
 
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
-    <link href="css/animate.css" rel="stylesheet">
-    <link href="css/style.css" rel="stylesheet">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
     <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-32x32.png" sizes="32x32" />
     <link rel="icon" href="https://sofive.com/wp-content/uploads/2018/04/cropped-sigle-192x192.png" sizes="192x192" />
+    <link href="/css/plugins/footable/footable.core.css" rel="stylesheet">
+
+    <link href="/css/plugins/dataTables/datatables.min.css" rel="stylesheet">
 
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -45,121 +51,156 @@
             <sofive-left-menu />
         </div>
 
-
         <div id="page-wrapper" class="gray-bg">
 
             <div>
                 <sofive-header />
             </div>
 
-            <div class="row" style="text-align: center; background-color: rgba(232, 232, 232, 0.43); border: 1px solid #e6eaec;">
-                <div class="col-lg-12">
-                    <div class="ibox" style="margin-top: 2%; margin-bottom: 2%">
-                        <h1 style="color: #676a6c">View all nominated <strong> <span style="color: #03793e"> <i>goals of the month</i></span> </strong> !</h1>
-                        <h3>{{moment().format("MMM YYYY")}}</h3>
-                    </div>
-                </div>
+            <div class="row" style="padding-top: 1%">
+            	<div class="col-sm-12 text-center">
+            		<h1 style="color: #676a6c; margin-bottom: 1%">View all nominated <strong> <span style="color: #03793e"> <i>goal-of-the-month</i></span> </strong> !</h1>
+                    <h3>{{moment().format("MMMM YYYY")}}</h3>
+            		<h4>Rankings are determined by the number of views of a video. Share it with all your friends to get a maximum of views ! </h4>
+            	</div>
             </div>
 
-            <div class="row wrapper" style="width: 100%">
-                <div class="col-lg-3" v-for="clip in clips">
+            <div class="row" style="padding-top: 1%">
+                <div class="col-sm-6 col-md-2 offset-md-4" style="cursor: pointer;">
                     <div class="ibox">
-                        <div>
-                            <div>
-                                <div class="ibox-content profile-content">
-                                    <div>{{clip.team_name}}</div>
-                                </div>
-                                <div class="ibox-content no-padding border-left-right">
-                                    <iframe frameborder="0" :src="clip.url" allowfullscreen style="width: 100%"></iframe>
-                                </div>
+                        <div class="ibox-content product-box text-center">
+                            <div class="product-imitation" style="padding: 0"><img src="https://sofive.com/wp-content/uploads/2018/05/SoccerForAll3-1.jpg" style="width: 100%; cursor: pointer;" v-on:click="gotoPage('/gotm-youth.html')"></div>
+                            <div class="product-desc">
+                                <span class="product-price">
+                                    Youth
+                                </span>
+                                <a href="#" class="product-name" v-on:click="gotoPage('/gotm-youth.html')"> Youth <i>goal-of-the-month</i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-2" style="cursor: pointer;">
+                    <div class="ibox">
+                        <div class="ibox-content product-box text-center">
+                            <div class="product-imitation" style="padding: 0"><img src="https://sofive.com/wp-content/uploads/2019/10/MDL-adult-M.jpg" style="width: 100%; cursor: pointer;" v-on:click="gotoPage('/gotm-adult.html')"></div>
+                            <div class="product-desc">
+                                <span class="product-price">
+                                    Adult
+                                </span>
+                                <a href="#" class="product-name" v-on:click="gotoPage('/gotm-adult.html')"> Adult <i>goal-of-the-month</i></a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <sofive-footer />
+            <div class="row" style="padding-top: 1%">
+                <div class="col-sm-12 text-center">
+                    <h1 style="color: #676a6c; margin-bottom: 1%">How can I nominate a goal video ?</h1>
+                    <h4>Start by going to the match page, click on the "Watch and assign goal" button in the event timeline and click on "Nominate for goal-of-the-month" !</h4>
+                </div>
+                <div class="col-sm-12 col-md-6 offset-md-3">
+                    <img src="/img/gotm_instructions.png" style="width: 100%">
+                </div>
+            </div>
+
+            <div>
+                <sofive-footer />
+            </div>
         </div>
     </div>
 
-    <!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KHK4JK2"
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+    
+    <script>
+      !function(f,b,e,v,n,t,s)
+      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+      n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t,s)}(window, document,'script',
+      'https://connect.facebook.net/en_US/fbevents.js');
+      fbq('init', '976102449200043');
+      fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=976102449200043&ev=PageView&noscript=1"
+    /></noscript>
     
 
-    <!-- Mainly scripts -->
-    <script src="js/jquery-3.1.1.min.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="js/bootstrap.js"></script>
-    <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
-    <script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="/js/jquery-3.1.1.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.js"></script>
+    <script src="/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.js"></script>
 
     <!-- Custom and plugin javascript -->
-    <script src="js/inspinia.js"></script>
+    <script src="/js/inspinia.js"></script>
 
-    <script src="js/vue.js"></script>
+    <script src="/js/plugins/select2/select2.full.min.js"></script>
 
-    <script type="text/javascript" src="js/vue-resource.js"></script>
-    <script type="text/javascript" src="js/moment.js"></script>
+    <script src="/js/vue.js"></script>
 
-    <script type="text/javascript" src="js/navigation.js"></script>
-    <script type="text/javascript" src="js/header.js"></script>
-    <script type="text/javascript" src="js/footer.js"></script>
+    <script type="text/javascript" src="/js/vue-resource.js"></script>
+    <script type="text/javascript" src="/js/moment.js"></script>
+
+    <script type="text/javascript" src="/js/navigation.js"></script>
+    <script type="text/javascript" src="/js/header.js"></script>
+    <script type="text/javascript" src="/js/footer.js"></script>
+
+    <script src="/js/plugins/footable/footable.all.min.js"></script>
+
+    <script src="/js/plugins/dataTables/datatables.min.js"></script>
+    <script src="/js/plugins/dataTables/dataTables.bootstrap4.min.js"></script>
 
     <script type="text/javascript">
+        var facilityMap = {
+            "1": "Sofive Meadowlands",
+            "2": "Sofive Elkins Park",
+            "3": "Sofive Brooklyn",
+            "4": "Sofive Rockville",
+            "5": "Sofive Columbia"
+        }
         var app = new Vue({
             el: '#wrapper',
             data: {
-                clips: []
+                loading: true,
+                facility_id: "0",
+                facility: ""
             },
-            mounted: function() {
-                this.getVideos()
+            mounted: function mounted() {
+                var center = this.getCenterCookie();
+                if (center) {
+                    this.facility_id = center;
+                    this.facility = facilityMap[center];
+                }
             },
             methods: {
-                getVideos: function() {
-                    const date = moment(),
-                    month = parseInt(date.format("MM")),
-                    year = parseInt(date.format("YYYY")),
-                    self = this;
-                    return this.$http.post("https://video.scoreplay.io/gotm/get", {
-                        month, year,
-                    }).then(resp => {
-                        self.clips = resp.data.map(v => ({
-                            ...v,
-                            url: v.url.replace("/video/", "/embed/video/")
-                        }))
-                        return Promise.all(self.clips.map(self.getSingleMatchDetails))
-                        .then(vids => {
-                            self.clips = vids
-                        })
-                    })
+                gotoPage: function(url) {
+                    window.location = url+"?facility_id="+this.facility_id
                 },
-                getSingleMatchDetails: function(match) {
-                        console.log("Getting details", match)
-                        const match_id = match.match_id.toString();
-                        return this.$http.post("https://app.scoreplay.io/match/details", {
-                                match_id
-                            })
-                            .then(function(resp) {
-                                console.log(resp)
-                                let body = resp.body,
-                                team_name = "Rental team"
-                                if (match_id.indexOf("manual") === (-1)) {
-                                    if (match.side === "away") {
-                                        team_name = body.details.away.teamName
-                                    } else {
-                                        team_name = body.details.home.teamName
-                                    }
-                                    team_name += " ("+body.details.type+")"
-                                }
-                                return {
-                                    team_name,
-                                    ...match,
-                                }
-                            })
-                    },
+                getCenterCookie: function() {
+                    var nameEQ = "center=";
+                    var ca = document.cookie.split(';');
+
+                    for (var i = 0; i < ca.length; i++) {
+                        var c = ca[i];
+
+                        while (c.charAt(0) == ' ') {
+                            c = c.substring(1, c.length);
+                        }
+
+                        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+                    }
+
+                    return null;
+                }
             }
-        })
+        });
     </script>
 
 </body>
