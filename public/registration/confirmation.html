@@ -472,7 +472,7 @@
                         deposit = "Yes";
                     }
 
-                    var season = "Summer";
+                    var season = "All";
 
                     if (this.data.season.name.indexOf("Fall") !== -1) {
                         season = "Fall";
@@ -488,6 +488,10 @@
 
                     if (this.data.season.name.indexOf("Winter 2") !== -1) {
                         season = "Winter 2";
+                    }
+
+                    if (this.data.season.name.indexOf("Summer") !== -1) {
+                        season = "Summer";
                     }
 
                     var early_bird = "No";
