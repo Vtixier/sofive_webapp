@@ -39,18 +39,35 @@
             float: left;
             color: #295182
         }
-
         .float-right {
             float: right;
             color: #75acda
         }
-
         .home-color {
             stroke: rgb(41, 81, 130);
         }
-
         .away-color {
             stroke: rgb(117, 172, 218);
+        }
+
+        @media only screen and (max-width: 768px) {
+            .hide-if-mob {
+                display: none;
+            }
+
+            .hide-if-not-mob {
+                display: block
+            }
+        }
+
+        @media only screen and (min-width: 768px) {
+            .hide-if-mob {
+                display: block;
+            }
+
+            .hide-if-not-mob {
+                display: none
+            }
         }
     </style>
 
@@ -72,7 +89,6 @@
 
         <div id="page-wrapper" class="gray-bg">
 
-
             <div>
                 <sofive-header />
             </div>
@@ -84,20 +100,19 @@
                             <iframe class="video" allow="autoplay" :src="clip.url" frameborder="0" allowfullscreen style="width: 100%"></iframe>
                         </div>
                         <div class="row" style="margin-bottom: 5%">
-                            <div class="col-md-1"></div>
-                            <div class="col-md-4">
-                                <button type="button" class="btn btn-primary btn-sm btn-block" style="background-color: #4267b2; border-color: #4267b2" v-on:click="gotoFb"><i class="fa fa-facebook-square"></i> Share on Facebook</button>
-                            </div>
-                            <div class="col-md-2"></div>
-                            <div class="col-md-4" v-if="!manual">
+                            <div class="col-sm-12" v-if="!manual" style="padding: 5%; padding-bottom: 0">
+                                <div style="text-align: center">Select scorer</div>
                                 <select class="select_center form-control" v-model="selected_scorer">
-                                    <option value="0">Select scorer</option>
+                                    <option value="0">Choose from roster</option>
                                     <option v-for="player in video_roster" :value="player.id">{{player.name}}</option>
                                 </select>
                             </div>
-                            <div class="col-md-12" style="padding: 5%; padding-bottom: 0">
+                            <div class="col-sm-6" style="padding: 5%; padding-bottom: 0">
                                 <button type="button" class="btn btn-primary btn-sm btn-block" v-if="!clip.goal_of_the_month" v-on:click="assignGOTM">Nominate for <i>Goal-of-the-month</i></button>
                                 <button type="button" class="btn btn-primary btn-sm btn-block" disabled v-else> Nominated for <i>Goal-of-the-month</i></button>
+                            </div>
+                            <div class="col-sm-6" style="padding: 5%; padding-bottom: 0">
+                                <button type="button" class="btn btn-primary btn-sm btn-block" style="background-color: #4267b2; border-color: #4267b2" v-on:click="gotoFb"><i class="fa fa-facebook-square"></i> Share on Facebook</button>
                             </div>
                         </div>
                     </div>
@@ -109,13 +124,31 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="ibox ">
-                            <div class="ibox-content text-center p-md" style="background-color: rgba(232, 232, 232, 0.43); border: 1px solid #e6eaec;">
+                            <div class="ibox-content text-center" style="background-color: rgba(232, 232, 232, 0.43); border: 1px solid #e6eaec;">
                                 <div class="row">
                                     <div class="col-sm">
-                                        <a style="font-size: 50px" class="text-center"><strong> <span style="color: #295182" v-on:click="gotoTeam(match.home.team_id)"> {{match.home.name}}</span> <span style="color: #4c4949" v-if="match.home.score>=0"> {{match.home.score}}</span> - <span style="color: #4c4949" v-if="match.away.score>=0">{{match.away.score}}</span> </span> <span style="color: #75acda" v-on:click="gotoTeam(match.away.team_id)"> {{match.away.name}} </strong></a>
-                                        <h3 style="margin: 8px; cursor: pointer;" v-on:click="gotoLeague(league.id)"><b>{{league.name}}</b></h3>
-                                        <h3>{{season.name}}</h3>
-                                        {{match.start}}
+                                        <a style="font-size: 50px" class="text-center hide-if-mob">
+                                            <strong>
+                                                <span style="color: #295182" v-on:click="gotoTeam(match.home.team_id)"> {{match.home.name}}</span>
+                                                <span style="color: #4c4949" v-if="match.home.score>=0"> {{match.home.score}}</span> - <span style="color: #4c4949" v-if="match.away.score>=0">{{match.away.score}}</span>
+                                                <span style="color: #75acda" v-on:click="gotoTeam(match.away.team_id)"> {{match.away.name}}</span>
+                                            </strong>
+                                        </a>
+                                        <a style="font-size: 20px" class="text-center hide-if-not-mob">
+                                            <strong>
+                                                <span style="color: #295182" v-on:click="gotoTeam(match.home.team_id)"> {{match.home.name}}</span>
+                                                <span style="color: #4c4949" v-if="match.home.score>=0"> {{match.home.score}}</span> - <span style="color: #4c4949" v-if="match.away.score>=0">{{match.away.score}}</span>
+                                                <span style="color: #75acda" v-on:click="gotoTeam(match.away.team_id)"> {{match.away.name}}</span>
+                                            </strong>
+                                        </a>
+                                        <div v-on:click="gotoLeague(league.id)" class="hide-if-not-mob" style="padding-top: 10px">
+                                            <u>View schedules & standings</u>
+                                        </div>
+                                        <div class="hide-if-mob">
+                                            <h3 style="margin: 8px; cursor: pointer;" v-on:click="gotoLeague(league.id)"><b>{{league.name}}</b></h3>
+                                            <h3>{{season.name}}</h3>
+                                            {{match.start}}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -130,7 +163,7 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="ibox">
-                                    <div class="ibox-title">
+                                    <div class="ibox-title" style="text-align: center; padding-right: 0; padding-left: 0">
                                         <h5>Highlights video</h5>
                                     </div>
                                     <div>
@@ -146,7 +179,7 @@
                                                 </figure>
                                             </div>
                                         </div>
-                                        <div class="ibox-content profile-content">
+                                        <div class="ibox-content profile-content hide-if-mob">
                                             <div class="row">
                                                 <div class="col-sm-12 col-md-6" v-if="video_download.match">
                                                     <button type="button" class="btn btn-block btn-outline btn-primary" v-on:click="gotoURL(video_download.match)">Download full match</button>
@@ -154,80 +187,25 @@
                                                 <div class="col-sm-12 col-md-6" v-if="video_download.highlight">
                                                     <button type="button" class="btn btn-block btn-outline btn-primary" v-on:click="gotoURL(video_download.highlight)">Download highlights</button>
                                                 </div>
-                                                <div class="col-sm-12" style="padding-top: 25px" v-if="!manual">
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-12" v-if="!manual">
                                                 <button type="button" class="btn btn-block btn-outline btn-primary" v-on:click="gotoLeague(league.id)">Schedules & Standings</button>
                                                 </div>
                                             </div>
                                         </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="row show-match-stats" style="display: none">
-                            <div class="col-sm-12 col-md-4">
-                                <div class="ibox ">
-                                    <div class="ibox-title">
-                                        <h5>Passes</h5>
-                                    </div>
-                                    <div class="ibox-content">
-                                        <div class="row" style="height: 100px">
-                                            <div id="ct-passes"></div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-6 ct-passes-home" style="text-align: center;"></div>
-                                            <div class="col-sm-6 ct-passes-away" style="text-align: center;"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-12 col-md-4">
-                                <div class="ibox ">
-                                    <div class="ibox-title">
-                                        <h5>Shots</h5>
-                                    </div>
-                                    <div class="ibox-content">
-                                        <div class="row" style="height: 100px">
-                                            <div id="ct-shots"></div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-6 ct-shots-home" style="text-align: center;"></div>
-                                            <div class="col-sm-6 ct-shots-away" style="text-align: center;"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-12 col-md-4">
-                                <div class="ibox ">
-                                    <div class="ibox-title">
-                                        <h5>Goals</h5>
-                                    </div>
-                                    <div class="ibox-content">
-                                        <div class="row" style="height: 100px">
-                                            <div id="ct-goals"></div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-6 ct-goals-home" style="text-align: center;"></div>
-                                            <div class="col-sm-6 ct-goals-away" style="text-align: center;"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row rosters" v-if="!manual">
+                        <div class="row rosters hide-if-mob" v-if="!manual" style="text-align: center; padding-right: 0; padding-left: 0">
                             <div class="col-lg-12">
                                 <div class="ibox">
                                     <div class="ibox-title">
                                         <h5>Rosters</h5>
-                                        <div class="ibox-tools">
-                                            <a class="collapse-link">
-                                                <i class="fa fa-chevron-up"></i>
-                                            </a>
-                                        </div>
                                     </div>
                                     <div class="ibox-content">
-
                                         <div class="row">
                                             <div class="col-lg-6">
                                                 <table class="table table-hover margin bottom">
@@ -280,13 +258,8 @@
                     <div class="col-lg-7">
 
                         <div class="ibox">
-                            <div class="ibox-title">
+                            <div class="ibox-title"  style="text-align: center; padding-right: 0; padding-left: 0">
                                 <h5>Live</h5>
-                                <div class="ibox-tools">
-                                    <a class="collapse-link">
-                                        <i class="fa fa-chevron-up"></i>
-                                    </a>
-                                </div>
                             </div>
                             <div class="ibox-content" style="height: 80vh; padding: 0; overflow: scroll;">
                                 <h2 v-if="events.length === 0">No events recorded for this match</h2>
@@ -305,9 +278,13 @@
                                             <div :class="{'vertical-timeline-content': true,
                                             'float-right': (match.home.name !== event.side),
                                             'float-left': (match.home.name === event.side)}" style="padding: 10px">
-                                                <h2>{{event.date}}. <b>
-                                                        <span v-if="(scoreplay_videos.clips[i] && scoreplay_videos.clips[i].player_id)">{{(all_rosters.find(p => (p.id.toString() === scoreplay_videos.clips[i].player_id)) || {'name':''}).name}} <small><br />({{event.side}})</small></span><span v-else>{{event.side}}</span>
-                                                    </b> ({{event.subtitle}})</h2>
+                                                <h2 style="font-size: 1.3em">{{event.date}}.
+                                                    <b>
+                                                        <span v-if="(scoreplay_videos.clips[i] && scoreplay_videos.clips[i].player_id)">{{(all_rosters.find(p => (p.id.toString() === scoreplay_videos.clips[i].player_id)) || {'name':''}).name}}
+                                                        </span>
+                                                        <span v-else>{{event.side}}</span>
+                                                    </b>
+                                                ({{event.subtitle}})</h2>
                                                 <a v-if="scoreplay_videos.clips[i]" v-on:click="select_vid(scoreplay_videos.clips[i], match.home.name === event.side)" target="blank" class="btn btn-sm btn-primary" style="float: right; color: white" data-toggle="modal" data-target="#edit">watch <span v-if="!manual">& assign </span>goal</a>
                                             </div>
                                         </div>
@@ -315,24 +292,60 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
 
-<!--                         <div class="row show-player-stats" style="display: none">
-                            <div class="col-lg-12">
-                                <div class="ibox ">
-                                    <div class="ibox-title">
-                                        <h5>Player scores <small>(Click on the player on the left)</small></h5>
+                <div class="row hide-if-not-mob">
+                    <div class="col-lg-12">
+                        <div class="ibox">
+                            <div class="ibox-title">
+                                <h5>Rosters</h5>
+                            </div>
+                            <div class="ibox-content">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <table class="table table-hover margin bottom">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width: 1%" class="text-center">No.</th>
+                                                    <th>Players</th>
+                                                    <th>Clips</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody v-if="home_team">
+                                                <tr v-for="(player, index) in home_team.roster" v-on:click="buildAndRunChart('1238')">
+                                                    <td class="text-center">{{index+1}}</td>
+                                                    <td> {{player.name}}
+                                                    </td>
+                                                    <td><a class="btn btn-sm btn-primary" style="color: white; line-height: 1.2"  v-on:click="gotoPlayer(player.id)">View</a></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
                                     </div>
-                                    <div class="ibox-content">
-                                        <div>
-                                            <canvas id="radarChart"></canvas>
-                                        </div>
+                                    <div class="col-lg-6">
+                                        <table class="table table-hover margin bottom">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width: 1%" class="text-center">No.</th>
+                                                    <th>Player</th>
+                                                    <th>Clips</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody v-if="away_team">
+                                                <tr v-for="(player, index) in away_team.roster" v-on:click="buildAndRunChart(
+                                                '1257')">
+                                                    <td class="text-center">{{index+1}}</td>
+                                                    <td> {{player.name}}
+                                                    </td>
+                                                    <td><a class="btn btn-sm btn-primary" style="color: white; line-height: 1.2" v-on:click="gotoPlayer(player.id)">View</a></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
-                        </div> -->
-
+                        </div>
                     </div>
-
                 </div>
 
 <!--                 <div class="row">
@@ -698,7 +711,7 @@
                             const v = resp.body;
                             let rec_url = v.recording.url;
                             if (rec_url !== "") {
-                                rec_url = "https://www.dailymotion.com/embed/video/" + v.recording.url.replace("https://www.dailymotion.com/video/", "") + "?queue-enable=false&queue-autoplay-next=false&ui-start-screen-info=false";
+                                rec_url = "https://www.dailymotion.com/embed/video/" + v.recording.url.replace("https://www.dailymotion.com/video/", "") + "?autoplay=1&queue-enable=false&queue-autoplay-next=false&ui-start-screen-info=false";
                             }
                             self.scoreplay_videos = {
                                 ...v,
@@ -960,7 +973,9 @@
                         window.location = "team.html?id=" + id;
                     },
                     gotoLeague: function gotoLeague(league_id) {
-                        window.location = "league.html?id=" + league_id;
+                        const url = "league.html?id=" + league_id;
+                        var win = window.open(url, '_blank');
+                        win.focus();
                     },
                     gotoPlayer: function gotoPlayer(player_id) {
                         window.location = "player.html?id=" + player_id;

@@ -12,6 +12,26 @@
   src: url('../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('../fonts/glyphicons-halflings-regular.woff2') format('woff2'), url('../fonts/glyphicons-halflings-regular.woff') format('woff'), url('../fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('../fonts/glyphicons-halflings-regular.svg') format('svg');
 }
 
+@media only screen and (max-width: 768px) {
+    .hide-if-mob {
+        display: none;
+    }
+
+    .hide-if-not-mob {
+        display: block
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    .hide-if-mob {
+        display: block;
+    }
+
+    .hide-if-not-mob {
+        display: none
+    }
+}
+
 @media (max-width: 768px) {
   .marge {
     margin-top: 15%;
