@@ -108,6 +108,13 @@
                 <sofive-header />
             </div>
 
+            <div class="row" style="text-align: center; background-color: #f2cfcf; color: #992929">
+                <div class="col-lg-12">
+                    <h2><b>IMPORTANT UPDATE: Temporary Closing</b></h2>
+                    <p>Based on the ongoing spread of COVID-19, and on the advice of public officials to support social-distancing efforts, Sofive is temporarily closing its facilities located in Brooklyn (NY), Carlstadt (NJ), Elkins Park (PA), Columbia (MD), and Rockville (MD) effective 01:00 AM Sunday, March 15, 2020. For updates regarding the closure, please <a href="https://sofive.com/update" style="color: #992929"><u>click here</u></a>.We sincerely regret the inconvenience. Thank you for your patience and cooperation</p>
+                </div>
+            </div>
+
             <div class="row wrapper border-bottom white-bg page-heading">
                 <div class="col-lg-10">
                     <h2>Online registration</h2>
@@ -215,7 +222,7 @@
                                                     <div class="i-checks" v-if="(data.product_type !== 'Adult Tournaments') && deposit_ok"><label> <input name="b" type="radio" value="deposit"> <i></i> Pay a deposit (${{deposit.full_price/100}}) </label></div>
                                                 </div>
                                             </div>
-                                            <button type="submit" class="btn btn-primary"><i class="fa fa-shopping-cart"></i> Checkout</button>
+                                            <button type="submit" class="btn btn-primary" v-if="1===2"><i class="fa fa-shopping-cart"></i> Checkout</button>
                                         </form>
                                     </span>
 
