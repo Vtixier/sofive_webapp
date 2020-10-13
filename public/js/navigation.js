@@ -20,7 +20,7 @@ Vue.component('sofive-left-menu', {
   mounted: function() {
     this.origin_url = window.location.href
     console.log("Origin url", this.origin_url)
-    document.querySelector("#open-covid").click()
+    // document.querySelector("#open-covid").click()
     const params = this.findGetParameter()
     if (params.center) {
         const url = window.location.href.replace("center=", "")
